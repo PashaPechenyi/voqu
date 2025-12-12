@@ -1373,116 +1373,64 @@ npm run migration:show
 
 ### Migration Template
 
+**Important:** Always use raw SQL queries with `queryRunner.query()` for migrations. This ensures full control over the SQL being executed and makes migrations more predictable and portable.
+
 ```typescript
 // database/migrations/1704067200000-create-levels.ts
-import { MigrationInterface, QueryRunner, Table, TableIndex } from 'typeorm';
+import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class CreateLevels1704067200000 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    // Create enum type
     await queryRunner.query(`
-      CREATE TYPE level_status AS ENUM ('draft', 'published', 'archived')
+      CREATE TABLE "Level" (
+        "id" BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+        "name" VARCHAR(255) NOT NULL,
+        "slug" VARCHAR(255) NOT NULL UNIQUE,
+        "description" TEXT,
+        "cefrLevel" VARCHAR(2) NOT NULL,
+        "status" VARCHAR(20) NOT NULL DEFAULT 'draft',
+        "order" INT NOT NULL DEFAULT 0,
+        "createdById" BIGINT REFERENCES "User"("id") ON DELETE SET NULL,
+        "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+        "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
+      );
+      CREATE INDEX ON "Level" ("slug");
+      CREATE INDEX ON "Level" ("status");
+      CREATE INDEX ON "Level" ("cefrLevel");
     `);
-
-    await queryRunner.query(`
-      CREATE TYPE cefr_level AS ENUM ('A1', 'A2', 'B1', 'B2', 'C1', 'C2')
-    `);
-
-    // Create table
-    await queryRunner.createTable(
-      new Table({
-        name: 'levels',
-        columns: [
-          {
-            name: 'id',
-            type: 'uuid',
-            isPrimary: true,
-            generationStrategy: 'uuid',
-            default: 'uuid_generate_v4()',
-          },
-          {
-            name: 'name',
-            type: 'varchar',
-            length: '255',
-          },
-          {
-            name: 'slug',
-            type: 'varchar',
-            length: '255',
-            isUnique: true,
-          },
-          {
-            name: 'description',
-            type: 'text',
-            isNullable: true,
-          },
-          {
-            name: 'cefr_level',
-            type: 'cefr_level',
-          },
-          {
-            name: 'status',
-            type: 'level_status',
-            default: "'draft'",
-          },
-          {
-            name: 'order',
-            type: 'int',
-            default: 0,
-          },
-          {
-            name: 'created_by_id',
-            type: 'uuid',
-            isNullable: true,
-          },
-          {
-            name: 'created_at',
-            type: 'timestamp',
-            default: 'CURRENT_TIMESTAMP',
-          },
-          {
-            name: 'updated_at',
-            type: 'timestamp',
-            default: 'CURRENT_TIMESTAMP',
-          },
-        ],
-      }),
-      true,
-    );
-
-    // Create indexes
-    await queryRunner.createIndex(
-      'levels',
-      new TableIndex({
-        name: 'idx_levels_slug',
-        columnNames: ['slug'],
-        isUnique: true,
-      }),
-    );
-
-    await queryRunner.createIndex(
-      'levels',
-      new TableIndex({
-        name: 'idx_levels_status',
-        columnNames: ['status'],
-      }),
-    );
-
-    await queryRunner.createIndex(
-      'levels',
-      new TableIndex({
-        name: 'idx_levels_cefr',
-        columnNames: ['cefr_level'],
-      }),
-    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('levels');
-    await queryRunner.query('DROP TYPE level_status');
-    await queryRunner.query('DROP TYPE cefr_level');
+    await queryRunner.query(`DROP TABLE IF EXISTS "Level"`);
   }
 }
+```
+
+### Migration Rules
+
+1. **Use raw SQL** - Always use `queryRunner.query()` with raw SQL instead of TypeORM's Table/TableIndex builders
+2. **Use BIGINT for IDs** - Primary keys should use `BIGINT GENERATED ALWAYS AS IDENTITY`
+3. **Use TIMESTAMP WITH TIME ZONE** - All timestamp columns should include timezone
+4. **Use camelCase column names** - Wrap column names in double quotes to preserve casing
+5. **Use PascalCase table names** - Table names should be PascalCase and wrapped in double quotes
+6. **Create indexes inline** - Add `CREATE INDEX` statements in the same query block
+7. **Always implement down()** - Ensure migrations can be reverted with `DROP TABLE IF EXISTS`
+
+### Foreign Key Pattern
+
+```typescript
+await queryRunner.query(`
+  CREATE TABLE "LessonProgress" (
+    "id" BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    "userId" BIGINT REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE NOT NULL,
+    "lessonId" BIGINT REFERENCES "Lesson"("id") ON DELETE CASCADE ON UPDATE CASCADE NOT NULL,
+    "completedAt" TIMESTAMP WITH TIME ZONE,
+    "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+    "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
+  );
+  CREATE INDEX ON "LessonProgress" ("userId");
+  CREATE INDEX ON "LessonProgress" ("lessonId");
+`);
 ```
 
 ### Migration Naming Convention
