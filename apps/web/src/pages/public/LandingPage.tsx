@@ -13,7 +13,7 @@ export function LandingPage() {
       }}
     >
       <Typography variant="h2" component="h1" gutterBottom>
-        Learn English with Voqu
+        Learn English with Voqu SONICHKA HOCHIT PLAKAT
       </Typography>
       <Typography variant="h5" color="text.secondary" sx={{ mb: 4, maxWidth: 600 }}>
         A self-paced learning platform with structured progression from A1 to C2
