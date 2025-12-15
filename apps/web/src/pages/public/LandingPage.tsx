@@ -23,7 +23,7 @@ export function LandingPage() {
           Get Started
         </Button>
         <Button variant="outlined" size="large">
-          Learn More
+          aaaaaaaaa
         </Button>
       </Stack>
     </Box>
