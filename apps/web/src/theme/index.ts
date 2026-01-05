@@ -3,26 +3,53 @@ import { createTheme } from '@mui/material/styles';
 export const theme = createTheme({
   palette: {
     primary: {
-      main: '#1976d2',
-      light: '#42a5f5',
-      dark: '#1565c0',
+      main: '#71677C',
     },
     secondary: {
-      main: '#9c27b0',
-      light: '#ba68c8',
-      dark: '#7b1fa2',
+      main: '#F5F1ED',
     },
     background: {
-      default: '#f5f5f5',
-      paper: '#ffffff',
+      default: '#F5F1ED',
+    },
+    text: {
+      primary: '#37123C',
+      secondary: '#f5f1ed',
     },
   },
   typography: {
-    fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
+    fontFamily: '"Georgia", "Times New Roman", sans-serif',
     h1: { fontWeight: 700 },
-    h2: { fontWeight: 700 },
-    h3: { fontWeight: 600 },
+    h2: {
+      fontWeight: 700,
+      fontSize: 35,
+      '@media (min-width:600px)': {
+        fontSize: 60,
+      },
+      '@media (min-width:900px)': {
+        fontSize: 90,
+      },
+    },
+    h3: {
+      fontWeight: 600,
+      fontSize: '1.5rem',
+      '@media (min-width:600px)': {
+        fontSize: '2rem',
+      },
+      '@media (min-width:900px)': {
+        fontSize: '3rem',
+      },
+    },
+    h5: {
+      fontSize: 15,
+      '@media (min-width:600px)': {
+        fontSize: 24,
+      },
+      '@media (min-width:900px)': {
+        fontSize: 30,
+      },
+    },
   },
+
   components: {
     MuiButton: {
       styleOverrides: {
