@@ -104,10 +104,10 @@ const sxStyles = createSxStylesList({
     mb: 12,
   },
 
-  titles: {
+  titles: (theme) => ({
     maxWidth: '45%',
     [theme.breakpoints.between('xs', 'md')]: {
       maxWidth: '80%',
     },
-  },
+  }),
 });

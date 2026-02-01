@@ -20,7 +20,7 @@ export const theme = createTheme({
     fontFamily: '"Georgia", "Times New Roman", sans-serif',
     h1: { fontWeight: 700 },
     h2: {
-      fontWeight: 700,
+      fontWeight: 600,
       fontSize: 35,
       '@media (min-width:600px)': {
         fontSize: 60,
@@ -31,12 +31,22 @@ export const theme = createTheme({
     },
     h3: {
       fontWeight: 600,
-      fontSize: '1.5rem',
+      fontSize: '24px',
       '@media (min-width:600px)': {
-        fontSize: '2rem',
+        fontSize: '32px',
       },
       '@media (min-width:900px)': {
-        fontSize: '3rem',
+        fontSize: '48px',
+      },
+    },
+    h4: {
+      fontWeight: 400,
+      fontSize: '24px',
+      '@media (min-width:600px)': {
+        fontSize: '25px',
+      },
+      '@media (min-width:900px)': {
+        fontSize: '34px',
       },
     },
     h5: {
