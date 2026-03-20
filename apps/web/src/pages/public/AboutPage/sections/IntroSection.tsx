@@ -1,7 +1,4 @@
-
 import { Box, Typography } from '@mui/material';
-
-import React from 'react';
 
 function IntroSection() {
   return (
@@ -24,7 +21,6 @@ function IntroSection() {
           learning style.
         </Typography>
       </Box>
-      
     </>
   );
 }

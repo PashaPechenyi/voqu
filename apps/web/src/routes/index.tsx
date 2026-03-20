@@ -8,8 +8,9 @@ export function AppRoutes() {
     <Routes>
       {/* Public routes */}
       <Route path="/" element={<PublicLayout />}>
-       <Route index element={<LandingPage />} />
-      <Route index element={<AboutPage />} />
+     <Route path='landingPage' index element={<LandingPage />} />
+        <Route path='/about' index element={<AboutPage />} />
+      
      
         
         

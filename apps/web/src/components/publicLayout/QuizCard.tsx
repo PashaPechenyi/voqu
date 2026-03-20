@@ -37,9 +37,10 @@ function QuizCard({
         <Typography variant="h6" sx={{ px: '28px', mt: '10px' , mb:"20px"}}>
           {activeQuestionData.question}
         </Typography>
-        {activeQuestionData.variants.map((variant) => {
+        {activeQuestionData.variants.map((variant, ind) => {
           return (
             <Button
+              key={ind}
               className={clsx({
                 correct: usersAnswer && variant == activeQuestionData.answer,
                 incorrect:

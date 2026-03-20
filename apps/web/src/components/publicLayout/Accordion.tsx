@@ -12,7 +12,7 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionCard from './AccordionCard';
 import { Box } from '@mui/material';
 import { Level } from '@/models/types';
-const levels:Level[] = [
+const levels: Level[] = [
   {
     level: 'A1-Beginner',
     description: 'Can understand and use familiar everyday expressions and very basic phrases.',
@@ -39,7 +39,8 @@ const levels:Level[] = [
 const Accordion = styled((props: AccordionProps) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
 ))(({ theme }) => ({
-  border: '1.5px, solid grey', borderRadius: '10px' 
+  border: '1.5px, solid grey',
+  borderRadius: '10px',
 }));
 
 const AccordionSummary = styled((props: AccordionSummaryProps) => (
@@ -48,42 +49,40 @@ const AccordionSummary = styled((props: AccordionSummaryProps) => (
     {...props}
   />
 ))(({ theme }) => ({
- 
-
   [`& .${accordionSummaryClasses.expandIconWrapper}.${accordionSummaryClasses.expanded}`]: {
     transform: 'rotate(90deg)',
   },
- 
+
   ...theme.applyStyles('dark', {
     backgroundColor: 'rgba(255, 255, 255, .05)',
   }),
 }));
 
-
-
 export default function CustomizedAccordions() {
   const [expanded, setExpanded] = React.useState<string | false>(false);
 
-  const handleChange = (panel: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
+  const handleChange = (panel: string, newExpanded:boolean) => {
     setExpanded(newExpanded ? panel : false);
   };
 
   return (
-    <Box sx={{display:"flex", flexDirection:"column", gap:"20px"}}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
       {levels.map((level, ind) => (
         <Accordion
-         
+        key={ind}
           expanded={expanded === `panel${ind + 1}`}
-          onChange={handleChange(`panel${ind + 1}`)}
+          onChange={(event: React.SyntheticEvent, newExpanded: boolean) =>
+            handleChange(`panel${ind + 1}`, newExpanded)
+          }
         >
-          <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
-            <Typography component="span" color='secondary'>{level.level}</Typography>
+          <AccordionSummary >
+            <Typography component="span" color="secondary">
+              {level.level}
+            </Typography>
           </AccordionSummary>
           <AccordionCard skills={level.skills} description={level.description} />
         </Accordion>
       ))}
-
-     
     </Box>
   );
 }

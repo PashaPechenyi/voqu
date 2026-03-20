@@ -17,3 +17,8 @@ export type Level={
     description:string,
     skills:string[]
 }
+export type Card={
+    icon:any,
+    title:string,
+    description:string
+}
