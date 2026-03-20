@@ -11,6 +11,6 @@
     },
     "types": ["vite/client"]
   },
-  "include": ["src"],
+  "include": ["src", "../../TablePage.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -1,6 +1,6 @@
 import { createSxStylesList } from '@/theme/helpers';
 import { Bookmark, MenuBook, School, Timeline } from '@mui/icons-material';
-import { Box, Card, CardContent, Grid, Grid2, SvgIconProps, Typography } from '@mui/material';
+import { Box, Card, CardContent, SvgIconProps, Typography } from '@mui/material';
 
 import { FC } from 'react';
 type Card = {
@@ -61,6 +61,7 @@ const sxStyles = createSxStylesList({
     flexDirection: 'column',
     alignItems: 'center',
     textAlign: 'center',
+    mb: 5,
   },
   cards: (theme) => ({
     display: 'flex',
