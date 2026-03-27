@@ -1,7 +1,8 @@
-import QuizSlider from '@/components/vocabulary/QuizSlider';
 import VocabularyCard from '@/components/vocabulary/VocabularyCard';
 import { createSxStylesList } from '@/theme/helpers';
 import { Box, Chip, Typography } from '@mui/material';
+import { TEST } from '@/consts/lessonPrevievData';
+import QuizSlider from '@/components/vocabulary/QuizSlider';
 
 export default function LessonPreviewSection() {
   return (
@@ -22,7 +23,7 @@ export default function LessonPreviewSection() {
 
       <Box sx={sxStyles.lessonBox}>
         <VocabularyCard />
-        <QuizSlider />
+        <QuizSlider testData={TEST} />
       </Box>
     </Box>
   );

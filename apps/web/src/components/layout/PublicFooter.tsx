@@ -52,9 +52,9 @@ function PublicFooter() {
           </Typography>
         </Box>
         <Toolbar sx={sxStyles.toolbar}>
-          {footerLinks.map((btn) => {
+          {footerLinks.map((btn, index) => {
             return (
-              <Button href={btn.path} color="inherit">
+              <Button key={index} href={btn.path} color="inherit">
                 <Typography color={'textSecondary'}>{btn.label}</Typography>
               </Button>
             );
@@ -63,8 +63,8 @@ function PublicFooter() {
         <Box sx={sxStyles.boxSocials}>
           <Box sx={sxStyles.socials}>
             <Typography color={'textSecondary'}>Follow us</Typography>
-            {socialMediaBtns.map(({ path, Icon }) => (
-              <IconButton href={path}>
+            {socialMediaBtns.map(({ path, Icon }, index) => (
+              <IconButton key={index} href={path}>
                 <Icon color={'secondary'} />
               </IconButton>
             ))}
@@ -72,8 +72,8 @@ function PublicFooter() {
         </Box>
         <Box sx={sxStyles.boxContacts}>
           <Typography color={'textSecondary'}>Contact us</Typography>
-          {contacts.map(({ Icon, path, value }) => (
-            <Box sx={sxStyles.contacts}>
+          {contacts.map(({ Icon, path, value }, index) => (
+            <Box key={index} sx={sxStyles.contacts}>
               <IconButton href={path}>
                 <Icon color={'secondary'} />
               </IconButton>

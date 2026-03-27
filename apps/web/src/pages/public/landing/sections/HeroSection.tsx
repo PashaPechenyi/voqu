@@ -1,6 +1,7 @@
 import { createSxStylesList } from '@/theme/helpers';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import { theme } from '@/theme';
+import { BorderColor } from '@mui/icons-material';
 
 export default function HeroSection() {
   return (
@@ -48,6 +49,7 @@ const sxStyles = createSxStylesList({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+
     [theme.breakpoints.between('xs', 'sm')]: {
       alignContent: 'flex-start',
     },

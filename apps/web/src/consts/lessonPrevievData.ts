@@ -30,7 +30,7 @@ export const PREVIEW_LESSON_CARDS: PreviewLessonCard[] = [
   },
 ];
 
-export const TEST = [
+export const TEST: Test[] = [
   {
     question: 'What is the correct translation of the word "Hello"?',
     answers: ['Привіт', 'До побачення', 'Дякую'],

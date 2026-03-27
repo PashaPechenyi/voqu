@@ -1,20 +1,5 @@
 import { useState } from 'react';
-import {
-  AppBar,
-  Box,
-  Button,
-  Divider,
-  Drawer,
-  IconButton,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Toolbar,
-  Typography,
-  useMediaQuery,
-} from '@mui/material';
+import { AppBar, Box, Button, IconButton, Toolbar, Typography, useMediaQuery } from '@mui/material';
 import SchoolIcon from '@mui/icons-material/School';
 import { navItems } from '@/consts/navigation';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -69,9 +54,9 @@ function PublicHeader() {
             </Box>
 
             <Box>
-              {navItems.map((btn) => {
+              {navItems.map((btn, index) => {
                 return (
-                  <Button href={btn.path} color="inherit">
+                  <Button key={index} href={btn.path} color="inherit">
                     <Typography color={'textSecondary'}>{btn.label}</Typography>
                   </Button>
                 );

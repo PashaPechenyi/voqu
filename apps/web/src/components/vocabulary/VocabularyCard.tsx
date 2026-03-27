@@ -39,14 +39,17 @@ export default function VocabularyCard() {
   const wordToDisplay = getCurrentDataByLanuage(card);
   return (
     <Card sx={sxStyles.card} onClick={() => setIsTranlate((prev) => !prev)}>
-      <CardContent sx={sxStyles.cardContent}>
-        <Box sx={sxStyles.word}>
-          <Typography variant="h5">{wordToDisplay.word}</Typography>
+      <CardHeader
+        sx={sxStyles.word}
+        action={
           <IconButton>
-            <VolumeUpRoundedIcon />
+            <VolumeUpRoundedIcon fontSize="large" />
           </IconButton>
-        </Box>
-        <Divider variant="middle" />
+        }
+        title={<Typography variant="h4">{wordToDisplay.word}</Typography>}
+      />
+      <Divider variant="middle" />
+      <CardContent sx={sxStyles.cardContent}>
         <Box sx={sxStyles.definition}>
           <Typography>Definition</Typography>
           <Typography color="text.disabled">{wordToDisplay.definition}</Typography>
@@ -77,7 +80,6 @@ export default function VocabularyCard() {
 
 const sxStyles = createSxStylesList({
   word: {
-    height: '30%',
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
@@ -125,5 +127,6 @@ const sxStyles = createSxStylesList({
   btns: {
     position: 'sticky',
     top: '100%',
+    padding: '16px',
   },
 });

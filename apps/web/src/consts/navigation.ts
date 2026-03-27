@@ -3,6 +3,7 @@ import { NavMenuItem } from '@/models/models';
 export const navItems: NavMenuItem[] = [
   { label: 'Головна', path: '/' },
   { label: 'Про нас', path: '/about' },
+  { label: 'table', path: '/table' },
 ];
 
 export const footerLinks: NavMenuItem[] = [
