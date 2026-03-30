@@ -24,17 +24,16 @@ function QuizCard({
   return (
     <Card sx={styles.card}>
       <CardHeader
-      sx={{display:"flex", alignItems:"center"}}
+        sx={{ display: 'flex', alignItems: 'center' }}
         avatar={<StarBorderIcon fontSize="large" sx={{ fill: '#71677D' }} />}
-        title={<Typography variant="h4">Practice Quiz</Typography> }
+        title={<Typography variant="h4">Practice Quiz</Typography>}
         action={
           <Pagination activeWordNumber={activeQuestionNumber} wordsAmount={questionsAmount} />
         }
-        
       />
 
       <CardContent sx={styles.cardContent}>
-        <Typography variant="h6" sx={{ px: '28px', mt: '10px' , mb:"20px"}}>
+        <Typography variant="h6" sx={{ px: '28px', mt: '10px', mb: '20px' }}>
           {activeQuestionData.question}
         </Typography>
         {activeQuestionData.variants.map((variant, ind) => {
@@ -94,8 +93,7 @@ const styles = {
     borderRadius: '10px',
     py: '20px',
     px: '20px',
-   
-},
+  },
   cardContent: {
     display: 'flex',
     flexDirection: 'column',

@@ -11,11 +11,13 @@ US-{number}-{phase}-{short-title}.md
 ```
 
 **Examples:**
+
 - `US-001-1.1-theme-configuration.md`
 - `US-017-1.2-user-registration.md`
 - `US-025-2.1-grammar-template.md`
 
 **Rules:**
+
 - Number: 3-digit sequential number (001, 002, etc.)
 - Phase: matches the implementation phase (1.1, 1.2, 2.1, etc.)
 - Short title: lowercase, hyphen-separated, descriptive
@@ -27,11 +29,13 @@ US-{number}-{phase}-{short-title}.md
 Each user story file must contain the following sections in order:
 
 ### 1. Title
+
 ```markdown
 # US-{id}: {Title}
 ```
 
 ### 2. Story Statement
+
 ```markdown
 ## Story
 
@@ -41,12 +45,14 @@ Each user story file must contain the following sections in order:
 ```
 
 **User roles in this project:**
+
 - `visitor` - unauthenticated user viewing public pages
 - `user` - authenticated learner
 - `admin` - content manager
 - `developer` - for technical/infrastructure stories
 
 ### 3. Description
+
 ```markdown
 ## Description
 
@@ -54,6 +60,7 @@ Each user story file must contain the following sections in order:
 ```
 
 ### 4. Acceptance Criteria
+
 ```markdown
 ## Acceptance Criteria
 
@@ -63,6 +70,7 @@ Each user story file must contain the following sections in order:
 ```
 
 **Rules for acceptance criteria:**
+
 - Use checkbox format `- [ ]`
 - Each criterion should be independently verifiable
 - Be specific and measurable
@@ -71,10 +79,12 @@ Each user story file must contain the following sections in order:
 - Include file paths where components should be created
 
 ### 5. Technical Notes
+
 ```markdown
 ## Technical Notes
 
 **Libraries:**
+
 - {library} - {components/functions used}
 
 **File location:** `{path/to/file.tsx}`
@@ -83,6 +93,7 @@ Each user story file must contain the following sections in order:
 ```
 
 **Include:**
+
 - Required npm packages
 - File paths
 - Component/function names
@@ -91,6 +102,7 @@ Each user story file must contain the following sections in order:
 - Responsive breakpoints
 
 ### 6. UI/UX Requirements (for frontend stories)
+
 ```markdown
 ## UI/UX Requirements
 
@@ -100,6 +112,7 @@ Each user story file must contain the following sections in order:
 ```
 
 **Include:**
+
 - Layout behavior
 - Responsive design rules
 - Spacing and padding values
@@ -108,29 +121,34 @@ Each user story file must contain the following sections in order:
 - Interactive states (hover, focus, etc.)
 
 ### 7. Content (if applicable)
+
 ```markdown
 ## Content
 
 | Field | Value |
-|-------|-------|
-| ... | ... |
+| ----- | ----- |
+| ...   | ...   |
 ```
 
 Use tables for:
+
 - Text content (especially translations)
 - Data structures
 - Configuration values
 
 ### 8. Dependencies (if applicable)
+
 ```markdown
 ## Dependencies
 
 Requires completion of:
+
 - {US-XXX} ({Title})
 - ...
 ```
 
 ### 9. Notes
+
 ```markdown
 ## Notes
 
@@ -144,16 +162,19 @@ Requires completion of:
 ## Content Rules
 
 ### Language
+
 - UI text for this project is in **Ukrainian**
 - Technical documentation is in **English**
 - Include Ukrainian text content in tables or code blocks
 
 ### Scope
+
 - Each story should take **no more than 4 hours** to implement
 - If larger, break into smaller stories
 - One story = one logical unit of work
 
 ### Specificity
+
 - Be specific about requirements
 - Do NOT include copy-paste implementation code
 - DO include:
@@ -164,12 +185,14 @@ Requires completion of:
   - File paths
 
 ### What NOT to Include
+
 - Full implementation code
 - Boilerplate code
 - Import statements
 - Complete component implementations
 
 ### What TO Include
+
 - Component names and their purpose
 - Props interfaces (structure, not full code)
 - Styling specifications
@@ -184,6 +207,7 @@ Requires completion of:
 When creating new stories, update `index.md`:
 
 1. Add row to the phase table:
+
 ```markdown
 | [US-XXX-X.X](./US-XXX-X.X-title.md) | Title | Description | Not Started |
 ```
@@ -191,6 +215,7 @@ When creating new stories, update `index.md`:
 2. Add to implementation order section (if new phase)
 
 3. Update status as work progresses:
+
 - `Not Started`
 - `In Progress`
 - `Completed`
@@ -228,6 +253,7 @@ When creating new stories, update `index.md`:
 ## Technical Notes
 
 **Libraries:**
+
 - `@mui/material` - {components}
 - `react-router-dom` - {hooks/components}
 
@@ -251,14 +277,15 @@ When creating new stories, update `index.md`:
 ## Content
 
 | Element | Text |
-|---------|------|
-| ... | ... |
+| ------- | ---- |
+| ...     | ...  |
 
 ---
 
 ## Dependencies
 
 Requires completion of:
+
 - US-XXX-X.X ({Title})
 
 ---
@@ -284,4 +311,4 @@ Requires completion of:
 
 ---
 
-*Document Version: 1.0*
+_Document Version: 1.0_

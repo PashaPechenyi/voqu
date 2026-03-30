@@ -3,6 +3,7 @@
 > **Purpose:** Architecture guidelines, folder structure, and coding conventions for the React + Vite + MUI frontend application.
 >
 > **Related documents:**
+>
 > - [Shared Packages Architecture](./ARCHITECTURE_SHARED.md) - Types, constants, and utilities shared with backend
 > - [Backend Architecture](./ARCHITECTURE_BACKEND.md)
 > - [Implementation Rules](./phases/IMPLEMENTATION_RULES.md) - Detailed implementation plan rules
@@ -33,18 +34,18 @@
 
 ## 1. Tech Stack Overview
 
-| Technology | Version | Purpose |
-|------------|---------|---------|
-| React | 18.x | UI library |
-| Vite | 5.x | Build tool & dev server |
-| TypeScript | 5.x | Type safety |
-| React Router | 6.x | Client-side routing |
-| Material UI (MUI) | 5.x | Component library |
-| TanStack Query | 5.x | Server state management |
-| Zustand | 4.x | Client state management |
-| Auth0 | - | Authentication |
-| React Hook Form | 7.x | Form handling |
-| Zod | 3.x | Schema validation |
+| Technology        | Version | Purpose                 |
+| ----------------- | ------- | ----------------------- |
+| React             | 18.x    | UI library              |
+| Vite              | 5.x     | Build tool & dev server |
+| TypeScript        | 5.x     | Type safety             |
+| React Router      | 6.x     | Client-side routing     |
+| Material UI (MUI) | 5.x     | Component library       |
+| TanStack Query    | 5.x     | Server state management |
+| Zustand           | 4.x     | Client state management |
+| Auth0             | -       | Authentication          |
+| React Hook Form   | 7.x     | Form handling           |
+| Zod               | 3.x     | Schema validation       |
 
 ### Why This Stack?
 
@@ -176,25 +177,25 @@ apps/web/
 
 ### Components
 
-| Type | Folder | File | Example |
-|------|--------|------|---------|
-| Page component | PascalCase | PascalCase.tsx | `LandingPage/LandingPage.tsx` |
-| Regular component | PascalCase | PascalCase.tsx | `Button/Button.tsx` |
-| Page section | PascalCase | PascalCase.tsx | `sections/HeroSection.tsx` |
-| Component types | PascalCase | PascalCase.types.ts | `Button/Button.types.ts` |
-| Barrel export | - | index.ts | `Button/index.ts` |
+| Type              | Folder     | File                | Example                       |
+| ----------------- | ---------- | ------------------- | ----------------------------- |
+| Page component    | PascalCase | PascalCase.tsx      | `LandingPage/LandingPage.tsx` |
+| Regular component | PascalCase | PascalCase.tsx      | `Button/Button.tsx`           |
+| Page section      | PascalCase | PascalCase.tsx      | `sections/HeroSection.tsx`    |
+| Component types   | PascalCase | PascalCase.types.ts | `Button/Button.types.ts`      |
+| Barrel export     | -          | index.ts            | `Button/index.ts`             |
 
 ### Non-Component Files
 
-| Type | Convention | Example |
-|------|------------|---------|
-| Hooks | camelCase with `use` prefix | `useAuth.ts`, `useLevels.ts` |
-| Services | kebab-case with `.service.ts` | `auth.service.ts` |
-| Stores | kebab-case with `.store.ts` | `auth.store.ts` |
-| Utilities | kebab-case with `.utils.ts` | `storage.utils.ts` |
-| Types | kebab-case with `.types.ts` | `router.types.ts` |
-| Constants | kebab-case with `.constants.ts` | `routes.constants.ts` |
-| Config | kebab-case | `env.ts`, `queryClient.ts` |
+| Type      | Convention                      | Example                      |
+| --------- | ------------------------------- | ---------------------------- |
+| Hooks     | camelCase with `use` prefix     | `useAuth.ts`, `useLevels.ts` |
+| Services  | kebab-case with `.service.ts`   | `auth.service.ts`            |
+| Stores    | kebab-case with `.store.ts`     | `auth.store.ts`              |
+| Utilities | kebab-case with `.utils.ts`     | `storage.utils.ts`           |
+| Types     | kebab-case with `.types.ts`     | `router.types.ts`            |
+| Constants | kebab-case with `.constants.ts` | `routes.constants.ts`        |
+| Config    | kebab-case                      | `env.ts`, `queryClient.ts`   |
 
 ### Naming Rules Summary
 
@@ -349,12 +350,12 @@ export function Button({
 
 ### Component Categories
 
-| Category | Location | Purpose |
-|----------|----------|---------|
-| Common | `components/common/` | Generic, reusable UI components |
-| Layout | `components/layout/` | Page layouts, navigation |
-| Forms | `components/forms/` | Form inputs, validation display |
-| Features | `components/features/{domain}/` | Domain-specific components |
+| Category | Location                        | Purpose                         |
+| -------- | ------------------------------- | ------------------------------- |
+| Common   | `components/common/`            | Generic, reusable UI components |
+| Layout   | `components/layout/`            | Page layouts, navigation        |
+| Forms    | `components/forms/`             | Form inputs, validation display |
+| Features | `components/features/{domain}/` | Domain-specific components      |
 
 ### When to Extract a Component
 
@@ -461,13 +462,13 @@ export function HeroSection() {
 
 ### Page Categories
 
-| Category | Location | Layout | Auth Required |
-|----------|----------|--------|---------------|
-| Public | `pages/public/` | PublicLayout | No |
-| Auth | `pages/auth/` | MinimalLayout | No |
-| Dashboard | `pages/dashboard/` | DashboardLayout | Yes |
-| Admin | `pages/admin/` | AdminLayout | Yes (Admin) |
-| Errors | `pages/errors/` | PublicLayout | No |
+| Category  | Location           | Layout          | Auth Required |
+| --------- | ------------------ | --------------- | ------------- |
+| Public    | `pages/public/`    | PublicLayout    | No            |
+| Auth      | `pages/auth/`      | MinimalLayout   | No            |
+| Dashboard | `pages/dashboard/` | DashboardLayout | Yes           |
+| Admin     | `pages/admin/`     | AdminLayout     | Yes (Admin)   |
+| Errors    | `pages/errors/`    | PublicLayout    | No            |
 
 ---
 
@@ -543,14 +544,14 @@ export const dashboardRoutes: RouteObject[] = [
 
 ### Route Naming Conventions
 
-| Type | Pattern | Example |
-|------|---------|---------|
-| Public | `/lowercase` | `/about`, `/pricing` |
-| Auth | `/auth/action` | `/auth/login`, `/auth/signup` |
-| Dashboard | `/dashboard/section` | `/dashboard/progress` |
-| Admin | `/admin/resource` | `/admin/levels` |
-| Detail | `/resource/:id` | `/levels/:id` |
-| Nested | `/parent/:parentId/child/:childId` | `/levels/:levelId/lessons/:lessonId` |
+| Type      | Pattern                            | Example                              |
+| --------- | ---------------------------------- | ------------------------------------ |
+| Public    | `/lowercase`                       | `/about`, `/pricing`                 |
+| Auth      | `/auth/action`                     | `/auth/login`, `/auth/signup`        |
+| Dashboard | `/dashboard/section`               | `/dashboard/progress`                |
+| Admin     | `/admin/resource`                  | `/admin/levels`                      |
+| Detail    | `/resource/:id`                    | `/levels/:id`                        |
+| Nested    | `/parent/:parentId/child/:childId` | `/levels/:levelId/lessons/:lessonId` |
 
 ---
 
@@ -558,14 +559,14 @@ export const dashboardRoutes: RouteObject[] = [
 
 ### State Categories
 
-| State Type | Solution | Example |
-|------------|----------|---------|
-| Server state | TanStack Query | Levels list, user profile |
-| Form state | React Hook Form | Login form, create level form |
-| UI state | Zustand | Sidebar open, modal state |
-| Auth state | Auth0 + Zustand | Current user, tokens |
-| Component state | useState | Dropdown open, input value |
-| URL state | React Router | Current page, query params |
+| State Type      | Solution        | Example                       |
+| --------------- | --------------- | ----------------------------- |
+| Server state    | TanStack Query  | Levels list, user profile     |
+| Form state      | React Hook Form | Login form, create level form |
+| UI state        | Zustand         | Sidebar open, modal state     |
+| Auth state      | Auth0 + Zustand | Current user, tokens          |
+| Component state | useState        | Dropdown open, input value    |
+| URL state       | React Router    | Current page, query params    |
 
 ### TanStack Query Pattern
 
@@ -688,7 +689,7 @@ apiClient.interceptors.response.use(
       useAuthStore.getState().logout();
     }
     return Promise.reject(error);
-  }
+  },
 );
 ```
 
@@ -723,10 +724,7 @@ export const levelsService = {
   },
 
   update: async (id: string, payload: UpdateLevelRequest): Promise<Level> => {
-    const { data } = await apiClient.patch(
-      API_ENDPOINTS.LEVELS.BY_ID(id),
-      payload
-    );
+    const { data } = await apiClient.patch(API_ENDPOINTS.LEVELS.BY_ID(id), payload);
     return data;
   },
 
@@ -785,27 +783,27 @@ import { Timeline, TimelineItem } from '@mui/lab';
 
 ### Breakpoints Reference
 
-| Breakpoint | Min Width | Target |
-|------------|-----------|--------|
-| xs | 0px | Mobile |
-| sm | 600px | Tablet portrait |
-| md | 900px | Tablet landscape |
-| lg | 1200px | Desktop |
-| xl | 1536px | Large desktop |
+| Breakpoint | Min Width | Target           |
+| ---------- | --------- | ---------------- |
+| xs         | 0px       | Mobile           |
+| sm         | 600px     | Tablet portrait  |
+| md         | 900px     | Tablet landscape |
+| lg         | 1200px    | Desktop          |
+| xl         | 1536px    | Large desktop    |
 
 ### Spacing System
 
 MUI uses an 8px grid. The spacing multiplier:
 
-| Value | Pixels | Usage |
-|-------|--------|-------|
-| 0.5 | 4px | Tight spacing |
-| 1 | 8px | Small gap |
-| 2 | 16px | Standard gap |
-| 3 | 24px | Medium gap |
-| 4 | 32px | Large gap |
-| 6 | 48px | Section padding |
-| 8 | 64px | Hero padding |
+| Value | Pixels | Usage           |
+| ----- | ------ | --------------- |
+| 0.5   | 4px    | Tight spacing   |
+| 1     | 8px    | Small gap       |
+| 2     | 16px   | Standard gap    |
+| 3     | 24px   | Medium gap      |
+| 4     | 32px   | Large gap       |
+| 6     | 48px   | Section padding |
+| 8     | 64px   | Hero padding    |
 
 ```typescript
 // Spacing examples
@@ -1112,12 +1110,12 @@ export function AboutPage() {
 
 ### Title Format
 
-| Page Type | Format | Example |
-|-----------|--------|---------|
-| Public | `{Page} — Voqu` | `Про нас — Voqu` |
+| Page Type | Format                          | Example                       |
+| --------- | ------------------------------- | ----------------------------- |
+| Public    | `{Page} — Voqu`                 | `Про нас — Voqu`              |
 | Dashboard | `{Section} \| Dashboard — Voqu` | `Прогрес \| Dashboard — Voqu` |
-| Admin | `{Resource} \| Admin — Voqu` | `Рівні \| Admin — Voqu` |
-| Detail | `{Item Name} — Voqu` | `Beginner Basics — Voqu` |
+| Admin     | `{Resource} \| Admin — Voqu`    | `Рівні \| Admin — Voqu`       |
+| Detail    | `{Item Name} — Voqu`            | `Beginner Basics — Voqu`      |
 
 ---
 
@@ -1196,10 +1194,7 @@ const AdminDashboard = lazy(() => import('@/pages/admin/AdminDashboard'));
 
 ```typescript
 // Memoize expensive computations
-const filteredLessons = useMemo(
-  () => lessons.filter((l) => l.status === 'published'),
-  [lessons]
-);
+const filteredLessons = useMemo(() => lessons.filter((l) => l.status === 'published'), [lessons]);
 
 // Memoize callbacks passed to children
 const handleSelect = useCallback((id: string) => {
@@ -1269,5 +1264,5 @@ const MemoizedList = memo(LessonList);
 
 ---
 
-*Document Version: 1.0*
-*Last Updated: December 2024*
+_Document Version: 1.0_
+_Last Updated: December 2024_

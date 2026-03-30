@@ -15,7 +15,6 @@ function LessonStructurePhase({
   description,
   phaseNumber,
 }: LessonStructurePhaseProps) {
-
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   if (!isMobile) {
     return phaseNumber % 2 ? (

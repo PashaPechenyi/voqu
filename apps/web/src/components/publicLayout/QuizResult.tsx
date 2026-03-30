@@ -11,7 +11,7 @@ function QuizResult({ correctAnswersAmount, restart, questionsAmount }: QuizResu
   const resultInPercents = (correctAnswersAmount / questionsAmount) * 100;
   return (
     <Card sx={styles.card}>
-      <TestProgressAnimation percentage={resultInPercents} sx={{width:"65%"}}  />
+      <TestProgressAnimation percentage={resultInPercents} sx={{ width: '65%' }} />
       {/* <Box
         sx={{
           width: '350px',

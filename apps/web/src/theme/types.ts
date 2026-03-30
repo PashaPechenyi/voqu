@@ -33,4 +33,3 @@ declare module '@mui/material/Typography' {
 
 export type TSxProps = SxProps<Theme>;
 export type TSxItem = Exclude<TSxProps, ReadonlyArray<any>>;
-

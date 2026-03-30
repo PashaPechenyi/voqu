@@ -19,12 +19,12 @@ function QuickActions() {
         borderRadius: '20px',
         display: 'flex',
         flexDirection: 'column',
-        alignItems:"start",
-        justifyContent:"start",
+        alignItems: 'start',
+        justifyContent: 'start',
         p: '30px',
         gap: '20px',
-        my:"40px",
-        backgroundColor:"rgba(164, 148, 137, 0.41)"
+        my: '40px',
+        backgroundColor: 'rgba(164, 148, 137, 0.41)',
       }}
     >
       <Typography variant="h5" color="secondary">

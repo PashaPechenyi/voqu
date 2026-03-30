@@ -113,7 +113,7 @@ function HeroSection() {
             component="img"
             src={img}
             sx={{
-              width: {xs:1,sm:'90%'},
+              width: { xs: 1, sm: '90%' },
               border: '5px solid grey',
               borderRadius: '10px',
 
@@ -124,7 +124,7 @@ function HeroSection() {
           <Box
             sx={{
               width: '40%',
-                minWidth:'160px',
+              minWidth: '160px',
               color: 'white',
               display: { xs: 'none', sm: 'block' },
               backgroundColor: '#71677D',
@@ -139,7 +139,10 @@ function HeroSection() {
           >
             <Box sx={{ textAlign: 'cenetr', py: '25px' }}>
               <Typography variant="h5">500+</Typography>
-              <Typography variant="body1" sx={{ typography: { md: 'body1', xs: 'body2' }, color:"white" }}>
+              <Typography
+                variant="body1"
+                sx={{ typography: { md: 'body1', xs: 'body2' }, color: 'white' }}
+              >
                 {' '}
                 Happy students
               </Typography>

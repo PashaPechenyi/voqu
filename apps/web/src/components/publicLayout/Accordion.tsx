@@ -61,7 +61,7 @@ const AccordionSummary = styled((props: AccordionSummaryProps) => (
 export default function CustomizedAccordions() {
   const [expanded, setExpanded] = React.useState<string | false>(false);
 
-  const handleChange = (panel: string, newExpanded:boolean) => {
+  const handleChange = (panel: string, newExpanded: boolean) => {
     setExpanded(newExpanded ? panel : false);
   };
 
@@ -69,13 +69,13 @@ export default function CustomizedAccordions() {
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
       {levels.map((level, ind) => (
         <Accordion
-        key={ind}
+          key={ind}
           expanded={expanded === `panel${ind + 1}`}
           onChange={(event: React.SyntheticEvent, newExpanded: boolean) =>
             handleChange(`panel${ind + 1}`, newExpanded)
           }
         >
-          <AccordionSummary >
+          <AccordionSummary>
             <Typography component="span" color="secondary">
               {level.level}
             </Typography>

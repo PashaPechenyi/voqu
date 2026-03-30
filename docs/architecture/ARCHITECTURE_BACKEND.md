@@ -3,6 +3,7 @@
 > **Purpose:** Architecture guidelines, folder structure, and coding conventions for the NestJS + TypeORM + PostgreSQL backend application.
 >
 > **Related documents:**
+>
 > - [Shared Packages Architecture](./ARCHITECTURE_SHARED.md) - Types, constants, and utilities shared with frontend
 > - [Frontend Architecture](./ARCHITECTURE_FRONTEND.md)
 > - [Implementation Rules](./phases/IMPLEMENTATION_RULES.md) - Detailed implementation plan rules
@@ -33,16 +34,16 @@
 
 ## 1. Tech Stack Overview
 
-| Technology | Version | Purpose |
-|------------|---------|---------|
-| NestJS | 10.x | Backend framework |
-| TypeScript | 5.x | Type safety |
-| TypeORM | 0.3.x | ORM for PostgreSQL |
-| PostgreSQL | 15.x | Primary database |
-| Auth0 | - | Authentication provider |
-| class-validator | 0.14.x | Request validation |
-| class-transformer | 0.5.x | Object transformation |
-| Passport | 0.7.x | Auth strategies |
+| Technology        | Version | Purpose                 |
+| ----------------- | ------- | ----------------------- |
+| NestJS            | 10.x    | Backend framework       |
+| TypeScript        | 5.x     | Type safety             |
+| TypeORM           | 0.3.x   | ORM for PostgreSQL      |
+| PostgreSQL        | 15.x    | Primary database        |
+| Auth0             | -       | Authentication provider |
+| class-validator   | 0.14.x  | Request validation      |
+| class-transformer | 0.5.x   | Object transformation   |
+| Passport          | 0.7.x   | Auth strategies         |
 
 ### Why This Stack?
 
@@ -164,32 +165,32 @@ apps/api/
 
 ### Module Files
 
-| Type | Pattern | Example |
-|------|---------|---------|
-| Module | `{feature}.module.ts` | `levels.module.ts` |
+| Type       | Pattern                   | Example                |
+| ---------- | ------------------------- | ---------------------- |
+| Module     | `{feature}.module.ts`     | `levels.module.ts`     |
 | Controller | `{feature}.controller.ts` | `levels.controller.ts` |
-| Service | `{feature}.service.ts` | `levels.service.ts` |
-| Entity | `{entity}.entity.ts` | `level.entity.ts` |
+| Service    | `{feature}.service.ts`    | `levels.service.ts`    |
+| Entity     | `{entity}.entity.ts`      | `level.entity.ts`      |
 
 ### DTO Files
 
-| Type | Pattern | Example |
-|------|---------|---------|
-| Create DTO | `create-{entity}.dto.ts` | `create-level.dto.ts` |
-| Update DTO | `update-{entity}.dto.ts` | `update-level.dto.ts` |
-| Query DTO | `{entity}-query.dto.ts` | `level-query.dto.ts` |
+| Type         | Pattern                    | Example                 |
+| ------------ | -------------------------- | ----------------------- |
+| Create DTO   | `create-{entity}.dto.ts`   | `create-level.dto.ts`   |
+| Update DTO   | `update-{entity}.dto.ts`   | `update-level.dto.ts`   |
+| Query DTO    | `{entity}-query.dto.ts`    | `level-query.dto.ts`    |
 | Response DTO | `{entity}-response.dto.ts` | `level-response.dto.ts` |
 
 ### Common Files
 
-| Type | Pattern | Example |
-|------|---------|---------|
-| Guard | `{name}.guard.ts` | `admin.guard.ts` |
-| Decorator | `{name}.decorator.ts` | `current-user.decorator.ts` |
-| Filter | `{name}.filter.ts` | `http-exception.filter.ts` |
-| Interceptor | `{name}.interceptor.ts` | `transform.interceptor.ts` |
-| Pipe | `{name}.pipe.ts` | `validation.pipe.ts` |
-| Strategy | `{name}.strategy.ts` | `jwt.strategy.ts` |
+| Type        | Pattern                 | Example                     |
+| ----------- | ----------------------- | --------------------------- |
+| Guard       | `{name}.guard.ts`       | `admin.guard.ts`            |
+| Decorator   | `{name}.decorator.ts`   | `current-user.decorator.ts` |
+| Filter      | `{name}.filter.ts`      | `http-exception.filter.ts`  |
+| Interceptor | `{name}.interceptor.ts` | `transform.interceptor.ts`  |
+| Pipe        | `{name}.pipe.ts`        | `validation.pipe.ts`        |
+| Strategy    | `{name}.strategy.ts`    | `jwt.strategy.ts`           |
 
 ### Naming Rules
 
@@ -346,14 +347,14 @@ export class AppModule {}
 
 ### Module Dependencies
 
-| Module | Depends On | Exports |
-|--------|------------|---------|
-| AuthModule | UsersModule | AuthService, JwtStrategy |
-| UsersModule | - | UsersService |
-| LevelsModule | - | LevelsService |
-| LessonsModule | LevelsModule | LessonsService |
-| TemplatesModule | LessonsModule | TemplatesService |
-| ProgressModule | UsersModule, LessonsModule | ProgressService |
+| Module          | Depends On                 | Exports                  |
+| --------------- | -------------------------- | ------------------------ |
+| AuthModule      | UsersModule                | AuthService, JwtStrategy |
+| UsersModule     | -                          | UsersService             |
+| LevelsModule    | -                          | LevelsService            |
+| LessonsModule   | LevelsModule               | LessonsService           |
+| TemplatesModule | LessonsModule              | TemplatesService         |
+| ProgressModule  | UsersModule, LessonsModule | ProgressService          |
 
 ---
 
@@ -436,10 +437,7 @@ export class LevelsController {
    */
   @Patch(':id')
   @UseGuards(JwtAuthGuard, AdminGuard)
-  update(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Body() updateDto: UpdateLevelDto,
-  ) {
+  update(@Param('id', ParseUUIDPipe) id: string, @Body() updateDto: UpdateLevelDto) {
     return this.levelsService.update(id, updateDto);
   }
 
@@ -467,12 +465,12 @@ export class LevelsController {
 
 ### HTTP Methods & Status Codes
 
-| Method | Success Code | Use Case |
-|--------|--------------|----------|
-| GET | 200 OK | Read operations |
-| POST | 201 Created | Create operations |
-| PATCH | 200 OK | Partial updates |
-| PUT | 200 OK | Full updates |
+| Method | Success Code   | Use Case          |
+| ------ | -------------- | ----------------- |
+| GET    | 200 OK         | Read operations   |
+| POST   | 201 Created    | Create operations |
+| PATCH  | 200 OK         | Partial updates   |
+| PUT    | 200 OK         | Full updates      |
 | DELETE | 204 No Content | Delete operations |
 
 ---
@@ -483,11 +481,7 @@ export class LevelsController {
 
 ```typescript
 // modules/levels/levels.service.ts
-import {
-  Injectable,
-  NotFoundException,
-  ConflictException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, FindOptionsWhere, ILike } from 'typeorm';
 import { Level, User } from '@/database/entities';
@@ -752,16 +746,16 @@ export class Level {
 
 ### Column Type Reference
 
-| TypeScript | PostgreSQL | Decorator |
-|------------|------------|-----------|
-| string | VARCHAR | `@Column({ length: 255 })` |
-| string | TEXT | `@Column({ type: 'text' })` |
-| number | INTEGER | `@Column()` or `@Column({ type: 'int' })` |
-| number | DECIMAL | `@Column({ type: 'decimal', precision: 10, scale: 2 })` |
-| boolean | BOOLEAN | `@Column({ default: false })` |
-| Date | TIMESTAMP | `@Column({ type: 'timestamp' })` |
-| enum | ENUM | `@Column({ type: 'enum', enum: MyEnum })` |
-| object | JSONB | `@Column({ type: 'jsonb' })` |
+| TypeScript | PostgreSQL | Decorator                                               |
+| ---------- | ---------- | ------------------------------------------------------- |
+| string     | VARCHAR    | `@Column({ length: 255 })`                              |
+| string     | TEXT       | `@Column({ type: 'text' })`                             |
+| number     | INTEGER    | `@Column()` or `@Column({ type: 'int' })`               |
+| number     | DECIMAL    | `@Column({ type: 'decimal', precision: 10, scale: 2 })` |
+| boolean    | BOOLEAN    | `@Column({ default: false })`                           |
+| Date       | TIMESTAMP  | `@Column({ type: 'timestamp' })`                        |
+| enum       | ENUM       | `@Column({ type: 'enum', enum: MyEnum })`               |
+| object     | JSONB      | `@Column({ type: 'jsonb' })`                            |
 
 ### Relation Types
 
@@ -822,7 +816,7 @@ import { CEFRLevel, LevelStatus, VALIDATION } from '@voqu/shared';
 
 export class CreateLevelDto {
   @IsString()
-  @IsNotEmpty({ message: 'Назва обов\'язкова' })
+  @IsNotEmpty({ message: "Назва обов'язкова" })
   @MaxLength(VALIDATION.NAME.MAX)
   name: string;
 
@@ -867,14 +861,7 @@ export class UpdateLevelDto extends PartialType(CreateLevelDto) {}
 
 ```typescript
 // modules/levels/dto/level-query.dto.ts
-import {
-  IsOptional,
-  IsEnum,
-  IsString,
-  IsInt,
-  Min,
-  Max,
-} from 'class-validator';
+import { IsOptional, IsEnum, IsString, IsInt, Min, Max } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { CEFRLevel, LevelStatus, VALIDATION } from '@voqu/shared';
 
@@ -916,20 +903,20 @@ export class LevelQueryDto {
 
 ### Common Validators
 
-| Decorator | Purpose | Example |
-|-----------|---------|---------|
-| `@IsString()` | Must be string | Text fields |
-| `@IsNotEmpty()` | Cannot be empty | Required fields |
-| `@IsOptional()` | Can be undefined | Optional fields |
-| `@IsEmail()` | Valid email format | Email fields |
-| `@IsUUID()` | Valid UUID | ID parameters |
-| `@IsEnum(E)` | Must be enum value | Status, type fields |
-| `@IsInt()` | Must be integer | Count, order fields |
-| `@Min(n)` / `@Max(n)` | Numeric range | Pagination, order |
-| `@MinLength(n)` / `@MaxLength(n)` | String length | Name, description |
-| `@Matches(regex)` | Pattern match | Slug, phone |
-| `@IsArray()` | Must be array | List inputs |
-| `@ValidateNested()` | Validate nested object | Complex DTOs |
+| Decorator                         | Purpose                | Example             |
+| --------------------------------- | ---------------------- | ------------------- |
+| `@IsString()`                     | Must be string         | Text fields         |
+| `@IsNotEmpty()`                   | Cannot be empty        | Required fields     |
+| `@IsOptional()`                   | Can be undefined       | Optional fields     |
+| `@IsEmail()`                      | Valid email format     | Email fields        |
+| `@IsUUID()`                       | Valid UUID             | ID parameters       |
+| `@IsEnum(E)`                      | Must be enum value     | Status, type fields |
+| `@IsInt()`                        | Must be integer        | Count, order fields |
+| `@Min(n)` / `@Max(n)`             | Numeric range          | Pagination, order   |
+| `@MinLength(n)` / `@MaxLength(n)` | String length          | Name, description   |
+| `@Matches(regex)`                 | Pattern match          | Slug, phone         |
+| `@IsArray()`                      | Must be array          | List inputs         |
+| `@ValidateNested()`               | Validate nested object | Complex DTOs        |
 
 ---
 
@@ -1219,15 +1206,15 @@ export class DuplicateEntityException extends ConflictException {
 
 ### Error Codes Reference
 
-| Status | Exception | Use Case |
-|--------|-----------|----------|
-| 400 | `BadRequestException` | Invalid request data |
-| 401 | `UnauthorizedException` | Missing/invalid auth token |
-| 403 | `ForbiddenException` | Insufficient permissions |
-| 404 | `NotFoundException` | Resource not found |
-| 409 | `ConflictException` | Duplicate resource |
-| 422 | `UnprocessableEntityException` | Business logic error |
-| 500 | `InternalServerErrorException` | Unexpected error |
+| Status | Exception                      | Use Case                   |
+| ------ | ------------------------------ | -------------------------- |
+| 400    | `BadRequestException`          | Invalid request data       |
+| 401    | `UnauthorizedException`        | Missing/invalid auth token |
+| 403    | `ForbiddenException`           | Insufficient permissions   |
+| 404    | `NotFoundException`            | Resource not found         |
+| 409    | `ConflictException`            | Duplicate resource         |
+| 422    | `UnprocessableEntityException` | Business logic error       |
+| 500    | `InternalServerErrorException` | Unexpected error           |
 
 ---
 
@@ -1440,6 +1427,7 @@ await queryRunner.query(`
 ```
 
 Examples:
+
 - `1704067200000-create-levels.ts`
 - `1704067300000-add-status-to-lessons.ts`
 - `1704067400000-create-level-lesson-relation.ts`
@@ -1619,9 +1607,7 @@ describe('LevelsService', () => {
       const dto = { name: 'Test', slug: 'existing-slug', cefrLevel: CEFRLevel.A1 };
       mockRepository.findOne.mockResolvedValue({ id: 'existing' });
 
-      await expect(service.create(dto as any, {} as any)).rejects.toThrow(
-        ConflictException,
-      );
+      await expect(service.create(dto as any, {} as any)).rejects.toThrow(ConflictException);
     });
   });
 });
@@ -1683,10 +1669,7 @@ describe('Levels (e2e)', () => {
 
   describe('POST /api/v1/levels', () => {
     it('should require authentication', () => {
-      return request(app.getHttpServer())
-        .post('/api/v1/levels')
-        .send({ name: 'Test' })
-        .expect(401);
+      return request(app.getHttpServer()).post('/api/v1/levels').send({ name: 'Test' }).expect(401);
     });
 
     it('should create level with valid data', () => {
@@ -1861,5 +1844,5 @@ export class LevelsController {
 
 ---
 
-*Document Version: 1.0*
-*Last Updated: December 2024*
+_Document Version: 1.0_
+_Last Updated: December 2024_

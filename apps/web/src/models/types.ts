@@ -12,13 +12,13 @@ export type Question = {
   variants: string[];
   answer: string;
 };
-export type Level={
-    level:string,
-    description:string,
-    skills:string[]
-}
-export type Card={
-    icon:any,
-    title:string,
-    description:string
-}
+export type Level = {
+  level: string;
+  description: string;
+  skills: string[];
+};
+export type Card = {
+  icon: any;
+  title: string;
+  description: string;
+};

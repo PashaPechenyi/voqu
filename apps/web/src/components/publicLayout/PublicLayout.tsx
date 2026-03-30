@@ -7,9 +7,16 @@ import PublicFooter from './PublicFooter';
 export function PublicLayout() {
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor:'#f6f1ee' }}>
+      <Box
+        sx={{
+          minHeight: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          backgroundColor: '#f6f1ee',
+        }}
+      >
         <PublicHeader />
-        <Container component="main" sx={{ flex: 1, py: 4, }}>
+        <Container component="main" sx={{ flex: 1, py: 4 }}>
           <Outlet />
         </Container>
         <PublicFooter />

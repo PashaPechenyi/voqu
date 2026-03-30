@@ -7,12 +7,10 @@ import LessonPreviewSection from './sections/LessonPreviewSection';
 export function LandingPage() {
   return (
     <>
-    <HeroSection/>
-   
-    <FeaturesSection/>
-    <LessonPreviewSection/>
-    
+      <HeroSection />
+
+      <FeaturesSection />
+      <LessonPreviewSection />
     </>
-    
   );
 }

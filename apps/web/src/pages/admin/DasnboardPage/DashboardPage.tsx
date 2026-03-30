@@ -9,8 +9,8 @@ function DashboardPage() {
     <>
       <AdminHeader />
       <SummarySection />
-      <StatisticsPage/>
-      <QuickActions/>
+      <StatisticsPage />
+      <QuickActions />
     </>
   );
 }
