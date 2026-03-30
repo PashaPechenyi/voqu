@@ -9,13 +9,9 @@ export function AppRoutes() {
     <Routes>
       {/* Public routes */}
       <Route path="/" element={<PublicLayout />}>
-      <Route path='landingPage' index element={<LandingPage />} />
-      <Route path='/about' index element={<AboutPage />} />
-      <Route path='/admin' index element={<DashboardPage />} />
-     
-        
-        
-      
+        <Route path="landingPage" index element={<LandingPage />} />
+        <Route path="/about" index element={<AboutPage />} />
+        <Route path="/admin" index element={<DashboardPage />} />
       </Route>
     </Routes>
   );

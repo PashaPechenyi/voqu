@@ -23,7 +23,6 @@ function Table1<TRow extends Record<string, any>>({
   rowsId: (row: TRow) => any;
 }) {
   const keys = Object.keys(Object.assign({}, ...rows));
- 
 
   return (
     <TableContainer component={Paper}>

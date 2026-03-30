@@ -7,7 +7,7 @@ import { TSxItem, TSxProps } from './types';
 
 //   slot:"Root"
 // })({
- 
+
 //   padding: '10px 20px',
 //   borderRadius: '8px',
 //   border: 'none',

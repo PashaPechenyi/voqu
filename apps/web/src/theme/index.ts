@@ -11,15 +11,15 @@ export const theme = createTheme({
     background: {
       default: '#ebebeb',
     },
-    tertiary:{
-      main:"#aa9f96"
-    }
+    tertiary: {
+      main: '#aa9f96',
+    },
   },
   typography: {
     fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
     h1: { fontWeight: 700 },
     h2: { fontWeight: 700 },
-    h3: { fontWeight: 600,  color: '#37123c',},
+    h3: { fontWeight: 600, color: '#37123c' },
     h4: { fontSize: '28px', fontWeight: 500, color: '#37123c' },
 
     h5: {
@@ -41,18 +41,15 @@ export const theme = createTheme({
         fontSize: 26,
       },
     },
-    body2:{
-     
+    body2: {},
+    body3: {
+      fontSize: 21,
+      color: '#37123c',
     },
-    body3:{
-      fontSize:21,
-      color:"#37123c"
+    body4: {
+      fontSize: 11,
+      color: '#aa9f96',
     },
-    body4:{
-      fontSize:11,
-      color:"#aa9f96"
-    }
-
   },
   components: {
     MuiButton: {
@@ -60,7 +57,6 @@ export const theme = createTheme({
         root: {
           textTransform: 'none',
           borderRadius: 8,
-          
         },
       },
     },
@@ -79,6 +75,5 @@ export const theme = createTheme({
         },
       },
     },
-    
   },
 });

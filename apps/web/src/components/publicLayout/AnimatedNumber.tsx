@@ -3,16 +3,16 @@ type AnimatedNumberType = {
   percent: number;
 };
 //let animatedPercent=0;
-const animationDuration=2000;
+const animationDuration = 2000;
 function AnimatedNumber({ percent }: AnimatedNumberType) {
   const [animatedPercent, setAnimatedPercent] = useState<number>(0);
   const intervalId = useRef<number | null>(null);
-    const step = percent/(animationDuration/10)
+  const step = percent / (animationDuration / 10);
   console.log('trfh');
-  function resolveNumberDisplayFormat(value:number){
+  function resolveNumberDisplayFormat(value: number) {
     return Number(value.toFixed(2));
   }
-  
+
   useEffect(() => {
     const interval = setInterval(() => {
       setAnimatedPercent((prev) => prev + step);

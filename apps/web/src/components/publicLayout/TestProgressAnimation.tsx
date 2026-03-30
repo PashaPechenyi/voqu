@@ -103,7 +103,7 @@ const ProgressCircleIcon = ({
         {/* <text x="50%" y="50%" dominantBaseline="middle" textAnchor="middle" fontSize="4">
           <AnimatedNumber percent={percentage}/>%
         </text> */}
-         <AnimatedNumber percent={percentage}/>
+        <AnimatedNumber percent={percentage} />
       </SvgIcon>
     </>
   );

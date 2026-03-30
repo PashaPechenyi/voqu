@@ -17,7 +17,7 @@ function StatisticsCard() {
       }}
     >
       <CardContent sx={{ px: '20px', mt: '20px' }}>
-        <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center', pb:"30px" }}>
+        <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center', pb: '30px' }}>
           <TimelineIcon fontSize="large" sx={{ fill: 'grey' }} />
           <Typography variant="h4">Recent Activity</Typography>
         </Box>
@@ -26,15 +26,20 @@ function StatisticsCard() {
           {ACTIVITIES.map((el) => {
             return (
               <Box>
-                <Box sx={{display:"flex", gap: "10px", alignItems:"center"}}>
-                   <Box sx={{width:"10px", height:"10px", backgroundColor:"red", borderRadius:"100%"}}></Box>
-                    <Typography color="secondary" variant="body3">
-                      {el.type}
-                    </Typography>
-                  </Box>
+                <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                  <Box
+                    sx={{
+                      width: '10px',
+                      height: '10px',
+                      backgroundColor: 'red',
+                      borderRadius: '100%',
+                    }}
+                  ></Box>
+                  <Typography color="secondary" variant="body3">
+                    {el.type}
+                  </Typography>
+                </Box>
                 <Box sx={{ ml: '20px' }}>
-                  
-
                   <Typography variant="body1" color="primary">
                     {el.name}
                   </Typography>

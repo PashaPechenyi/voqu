@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import SchoolIcon from '@mui/icons-material/School';
 import { AppBar, Drawer, IconButton } from '@mui/material';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import  ImportContactsIcon from '@mui/icons-material/ImportContacts';
+import ImportContactsIcon from '@mui/icons-material/ImportContacts';
 import PersonIcon from '@mui/icons-material/Person';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { flexbox, keys, useMediaQuery } from '@mui/system';

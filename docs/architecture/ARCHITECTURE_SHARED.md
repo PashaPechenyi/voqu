@@ -3,6 +3,7 @@
 > **Purpose:** Guidelines for the `packages/shared` module - shared types, constants, and utilities used by both frontend and backend.
 >
 > **Related documents:**
+>
 > - [Frontend Architecture](./ARCHITECTURE_FRONTEND.md)
 > - [Backend Architecture](./ARCHITECTURE_BACKEND.md)
 > - [Implementation Plan](./IMPLEMENTATION_PLAN.md)
@@ -102,14 +103,14 @@ packages/shared/
 
 ## 3. File Naming Conventions
 
-| Type | Pattern | Example |
-|------|---------|---------|
-| Type definitions | `{domain}.types.ts` | `user.types.ts` |
-| Constants | `{domain}.constants.ts` | `routes.constants.ts` |
-| Enums | `{domain}.enums.ts` | `level.enums.ts` |
-| Utilities | `{domain}.utils.ts` | `slug.utils.ts` |
-| API Contracts | `{domain}.contracts.ts` | `auth.contracts.ts` |
-| Barrel exports | `index.ts` | `types/index.ts` |
+| Type             | Pattern                 | Example               |
+| ---------------- | ----------------------- | --------------------- |
+| Type definitions | `{domain}.types.ts`     | `user.types.ts`       |
+| Constants        | `{domain}.constants.ts` | `routes.constants.ts` |
+| Enums            | `{domain}.enums.ts`     | `level.enums.ts`      |
+| Utilities        | `{domain}.utils.ts`     | `slug.utils.ts`       |
+| API Contracts    | `{domain}.contracts.ts` | `auth.contracts.ts`   |
+| Barrel exports   | `index.ts`              | `types/index.ts`      |
 
 ### Naming Rules
 
@@ -161,17 +162,17 @@ packages/shared/
 
 ## 5. What Does NOT Belong in Shared
 
-| Category | Reason | Where it belongs |
-|----------|--------|------------------|
-| React components | Frontend-specific | `apps/web/src/components/` |
-| React hooks | Frontend-specific | `apps/web/src/hooks/` |
-| NestJS decorators | Backend-specific | `apps/api/src/common/` |
-| Database entities | Backend-specific | `apps/api/src/database/entities/` |
-| Browser APIs (localStorage, fetch) | Platform-specific | `apps/web/src/services/` |
-| Node.js APIs (fs, path) | Platform-specific | `apps/api/src/` |
-| Environment variables | App-specific | `.env` files per app |
-| Styling (CSS, MUI theme) | Frontend-specific | `apps/web/src/theme/` |
-| Business logic with side effects | App-specific | Services in respective apps |
+| Category                           | Reason            | Where it belongs                  |
+| ---------------------------------- | ----------------- | --------------------------------- |
+| React components                   | Frontend-specific | `apps/web/src/components/`        |
+| React hooks                        | Frontend-specific | `apps/web/src/hooks/`             |
+| NestJS decorators                  | Backend-specific  | `apps/api/src/common/`            |
+| Database entities                  | Backend-specific  | `apps/api/src/database/entities/` |
+| Browser APIs (localStorage, fetch) | Platform-specific | `apps/web/src/services/`          |
+| Node.js APIs (fs, path)            | Platform-specific | `apps/api/src/`                   |
+| Environment variables              | App-specific      | `.env` files per app              |
+| Styling (CSS, MUI theme)           | Frontend-specific | `apps/web/src/theme/`             |
+| Business logic with side effects   | App-specific      | Services in respective apps       |
 
 ---
 
@@ -256,14 +257,14 @@ export interface UserPreview {
 
 ### Type Naming Conventions
 
-| Pattern | Usage | Example |
-|---------|-------|---------|
-| `{Entity}` | Full entity type | `User`, `Level`, `Lesson` |
-| `{Entity}Preview` | Minimal data for lists | `LevelPreview`, `LessonPreview` |
-| `{Entity}With{Relation}` | Entity with loaded relations | `LevelWithLessons` |
-| `Create{Entity}` | Creation payload | `CreateLevel`, `CreateLesson` |
-| `Update{Entity}` | Update payload (partial) | `UpdateLevel`, `UpdateLesson` |
-| `{Entity}Query` | Query/filter parameters | `LevelQuery`, `LessonQuery` |
+| Pattern                  | Usage                        | Example                         |
+| ------------------------ | ---------------------------- | ------------------------------- |
+| `{Entity}`               | Full entity type             | `User`, `Level`, `Lesson`       |
+| `{Entity}Preview`        | Minimal data for lists       | `LevelPreview`, `LessonPreview` |
+| `{Entity}With{Relation}` | Entity with loaded relations | `LevelWithLessons`              |
+| `Create{Entity}`         | Creation payload             | `CreateLevel`, `CreateLesson`   |
+| `Update{Entity}`         | Update payload (partial)     | `UpdateLevel`, `UpdateLesson`   |
+| `{Entity}Query`          | Query/filter parameters      | `LevelQuery`, `LessonQuery`     |
 
 ### Generic Types
 
@@ -334,8 +335,7 @@ export const ROUTES = {
   // Learning
   LEVELS: '/levels',
   LEVEL_DETAIL: (id: string) => `/levels/${id}`,
-  LESSON_DETAIL: (levelId: string, lessonId: string) =>
-    `/levels/${levelId}/lessons/${lessonId}`,
+  LESSON_DETAIL: (levelId: string, lessonId: string) => `/levels/${levelId}/lessons/${lessonId}`,
 
   // Admin
   ADMIN: {
@@ -498,14 +498,10 @@ export function getRelativeTime(isoDate: string, locale = 'uk-UA'): string {
   const rtf = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' });
   const date = new Date(isoDate);
   const now = new Date();
-  const diffInDays = Math.floor(
-    (date.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
-  );
+  const diffInDays = Math.floor((date.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
 
   if (Math.abs(diffInDays) < 1) {
-    const diffInHours = Math.floor(
-      (date.getTime() - now.getTime()) / (1000 * 60 * 60)
-    );
+    const diffInHours = Math.floor((date.getTime() - now.getTime()) / (1000 * 60 * 60));
     return rtf.format(diffInHours, 'hour');
   }
 
@@ -728,12 +724,12 @@ import type { CreateLevelRequest } from '@voqu/shared/contracts';
 
 ### When to Bump Version
 
-| Change Type | Version Bump | Example |
-|-------------|--------------|---------|
-| New types/exports added | Patch (1.0.x) | Add `TemplatePreview` type |
-| Bug fixes in utils | Patch (1.0.x) | Fix `generateSlug` edge case |
-| New features | Minor (1.x.0) | Add new `contracts/` module |
-| Breaking changes | Major (x.0.0) | Rename `User.name` to `User.firstName` |
+| Change Type             | Version Bump  | Example                                |
+| ----------------------- | ------------- | -------------------------------------- |
+| New types/exports added | Patch (1.0.x) | Add `TemplatePreview` type             |
+| Bug fixes in utils      | Patch (1.0.x) | Fix `generateSlug` edge case           |
+| New features            | Minor (1.x.0) | Add new `contracts/` module            |
+| Breaking changes        | Major (x.0.0) | Rename `User.name` to `User.firstName` |
 
 ### Breaking Change Checklist
 
@@ -763,5 +759,5 @@ export interface UserPreview {
 
 ---
 
-*Document Version: 1.0*
-*Last Updated: December 2024*
+_Document Version: 1.0_
+_Last Updated: December 2024_

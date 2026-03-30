@@ -86,7 +86,12 @@ function PublicFooter() {
                   >
                     {text.name}
                   </Typography> */}
-                  <Button color="inherit" component={Link} sx={{ fontSize: '16px', textDecoration: 'none', color: 'white', padding: 2 }} to={text.way}>
+                  <Button
+                    color="inherit"
+                    component={Link}
+                    sx={{ fontSize: '16px', textDecoration: 'none', color: 'white', padding: 2 }}
+                    to={text.way}
+                  >
                     {text.name}
                   </Button>
                 </ListItem>

@@ -75,12 +75,12 @@ function QuizSlider() {
     setUsersAnswer(null);
   }
 
-  function handleAnswerClick( selectedAnswer: string) {
+  function handleAnswerClick(selectedAnswer: string) {
     if (activeQuestionData.answer == selectedAnswer) {
       setCorrectAnswersAmount((prev) => prev + 1);
       console.log(correctAnswersAmount, 'result');
     }
-    setUsersAnswer(selectedAnswer)
+    setUsersAnswer(selectedAnswer);
   }
 
   return (
@@ -95,7 +95,11 @@ function QuizSlider() {
           handleNextQuestion={handleNextQuestion}
         />
       ) : (
-        <QuizResult correctAnswersAmount={correctAnswersAmount} questionsAmount={questionsAmount} restart={restart} />
+        <QuizResult
+          correctAnswersAmount={correctAnswersAmount}
+          questionsAmount={questionsAmount}
+          restart={restart}
+        />
       )}
     </>
   );

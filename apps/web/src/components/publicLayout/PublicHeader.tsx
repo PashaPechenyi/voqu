@@ -77,15 +77,15 @@ export default function PublicHeader() {
                       // >
                       //   {el.name}
                       // </Button>
-                       <Button
-                      color="inherit"
-                      component={Link}
-                       sx={{ fontSize: { xs: '15px', sm: '20px' } }}
+                      <Button
+                        color="inherit"
+                        component={Link}
+                        sx={{ fontSize: { xs: '15px', sm: '20px' } }}
                         onClick={() => setIsOpen(false)}
-                      to={el.way}
-                    >
-                      {el.name}
-                    </Button>
+                        to={el.way}
+                      >
+                        {el.name}
+                      </Button>
                     );
                   })}
                 </Box>
@@ -115,7 +115,12 @@ export default function PublicHeader() {
                     <Button
                       color="inherit"
                       component={Link}
-                      sx={{ fontSize: '16px', textDecoration: 'none', color: '#37123c', padding: 2 }}
+                      sx={{
+                        fontSize: '16px',
+                        textDecoration: 'none',
+                        color: '#37123c',
+                        padding: 2,
+                      }}
                       to={link.way}
                     >
                       {link.name}
