@@ -8,6 +8,12 @@ export const theme = createTheme({
     secondary: {
       main: '#F5F1ED',
     },
+    adminPrimary: {
+      main: '#37123C',
+    },
+    adminSecondary: {
+      main: '#A99F96',
+    },
     background: {
       default: '#F5F1ED',
     },
