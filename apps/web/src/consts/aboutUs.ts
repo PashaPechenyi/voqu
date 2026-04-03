@@ -1,4 +1,4 @@
-import { CefrLevel, MethodologyCard } from './../models/models';
+import { CefrLevel, MethodologyCardConst } from './../models/models';
 import ImportContactsIcon from '@mui/icons-material/ImportContacts';
 import DonutLargeRoundedIcon from '@mui/icons-material/DonutLargeRounded';
 import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';
@@ -75,7 +75,7 @@ export const cefrLevels: CefrLevel[] = [
   },
 ];
 
-export const MethodologyCards: MethodologyCard[] = [
+export const MethodologyCards: MethodologyCardConst[] = [
   {
     id: 1,
     title: 'Vocabulary Introduction',
