@@ -4,7 +4,7 @@ import PeopleAltRoundedIcon from '@mui/icons-material/PeopleAltRounded';
 import { NavMenuIconItem } from '@/shared/types/navMenuItem.type';
 
 export const adminQuickActions: NavMenuIconItem[] = [
-  { Icon: WorkspacePremiumIcon, label: 'View Reports', path: '/' },
-  { Icon: ImportContactsRoundedIcon, label: 'Manage Courses', path: '/about' },
+  { Icon: WorkspacePremiumIcon, label: 'View Reports', path: '/admin' },
+  { Icon: ImportContactsRoundedIcon, label: 'Manage Courses', path: '/admin/courses' },
   { Icon: PeopleAltRoundedIcon, label: 'Manage Users', path: '/table' },
 ];
