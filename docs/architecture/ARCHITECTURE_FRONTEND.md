@@ -12,37 +12,41 @@ src/
 │   ├── components/             # Generic UI (no business logic)
 │   │   └── ComponentName/
 │   │       └── ComponentName.tsx
-│   ├── hooks/
 │   ├── helpers/
 │   ├── constants/
 │   └── types/
 │
 ├── layouts/                    # Page wrappers for routing
-│   ├── PublicLayout/
-│   ├── AdminLayout/
-│   └── DashboardLayout/
+│   └── LayoutName/
+│       ├── LayoutName.layout.tsx
+│       ├── components/         # Sub-components (Header, Footer)
+│       └── constants/          # Layout-specific constants
 │
 ├── features/                   # Domain-specific modules
 │   └── {feature}/
 │       ├── components/
 │       ├── hooks/
 │       ├── services/
+│       ├── constants/
 │       └── types/
 │
 ├── pages/
 │   ├── public/
-│   │   └── PageName/
+│   │   └── pageName/
 │   │       ├── PageName.page.tsx
+│   │       ├── constants/      # Page-specific constants
+│   │       ├── hooks/          # Page-specific hooks
+│   │       ├── types/          # Page-specific types
 │   │       └── sections/
 │   │           └── SectionName.section.tsx
-│   ├── auth/
-│   ├── dashboard/
 │   └── admin/
+│       └── pageName/
+│           ├── PageName.page.tsx
+│           ├── constants/
+│           ├── hooks/
+│           ├── types/
+│           └── sections/
 │
-├── services/                   # Global services (API client)
-├── mocks/                      # Mock data for development
-├── assets/
-│   └── images/
 ├── routes/
 └── theme/
 ```
@@ -51,34 +55,32 @@ src/
 
 ## Folder Responsibilities
 
-| Folder      | Purpose                          | Example Contents                 |
-| ----------- | -------------------------------- | -------------------------------- |
-| `shared/`   | Generic, reusable code           | Accordion, Table, Pagination     |
-| `features/` | Domain-specific modules          | vocabulary/, quiz/, lessons/     |
-| `layouts/`  | Page wrappers with header/footer | PublicLayout, AdminLayout        |
-| `pages/`    | Route entry points               | Landing.page.tsx, About.page.tsx |
-| `services/` | External integrations            | API client, localStorage         |
-| `mocks/`    | Development mock data            | questions.mock.ts, words.mock.ts |
+| Folder      | Purpose                          | Example Contents                          |
+| ----------- | -------------------------------- | ----------------------------------------- |
+| `shared/`   | Generic, reusable code           | Table, SectionDivider, QuizSlider         |
+| `features/` | Domain-specific modules          | vocabulary/, courses/, levels/             |
+| `layouts/`  | Page wrappers with header/footer | PublicLayout/, AdminLayout/                |
+| `pages/`    | Route entry points               | Landing.page.tsx, AboutUs.page.tsx         |
+| `theme/`    | MUI theme configuration          | index.ts, theme.type.ts                   |
 
 ---
 
 ## File Naming Conventions
 
-| Type           | Convention          | Example                |
-| -------------- | ------------------- | ---------------------- |
-| Components     | PascalCase          | `VocabularyCard.tsx`   |
-| Pages          | PascalCase + suffix | `Landing.page.tsx`     |
-| Sections       | PascalCase + suffix | `Hero.section.tsx`     |
-| Hooks          | camelCase + suffix  | `useAuth.hook.ts`      |
-| Services       | camelCase + suffix  | `auth.service.ts`      |
-| Types          | camelCase + suffix  | `word.type.ts`         |
-| Helpers        | camelCase + suffix  | `theme.helper.ts`      |
-| Constants      | camelCase + suffix  | `navigation.const.ts`  |
-| Mocks          | camelCase + suffix  | `words.mock.ts`        |
-| Barrel exports | `index.ts`          | `index.ts`             |
+| Type           | Convention          | Example                            |
+| -------------- | ------------------- | ---------------------------------- |
+| Components     | PascalCase          | `VocabularyCardsSlider.tsx`        |
+| Pages          | PascalCase + suffix | `Landing.page.tsx`                 |
+| Sections       | PascalCase + suffix | `Hero.section.tsx`                 |
+| Layouts        | PascalCase + suffix | `Public.layout.tsx`                |
+| Hooks          | camelCase + suffix  | `useAuth.hook.ts`                  |
+| Services       | camelCase + suffix  | `auth.service.ts`                  |
+| Types          | camelCase + suffix  | `vocabularyEntry.type.ts`          |
+| Helpers        | camelCase + suffix  | `combineSxStyles.helper.ts`        |
+| Constants      | camelCase + suffix  | `publicNavItems.const.ts`          |
 
-> **Note:** Components in `shared/components/` and `features/*/components/` do NOT require a suffix.
-> All other files (hooks, services, types, helpers, constants, mocks) MUST include their suffix.
+> **Note:** Components in `shared/components/`, `features/*/components/`, and `layouts/*/components/` do NOT require a suffix.
+> All other files (layouts, hooks, services, types, helpers, constants) MUST include their suffix.
 
 ---
 
@@ -86,12 +88,13 @@ src/
 
 ### Where Components Live
 
-| Component Type                 | Location                 |
-| ------------------------------ | ------------------------ |
-| Generic UI (no business logic) | `shared/components/`     |
-| Feature-specific               | `features/*/components/` |
-| Layout wrappers                | `layouts/`               |
-| Page sections (one-off)        | `pages/*/sections/`      |
+| Component Type                 | Location                       |
+| ------------------------------ | ------------------------------ |
+| Generic UI (no business logic) | `shared/components/`           |
+| Feature-specific               | `features/*/components/`       |
+| Layout wrappers                | `layouts/*/`                   |
+| Layout sub-components          | `layouts/*/components/`        |
+| Page sections (one-off)        | `pages/**/sections/`           |
 
 ### Component Folder Structure
 
@@ -104,29 +107,68 @@ ComponentName/
 
 Add additional files only when needed:
 
-- `ComponentName.types.ts` - For complex prop interfaces
-- `ComponentName.test.tsx` - For tests
+- `ComponentName.types.ts` - For complex prop interfaces (e.g., `MethodologyCard.types.ts`, `Table.types.ts`)
+
+### Layout Folder Structure
+
+Each layout follows a richer internal structure:
+
+```
+LayoutName/
+├── LayoutName.layout.tsx         # Main layout component
+├── components/                   # Sub-components (Header, Footer, MobileMenu)
+│   └── LayoutNameHeader.tsx
+└── constants/                    # Layout-specific constants
+    └── layoutNameNavItems.const.ts
+```
+
+### Page Folder Structure
+
+Pages can co-locate their own constants and types alongside sections:
+
+```
+pageName/
+├── PageName.page.tsx             # Page entry component
+├── constants/                    # Page-specific constants
+│   └── pageSpecific.const.ts
+├── hooks/                        # Page-specific hooks
+│   └── usePageSpecific.hook.ts
+├── types/                        # Page-specific types
+│   └── pageSpecific.type.ts
+└── sections/
+    └── PageNameSection.section.tsx
+```
 
 ---
 
 ## Type Organization
 
-Types are co-located with their feature:
+Types are co-located with their domain:
 
 ```
 features/
 ├── vocabulary/
 │   └── types/
-│       └── word.types.ts
-├── quiz/
+│       └── vocabularyEntry.type.ts
+├── courses/
 │   └── types/
-│       └── question.types.ts
+│       └── popularCourses.type.ts
 └── levels/
     └── types/
-        └── level.types.ts
+        └── level.type.ts
 ```
 
-Shared types (theme, common utilities) go in `shared/types/`.
+Pages and layouts can also co-locate types when they are only used locally:
+
+```
+pages/admin/dashboard/
+└── types/
+    ├── dashboardStatistic.type.ts
+    └── recentActivity.type.ts
+```
+
+Shared types (navigation, quiz entries) go in `shared/types/`.
+Theme-related types go in `theme/`.
 
 ---
 
@@ -138,25 +180,28 @@ Shared types (theme, common utilities) go in `shared/types/`.
 // 1. External libraries
 import { useState } from 'react';
 import { Box, Typography } from '@mui/material';
-
 // 2. Internal absolute imports (@/)
-import { Pagination } from '@/shared/components/Pagination/Pagination';
-import { Word } from '@/features/vocabulary/types/word.types';
-
-// 3. Relative imports (same feature/folder)
-import { HeroSection } from './sections/Hero.section';
+import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
+import PopularCourse from '@/features/courses/components/PopularCourse/PopularCourse';
+// 3. Relative imports (within same module)
+import { publicNavItems } from '../constants/publicNavItems.const';
+import PublicMobileMenu from './PublicMobileMenu';
 ```
 
 ### Path Alias
 
-Use `@/` alias for all internal imports:
+Use `@/` alias for cross-module imports. Use relative imports within the same module (layout, page, or feature):
 
 ```typescript
-// Good
+// Good - cross-module
 import { theme } from '@/theme';
-import { useAuth } from '@/features/auth/hooks/useAuth';
+import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 
-// Bad
+// Good - within same module (relative)
+import { publicNavItems } from '../constants/publicNavItems.const';
+import AdminHeader from './components/AdminHeader';
+
+// Bad - relative for cross-module
 import { theme } from '../../../theme';
 ```
 
@@ -164,22 +209,17 @@ import { theme } from '../../../theme';
 
 ## Routing
 
-Routes are organized by domain:
+Routes are defined in a single file:
 
 ```
 routes/
-├── index.tsx           # Main router
-├── public.routes.tsx
-├── auth.routes.tsx
-├── dashboard.routes.tsx
-└── admin.routes.tsx
+└── index.tsx           # All routes defined here
 ```
 
 ### Route Rules
 
-- Public pages: `/lowercase` (e.g., `/about`)
-- Dashboard: `/dashboard/section` (e.g., `/dashboard/progress`)
-- Admin: `/admin/resource` (e.g., `/admin/levels`)
+- Public pages: `/lowercase` (e.g., `/`, `/about`)
+- Admin: `/admin` (e.g., `/admin`)
 - Only one `index` route per parent
 
 ---
@@ -214,15 +254,15 @@ Use MUI breakpoint syntax:
 
 ## Best Practices
 
-1. **No mock data in components** - Extract to `mocks/` folder
+1. **No mock data in components** - Extract to `constants/` files with `.const.ts` suffix
 2. **No unused imports** - Remove all unused imports
 3. **Export conventions**:
-   - Components (`.tsx`): Use `export default`
-   - Utilities, hooks, types, constants: Use named exports
-   - Barrel files (`index.ts`): Use named re-exports
-4. **Co-locate types** - Keep types close to their usage in feature folders
+   - Components (`.tsx`): Use `export default ComponentName;` at the bottom of the file (not inline `export default function`)
+   - Types, constants: Use named exports
+4. **Co-locate types and constants** - Keep types and constants close to their usage. Pages and layouts can have their own `types/` and `constants/` folders when data is only used locally
 5. **Single responsibility** - Each component folder contains one component
+6. **No barrel files** - Do not use `index.ts` barrel re-exports (exception: `theme/index.ts` as a module entry point)
 
 ---
 
-_Last Updated: March 2026_
+_Last Updated: April 2026_
