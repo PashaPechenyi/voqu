@@ -1,7 +1,6 @@
-import { courseLevels } from '@/consts/adminConsts/courseLevels';
-import { createSxStylesList } from '@/theme/helpers';
+import { courseLevels } from '@/features/courseLevel/constants/courseLevels.const';
+import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 import { Box, Button, MenuItem, Modal, TextField, Typography } from '@mui/material';
-import { useState } from 'react';
 
 type ModalAddNewFormProps = {
   open: boolean;

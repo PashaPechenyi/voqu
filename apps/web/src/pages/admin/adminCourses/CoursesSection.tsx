@@ -1,4 +1,3 @@
-import { courses } from '@/consts/adminConsts/initialCourses';
 import {
   Box,
   Button,
@@ -13,7 +12,9 @@ import {
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { createSxStylesList } from '@/theme/helpers';
+import { courses } from '@/features/courses/constants/initialCourses.const';
+import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
+
 export default function CoursesSection() {
   return (
     <Box sx={sxStyles.root}>

@@ -1,8 +1,8 @@
 import { Box, Button, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import ModalAddNewForm from './ModalAddNewForm';
 import AddIcon from '@mui/icons-material/Add';
-import { createSxStylesList } from '@/theme/helpers';
+import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 
 export default function HeroSection() {
   //   const isOpen = true;

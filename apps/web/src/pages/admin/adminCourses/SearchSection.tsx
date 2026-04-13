@@ -1,6 +1,6 @@
+import { courses } from '@/features/courses/constants/initialCourses.const';
+import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 import { Autocomplete, Box, TextField } from '@mui/material';
-import { createSxStylesList } from '@/theme/helpers';
-import { courses } from '@/consts/adminConsts/initialCourses';
 
 export default function SearchSection() {
   return (
