@@ -3,8 +3,9 @@ import { PublicLayout } from '@/components/layout/PublicLayout';
 import { LandingPage } from '@/pages/public/landing/LandingPage';
 import AboutUsPage from '@/pages/public/aboutUs/AboutUsPage';
 import TablePage from '@/pages/public/table/TablePage';
-import AdminLandingPage from '@/pages/admin/AdminDashboardLandingPage';
 import AdminLayout from '@/components/layout/adminLayout/AdminLayout';
+import AdminDashboardLandingPage from '@/pages/admin/AdminDashboardLandingPage';
+import AdminCoursesLayout from '@/pages/admin/AdminCoursesLayout';
 
 export function AppRoutes() {
   return (
@@ -20,7 +21,10 @@ export function AppRoutes() {
         <Route index element={<TablePage />} />
       </Route>
       <Route path="/admin" element={<AdminLayout />}>
-        <Route index element={<AdminLandingPage />} />
+        <Route index element={<AdminDashboardLandingPage />} />
+      </Route>
+      <Route path="/admin-courses" element={<AdminLayout />}>
+        <Route index element={<AdminCoursesLayout />} />
       </Route>
     </Routes>
   );
