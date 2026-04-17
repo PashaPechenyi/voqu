@@ -55,29 +55,31 @@ src/
 
 ## Folder Responsibilities
 
-| Folder      | Purpose                          | Example Contents                          |
-| ----------- | -------------------------------- | ----------------------------------------- |
-| `shared/`   | Generic, reusable code           | Table, SectionDivider, QuizSlider         |
-| `features/` | Domain-specific modules          | vocabulary/, courses/, levels/             |
-| `layouts/`  | Page wrappers with header/footer | PublicLayout/, AdminLayout/                |
-| `pages/`    | Route entry points               | Landing.page.tsx, AboutUs.page.tsx         |
-| `theme/`    | MUI theme configuration          | index.ts, theme.type.ts                   |
+| Folder      | Purpose                          | Example Contents                   |
+| ----------- | -------------------------------- | ---------------------------------- |
+| `shared/`   | Generic, reusable code           | Table, SectionDivider, QuizSlider  |
+| `features/` | Domain-specific modules          | vocabulary/, courses/, levels/     |
+| `layouts/`  | Page wrappers with header/footer | PublicLayout/, AdminLayout/        |
+| `pages/`    | Route entry points               | Landing.page.tsx, AboutUs.page.tsx |
+| `theme/`    | MUI theme configuration          | index.ts, theme.type.ts            |
 
 ---
 
 ## File Naming Conventions
 
-| Type           | Convention          | Example                            |
+<<<<<<< HEAD
+| Type | Convention | Example |
 | -------------- | ------------------- | ---------------------------------- |
-| Components     | PascalCase          | `VocabularyCardsSlider.tsx`        |
-| Pages          | PascalCase + suffix | `Landing.page.tsx`                 |
-| Sections       | PascalCase + suffix | `Hero.section.tsx`                 |
-| Layouts        | PascalCase + suffix | `Public.layout.tsx`                |
-| Hooks          | camelCase + suffix  | `useAuth.hook.ts`                  |
-| Services       | camelCase + suffix  | `auth.service.ts`                  |
-| Types          | camelCase + suffix  | `vocabularyEntry.type.ts`          |
-| Helpers        | camelCase + suffix  | `combineSxStyles.helper.ts`        |
-| Constants      | camelCase + suffix  | `publicNavItems.const.ts`          |
+| Components | PascalCase | `VocabularyCardsSlider.tsx` |
+| Pages | PascalCase + suffix | `Landing.page.tsx` |
+| Sections | PascalCase + suffix | `Hero.section.tsx` |
+| Layouts | PascalCase + suffix | `Public.layout.tsx` |
+| Hooks | camelCase + suffix | `useAuth.hook.ts` |
+| Services | camelCase + suffix | `auth.service.ts` |
+| Types | camelCase + suffix | `vocabularyEntry.type.ts` |
+| Constants | camelCase + suffix | `publicNavItems.const.ts` |
+
+> > > > > > > main
 
 > **Note:** Components in `shared/components/`, `features/*/components/`, and `layouts/*/components/` do NOT require a suffix.
 > All other files (layouts, hooks, services, types, helpers, constants) MUST include their suffix.
@@ -88,13 +90,13 @@ src/
 
 ### Where Components Live
 
-| Component Type                 | Location                       |
-| ------------------------------ | ------------------------------ |
-| Generic UI (no business logic) | `shared/components/`           |
-| Feature-specific               | `features/*/components/`       |
-| Layout wrappers                | `layouts/*/`                   |
-| Layout sub-components          | `layouts/*/components/`        |
-| Page sections (one-off)        | `pages/**/sections/`           |
+| Component Type                 | Location                 |
+| ------------------------------ | ------------------------ |
+| Generic UI (no business logic) | `shared/components/`     |
+| Feature-specific               | `features/*/components/` |
+| Layout wrappers                | `layouts/*/`             |
+| Layout sub-components          | `layouts/*/components/`  |
+| Page sections (one-off)        | `pages/**/sections/`     |
 
 ### Component Folder Structure
 

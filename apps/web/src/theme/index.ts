@@ -21,6 +21,9 @@ export const theme = createTheme({
       primary: '#37123C',
       secondary: '#f5f1ed',
     },
+    tertiary: {
+      main: '#aa9f96',
+    },
   },
   typography: {
     fontFamily: '"Georgia", "Times New Roman", sans-serif',
@@ -72,6 +75,14 @@ export const theme = createTheme({
         root: {
           textTransform: 'none',
           borderRadius: 8,
+        },
+      },
+    },
+    MuiListItem: {
+      styleOverrides: {
+        root: {
+          paddingRight: 0,
+          paddingLeft: 0,
         },
       },
     },

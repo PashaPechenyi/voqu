@@ -5,13 +5,17 @@ import AboutUsPage from '@/pages/public/aboutUs/AboutUs.page';
 import AdminLandingPage from '@/pages/admin/dashboard/Dashboard.page';
 import { Routes, Route } from 'react-router-dom';
 import AdminCoursesLayout from '@/pages/admin/AdminCoursesLayout';
+import AboutPage from '@/pages/public/AboutPage/AboutPage';
+import DashboardPage from '@/pages/admin/DasnboardPage/DashboardPage';
 
 export function AppRoutes() {
   return (
     <Routes>
       {/* Public routes */}
       <Route path="/" element={<PublicLayout />}>
-        <Route index element={<LandingPage />} />
+        <Route path="landingPage" index element={<LandingPage />} />
+        <Route path="/about" index element={<AboutPage />} />
+        <Route path="/admin" index element={<DashboardPage />} />
       </Route>
       <Route path="/about" element={<PublicLayout />}>
         <Route index element={<AboutUsPage />} />
