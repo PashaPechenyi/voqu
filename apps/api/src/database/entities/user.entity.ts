@@ -1,27 +1,31 @@
-import { Entity, Column, ManyToOne, JoinColumn, Index } from 'typeorm';
+import { Entity, Column, ManyToOne, OneToMany, JoinColumn, Index } from 'typeorm';
 import { BaseSecuredEntity } from './base-secured.entity';
 import { Role } from './role.entity';
+import { Course } from './course.entity';
 
 @Entity('User')
 export class User extends BaseSecuredEntity {
   @Index('idx_user_email')
   @Column({ length: 255, unique: true })
-  email: string;
+  email?: string;
 
   @Column({ length: 255 })
-  firstName: string;
+  firstName?: string;
 
   @Column({ length: 255 })
-  lastName: string;
+  lastName?: string;
 
   @Column({ length: 255 })
-  password: string;
+  password?: string;
 
   // Relations
   @ManyToOne(() => Role, (role) => role.Users)
   @JoinColumn({ name: 'RoleId' })
-  Role: Role;
+  Role?: Role;
 
   @Column({ name: 'RoleId' })
-  RoleId: string;
+  RoleId?: string;
+
+  @OneToMany(() => Course, (course) => course.Owner)
+  Courses?: Course[];
 }

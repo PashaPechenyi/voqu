@@ -9,10 +9,12 @@ export class CreateCourse1776100625000 implements MigrationInterface {
         "description" TEXT,
         "status" VARCHAR(20) NOT NULL DEFAULT 'draft',
         "LevelId" BIGINT NOT NULL REFERENCES "Level" ("id") ON DELETE CASCADE,
+        "OwnerId" UUID NOT NULL REFERENCES "User" ("id") ON DELETE CASCADE,
         "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
         "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
       );
       CREATE INDEX "idx_course_LevelId" ON "Course" ("LevelId");
+      CREATE INDEX "idx_course_OwnerId" ON "Course" ("OwnerId");
     `);
   }
 

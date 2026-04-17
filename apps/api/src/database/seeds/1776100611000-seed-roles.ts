@@ -5,13 +5,14 @@ export class SeedRoles1776100611000 implements MigrationInterface {
     await queryRunner.query(`
       INSERT INTO "Role" ("name", "slug")
       VALUES
-        ('Super Admin', 'super-admin'),
+        ('Student', 'student'),
+        ('Teacher', 'teacher'),
         ('Admin', 'admin'),
-        ('User', 'user');
+        ('Super Admin', 'super-admin');
     `);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`DELETE FROM "Role" WHERE "slug" IN ('super-admin', 'admin', 'user')`);
+    await queryRunner.query(`DELETE FROM "Role" WHERE "slug" IN ('student', 'teacher', 'admin', 'super-admin')`);
   }
 }

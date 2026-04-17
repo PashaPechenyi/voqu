@@ -5,25 +5,25 @@ import { Course } from './course.entity';
 @Entity('Lesson')
 export class Lesson extends BaseSecuredEntity {
   @Column({ length: 255 })
-  title: string;
+  title?: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
-  subtitle: string | null;
+  subtitle?: string | null;
 
   @Column({ type: 'text', nullable: true })
-  description: string | null;
+  description?: string | null;
 
   @Column({ default: 0 })
-  order: number;
+  order?: number;
 
   @Column({ length: 20, default: 'draft' })
-  status: string;
+  status?: string;
 
   // Relations
   @ManyToOne(() => Course, (course) => course.Lessons)
   @JoinColumn({ name: 'CourseId' })
-  Course: Course;
+  Course?: Course;
 
   @Column({ name: 'CourseId' })
-  CourseId: string;
+  CourseId?: string;
 }
