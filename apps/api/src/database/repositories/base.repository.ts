@@ -11,6 +11,7 @@ import { FindOneOptions } from 'typeorm/find-options/FindOneOptions';
 import { InsertResult } from 'typeorm/query-builder/result/InsertResult';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { EntityNotFoundException } from '../../common/exceptions/entity-not-found.exception';
+import { FieldsMap, ListQueryBuilder } from '../../common/database/list-query.builder';
 
 export class BaseRepository<T extends ObjectLiteral> extends Repository<T> {
   protected readonly Entity: EntityTarget<T> | any;
@@ -126,6 +127,13 @@ export class BaseRepository<T extends ObjectLiteral> extends Repository<T> {
   public async getOneBy(conditions: Partial<Record<keyof T, T[keyof T]>>): Promise<T | null> {
     const qb = this.buildConditionsQuery(conditions);
     return qb ? qb.getOne() : null;
+  }
+
+  public createListQueryBuilder<B extends ObjectLiteral>(
+    baseBuilder: SelectQueryBuilder<B>,
+    fieldsMap?: FieldsMap,
+  ): ListQueryBuilder<B> {
+    return new ListQueryBuilder(baseBuilder, fieldsMap);
   }
 
   public async getOneByOrFail(conditions: Partial<Record<keyof T, T[keyof T]>>): Promise<T> {
