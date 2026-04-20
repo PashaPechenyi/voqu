@@ -15,42 +15,42 @@
 - [1. Tech Stack Overview](#1-tech-stack-overview)
 - [2. Folder Structure](#2-folder-structure)
 - [3. File Naming Conventions](#3-file-naming-conventions)
-- [4. Import Path Aliases](#4-import-path-aliases)
-- [5. Module Architecture](#5-module-architecture)
-- [6. Controller Pattern](#6-controller-pattern)
-- [7. Service Pattern](#7-service-pattern)
+- [4. Module Architecture](#4-module-architecture)
+- [5. Controller Pattern](#5-controller-pattern)
+- [6. Service Pattern](#6-service-pattern)
+- [7. Repository Pattern](#7-repository-pattern)
 - [8. Database & Entities](#8-database--entities)
 - [9. DTOs & Validation](#9-dtos--validation)
-- [10. Authentication & Authorization](#10-authentication--authorization)
-- [11. Error Handling](#11-error-handling)
-- [12. Pagination & Filtering](#12-pagination--filtering)
+- [10. Response DTOs](#10-response-dtos)
+- [11. Structs (Interfaces & Enums)](#11-structs-interfaces--enums)
+- [12. Error Handling](#12-error-handling)
 - [13. Database Migrations](#13-database-migrations)
-- [14. Configuration Management](#14-configuration-management)
-- [15. Testing](#15-testing)
-- [16. API Documentation](#16-api-documentation)
+- [14. Seeds](#14-seeds)
+- [15. Configuration Management](#15-configuration-management)
+- [16. Bootstrap](#16-bootstrap)
 - [17. Code Quality Checklist](#17-code-quality-checklist)
 
 ---
 
 ## 1. Tech Stack Overview
 
-| Technology        | Version | Purpose                 |
-| ----------------- | ------- | ----------------------- |
-| NestJS            | 10.x    | Backend framework       |
-| TypeScript        | 5.x     | Type safety             |
-| TypeORM           | 0.3.x   | ORM for PostgreSQL      |
-| PostgreSQL        | 15.x    | Primary database        |
-| Auth0             | -       | Authentication provider |
-| class-validator   | 0.14.x  | Request validation      |
-| class-transformer | 0.5.x   | Object transformation   |
-| Passport          | 0.7.x   | Auth strategies         |
+| Technology        | Version | Purpose                   |
+| ----------------- | ------- | ------------------------- |
+| NestJS            | 10.x    | Backend framework         |
+| TypeScript        | 5.x     | Type safety               |
+| TypeORM           | 0.3.x   | ORM for PostgreSQL        |
+| PostgreSQL        | 15.x    | Primary database          |
+| class-validator   | 0.14.x  | Request validation        |
+| class-transformer | 0.5.x   | Object transformation     |
+| Passport          | 0.7.x   | Auth strategies (planned) |
+| passport-jwt      | 4.x     | JWT strategy (planned)    |
+| jwks-rsa          | 3.x     | JWKS support (planned)    |
 
 ### Why This Stack?
 
 - **NestJS** - Modular architecture, native TypeScript, built-in DI
 - **TypeORM** - Decorator-based entities, migrations, excellent TypeScript support
 - **PostgreSQL** - Robust relational database, great for structured data
-- **Auth0** - Enterprise-grade auth without building from scratch
 
 ---
 
@@ -59,105 +59,101 @@
 ```
 apps/api/
 ├── src/
-│   ├── main.ts                         # Application entry point
-│   ├── app.module.ts                   # Root module
+│   ├── main.ts                             # Application entry point
+│   ├── app.module.ts                       # Root module
 │   │
-│   ├── modules/                        # Feature modules
-│   │   ├── auth/                       # Authentication module
-│   │   │   ├── auth.module.ts
-│   │   │   ├── auth.controller.ts
-│   │   │   ├── auth.service.ts
-│   │   │   ├── strategies/
-│   │   │   │   └── jwt.strategy.ts
-│   │   │   └── dto/
-│   │   │       └── auth-response.dto.ts
+│   ├── modules/                            # Feature modules
+│   │   ├── auth/                           # Authentication (planned)
+│   │   ├── user/
+│   │   │   ├── user.module.ts
+│   │   │   └── repositories/
+│   │   │       └── user.repository.ts
 │   │   │
-│   │   ├── users/                      # Users module
-│   │   │   ├── users.module.ts
-│   │   │   ├── users.controller.ts
-│   │   │   ├── users.service.ts
-│   │   │   └── dto/
-│   │   │       ├── create-user.dto.ts
-│   │   │       ├── update-user.dto.ts
-│   │   │       └── user-response.dto.ts
+│   │   ├── role/
+│   │   │   └── structs/
+│   │   │       └── role-slug.enum.ts
 │   │   │
-│   │   ├── levels/                     # Levels module
-│   │   │   ├── levels.module.ts
-│   │   │   ├── levels.controller.ts
-│   │   │   ├── levels.service.ts
-│   │   │   └── dto/
-│   │   │       ├── create-level.dto.ts
-│   │   │       ├── update-level.dto.ts
-│   │   │       ├── level-query.dto.ts
-│   │   │       └── level-response.dto.ts
+│   │   ├── level/
+│   │   │   ├── level.module.ts
+│   │   │   ├── http/
+│   │   │   │   ├── controllers/
+│   │   │   │   │   └── level.controller.ts
+│   │   │   │   └── dto/
+│   │   │   │       └── level-list-response.dto.ts
+│   │   │   ├── services/
+│   │   │   │   └── level.service.ts
+│   │   │   └── repositories/
+│   │   │       └── level.repository.ts
 │   │   │
-│   │   ├── lessons/                    # Lessons module
-│   │   │   ├── lessons.module.ts
-│   │   │   ├── lessons.controller.ts
-│   │   │   ├── lessons.service.ts
-│   │   │   └── dto/
+│   │   ├── course/
+│   │   │   ├── course.module.ts
+│   │   │   ├── http/
+│   │   │   │   ├── controllers/
+│   │   │   │   │   └── course.controller.ts
+│   │   │   │   └── dto/
+│   │   │   │       ├── create-course.dto.ts
+│   │   │   │       └── create-course-response.dto.ts
+│   │   │   ├── services/
+│   │   │   │   └── course.service.ts
+│   │   │   ├── repositories/
+│   │   │   │   └── course.repository.ts
+│   │   │   └── structs/
+│   │   │       ├── course-status.enum.ts
+│   │   │       └── create-course-params.interface.ts
 │   │   │
-│   │   ├── templates/                  # Templates module
-│   │   │   ├── templates.module.ts
-│   │   │   ├── templates.controller.ts
-│   │   │   ├── templates.service.ts
-│   │   │   └── dto/
-│   │   │
-│   │   └── progress/                   # Progress tracking module
-│   │       ├── progress.module.ts
-│   │       ├── progress.controller.ts
-│   │       ├── progress.service.ts
-│   │       └── dto/
+│   │   ├── lesson/                         # (planned)
+│   │   ├── progress/                       # (planned)
+│   │   └── templates/                      # (planned)
 │   │
-│   ├── database/                       # Database configuration
-│   │   ├── data-source.ts              # TypeORM data source
-│   │   ├── entities/                   # Entity definitions
-│   │   │   ├── index.ts
+│   ├── database/
+│   │   ├── data-source.ts                  # TypeORM data source
+│   │   ├── entities/                       # Entity definitions
+│   │   │   ├── base.entity.ts              # BIGINT identity id
+│   │   │   ├── base-secured.entity.ts      # UUID id (extends BaseEntity)
+│   │   │   ├── role.entity.ts
 │   │   │   ├── user.entity.ts
 │   │   │   ├── level.entity.ts
+│   │   │   ├── course.entity.ts
 │   │   │   ├── lesson.entity.ts
-│   │   │   ├── template.entity.ts
-│   │   │   └── progress.entity.ts
-│   │   └── migrations/                 # Database migrations
-│   │       ├── 1704067200000-create-users.ts
-│   │       └── 1704067300000-create-levels.ts
+│   │   │   └── example.entity.ts
+│   │   ├── repositories/
+│   │   │   └── base.repository.ts          # Shared repository base class
+│   │   ├── migrations/                     # Schema migrations
+│   │   │   ├── 1776100610000-create-role.ts
+│   │   │   ├── 1776100615000-create-user.ts
+│   │   │   ├── 1776100620000-create-level.ts
+│   │   │   ├── 1776100625000-create-course.ts
+│   │   │   └── 1776100628000-create-lesson.ts
+│   │   └── seeds/                          # Data seed migrations
+│   │       ├── 1776100611000-seed-roles.ts
+│   │       ├── 1776100612000-seed-delegable-roles.ts
+│   │       ├── 1776100616000-seed-super-admin.ts
+│   │       └── 1776100630000-seed-levels.ts
 │   │
-│   ├── common/                         # Shared utilities
-│   │   ├── guards/                     # Auth guards
-│   │   │   ├── jwt-auth.guard.ts
-│   │   │   ├── admin.guard.ts
-│   │   │   └── owner.guard.ts
-│   │   ├── decorators/                 # Custom decorators
-│   │   │   ├── current-user.decorator.ts
-│   │   │   ├── roles.decorator.ts
-│   │   │   └── public.decorator.ts
-│   │   ├── filters/                    # Exception filters
-│   │   │   └── http-exception.filter.ts
-│   │   ├── interceptors/               # Request interceptors
-│   │   │   ├── transform.interceptor.ts
-│   │   │   └── logging.interceptor.ts
-│   │   ├── pipes/                      # Validation pipes
-│   │   │   └── validation.pipe.ts
-│   │   ├── dto/                        # Shared DTOs
-│   │   │   └── pagination-query.dto.ts
-│   │   └── exceptions/                 # Custom exceptions
-│   │       └── entity-not-found.exception.ts
+│   ├── common/
+│   │   ├── decorators/                     # Custom decorators (empty, planned)
+│   │   ├── guards/                         # Auth guards (empty, planned)
+│   │   ├── filters/                        # Exception filters (empty, planned)
+│   │   ├── interceptors/                   # Request interceptors (empty, planned)
+│   │   ├── exceptions/
+│   │   │   └── entity-not-found.exception.ts
+│   │   └── http/
+│   │       └── dto/
+│   │           └── base-response.dto.ts
 │   │
-│   └── config/                         # Configuration
-│       ├── index.ts
-│       ├── database.config.ts
-│       ├── auth.config.ts
-│       └── app.config.ts
+│   └── config/                             # Reserved for ConfigService registrations
 │
-├── test/                               # E2E tests
-│   ├── app.e2e-spec.ts
-│   └── jest-e2e.json
-│
-├── nest-cli.json                       # NestJS CLI config
-├── tsconfig.json                       # TypeScript config
-├── tsconfig.build.json                 # Build-specific config
+├── nest-cli.json
+├── tsconfig.json
 └── package.json
 ```
+
+### Key layout rules
+
+1. Only `{name}.module.ts` lives at the module root. Everything else is grouped into subfolders: `http/controllers`, `http/dto`, `services`, `repositories`, `structs`.
+2. A module may omit any subfolder it does not need (for example, `user/` has only `repositories/`, `role/` has only `structs/`).
+3. All TypeORM entities live in `src/database/entities/`, **not** inside a feature module.
+4. A shared `BaseRepository<T>` lives in `src/database/repositories/`.
 
 ---
 
@@ -167,301 +163,143 @@ apps/api/
 
 | Type       | Pattern                   | Example                |
 | ---------- | ------------------------- | ---------------------- |
-| Module     | `{feature}.module.ts`     | `levels.module.ts`     |
-| Controller | `{feature}.controller.ts` | `levels.controller.ts` |
-| Service    | `{feature}.service.ts`    | `levels.service.ts`    |
-| Entity     | `{entity}.entity.ts`      | `level.entity.ts`      |
+| Module     | `{feature}.module.ts`     | `course.module.ts`     |
+| Controller | `{feature}.controller.ts` | `course.controller.ts` |
+| Service    | `{feature}.service.ts`    | `course.service.ts`    |
+| Repository | `{feature}.repository.ts` | `course.repository.ts` |
+| Entity     | `{entity}.entity.ts`      | `course.entity.ts`     |
 
 ### DTO Files
 
-| Type         | Pattern                    | Example                 |
-| ------------ | -------------------------- | ----------------------- |
-| Create DTO   | `create-{entity}.dto.ts`   | `create-level.dto.ts`   |
-| Update DTO   | `update-{entity}.dto.ts`   | `update-level.dto.ts`   |
-| Query DTO    | `{entity}-query.dto.ts`    | `level-query.dto.ts`    |
-| Response DTO | `{entity}-response.dto.ts` | `level-response.dto.ts` |
+| Type                   | Pattern                             | Example                         |
+| ---------------------- | ----------------------------------- | ------------------------------- |
+| Create request DTO     | `create-{entity}.dto.ts`            | `create-course.dto.ts`          |
+| Update request DTO     | `update-{entity}.dto.ts`            | `update-course.dto.ts`          |
+| Operation response DTO | `{action}-{entity}-response.dto.ts` | `create-course-response.dto.ts` |
+| List response DTO      | `{entity}-list-response.dto.ts`     | `level-list-response.dto.ts`    |
 
-### Common Files
+### Structs
 
-| Type        | Pattern                 | Example                     |
-| ----------- | ----------------------- | --------------------------- |
-| Guard       | `{name}.guard.ts`       | `admin.guard.ts`            |
-| Decorator   | `{name}.decorator.ts`   | `current-user.decorator.ts` |
-| Filter      | `{name}.filter.ts`      | `http-exception.filter.ts`  |
-| Interceptor | `{name}.interceptor.ts` | `transform.interceptor.ts`  |
-| Pipe        | `{name}.pipe.ts`        | `validation.pipe.ts`        |
-| Strategy    | `{name}.strategy.ts`    | `jwt.strategy.ts`           |
+| Type      | Pattern               | Example                             |
+| --------- | --------------------- | ----------------------------------- |
+| Enum      | `{name}.enum.ts`      | `course-status.enum.ts`             |
+| Interface | `{name}.interface.ts` | `create-course-params.interface.ts` |
 
 ### Naming Rules
 
-- **All kebab-case** for filenames: `level-query.dto.ts`
-- **Singular nouns** for entities: `level.entity.ts` not `levels.entity.ts`
-- **Plural nouns** for modules: `levels.module.ts`
-- **Descriptive prefixes** for DTOs: `create-`, `update-`, `-query`, `-response`
+- **kebab-case** for filenames: `create-course.dto.ts`.
+- **Singular nouns** for entity files and feature folders: `course.entity.ts`, `modules/course/`.
+- Interface names are **PascalCase with an `I` prefix**: `ICreateCourseParams`.
+- Enum values use **PascalCase**: `CourseStatus.Draft`, `RoleSlug.SuperAdmin`.
+- Enum **string values** stay kebab-case/lowercase: `'super-admin'`, `'draft'`.
 
 ---
 
-## 4. Import Path Aliases
-
-### Configuration
-
-```json
-// tsconfig.json
-{
-  "compilerOptions": {
-    "baseUrl": "./",
-    "paths": {
-      "@/*": ["src/*"],
-      "@voqu/shared": ["../../packages/shared/src"],
-      "@voqu/shared/*": ["../../packages/shared/src/*"]
-    }
-  }
-}
-```
-
-### Import Order
-
-```typescript
-// 1. NestJS core imports
-import { Module, Controller, Injectable } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-
-// 2. External libraries
-import { Repository } from 'typeorm';
-
-// 3. Shared package imports
-import { UserRole, LevelStatus, VALIDATION } from '@voqu/shared';
-import type { CreateLevelRequest } from '@voqu/shared';
-
-// 4. Internal absolute imports (@/)
-import { Level } from '@/database/entities';
-import { JwtAuthGuard } from '@/common/guards';
-import { CurrentUser } from '@/common/decorators';
-
-// 5. Relative imports (same module)
-import { LevelsService } from './levels.service';
-import { CreateLevelDto } from './dto/create-level.dto';
-```
-
-### Import Examples
-
-```typescript
-// Entities
-import { User, Level, Lesson } from '@/database/entities';
-
-// Guards
-import { JwtAuthGuard, AdminGuard, OwnerGuard } from '@/common/guards';
-
-// Decorators
-import { CurrentUser, Roles, Public } from '@/common/decorators';
-
-// DTOs
-import { PaginationQueryDto } from '@/common/dto';
-
-// Exceptions
-import { EntityNotFoundException } from '@/common/exceptions';
-
-// Config
-import { DatabaseConfig, AuthConfig } from '@/config';
-
-// Shared types
-import type { User as UserType, Level as LevelType } from '@voqu/shared';
-import { UserRole, LevelStatus } from '@voqu/shared';
-```
-
----
-
-## 5. Module Architecture
+## 4. Module Architecture
 
 ### Module Structure
 
-Every feature module follows this pattern:
+Every feature module follows this layout (omit subfolders the module does not need):
 
 ```
 modules/{feature}/
-├── {feature}.module.ts         # Module definition
-├── {feature}.controller.ts     # HTTP endpoints
-├── {feature}.service.ts        # Business logic
-└── dto/                        # Data transfer objects
-    ├── create-{feature}.dto.ts
-    ├── update-{feature}.dto.ts
-    ├── {feature}-query.dto.ts
-    └── {feature}-response.dto.ts
+├── {feature}.module.ts
+├── http/
+│   ├── controllers/
+│   │   └── {feature}.controller.ts
+│   └── dto/
+│       ├── create-{feature}.dto.ts
+│       └── create-{feature}-response.dto.ts
+├── services/
+│   └── {feature}.service.ts
+├── repositories/
+│   └── {feature}.repository.ts
+└── structs/
+    ├── {feature}-status.enum.ts
+    └── create-{feature}-params.interface.ts
 ```
 
 ### Module Definition Pattern
 
 ```typescript
-// modules/levels/levels.module.ts
+// modules/course/course.module.ts
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Level } from '@/database/entities';
-import { LevelsController } from './levels.controller';
-import { LevelsService } from './levels.service';
+import { UserModule } from '../user/user.module';
+import { CourseController } from './http/controllers/course.controller';
+import { CourseService } from './services/course.service';
+import { CourseRepository } from './repositories/course.repository';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Level])],
-  controllers: [LevelsController],
-  providers: [LevelsService],
-  exports: [LevelsService], // Export if other modules need it
+  imports: [UserModule],
+  controllers: [CourseController],
+  providers: [CourseRepository, CourseService],
+  exports: [CourseService],
 })
-export class LevelsModule {}
+export class CourseModule {}
 ```
 
 ### Module Registration
 
 ```typescript
-// app.module.ts
+// src/app.module.ts
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { dataSourceOptions } from '@/database/data-source';
-
-// Feature modules
-import { AuthModule } from '@/modules/auth/auth.module';
-import { UsersModule } from '@/modules/users/users.module';
-import { LevelsModule } from '@/modules/levels/levels.module';
-import { LessonsModule } from '@/modules/lessons/lessons.module';
-import { TemplatesModule } from '@/modules/templates/templates.module';
-import { ProgressModule } from '@/modules/progress/progress.module';
+import { dataSourceOptions } from './database/data-source';
+import { CourseModule } from './modules/course/course.module';
+import { LevelModule } from './modules/level/level.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: '.env',
-    }),
+    ConfigModule.forRoot({ isGlobal: true, envFilePath: '.env' }),
     TypeOrmModule.forRoot(dataSourceOptions),
-
-    // Feature modules
-    AuthModule,
-    UsersModule,
-    LevelsModule,
-    LessonsModule,
-    TemplatesModule,
-    ProgressModule,
+    LevelModule,
+    CourseModule,
   ],
 })
 export class AppModule {}
 ```
 
+### Repository Registration
+
+Repositories are registered as plain Nest providers (they extend `BaseRepository` and inject the `DataSource` directly). Do **not** register them through `TypeOrmModule.forFeature([...])`.
+
 ### Module Dependencies
 
-| Module          | Depends On                 | Exports                  |
-| --------------- | -------------------------- | ------------------------ |
-| AuthModule      | UsersModule                | AuthService, JwtStrategy |
-| UsersModule     | -                          | UsersService             |
-| LevelsModule    | -                          | LevelsService            |
-| LessonsModule   | LevelsModule               | LessonsService           |
-| TemplatesModule | LessonsModule              | TemplatesService         |
-| ProgressModule  | UsersModule, LessonsModule | ProgressService          |
+A module that needs another module's repository imports that module and consumes the exported provider. Example: `CourseModule` imports `UserModule` to use `UserRepository`; `UserModule` exports `UserRepository`.
 
 ---
 
-## 6. Controller Pattern
+## 5. Controller Pattern
 
 ### Controller Template
 
 ```typescript
-// modules/levels/levels.controller.ts
-import {
-  Controller,
-  Get,
-  Post,
-  Patch,
-  Delete,
-  Param,
-  Body,
-  Query,
-  UseGuards,
-  ParseUUIDPipe,
-  HttpCode,
-  HttpStatus,
-} from '@nestjs/common';
-import { JwtAuthGuard, AdminGuard } from '@/common/guards';
-import { CurrentUser, Public } from '@/common/decorators';
-import { User } from '@/database/entities';
-import { LevelsService } from './levels.service';
-import { CreateLevelDto } from './dto/create-level.dto';
-import { UpdateLevelDto } from './dto/update-level.dto';
-import { LevelQueryDto } from './dto/level-query.dto';
+// modules/course/http/controllers/course.controller.ts
+import { Body, Controller, Post } from '@nestjs/common';
+import { CourseService } from '../../services/course.service';
+import { CreateCourseDto } from '../dto/create-course.dto';
+import { CreateCourseResponseDto } from '../dto/create-course-response.dto';
 
-@Controller('v1/levels')
-export class LevelsController {
-  constructor(private readonly levelsService: LevelsService) {}
+@Controller('course')
+export class CourseController {
+  constructor(private readonly courseService: CourseService) {}
 
-  /**
-   * Get all levels with pagination and filtering
-   * GET /api/v1/levels
-   */
-  @Get()
-  @Public()
-  findAll(@Query() query: LevelQueryDto) {
-    return this.levelsService.findAll(query);
-  }
-
-  /**
-   * Get level by ID
-   * GET /api/v1/levels/:id
-   */
-  @Get(':id')
-  @Public()
-  findOne(@Param('id', ParseUUIDPipe) id: string) {
-    return this.levelsService.findOne(id);
-  }
-
-  /**
-   * Get level by slug
-   * GET /api/v1/levels/slug/:slug
-   */
-  @Get('slug/:slug')
-  @Public()
-  findBySlug(@Param('slug') slug: string) {
-    return this.levelsService.findBySlug(slug);
-  }
-
-  /**
-   * Create new level (Admin only)
-   * POST /api/v1/levels
-   */
   @Post()
-  @UseGuards(JwtAuthGuard, AdminGuard)
-  @HttpCode(HttpStatus.CREATED)
-  create(@Body() createDto: CreateLevelDto, @CurrentUser() user: User) {
-    return this.levelsService.create(createDto, user);
-  }
-
-  /**
-   * Update level (Admin only)
-   * PATCH /api/v1/levels/:id
-   */
-  @Patch(':id')
-  @UseGuards(JwtAuthGuard, AdminGuard)
-  update(@Param('id', ParseUUIDPipe) id: string, @Body() updateDto: UpdateLevelDto) {
-    return this.levelsService.update(id, updateDto);
-  }
-
-  /**
-   * Delete level (Admin only)
-   * DELETE /api/v1/levels/:id
-   */
-  @Delete(':id')
-  @UseGuards(JwtAuthGuard, AdminGuard)
-  @HttpCode(HttpStatus.NO_CONTENT)
-  remove(@Param('id', ParseUUIDPipe) id: string) {
-    return this.levelsService.remove(id);
+  async create(@Body() body: CreateCourseDto): Promise<CreateCourseResponseDto> {
+    const course = await this.courseService.createCourse(body);
+    return new CreateCourseResponseDto(course.id!);
   }
 }
 ```
 
 ### Controller Rules
 
-1. **No business logic** - Only request/response handling
-2. **Use guards for auth** - `@UseGuards(JwtAuthGuard)`
-3. **Use pipes for validation** - `ParseUUIDPipe`, `ValidationPipe`
-4. **Use decorators for metadata** - `@CurrentUser()`, `@Roles()`
-5. **Document endpoints** - JSDoc comments for each method
-6. **Return service result** - Let interceptors handle transformation
+1. **No business logic.** Controllers only wire HTTP → service → response DTO.
+2. **Route path is the singular feature name** (`@Controller('course')`, `@Controller('level')`). The global prefix `api` is added in `main.ts`, so the resulting URL is `/api/course`.
+3. **Request body type is the DTO class**, and the controller passes `body` straight to the service — the service accepts it as the `ICreate{Feature}Params` interface that the DTO implements.
+4. **Every response is a response-DTO instance** that extends `BaseResponseDto`. Never return an entity directly.
+5. **Use `ValidationPipe` globally** (configured in `main.ts`); no per-route pipes are required for DTO validation.
 
 ### HTTP Methods & Status Codes
 
@@ -475,734 +313,448 @@ export class LevelsController {
 
 ---
 
-## 7. Service Pattern
+## 6. Service Pattern
 
 ### Service Template
 
 ```typescript
-// modules/levels/levels.service.ts
-import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, FindOptionsWhere, ILike } from 'typeorm';
-import { Level, User } from '@/database/entities';
-import { generateSlug } from '@voqu/shared';
-import { CreateLevelDto } from './dto/create-level.dto';
-import { UpdateLevelDto } from './dto/update-level.dto';
-import { LevelQueryDto } from './dto/level-query.dto';
+// modules/course/services/course.service.ts
+import { Injectable } from '@nestjs/common';
+import { EntityNotFoundException } from '../../../common/exceptions/entity-not-found.exception';
+import { Course } from '../../../database/entities/course.entity';
+import { User } from '../../../database/entities/user.entity';
+import { RoleSlug } from '../../role/structs/role-slug.enum';
+import { UserRepository } from '../../user/repositories/user.repository';
+import { ICreateCourseParams } from '../structs/create-course-params.interface';
+import { CourseRepository } from '../repositories/course.repository';
 
 @Injectable()
-export class LevelsService {
+export class CourseService {
   constructor(
-    @InjectRepository(Level)
-    private readonly levelRepository: Repository<Level>,
+    private readonly courseRepository: CourseRepository,
+    private readonly userRepository: UserRepository,
   ) {}
 
-  /**
-   * Find all levels with pagination and filtering
-   */
-  async findAll(query: LevelQueryDto) {
-    const { page = 1, limit = 20, status, cefrLevel, search, sortBy, sortOrder } = query;
-
-    const where: FindOptionsWhere<Level> = {};
-
-    if (status) {
-      where.status = status;
+  async createCourse(params: ICreateCourseParams): Promise<Course> {
+    const owner = await this.userRepository.findOneBySlug(RoleSlug.SuperAdmin);
+    if (!owner) {
+      throw new EntityNotFoundException({ entity: User, ctx: { roleSlug: RoleSlug.SuperAdmin } });
     }
 
-    if (cefrLevel) {
-      where.cefrLevel = cefrLevel;
-    }
-
-    if (search) {
-      where.name = ILike(`%${search}%`);
-    }
-
-    const [data, total] = await this.levelRepository.findAndCount({
-      where,
-      order: { [sortBy || 'order']: sortOrder || 'ASC' },
-      skip: (page - 1) * limit,
-      take: limit,
-    });
-
-    return {
-      data,
-      meta: {
-        page,
-        limit,
-        total,
-        totalPages: Math.ceil(total / limit),
-      },
-    };
-  }
-
-  /**
-   * Find level by ID
-   * @throws NotFoundException if level not found
-   */
-  async findOne(id: string): Promise<Level> {
-    const level = await this.levelRepository.findOne({
-      where: { id },
-      relations: ['lessons'],
-    });
-
-    if (!level) {
-      throw new NotFoundException(`Level with ID "${id}" not found`);
-    }
-
-    return level;
-  }
-
-  /**
-   * Find level by slug
-   * @throws NotFoundException if level not found
-   */
-  async findBySlug(slug: string): Promise<Level> {
-    const level = await this.levelRepository.findOne({
-      where: { slug },
-      relations: ['lessons'],
-    });
-
-    if (!level) {
-      throw new NotFoundException(`Level with slug "${slug}" not found`);
-    }
-
-    return level;
-  }
-
-  /**
-   * Create new level
-   * @throws ConflictException if slug already exists
-   */
-  async create(dto: CreateLevelDto, createdBy: User): Promise<Level> {
-    const slug = dto.slug || generateSlug(dto.name);
-
-    // Check for duplicate slug
-    const existing = await this.levelRepository.findOne({ where: { slug } });
-    if (existing) {
-      throw new ConflictException(`Level with slug "${slug}" already exists`);
-    }
-
-    const level = this.levelRepository.create({
-      ...dto,
-      slug,
-      createdBy,
-    });
-
-    return this.levelRepository.save(level);
-  }
-
-  /**
-   * Update level
-   * @throws NotFoundException if level not found
-   * @throws ConflictException if slug already exists
-   */
-  async update(id: string, dto: UpdateLevelDto): Promise<Level> {
-    const level = await this.findOne(id);
-
-    // Check slug uniqueness if changing
-    if (dto.slug && dto.slug !== level.slug) {
-      const existing = await this.levelRepository.findOne({
-        where: { slug: dto.slug },
-      });
-      if (existing) {
-        throw new ConflictException(`Level with slug "${dto.slug}" already exists`);
-      }
-    }
-
-    Object.assign(level, dto);
-    return this.levelRepository.save(level);
-  }
-
-  /**
-   * Delete level
-   * @throws NotFoundException if level not found
-   */
-  async remove(id: string): Promise<void> {
-    const level = await this.findOne(id);
-    await this.levelRepository.remove(level);
+    return this.courseRepository.create({ ...params, OwnerId: owner.id });
   }
 }
 ```
 
 ### Service Rules
 
-1. **All business logic here** - Validation, transformations, database operations
-2. **Use repository pattern** - `@InjectRepository(Entity)`
-3. **Throw HTTP exceptions** - `NotFoundException`, `ConflictException`, etc.
-4. **Document methods** - JSDoc with `@throws` annotations
-5. **Handle transactions** - Use `QueryRunner` for multi-table operations
-6. **Return entities or DTOs** - Let controller/interceptor handle response
+1. **Business logic lives here** — validation beyond shape checks, cross-entity lookups, transformations, persistence orchestration.
+2. **Input type is the struct interface** (`ICreate{Feature}Params`), not the DTO class. This keeps services decoupled from HTTP concerns.
+3. **Use feature repositories** (`CourseRepository`, `UserRepository`). Never inject the raw TypeORM `Repository<T>` or `@InjectRepository` in services.
+4. **Throw domain exceptions** such as `EntityNotFoundException` (see [§12](#12-error-handling)).
+5. **Return entities**; the controller wraps them in a response DTO.
 
-### Transaction Pattern
+---
+
+## 7. Repository Pattern
+
+All feature repositories extend `BaseRepository<T>` from `src/database/repositories/base.repository.ts`.
+
+### Feature Repository Template
 
 ```typescript
-async createWithRelations(dto: CreateComplexDto): Promise<Entity> {
-  const queryRunner = this.dataSource.createQueryRunner();
+// modules/course/repositories/course.repository.ts
+import { Injectable } from '@nestjs/common';
+import { DataSource } from 'typeorm';
+import { Course } from '../../../database/entities/course.entity';
+import { BaseRepository } from '../../../database/repositories/base.repository';
 
-  await queryRunner.connect();
-  await queryRunner.startTransaction();
-
-  try {
-    const entity = queryRunner.manager.create(Entity, dto);
-    await queryRunner.manager.save(entity);
-
-    const related = queryRunner.manager.create(Related, { entityId: entity.id });
-    await queryRunner.manager.save(related);
-
-    await queryRunner.commitTransaction();
-    return entity;
-  } catch (error) {
-    await queryRunner.rollbackTransaction();
-    throw error;
-  } finally {
-    await queryRunner.release();
+@Injectable()
+export class CourseRepository extends BaseRepository<Course> {
+  constructor(dataSource: DataSource) {
+    super(dataSource, Course);
   }
 }
 ```
+
+### Repository with Custom Queries
+
+```typescript
+// modules/user/repositories/user.repository.ts
+@Injectable()
+export class UserRepository extends BaseRepository<User> {
+  constructor(dataSource: DataSource) {
+    super(dataSource, User);
+  }
+
+  async findOneBySlug(slug: RoleSlug): Promise<User | null> {
+    return this.orm.findOne({
+      where: { Role: { slug } },
+      relations: { Role: true },
+    });
+  }
+}
+```
+
+### `BaseRepository` Helpers
+
+| Method                                    | Purpose                                                              |
+| ----------------------------------------- | -------------------------------------------------------------------- |
+| `create(item)`                            | Insert + return the inserted row (bypasses TypeORM's default create) |
+| `createWithId(item)`                      | Insert including a caller-provided `id`                              |
+| `update(id, values)`                      | Update by id, returns the updated row                                |
+| `updateWhere(where, values)`              | Update by conditions, returns the updated row                        |
+| `deleteWhere(where)`                      | Delete by conditions                                                 |
+| `upsertOne(item, conflictTarget)`         | Merge-then-save upsert driven by a conflict-target column set        |
+| `findOne(options)` / `findOneBy(where)`   | Overridden to always build a QueryBuilder with the entity alias      |
+| `findOneOrThrowException(options)`        | `findOne` that throws `EntityNotFoundException` when missing         |
+| `findOrThrowException(options)`           | `find` that throws when no rows match                                |
+| `getOneById(id)` / `getOneByIdOrFail(id)` | Lookup by primary key                                                |
+| `getOneBy(conditions)` / `…OrFail`        | Lookup by a map of column equalities                                 |
+
+### Repository Rules
+
+1. **Never inject `Repository<T>` from TypeORM directly** in services. Always go through the feature repository.
+2. When a feature needs only a repository (no controller/service yet), expose it through the module's `exports`, as `UserModule` does.
+3. Custom query methods belong in the feature repository, not in services.
 
 ---
 
 ## 8. Database & Entities
 
+### Base Entities
+
+Two base classes live in `src/database/entities/`:
+
+```typescript
+// base.entity.ts — BIGINT identity primary key
+export abstract class BaseEntity {
+  @PrimaryGeneratedColumn('increment')
+  id?: string;
+
+  @Column({ type: 'timestamptz' })
+  createdAt?: string;
+
+  @Column({ type: 'timestamptz' })
+  @UpdateDateColumn({ type: 'timestamptz' })
+  updatedAt?: string;
+
+  public static getName(): string {
+    return this.name;
+  }
+}
+
+// base-secured.entity.ts — UUID primary key
+export class BaseSecuredEntity extends BaseEntity {
+  @PrimaryGeneratedColumn('uuid')
+  declare id?: string;
+}
+```
+
+Choose the base class based on whether the entity's id is exposed to clients:
+
+- **`BaseEntity`** (BIGINT) — reference/lookup data such as `Level`.
+- **`BaseSecuredEntity`** (UUID) — user-facing resources such as `User`, `Role`, `Course`, `Lesson`.
+
 ### Entity Template
 
 ```typescript
-// database/entities/level.entity.ts
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  CreateDateColumn,
-  UpdateDateColumn,
-  OneToMany,
-  ManyToOne,
-  Index,
-  JoinColumn,
-} from 'typeorm';
-import { LevelStatus, CEFRLevel } from '@voqu/shared';
-import { User } from './user.entity';
+// database/entities/course.entity.ts
+import { Entity, Column, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
+import { BaseSecuredEntity } from './base-secured.entity';
+import { CourseStatus } from '../../modules/course/structs/course-status.enum';
+import { Level } from './level.entity';
 import { Lesson } from './lesson.entity';
+import { User } from './user.entity';
 
-@Entity('levels')
-export class Level {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
+@Entity('Course')
+export class Course extends BaseSecuredEntity {
   @Column({ length: 255 })
-  name: string;
-
-  @Index('idx_levels_slug', { unique: true })
-  @Column({ length: 255, unique: true })
-  slug: string;
+  name?: string;
 
   @Column({ type: 'text', nullable: true })
-  description: string | null;
+  description?: string | null;
 
-  @Index('idx_levels_cefr')
-  @Column({
-    type: 'enum',
-    enum: CEFRLevel,
-  })
-  cefrLevel: CEFRLevel;
+  @Column({ length: 20, default: CourseStatus.Draft })
+  status?: CourseStatus;
 
-  @Index('idx_levels_status')
-  @Column({
-    type: 'enum',
-    enum: LevelStatus,
-    default: LevelStatus.DRAFT,
-  })
-  status: LevelStatus;
+  @ManyToOne(() => Level, (level) => level.Courses)
+  @JoinColumn({ name: 'LevelId' })
+  Level?: Level;
 
-  @Column({ default: 0 })
-  order: number;
+  @Column({ name: 'LevelId' })
+  LevelId?: string;
 
-  @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
+  @ManyToOne(() => User, (user) => user.Courses)
+  @JoinColumn({ name: 'OwnerId' })
+  Owner?: User;
 
-  @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt: Date;
+  @Column({ name: 'OwnerId' })
+  OwnerId?: string;
 
-  // Relations
-  @OneToMany(() => Lesson, (lesson) => lesson.level)
-  lessons: Lesson[];
-
-  @ManyToOne(() => User, { nullable: true })
-  @JoinColumn({ name: 'created_by_id' })
-  createdBy: User | null;
-
-  @Column({ name: 'created_by_id', nullable: true })
-  createdById: string | null;
+  @OneToMany(() => Lesson, (lesson) => lesson.Course)
+  Lessons?: Lesson[];
 }
 ```
 
 ### Entity Rules
 
-1. **Use decorators** - `@Entity`, `@Column`, `@Index`
-2. **UUID primary keys** - `@PrimaryGeneratedColumn('uuid')`
-3. **Snake_case columns** - `{ name: 'created_at' }`
-4. **Explicit nullable** - `nullable: true` or `| null` type
-5. **Index frequently queried** - `@Index()` on filter/sort columns
-6. **Define both sides** - Foreign key column + relation
+1. **Every property is optional (`?`)** — columns, FKs, and relations alike. This lets partial objects be assignable and mirrors how data comes back from query builders.
+2. **Table name is PascalCase singular**: `@Entity('Course')`, `@Entity('User')`.
+3. **Column names are camelCase** (not snake_case). Both the TS property and the DB column share the same camelCase identifier (preserved through double-quoted identifiers in migrations).
+4. **Foreign keys are PascalCase**: `RoleId`, `LevelId`, `OwnerId`. The corresponding relation property is also PascalCase: `Role`, `Level`, `Owner`.
+5. **Always declare both sides** of a FK — the `@Column({ name: 'LevelId' })` scalar _and_ the `@ManyToOne … @JoinColumn({ name: 'LevelId' })` relation.
+6. **Use `timestamptz`** for all timestamps (enforced by `BaseEntity`).
+7. **Enums stored as short VARCHAR** with a default, not as Postgres `ENUM`. See `Course.status` (`length: 20, default: CourseStatus.Draft`).
+8. **Entities do NOT import DTOs or services** — only other entities and shared structs (enums).
 
 ### Column Type Reference
 
-| TypeScript | PostgreSQL | Decorator                                               |
-| ---------- | ---------- | ------------------------------------------------------- |
-| string     | VARCHAR    | `@Column({ length: 255 })`                              |
-| string     | TEXT       | `@Column({ type: 'text' })`                             |
-| number     | INTEGER    | `@Column()` or `@Column({ type: 'int' })`               |
-| number     | DECIMAL    | `@Column({ type: 'decimal', precision: 10, scale: 2 })` |
-| boolean    | BOOLEAN    | `@Column({ default: false })`                           |
-| Date       | TIMESTAMP  | `@Column({ type: 'timestamp' })`                        |
-| enum       | ENUM       | `@Column({ type: 'enum', enum: MyEnum })`               |
-| object     | JSONB      | `@Column({ type: 'jsonb' })`                            |
+| TypeScript       | PostgreSQL               | Decorator                                        |
+| ---------------- | ------------------------ | ------------------------------------------------ |
+| `string`         | VARCHAR                  | `@Column({ length: 255 })`                       |
+| `string \| null` | TEXT                     | `@Column({ type: 'text', nullable: true })`      |
+| `number`         | INTEGER                  | `@Column()` / `@Column({ default: 0 })`          |
+| `boolean`        | BOOLEAN                  | `@Column({ default: false })`                    |
+| `string` (tz)    | TIMESTAMP WITH TIME ZONE | `@Column({ type: 'timestamptz' })`               |
+| enum             | VARCHAR(n)               | `@Column({ length: 20, default: MyEnum.Value })` |
+| `T[]` / object   | JSONB                    | `@Column({ type: 'jsonb', default: [] })`        |
 
-### Relation Types
+### Indexes
+
+Indexes are declared on the entity with `@Index('idx_{table}_{column}')`:
+
+```typescript
+@Index('idx_user_email')
+@Column({ length: 255, unique: true })
+email?: string;
+```
+
+Matching `CREATE INDEX` statements are added in the migration (see [§13](#13-database-migrations)).
+
+### Relation Patterns
 
 ```typescript
 // One-to-Many
-@OneToMany(() => Lesson, (lesson) => lesson.level)
-lessons: Lesson[];
+@OneToMany(() => Course, (course) => course.Level)
+Courses?: Course[];
 
 // Many-to-One
-@ManyToOne(() => Level, (level) => level.lessons)
-@JoinColumn({ name: 'level_id' })
-level: Level;
+@ManyToOne(() => Level, (level) => level.Courses)
+@JoinColumn({ name: 'LevelId' })
+Level?: Level;
 
-@Column({ name: 'level_id' })
-levelId: string;
-
-// Many-to-Many
-@ManyToMany(() => Tag)
-@JoinTable({
-  name: 'lesson_tags',
-  joinColumn: { name: 'lesson_id' },
-  inverseJoinColumn: { name: 'tag_id' },
-})
-tags: Tag[];
-```
-
-### Barrel Export
-
-```typescript
-// database/entities/index.ts
-export { User } from './user.entity';
-export { Level } from './level.entity';
-export { Lesson } from './lesson.entity';
-export { Template } from './template.entity';
-export { Progress } from './progress.entity';
+@Column({ name: 'LevelId' })
+LevelId?: string;
 ```
 
 ---
 
 ## 9. DTOs & Validation
 
+Request DTOs live in `modules/{feature}/http/dto/` and **implement** the matching struct interface. Validation uses `class-validator`; the global `ValidationPipe` in `main.ts` applies `whitelist`, `forbidNonWhitelisted`, and `transform`.
+
 ### Create DTO Pattern
 
 ```typescript
-// modules/levels/dto/create-level.dto.ts
+// modules/course/http/dto/create-course.dto.ts
 import {
-  IsString,
-  IsNotEmpty,
-  IsOptional,
   IsEnum,
-  IsInt,
-  Min,
-  Max,
+  IsNotEmpty,
+  IsNumberString,
+  IsOptional,
+  IsString,
   MaxLength,
-  Matches,
 } from 'class-validator';
-import { CEFRLevel, LevelStatus, VALIDATION } from '@voqu/shared';
+import { CourseStatus } from '../../structs/course-status.enum';
+import { ICreateCourseParams } from '../../structs/create-course-params.interface';
 
-export class CreateLevelDto {
+export class CreateCourseDto implements ICreateCourseParams {
   @IsString()
-  @IsNotEmpty({ message: "Назва обов'язкова" })
-  @MaxLength(VALIDATION.NAME.MAX)
+  @IsNotEmpty()
+  @MaxLength(255)
   name: string;
 
   @IsOptional()
   @IsString()
-  @Matches(VALIDATION.SLUG.PATTERN, {
-    message: 'Slug може містити лише малі літери, цифри та дефіси',
-  })
-  @MaxLength(VALIDATION.SLUG.MAX)
-  slug?: string;
-
-  @IsOptional()
-  @IsString()
-  @MaxLength(VALIDATION.DESCRIPTION.MAX)
   description?: string;
 
-  @IsEnum(CEFRLevel, { message: 'Невірний рівень CEFR' })
-  cefrLevel: CEFRLevel;
-
   @IsOptional()
-  @IsEnum(LevelStatus)
-  status?: LevelStatus;
+  @IsEnum(CourseStatus)
+  status?: CourseStatus;
 
-  @IsOptional()
-  @IsInt()
-  @Min(0)
-  order?: number;
+  @IsNumberString()
+  @IsNotEmpty()
+  LevelId: string;
 }
 ```
 
-### Update DTO Pattern
+### DTO Rules
 
-```typescript
-// modules/levels/dto/update-level.dto.ts
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateLevelDto } from './create-level.dto';
-
-export class UpdateLevelDto extends PartialType(CreateLevelDto) {}
-```
-
-### Query DTO Pattern
-
-```typescript
-// modules/levels/dto/level-query.dto.ts
-import { IsOptional, IsEnum, IsString, IsInt, Min, Max } from 'class-validator';
-import { Transform } from 'class-transformer';
-import { CEFRLevel, LevelStatus, VALIDATION } from '@voqu/shared';
-
-export class LevelQueryDto {
-  @IsOptional()
-  @Transform(({ value }) => parseInt(value, 10))
-  @IsInt()
-  @Min(1)
-  page?: number = VALIDATION.PAGINATION.DEFAULT_PAGE;
-
-  @IsOptional()
-  @Transform(({ value }) => parseInt(value, 10))
-  @IsInt()
-  @Min(1)
-  @Max(VALIDATION.PAGINATION.MAX_LIMIT)
-  limit?: number = VALIDATION.PAGINATION.DEFAULT_LIMIT;
-
-  @IsOptional()
-  @IsEnum(LevelStatus)
-  status?: LevelStatus;
-
-  @IsOptional()
-  @IsEnum(CEFRLevel)
-  cefrLevel?: CEFRLevel;
-
-  @IsOptional()
-  @IsString()
-  search?: string;
-
-  @IsOptional()
-  @IsEnum(['name', 'order', 'createdAt'])
-  sortBy?: 'name' | 'order' | 'createdAt';
-
-  @IsOptional()
-  @IsEnum(['ASC', 'DESC'])
-  sortOrder?: 'ASC' | 'DESC';
-}
-```
+1. **Every request DTO `implements I{Action}{Feature}Params`** from `structs/`. Services consume the interface — so the DTO is the controller-facing implementation of the same shape.
+2. **FK fields keep their PascalCase name** (`LevelId`, `RoleId`) to match the entity contract end-to-end.
+3. **Use `@IsNumberString()` for BIGINT FKs** (e.g. `LevelId`) because they are serialized as strings. Use `@IsUUID()` for UUID FKs when applicable.
+4. **Mark optional fields with `@IsOptional()`** and make the TS property optional (`?`).
+5. **Validation messages** can be localized (Ukrainian is acceptable) when user-facing; otherwise leave default messages.
 
 ### Common Validators
 
-| Decorator                         | Purpose                | Example             |
-| --------------------------------- | ---------------------- | ------------------- |
-| `@IsString()`                     | Must be string         | Text fields         |
-| `@IsNotEmpty()`                   | Cannot be empty        | Required fields     |
-| `@IsOptional()`                   | Can be undefined       | Optional fields     |
-| `@IsEmail()`                      | Valid email format     | Email fields        |
-| `@IsUUID()`                       | Valid UUID             | ID parameters       |
-| `@IsEnum(E)`                      | Must be enum value     | Status, type fields |
-| `@IsInt()`                        | Must be integer        | Count, order fields |
-| `@Min(n)` / `@Max(n)`             | Numeric range          | Pagination, order   |
-| `@MinLength(n)` / `@MaxLength(n)` | String length          | Name, description   |
-| `@Matches(regex)`                 | Pattern match          | Slug, phone         |
-| `@IsArray()`                      | Must be array          | List inputs         |
-| `@ValidateNested()`               | Validate nested object | Complex DTOs        |
+| Decorator                    | Purpose                        |
+| ---------------------------- | ------------------------------ |
+| `@IsString()`                | Must be string                 |
+| `@IsNotEmpty()`              | Cannot be empty                |
+| `@IsOptional()`              | Can be undefined               |
+| `@IsEmail()`                 | Valid email format             |
+| `@IsUUID()`                  | UUID primary key value         |
+| `@IsNumberString()`          | BIGINT id serialized as string |
+| `@IsEnum(E)`                 | Must be enum value             |
+| `@IsInt()` / `@Min` / `@Max` | Integer ranges                 |
+| `@MinLength` / `@MaxLength`  | String length                  |
+| `@Matches(regex)`            | Pattern match                  |
 
 ---
 
-## 10. Authentication & Authorization
+## 10. Response DTOs
 
-### Auth Module Setup
+All controller responses **must** be instances of a class that extends `BaseResponseDto`. Returning an entity directly is not allowed.
 
-```typescript
-// modules/auth/auth.module.ts
-import { Module } from '@nestjs/common';
-import { PassportModule } from '@nestjs/passport';
-import { JwtModule } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
-import { UsersModule } from '@/modules/users/users.module';
-import { AuthController } from './auth.controller';
-import { AuthService } from './auth.service';
-import { JwtStrategy } from './strategies/jwt.strategy';
-
-@Module({
-  imports: [
-    UsersModule,
-    PassportModule.register({ defaultStrategy: 'jwt' }),
-    JwtModule.registerAsync({
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
-        secret: config.get('JWT_SECRET'),
-        signOptions: { expiresIn: '7d' },
-      }),
-    }),
-  ],
-  controllers: [AuthController],
-  providers: [AuthService, JwtStrategy],
-  exports: [AuthService],
-})
-export class AuthModule {}
-```
-
-### JWT Strategy
+### Base Response
 
 ```typescript
-// modules/auth/strategies/jwt.strategy.ts
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { PassportStrategy } from '@nestjs/passport';
-import { ExtractJwt, Strategy } from 'passport-jwt';
-import { ConfigService } from '@nestjs/config';
-import { UsersService } from '@/modules/users/users.service';
-
-interface JwtPayload {
-  sub: string;
-  email: string;
-}
-
-@Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(
-    private readonly configService: ConfigService,
-    private readonly usersService: UsersService,
-  ) {
-    super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: configService.get('JWT_SECRET'),
-    });
+// common/http/dto/base-response.dto.ts
+export class BaseResponseDto {
+  constructor(success = true) {
+    this.success = success;
   }
 
-  async validate(payload: JwtPayload) {
-    const user = await this.usersService.findById(payload.sub);
-
-    if (!user) {
-      throw new UnauthorizedException('User not found');
-    }
-
-    return user;
-  }
+  success: boolean;
 }
 ```
 
-### Guards
+### Operation Response
 
 ```typescript
-// common/guards/jwt-auth.guard.ts
-import { Injectable, ExecutionContext } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
-import { Reflector } from '@nestjs/core';
-import { IS_PUBLIC_KEY } from '@/common/decorators/public.decorator';
+// modules/course/http/dto/create-course-response.dto.ts
+import { BaseResponseDto } from '../../../../common/http/dto/base-response.dto';
 
-@Injectable()
-export class JwtAuthGuard extends AuthGuard('jwt') {
-  constructor(private reflector: Reflector) {
+export class CreateCourseResponseDto extends BaseResponseDto {
+  constructor(id: string) {
     super();
+    this.id = id;
   }
 
-  canActivate(context: ExecutionContext) {
-    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
-      context.getHandler(),
-      context.getClass(),
-    ]);
-
-    if (isPublic) {
-      return true;
-    }
-
-    return super.canActivate(context);
-  }
+  id: string;
 }
 ```
 
+### List Response
+
 ```typescript
-// common/guards/admin.guard.ts
-import { Injectable, CanActivate, ExecutionContext, ForbiddenException } from '@nestjs/common';
-import { UserRole } from '@voqu/shared';
+// modules/level/http/dto/level-list-response.dto.ts
+import { BaseResponseDto } from '../../../../common/http/dto/base-response.dto';
+import { Level } from '../../../../database/entities/level.entity';
 
-@Injectable()
-export class AdminGuard implements CanActivate {
-  canActivate(context: ExecutionContext): boolean {
-    const request = context.switchToHttp().getRequest();
-    const user = request.user;
-
-    if (!user || user.role !== UserRole.ADMIN) {
-      throw new ForbiddenException('Admin access required');
-    }
-
-    return true;
+export class LevelListResponseDto extends BaseResponseDto {
+  constructor(items: Level[]) {
+    super();
+    this.items = items;
   }
+
+  items: Level[];
 }
 ```
 
-### Decorators
+### Response DTO Rules
 
-```typescript
-// common/decorators/current-user.decorator.ts
-import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { User } from '@/database/entities';
-
-export const CurrentUser = createParamDecorator(
-  (data: keyof User | undefined, ctx: ExecutionContext) => {
-    const request = ctx.switchToHttp().getRequest();
-    const user = request.user as User;
-
-    return data ? user?.[data] : user;
-  },
-);
-```
-
-```typescript
-// common/decorators/public.decorator.ts
-import { SetMetadata } from '@nestjs/common';
-
-export const IS_PUBLIC_KEY = 'isPublic';
-export const Public = () => SetMetadata(IS_PUBLIC_KEY, true);
-```
-
-```typescript
-// common/decorators/roles.decorator.ts
-import { SetMetadata } from '@nestjs/common';
-import { UserRole } from '@voqu/shared';
-
-export const ROLES_KEY = 'roles';
-export const Roles = (...roles: UserRole[]) => SetMetadata(ROLES_KEY, roles);
-```
-
-### Usage in Controllers
-
-```typescript
-@Controller('v1/levels')
-export class LevelsController {
-  // Public endpoint - no auth required
-  @Get()
-  @Public()
-  findAll() {}
-
-  // Authenticated user required
-  @Get('my-progress')
-  @UseGuards(JwtAuthGuard)
-  getProgress(@CurrentUser() user: User) {}
-
-  // Admin only
-  @Post()
-  @UseGuards(JwtAuthGuard, AdminGuard)
-  create(@Body() dto: CreateLevelDto) {}
-
-  // Role-based
-  @Delete(':id')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN)
-  remove(@Param('id') id: string) {}
-}
-```
+1. **Every endpoint return type is a `…ResponseDto` class** that extends `BaseResponseDto`.
+2. **The constructor takes the final payload** and assigns fields on `this`; call `super()` first.
+3. **List endpoints expose an `items` field**. Operation endpoints expose the relevant ids/fields directly.
+4. **It is acceptable to ship entities inside a response DTO field** (e.g. `items: Level[]`). Entities are treated as read-only payload DTOs for the response layer. If a client-facing shape needs to diverge from the entity, introduce a dedicated view DTO.
 
 ---
 
-## 11. Error Handling
+## 11. Structs (Interfaces & Enums)
 
-### Global Exception Filter
+The `modules/{feature}/structs/` folder holds transport-layer contracts shared between controller, DTO, and service.
+
+### Params Interface
 
 ```typescript
-// common/filters/http-exception.filter.ts
-import {
-  ExceptionFilter,
-  Catch,
-  ArgumentsHost,
-  HttpException,
-  HttpStatus,
-  Logger,
-} from '@nestjs/common';
-import { Response } from 'express';
+// modules/course/structs/create-course-params.interface.ts
+import { CourseStatus } from './course-status.enum';
 
-interface ErrorResponse {
-  statusCode: number;
-  error: string;
-  message: string;
-  details?: unknown[];
-  timestamp: string;
-  path: string;
-}
-
-@Catch()
-export class HttpExceptionFilter implements ExceptionFilter {
-  private readonly logger = new Logger(HttpExceptionFilter.name);
-
-  catch(exception: unknown, host: ArgumentsHost) {
-    const ctx = host.switchToHttp();
-    const response = ctx.getResponse<Response>();
-    const request = ctx.getRequest();
-
-    let status = HttpStatus.INTERNAL_SERVER_ERROR;
-    let message = 'Internal server error';
-    let error = 'Internal Server Error';
-    let details: unknown[] | undefined;
-
-    if (exception instanceof HttpException) {
-      status = exception.getStatus();
-      const exceptionResponse = exception.getResponse();
-
-      if (typeof exceptionResponse === 'string') {
-        message = exceptionResponse;
-      } else if (typeof exceptionResponse === 'object') {
-        const res = exceptionResponse as Record<string, unknown>;
-        message = (res.message as string) || message;
-        error = (res.error as string) || error;
-        details = res.details as unknown[];
-      }
-    } else if (exception instanceof Error) {
-      message = exception.message;
-      this.logger.error(exception.message, exception.stack);
-    }
-
-    const errorResponse: ErrorResponse = {
-      statusCode: status,
-      error,
-      message,
-      timestamp: new Date().toISOString(),
-      path: request.url,
-    };
-
-    if (details) {
-      errorResponse.details = details;
-    }
-
-    response.status(status).json(errorResponse);
-  }
+export interface ICreateCourseParams {
+  name: string;
+  description?: string;
+  status?: CourseStatus;
+  LevelId: string;
 }
 ```
 
-### Custom Exceptions
+### Enum
+
+```typescript
+// modules/course/structs/course-status.enum.ts
+export enum CourseStatus {
+  Draft = 'draft',
+  Published = 'published',
+  Archived = 'archived',
+}
+```
+
+```typescript
+// modules/role/structs/role-slug.enum.ts
+export enum RoleSlug {
+  Student = 'student',
+  Teacher = 'teacher',
+  Admin = 'admin',
+  SuperAdmin = 'super-admin',
+}
+```
+
+### Struct Rules
+
+1. **Interface name is `I{Action}{Feature}Params`** for DTO-backed interfaces: `ICreateCourseParams`, `IUpdateCourseParams`.
+2. **Enum keys are PascalCase**; string values are kebab-case or lowercase depending on context (`RoleSlug.SuperAdmin = 'super-admin'`, `CourseStatus.Draft = 'draft'`).
+3. **Entities may import enums from `structs/`** (see `course.entity.ts`). Entities must **not** import interfaces or DTOs.
+4. **Services accept struct interfaces, not DTO classes** as their input type.
+
+---
+
+## 12. Error Handling
+
+The project currently relies on NestJS' built-in HTTP exceptions plus one custom exception.
+
+### EntityNotFoundException
 
 ```typescript
 // common/exceptions/entity-not-found.exception.ts
 import { NotFoundException } from '@nestjs/common';
+import { EntityTarget } from 'typeorm';
+
+export interface EntityNotFoundContext {
+  entity: EntityTarget<any> | any;
+  ctx?: unknown;
+}
 
 export class EntityNotFoundException extends NotFoundException {
-  constructor(entityName: string, identifier: string | number) {
-    super(`${entityName} with identifier "${identifier}" not found`);
+  constructor({ entity, ctx }: EntityNotFoundContext) {
+    const name = typeof entity === 'function' ? entity.name : String(entity);
+    super({ message: `${name} not found`, entity: name, ctx });
   }
 }
 ```
+
+Usage:
 
 ```typescript
-// common/exceptions/duplicate-entity.exception.ts
-import { ConflictException } from '@nestjs/common';
-
-export class DuplicateEntityException extends ConflictException {
-  constructor(entityName: string, field: string, value: string) {
-    super(`${entityName} with ${field} "${value}" already exists`);
-  }
-}
+throw new EntityNotFoundException({
+  entity: User,
+  ctx: { roleSlug: RoleSlug.SuperAdmin },
+});
 ```
+
+This is also thrown automatically by `BaseRepository.findOneOrThrowException`, `findOrThrowException`, `getOneByIdOrFail`, and `getOneByOrFail`.
 
 ### Error Codes Reference
 
@@ -1211,588 +763,230 @@ export class DuplicateEntityException extends ConflictException {
 | 400    | `BadRequestException`          | Invalid request data       |
 | 401    | `UnauthorizedException`        | Missing/invalid auth token |
 | 403    | `ForbiddenException`           | Insufficient permissions   |
-| 404    | `NotFoundException`            | Resource not found         |
+| 404    | `EntityNotFoundException`      | Resource not found         |
 | 409    | `ConflictException`            | Duplicate resource         |
 | 422    | `UnprocessableEntityException` | Business logic error       |
 | 500    | `InternalServerErrorException` | Unexpected error           |
 
----
-
-## 12. Pagination & Filtering
-
-### Shared Pagination DTO
-
-```typescript
-// common/dto/pagination-query.dto.ts
-import { IsOptional, IsInt, Min, Max, IsEnum, IsString } from 'class-validator';
-import { Transform } from 'class-transformer';
-import { VALIDATION } from '@voqu/shared';
-
-export class PaginationQueryDto {
-  @IsOptional()
-  @Transform(({ value }) => parseInt(value, 10))
-  @IsInt()
-  @Min(1)
-  page?: number = VALIDATION.PAGINATION.DEFAULT_PAGE;
-
-  @IsOptional()
-  @Transform(({ value }) => parseInt(value, 10))
-  @IsInt()
-  @Min(1)
-  @Max(VALIDATION.PAGINATION.MAX_LIMIT)
-  limit?: number = VALIDATION.PAGINATION.DEFAULT_LIMIT;
-
-  @IsOptional()
-  @IsString()
-  sortBy?: string;
-
-  @IsOptional()
-  @IsEnum(['ASC', 'DESC'])
-  sortOrder?: 'ASC' | 'DESC' = 'ASC';
-}
-```
-
-### Paginated Response Helper
-
-```typescript
-// common/helpers/pagination.helper.ts
-import { PaginationMeta } from '@voqu/shared';
-
-export interface PaginatedResult<T> {
-  data: T[];
-  meta: PaginationMeta;
-}
-
-export function paginate<T>(
-  data: T[],
-  total: number,
-  page: number,
-  limit: number,
-): PaginatedResult<T> {
-  return {
-    data,
-    meta: {
-      page,
-      limit,
-      total,
-      totalPages: Math.ceil(total / limit),
-    },
-  };
-}
-```
-
-### Service Implementation
-
-```typescript
-async findAll(query: LevelQueryDto): Promise<PaginatedResult<Level>> {
-  const { page, limit, status, search, sortBy, sortOrder } = query;
-
-  const queryBuilder = this.levelRepository.createQueryBuilder('level');
-
-  // Filtering
-  if (status) {
-    queryBuilder.andWhere('level.status = :status', { status });
-  }
-
-  if (search) {
-    queryBuilder.andWhere('level.name ILIKE :search', { search: `%${search}%` });
-  }
-
-  // Sorting
-  queryBuilder.orderBy(`level.${sortBy || 'order'}`, sortOrder || 'ASC');
-
-  // Pagination
-  const [data, total] = await queryBuilder
-    .skip((page - 1) * limit)
-    .take(limit)
-    .getManyAndCount();
-
-  return paginate(data, total, page, limit);
-}
-```
+Global filters, auth guards, decorators, and interceptors are not implemented yet. The folders exist in `src/common/` as placeholders for when they land.
 
 ---
 
 ## 13. Database Migrations
 
-### Migration Configuration
+### Data Source
 
 ```typescript
-// database/data-source.ts
-import { DataSource, DataSourceOptions } from 'typeorm';
-import { config } from 'dotenv';
-
-config();
-
+// src/database/data-source.ts
 export const dataSourceOptions: DataSourceOptions = {
   type: 'postgres',
   host: process.env.DB_HOST,
-  port: parseInt(process.env.DB_PORT, 10),
+  port: parseInt(process.env.DB_PORT || '5432', 10),
+  database: process.env.DB_NAME,
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
-  database: process.env.DB_DATABASE,
-  entities: ['dist/database/entities/**/*.entity.js'],
-  migrations: ['dist/database/migrations/**/*.js'],
-  synchronize: false, // Never true in production
+  entities: [__dirname + '/entities/**/*.entity{.ts,.js}'],
+  migrations: [__dirname + '/migrations/**/*{.ts,.js}', __dirname + '/seeds/**/*{.ts,.js}'],
+  synchronize: false,
+  logging: process.env.NODE_ENV === 'development',
 };
-
-export const dataSource = new DataSource(dataSourceOptions);
 ```
+
+Both `migrations/` and `seeds/` are loaded as migrations — the only difference is intent (schema vs. data).
 
 ### Migration Commands
 
 ```bash
-# Generate migration from entity changes
-npm run migration:generate -- src/database/migrations/CreateLevels
+# Create empty schema migration
+npm run migration:create ./1776100640000-add-something
 
-# Create empty migration
-npm run migration:create -- src/database/migrations/SeedInitialData
+# Create empty seed migration
+npm run seed:create ./1776100640000-seed-something
 
-# Run pending migrations
-npm run migration:run
+# Apply all pending migrations (schema + seeds)
+npm run migration:up
 
-# Revert last migration
-npm run migration:revert
-
-# Show migration status
-npm run migration:show
+# Revert the most recently applied migration
+npm run migration:down
 ```
 
 ### Migration Template
 
-**Important:** Always use raw SQL queries with `queryRunner.query()` for migrations. This ensures full control over the SQL being executed and makes migrations more predictable and portable.
+**Always use raw SQL via `queryRunner.query()`** — do not use TypeORM's `Table` / `TableIndex` builders.
 
 ```typescript
-// database/migrations/1704067200000-create-levels.ts
+// database/migrations/1776100625000-create-course.ts
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class CreateLevels1704067200000 implements MigrationInterface {
+export class CreateCourse1776100625000 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
-      CREATE TABLE "Level" (
-        "id" BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+      CREATE TABLE "Course" (
+        "id" UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
         "name" VARCHAR(255) NOT NULL,
-        "slug" VARCHAR(255) NOT NULL UNIQUE,
         "description" TEXT,
-        "cefrLevel" VARCHAR(2) NOT NULL,
         "status" VARCHAR(20) NOT NULL DEFAULT 'draft',
-        "order" INT NOT NULL DEFAULT 0,
-        "createdById" BIGINT REFERENCES "User"("id") ON DELETE SET NULL,
+        "LevelId" BIGINT NOT NULL REFERENCES "Level" ("id") ON DELETE CASCADE,
+        "OwnerId" UUID NOT NULL REFERENCES "User" ("id") ON DELETE CASCADE,
         "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
         "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
       );
-      CREATE INDEX ON "Level" ("slug");
-      CREATE INDEX ON "Level" ("status");
-      CREATE INDEX ON "Level" ("cefrLevel");
+      CREATE INDEX "idx_course_LevelId" ON "Course" ("LevelId");
+      CREATE INDEX "idx_course_OwnerId" ON "Course" ("OwnerId");
     `);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`DROP TABLE IF EXISTS "Level"`);
+    await queryRunner.query(`DROP TABLE IF EXISTS "Course"`);
   }
 }
 ```
 
 ### Migration Rules
 
-1. **Use raw SQL** - Always use `queryRunner.query()` with raw SQL instead of TypeORM's Table/TableIndex builders
-2. **Use BIGINT for IDs** - Primary keys should use `BIGINT GENERATED ALWAYS AS IDENTITY`
-3. **Use TIMESTAMP WITH TIME ZONE** - All timestamp columns should include timezone
-4. **Use camelCase column names** - Wrap column names in double quotes to preserve casing
-5. **Use PascalCase table names** - Table names should be PascalCase and wrapped in double quotes
-6. **Create indexes inline** - Add `CREATE INDEX` statements in the same query block
-7. **Always implement down()** - Ensure migrations can be reverted with `DROP TABLE IF EXISTS`
-
-### Foreign Key Pattern
-
-```typescript
-await queryRunner.query(`
-  CREATE TABLE "LessonProgress" (
-    "id" BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    "userId" BIGINT REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE NOT NULL,
-    "lessonId" BIGINT REFERENCES "Lesson"("id") ON DELETE CASCADE ON UPDATE CASCADE NOT NULL,
-    "completedAt" TIMESTAMP WITH TIME ZONE,
-    "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
-    "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
-  );
-  CREATE INDEX ON "LessonProgress" ("userId");
-  CREATE INDEX ON "LessonProgress" ("lessonId");
-`);
-```
+1. **Raw SQL only** via `queryRunner.query()`.
+2. **Primary key types**:
+   - `UUID NOT NULL DEFAULT gen_random_uuid()` for entities extending `BaseSecuredEntity`.
+   - `BIGINT GENERATED ALWAYS AS IDENTITY` for entities extending `BaseEntity`.
+3. **Timestamps**: `TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()` for `"createdAt"` and `"updatedAt"`.
+4. **Identifiers are quoted** to preserve casing — PascalCase tables (`"Course"`), camelCase columns (`"createdAt"`), and PascalCase FK columns (`"LevelId"`, `"OwnerId"`).
+5. **Foreign keys are inline** with `REFERENCES "Parent" ("id") ON DELETE …`.
+6. **Indexes are named** `idx_{tableLower}_{column}` and created in the same `up()` block.
+7. **Always implement `down()`** with `DROP TABLE IF EXISTS "…"` (or the inverse of the schema change).
 
 ### Migration Naming Convention
 
 ```
-{timestamp}-{action}-{entity}.ts
+{timestamp}-{kebab-action-entity}.ts
 ```
+
+Class name is PascalCase + the same timestamp suffix: `CreateCourse1776100625000`. Current timestamps use the `17761xxxxxxxx` range.
 
 Examples:
 
-- `1704067200000-create-levels.ts`
-- `1704067300000-add-status-to-lessons.ts`
-- `1704067400000-create-level-lesson-relation.ts`
-- `1704067500000-seed-initial-data.ts`
+- `1776100610000-create-role.ts` → `CreateRole1776100610000`
+- `1776100625000-create-course.ts` → `CreateCourse1776100625000`
+- `1776100628000-create-lesson.ts` → `CreateLesson1776100628000`
+
+### Foreign Key Pattern
+
+```sql
+"LevelId"  BIGINT NOT NULL REFERENCES "Level" ("id") ON DELETE CASCADE,
+"OwnerId"  UUID   NOT NULL REFERENCES "User"  ("id") ON DELETE CASCADE
+```
+
+FK column types must match the parent PK type (BIGINT for `BaseEntity`, UUID for `BaseSecuredEntity`).
 
 ---
 
-## 14. Configuration Management
+## 14. Seeds
+
+Seeds live in `src/database/seeds/` and use the same `MigrationInterface` contract as schema migrations. They are picked up by the data source's `migrations` glob automatically.
+
+### Seed Template
+
+```typescript
+// database/seeds/1776100611000-seed-roles.ts
+import { MigrationInterface, QueryRunner } from 'typeorm';
+
+export class SeedRoles1776100611000 implements MigrationInterface {
+  public async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`
+      INSERT INTO "Role" ("name", "slug")
+      VALUES
+        ('Student', 'student'),
+        ('Teacher', 'teacher'),
+        ('Admin', 'admin'),
+        ('Super Admin', 'super-admin');
+    `);
+  }
+
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(
+      `DELETE FROM "Role" WHERE "slug" IN ('student', 'teacher', 'admin', 'super-admin')`,
+    );
+  }
+}
+```
+
+### Seed Rules
+
+1. **Seeds are reversible.** Every `up()` has a matching `down()` that removes only the rows the seed inserted — no blanket `DELETE FROM "Role"`.
+2. **Ordering by timestamp.** Seeds that depend on a schema migration must have a later timestamp than that migration; seeds that depend on other seeds likewise.
+3. **Derive ids by lookup**, not by hardcoding, when linking rows:
+
+   ```typescript
+   const role = await queryRunner.query(`SELECT id FROM "Role" WHERE "slug" = 'super-admin';`);
+   const roleId = role[0].id;
+   ```
+
+4. **Use the same quoted-identifier discipline** as schema migrations.
+
+---
+
+## 15. Configuration Management
+
+`ConfigModule.forRoot({ isGlobal: true, envFilePath: '.env' })` is registered once in `AppModule`. There are no registered namespaces yet — access variables via `process.env` (inside `data-source.ts`) or `ConfigService.get('VAR_NAME')`.
 
 ### Environment Variables
 
 ```bash
-# .env.example
 # Application
 NODE_ENV=development
-PORT=3000
-API_PREFIX=api/v1
+PORT=3001
+CORS_ORIGIN=http://localhost:5173
 
 # Database
 DB_HOST=localhost
 DB_PORT=5432
 DB_USERNAME=postgres
 DB_PASSWORD=password
-DB_DATABASE=voqu_dev
-
-# Auth
-JWT_SECRET=your-secret-key
-JWT_EXPIRATION=7d
-AUTH0_DOMAIN=your-domain.auth0.com
-AUTH0_AUDIENCE=your-audience
-
-# CORS
-CORS_ORIGIN=http://localhost:5173
+DB_NAME=voqu_dev
 ```
 
-### Configuration Service
-
-```typescript
-// config/app.config.ts
-import { registerAs } from '@nestjs/config';
-
-export default registerAs('app', () => ({
-  nodeEnv: process.env.NODE_ENV || 'development',
-  port: parseInt(process.env.PORT, 10) || 3000,
-  apiPrefix: process.env.API_PREFIX || 'api/v1',
-  corsOrigin: process.env.CORS_ORIGIN || 'http://localhost:5173',
-}));
-```
-
-```typescript
-// config/database.config.ts
-import { registerAs } from '@nestjs/config';
-
-export default registerAs('database', () => ({
-  host: process.env.DB_HOST,
-  port: parseInt(process.env.DB_PORT, 10) || 5432,
-  username: process.env.DB_USERNAME,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_DATABASE,
-}));
-```
-
-### Using Configuration
-
-```typescript
-// In services/modules
-import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-
-@Injectable()
-export class SomeService {
-  constructor(private configService: ConfigService) {}
-
-  someMethod() {
-    const port = this.configService.get<number>('app.port');
-    const dbHost = this.configService.get<string>('database.host');
-  }
-}
-```
+The `src/config/` folder is reserved for future `registerAs()` config groups (app, database, auth). It is currently empty.
 
 ---
 
-## 15. Testing
-
-### Test File Structure
-
-```
-modules/levels/
-├── levels.controller.ts
-├── levels.service.ts
-├── __tests__/
-│   ├── levels.controller.spec.ts   # Unit tests
-│   ├── levels.service.spec.ts      # Unit tests
-│   └── levels.e2e-spec.ts          # E2E tests
-```
-
-### Unit Test Pattern
+## 16. Bootstrap
 
 ```typescript
-// modules/levels/__tests__/levels.service.spec.ts
-import { Test, TestingModule } from '@nestjs/testing';
-import { getRepositoryToken } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { NotFoundException, ConflictException } from '@nestjs/common';
-import { LevelsService } from '../levels.service';
-import { Level } from '@/database/entities';
-import { LevelStatus, CEFRLevel } from '@voqu/shared';
-
-describe('LevelsService', () => {
-  let service: LevelsService;
-  let repository: Repository<Level>;
-
-  const mockRepository = {
-    findOne: jest.fn(),
-    findAndCount: jest.fn(),
-    create: jest.fn(),
-    save: jest.fn(),
-    remove: jest.fn(),
-  };
-
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        LevelsService,
-        {
-          provide: getRepositoryToken(Level),
-          useValue: mockRepository,
-        },
-      ],
-    }).compile();
-
-    service = module.get<LevelsService>(LevelsService);
-    repository = module.get<Repository<Level>>(getRepositoryToken(Level));
-  });
-
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
-  describe('findOne', () => {
-    it('should return a level when found', async () => {
-      const level = { id: '1', name: 'Test Level' };
-      mockRepository.findOne.mockResolvedValue(level);
-
-      const result = await service.findOne('1');
-
-      expect(result).toEqual(level);
-      expect(mockRepository.findOne).toHaveBeenCalledWith({
-        where: { id: '1' },
-        relations: ['lessons'],
-      });
-    });
-
-    it('should throw NotFoundException when level not found', async () => {
-      mockRepository.findOne.mockResolvedValue(null);
-
-      await expect(service.findOne('1')).rejects.toThrow(NotFoundException);
-    });
-  });
-
-  describe('create', () => {
-    it('should create a new level', async () => {
-      const dto = { name: 'New Level', cefrLevel: CEFRLevel.A1 };
-      const user = { id: 'user-1' };
-      const level = { id: '1', ...dto, slug: 'new-level' };
-
-      mockRepository.findOne.mockResolvedValue(null);
-      mockRepository.create.mockReturnValue(level);
-      mockRepository.save.mockResolvedValue(level);
-
-      const result = await service.create(dto as any, user as any);
-
-      expect(result).toEqual(level);
-    });
-
-    it('should throw ConflictException when slug exists', async () => {
-      const dto = { name: 'Test', slug: 'existing-slug', cefrLevel: CEFRLevel.A1 };
-      mockRepository.findOne.mockResolvedValue({ id: 'existing' });
-
-      await expect(service.create(dto as any, {} as any)).rejects.toThrow(ConflictException);
-    });
-  });
-});
-```
-
-### E2E Test Pattern
-
-```typescript
-// test/levels.e2e-spec.ts
-import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
-import * as request from 'supertest';
-import { AppModule } from '../src/app.module';
-
-describe('Levels (e2e)', () => {
-  let app: INestApplication;
-  let authToken: string;
-
-  beforeAll(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
-
-    app = moduleFixture.createNestApplication();
-    app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
-    await app.init();
-
-    // Get auth token for protected routes
-    // authToken = await getTestToken();
-  });
-
-  afterAll(async () => {
-    await app.close();
-  });
-
-  describe('GET /api/v1/levels', () => {
-    it('should return paginated levels', () => {
-      return request(app.getHttpServer())
-        .get('/api/v1/levels')
-        .expect(200)
-        .expect((res) => {
-          expect(res.body).toHaveProperty('data');
-          expect(res.body).toHaveProperty('meta');
-          expect(Array.isArray(res.body.data)).toBe(true);
-        });
-    });
-
-    it('should filter by status', () => {
-      return request(app.getHttpServer())
-        .get('/api/v1/levels?status=published')
-        .expect(200)
-        .expect((res) => {
-          res.body.data.forEach((level: any) => {
-            expect(level.status).toBe('published');
-          });
-        });
-    });
-  });
-
-  describe('POST /api/v1/levels', () => {
-    it('should require authentication', () => {
-      return request(app.getHttpServer()).post('/api/v1/levels').send({ name: 'Test' }).expect(401);
-    });
-
-    it('should create level with valid data', () => {
-      return request(app.getHttpServer())
-        .post('/api/v1/levels')
-        .set('Authorization', `Bearer ${authToken}`)
-        .send({
-          name: 'Test Level',
-          cefrLevel: 'A1',
-        })
-        .expect(201)
-        .expect((res) => {
-          expect(res.body).toHaveProperty('id');
-          expect(res.body.name).toBe('Test Level');
-        });
-    });
-
-    it('should validate required fields', () => {
-      return request(app.getHttpServer())
-        .post('/api/v1/levels')
-        .set('Authorization', `Bearer ${authToken}`)
-        .send({})
-        .expect(400);
-    });
-  });
-});
-```
-
----
-
-## 16. API Documentation
-
-### Swagger Setup
-
-```typescript
-// main.ts
+// src/main.ts
 import { NestFactory } from '@nestjs/core';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Swagger configuration
-  const config = new DocumentBuilder()
-    .setTitle('Voqu API')
-    .setDescription('English Learning Platform API')
-    .setVersion('1.0')
-    .addBearerAuth()
-    .addTag('auth', 'Authentication endpoints')
-    .addTag('levels', 'Learning levels management')
-    .addTag('lessons', 'Lessons management')
-    .build();
+  app.setGlobalPrefix('api');
 
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api/docs', app, document);
+  app.enableCors({
+    origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
+    credentials: true,
+  });
 
-  await app.listen(3000);
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+    }),
+  );
+
+  const port = process.env.PORT || 3001;
+  await app.listen(port);
+  console.log(`Application is running on: http://localhost:${port}`);
 }
+
 bootstrap();
 ```
 
-### DTO Documentation
+Bootstrap responsibilities:
 
-```typescript
-// modules/levels/dto/create-level.dto.ts
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { CEFRLevel, LevelStatus } from '@voqu/shared';
-
-export class CreateLevelDto {
-  @ApiProperty({
-    description: 'Level display name',
-    example: 'Beginner Basics',
-  })
-  @IsString()
-  @IsNotEmpty()
-  name: string;
-
-  @ApiPropertyOptional({
-    description: 'URL-friendly identifier',
-    example: 'beginner-basics',
-  })
-  @IsOptional()
-  @IsString()
-  slug?: string;
-
-  @ApiProperty({
-    description: 'CEFR proficiency level',
-    enum: CEFRLevel,
-    example: CEFRLevel.A1,
-  })
-  @IsEnum(CEFRLevel)
-  cefrLevel: CEFRLevel;
-}
-```
-
-### Controller Documentation
-
-```typescript
-@ApiTags('levels')
-@Controller('v1/levels')
-export class LevelsController {
-  @ApiOperation({ summary: 'Get all levels' })
-  @ApiOkResponse({
-    description: 'Paginated list of levels',
-    type: LevelListResponseDto,
-  })
-  @Get()
-  findAll(@Query() query: LevelQueryDto) {}
-
-  @ApiOperation({ summary: 'Create new level' })
-  @ApiBearerAuth()
-  @ApiCreatedResponse({
-    description: 'Level created successfully',
-    type: LevelResponseDto,
-  })
-  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
-  @ApiForbiddenResponse({ description: 'Admin access required' })
-  @Post()
-  @UseGuards(JwtAuthGuard, AdminGuard)
-  create(@Body() dto: CreateLevelDto) {}
-}
-```
+- Set `api` as the global route prefix (so controllers use paths like `@Controller('course')`).
+- Enable CORS for the configured origin.
+- Register a single global `ValidationPipe` with `whitelist`, `forbidNonWhitelisted`, and `transform` — individual controllers don't need their own pipes.
 
 ---
 
@@ -1802,47 +996,61 @@ export class LevelsController {
 
 - [ ] No TypeScript errors (`npm run build`)
 - [ ] No ESLint warnings (`npm run lint`)
-- [ ] Code is formatted (`npm run format`)
-- [ ] Unit tests pass (`npm run test`)
-- [ ] E2E tests pass (`npm run test:e2e`)
-- [ ] No console.log statements (use Logger instead)
+- [ ] Migrations and seeds apply cleanly on a fresh DB (`npm run migration:up`)
+- [ ] No `console.log` in committed code (use NestJS `Logger` if needed)
 
 ### Module Checklist
 
-- [ ] Module properly registered in AppModule
-- [ ] All dependencies injected correctly
-- [ ] Exports defined if needed by other modules
+- [ ] Only `{name}.module.ts` at the module root; everything else under `http/`, `services/`, `repositories/`, `structs/`
+- [ ] Module registered in `AppModule`
+- [ ] Dependent modules imported; only what downstream modules need is re-exported
 
 ### Controller Checklist
 
-- [ ] All endpoints documented with JSDoc
-- [ ] Proper guards applied (auth, roles)
-- [ ] DTOs used for request/response
-- [ ] UUID params use `ParseUUIDPipe`
-- [ ] Correct HTTP status codes
+- [ ] Path is singular feature name (`@Controller('course')`)
+- [ ] `@Body()` typed as the request DTO
+- [ ] Return type is a `…ResponseDto` extending `BaseResponseDto`
+- [ ] No business logic; just service call + response DTO construction
 
 ### Service Checklist
 
-- [ ] All methods documented with JSDoc and `@throws`
-- [ ] Proper exceptions thrown (NotFoundException, etc.)
-- [ ] Transactions used for multi-table operations
-- [ ] No N+1 queries (use relations or QueryBuilder)
+- [ ] Parameters typed as the struct interface (`ICreate{Feature}Params`), never as the DTO class
+- [ ] Uses feature repositories only — no `@InjectRepository` / raw `Repository<T>`
+- [ ] Throws `EntityNotFoundException` (or relies on `BaseRepository.*OrFail` helpers) for missing rows
+
+### Repository Checklist
+
+- [ ] Extends `BaseRepository<T>`
+- [ ] Constructor takes `DataSource` and forwards entity to `super()`
+- [ ] Custom finders live here, not in the service
 
 ### Entity Checklist
 
-- [ ] All columns have proper types and constraints
-- [ ] Indexes defined for frequently queried columns
-- [ ] Relations have both sides defined
-- [ ] Enums imported from `@voqu/shared`
+- [ ] Extends `BaseEntity` (BIGINT) or `BaseSecuredEntity` (UUID), as appropriate
+- [ ] All properties declared optional (`?`)
+- [ ] Table name is PascalCase singular (`@Entity('Course')`)
+- [ ] FK columns and relation properties are PascalCase (`LevelId`, `Level`)
+- [ ] Both sides of every FK are declared (scalar `@Column` + relation)
+- [ ] Indexes declared via `@Index('idx_{table}_{column}')` and also created in the migration
 
 ### DTO Checklist
 
-- [ ] All fields have validation decorators
-- [ ] Optional fields use `@IsOptional()`
-- [ ] Custom error messages for user-facing errors
-- [ ] Query DTOs have `@Transform` for type conversion
+- [ ] Request DTO `implements I{Action}{Feature}Params`
+- [ ] All fields have `class-validator` decorators
+- [ ] Optional fields use `@IsOptional()` and `?`
+- [ ] BIGINT FKs validated with `@IsNumberString()`, UUID FKs with `@IsUUID()`
+- [ ] Response DTO extends `BaseResponseDto` and is constructed in the controller
+
+### Migration Checklist
+
+- [ ] Raw SQL only (`queryRunner.query()`)
+- [ ] Correct PK type (`UUID gen_random_uuid()` vs `BIGINT GENERATED ALWAYS AS IDENTITY`) for the parent entity's base class
+- [ ] `createdAt` / `updatedAt` are `TIMESTAMP WITH TIME ZONE DEFAULT NOW()`
+- [ ] Table and FK column identifiers quoted to preserve casing
+- [ ] Indexes named `idx_{table}_{column}` and created inline with the table
+- [ ] `down()` implemented and reversible
 
 ---
 
-_Document Version: 1.0_
-_Last Updated: December 2024_
+_Document Version: 2.0_
+_Last Updated: 2026-04-19_
