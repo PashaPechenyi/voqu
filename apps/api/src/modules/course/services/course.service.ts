@@ -32,6 +32,10 @@ export class CourseService {
     return this.courseRepository.update(id, params);
   }
 
+  async getCourseById(id: string): Promise<Course> {
+    return this.courseRepository.getOneByIdOrFail(id);
+  }
+
   async listCourses(params: IListCoursesParams): Promise<PaginatedList<CourseListItem>> {
     const { page, limit } = params;
     const isPaginated = page !== undefined || limit !== undefined;
