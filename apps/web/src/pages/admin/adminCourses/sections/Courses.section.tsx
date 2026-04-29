@@ -9,17 +9,16 @@ import {
   Divider,
   Typography,
 } from '@mui/material';
-import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import DeleteIcon from '@mui/icons-material/Delete';
 import { courses } from '@/features/courses/constants/initialCourses.const';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
+
+import { ADMIN_COURSES_EDIT } from '@/shared/constants/urls.const';
 
 export default function CoursesSection() {
   return (
     <Box sx={sxStyles.root}>
       {courses.map((courseData) => (
-        <Card sx={sxStyles.card}>
+        <Card key={courseData.id} sx={sxStyles.card}>
           <CardMedia
             sx={{ height: 140, display: 'flex', justifyContent: 'end', p: 1 }}
             children={
@@ -47,17 +46,8 @@ export default function CoursesSection() {
 
           <Divider variant="middle" />
           <CardActions sx={sxStyles.actions}>
-            <Button variant="contained" size="medium">
+            <Button href={ADMIN_COURSES_EDIT} variant="contained" fullWidth>
               Edit Course
-            </Button>
-            <Button color="adminSecondary" variant="outlined" size="small">
-              <RemoveRedEyeIcon />
-            </Button>
-            <Button color="adminSecondary" variant="outlined" size="small">
-              <MoreVertIcon />
-            </Button>
-            <Button color="error" variant="outlined" size="small">
-              <DeleteIcon />
             </Button>
           </CardActions>
         </Card>
@@ -68,9 +58,10 @@ export default function CoursesSection() {
 const sxStyles = createSxStylesList({
   root: {
     display: 'flex',
-    gap: 3,
+    flexWrap: 'wrap',
     alignItems: 'center',
-    flexDirection: 'row',
+    gap: 2,
+    justifyContent: 'start',
   },
   actions: {
     display: 'flex',
@@ -82,7 +73,7 @@ const sxStyles = createSxStylesList({
     display: 'flex',
     flexDirection: 'column',
     minHeight: 500,
-    maxWidth: '50%',
+    maxWidth: 345,
   },
   content: {
     display: 'flex',

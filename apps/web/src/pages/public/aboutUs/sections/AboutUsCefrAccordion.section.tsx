@@ -12,7 +12,7 @@ import {
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
 
-import { CefrLevel } from '@/features/levels/types/level.type';
+import { CefrLevel } from '@/features/levels/types/levelDemo.type/levelDemo.type';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 
 type AboutUsCefrAccordionProps = {

@@ -1,14 +1,26 @@
-import { courseLevels } from '@/features/courseLevel/constants/courseLevels.const';
-import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
-import { Box, Button, MenuItem, Modal, TextField, Typography } from '@mui/material';
+import { createSxStylesList } from '@/theme/helpers';
+import { Button, MenuItem, Modal, TextField, Typography } from '@mui/material';
+import { Box } from '@mui/system';
+import React, { useEffect, useState } from 'react';
 
-type ModalAddNewFormProps = {
+type FormValues = {
+  title: string;
+  duration: string;
+  lessonType: string;
+};
+const lessonType: string[] = ['reading', 'listening', 'grammar', 'quiz'];
+type AddNewLessonModalProps = {
   open: boolean;
   handleClose: () => void;
 };
-const status = ['Draft', 'Published'];
 
-export default function ModalAddNewForm({ open, handleClose }: ModalAddNewFormProps) {
+export const AddNewLessonModal = ({ open, handleClose }: AddNewLessonModalProps) => {
+  const [form, setForm] = useState<FormValues>({
+    title: '',
+    duration: '',
+    lessonType: 'reading',
+  });
+
   return (
     <>
       <Modal
@@ -17,29 +29,33 @@ export default function ModalAddNewForm({ open, handleClose }: ModalAddNewFormPr
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={sxStyles.modal}>
+        <Box sx={sxStyles.modal as any}>
           <Typography id="modal-modal-title" variant="h3">
-            Add New Course
+            Add New Lesson
           </Typography>
           <Typography color={'primary'} id="modal-modal-description" sx={{ mt: 2, mb: 2 }}>
-            Create a new course. You can add lessons after creating the course.
+            Create a new lesson for this course.
           </Typography>
-          <Box sx={sxStyles.form}>
+          <Box sx={sxStyles.form as any}>
             <TextField
               sx={sxStyles.textField}
               color="primary"
               required
               variant="filled"
               placeholder="Title"
+              value={form.title}
+              onChange={(e) => setForm((prev) => ({ ...prev, title: e.target.value }))}
             />
             <TextField
               sx={sxStyles.textField}
               required
               variant="filled"
               multiline
-              placeholder="Description"
+              placeholder="Duration"
+              value={form.duration}
+              onChange={(e) => setForm((prev) => ({ ...prev, duration: e.target.value }))}
             />
-            <Box sx={sxStyles.selectBox}>
+            <Box sx={sxStyles.selectBox as any}>
               <TextField
                 sx={sxStyles.select}
                 variant="filled"
@@ -47,30 +63,16 @@ export default function ModalAddNewForm({ open, handleClose }: ModalAddNewFormPr
                 focused
                 label="Select"
                 defaultValue="A1"
+                value={form.lessonType}
+                onChange={(e) => setForm((prev) => ({ ...prev, lessonType: e.target.value }))}
               >
-                {courseLevels.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-              <TextField
-                sx={sxStyles.select}
-                variant="filled"
-                select
-                focused
-                label="Status"
-                defaultValue="draft"
-              >
-                {status.map((option, index) => (
-                  <MenuItem key={index} value={option}>
+                {lessonType.map((option) => (
+                  <MenuItem key={option} value={option}>
                     {option}
                   </MenuItem>
                 ))}
               </TextField>
             </Box>
-
-            <TextField sx={sxStyles.textField} variant="filled" placeholder="Image URL" />
           </Box>
           <Button variant="contained" onClick={() => handleClose()}>
             close/make
@@ -79,8 +81,7 @@ export default function ModalAddNewForm({ open, handleClose }: ModalAddNewFormPr
       </Modal>
     </>
   );
-}
-
+};
 const sxStyles = createSxStylesList({
   modal: {
     position: 'absolute',
