@@ -9,8 +9,8 @@ import MuiAccordionSummary, {
 import Typography from '@mui/material/Typography';
 import AccordionCard from '@/shared/components/AccordionCard/AccordionCard';
 import { Box } from '@mui/material';
-import { Level } from '@/features/levels/types/level.types';
-const levels: Level[] = [
+import { LevelDemo } from '@/features/levels/types/levelDemo.types';
+const levels: LevelDemo[] = [
   {
     level: 'A1-Beginner',
     description: 'Can understand and use familiar everyday expressions and very basic phrases.',

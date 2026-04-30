@@ -2,7 +2,7 @@ import ImportContactsIcon from '@mui/icons-material/ImportContacts';
 import GroupIcon from '@mui/icons-material/Group';
 import TimelineIcon from '@mui/icons-material/Timeline';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
-import { Box, Card, CardContent, Typography } from '@mui/material';
+import { Box, Button, Card, CardContent, Typography } from '@mui/material';
 const CARDS = [
   { icon: ImportContactsIcon, description: 'Manage Courses' },
   { icon: GroupIcon, description: 'Manage users' },
@@ -42,7 +42,8 @@ function QuickActions() {
         {CARDS.map((el) => {
           const Icon = el.icon;
           return (
-            <Card
+            
+            <Button
               sx={{
                 width: { xs: 1, sm: '23%' },
                 textAlign: 'center',
@@ -53,16 +54,17 @@ function QuickActions() {
                 justifyContent: 'center',
                 alignItems: 'center',
                 border: '2px solid grey',
+                backgroundColor:"white"
               }}
             >
               <Icon fontSize="large" sx={{ fill: 'grey' }} />
 
-              <CardContent>
+              <Box sx={{p:"30px"}}>
                 <Typography gutterBottom variant="body1" color="secondary">
                   {el.description}
                 </Typography>
-              </CardContent>
-            </Card>
+              </Box>
+            </Button>
           );
         })}
       </Box>

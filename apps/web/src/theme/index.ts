@@ -75,5 +75,12 @@ export const theme = createTheme({
         },
       },
     },
+   
   },
 });
+
+export const adminTheme= createTheme({
+  palette:{
+
+  }
+})

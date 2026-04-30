@@ -31,6 +31,7 @@ function SummarySection() {
             textAlign: 'start',
             mb: '20px',
             //fontSize: { xs: '45px', md: '60px' },
+            pt:"40px",
             typography: { xs: 'h3', sm: 'h2' },
           }}
         >
