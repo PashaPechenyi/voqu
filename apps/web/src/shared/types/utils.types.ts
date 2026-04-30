@@ -1,0 +1,1 @@
+export type KeyOf<T> =(T)[keyof T ]

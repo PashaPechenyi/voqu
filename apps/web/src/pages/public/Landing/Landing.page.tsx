@@ -6,7 +6,6 @@ export function LandingPage() {
   return (
     <>
       <HeroSection />
-
       <FeaturesSection />
       <LessonPreviewSection />
     </>

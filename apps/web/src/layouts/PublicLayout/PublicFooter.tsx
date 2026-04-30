@@ -11,7 +11,7 @@ import { Link } from 'react-router-dom';
 
 export const LINKS: { name: string; way: string }[] = [
   { name: 'Home', way: '/landingPage' },
-  { name: 'About us', way: '/about' },
+  { name: 'About us', way: '/landingPage/about' },
   { name: 'Our offers', way: '' },
   { name: 'Contact', way: '' },
 ];

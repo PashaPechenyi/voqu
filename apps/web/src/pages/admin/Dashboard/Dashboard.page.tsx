@@ -6,7 +6,7 @@ import StatisticsPage from './sections/Statistics.section';
 function DashboardPage() {
   return (
     <>
-      <AdminHeader />
+      
       <SummarySection />
       <StatisticsPage />
       <QuickActions />

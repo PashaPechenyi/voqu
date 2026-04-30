@@ -15,8 +15,8 @@ import { theme } from '@/theme';
 import { Link } from 'react-router-dom';
 
 const LINKS: { name: string; way: string; img: any }[] = [
-  { name: 'Dashboard', way: '', img: DashboardIcon },
-  { name: 'Courses', way: '', img: ImportContactsIcon },
+  { name: 'Dashboard', way: '/admin', img: DashboardIcon },
+  { name: 'Courses', way: '/admin/courses', img: ImportContactsIcon },
   { name: 'Users', way: '', img: PersonIcon },
   { name: 'Settings', way: '', img: SettingsIcon },
 ];
