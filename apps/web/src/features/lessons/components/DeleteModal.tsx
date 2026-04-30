@@ -95,8 +95,6 @@ type DeleteModalProps = {
   title: string;
 };
 
-
-
 export default function DeleteModal({ isOpen, setIsOpen, mainWord, title }: DeleteModalProps) {
   const handleClickOpen = () => {
     setIsOpen(true);
@@ -130,7 +128,9 @@ export default function DeleteModal({ isOpen, setIsOpen, mainWord, title }: Dele
     >
       <DialogTitle>
         {' '}
-        <Typography variant="h4" color="red">Delete {mainWord}</Typography>
+        <Typography variant="h4" color="red">
+          Delete {mainWord}
+        </Typography>
       </DialogTitle>
       <DialogContent>
         <DialogContentText>

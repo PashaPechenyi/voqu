@@ -143,7 +143,7 @@ export default function CourseModal({
               control={control}
               name="description"
               rules={{ required: { value: true, message: ERROR_MESSAGE } }}
-              render={({ field,formState: { errors } }) => (
+              render={({ field, formState: { errors } }) => (
                 <TextField
                   label="Description"
                   variant="outlined"
@@ -161,7 +161,6 @@ export default function CourseModal({
             <Controller
               control={control}
               name="level"
-              
               render={({ field: { onChange, value } }) => (
                 <Autocomplete
                   options={data}

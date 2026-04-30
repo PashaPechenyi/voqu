@@ -12,7 +12,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { Link } from 'react-router-dom';
 
 type CourseCardProps = {
-  id:number,
+  id: number;
   title: string;
   description: string;
   lessonAmount: number;
@@ -93,8 +93,15 @@ function CourseCard({
       <Divider sx={{ maxWidth: '90%', ml: '5%' }} />
       <CardActions sx={{ justifyContent: 'center', gap: '8px' }}>
         <Button
-           component={Link}
-          sx={{ p: '10px', backgroundColor: '#71677D', color: 'white', gap: '5px', width: "95%", my:"10px" }}
+          component={Link}
+          sx={{
+            p: '10px',
+            backgroundColor: '#71677D',
+            color: 'white',
+            gap: '5px',
+            width: '95%',
+            my: '10px',
+          }}
           to={`/admin/courses/${id}/courseEdit`}
         >
           <EditIcon fontSize="small" sx={{ fill: 'white' }} />

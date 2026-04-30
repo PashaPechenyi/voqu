@@ -1,15 +1,15 @@
-import React, { useState } from 'react'
-import IntroSections from './sections/IntroSections'
-import CoursesSection from './sections/CoursesSection'
+import React, { useState } from 'react';
+import IntroSections from './sections/IntroSections';
+import CoursesSection from './sections/CoursesSection';
 
 function Courses() {
-    const [enteredValue, setEnteredValue]= useState<string>("")
+  const [enteredValue, setEnteredValue] = useState<string>('');
   return (
-   <>
-   <IntroSections enteredValue={enteredValue} setEnteredValue={setEnteredValue}/>
-   <CoursesSection  enteredValue={enteredValue} setEnteredValue={setEnteredValue}/>
-   </>
-  )
+    <>
+      <IntroSections enteredValue={enteredValue} setEnteredValue={setEnteredValue} />
+      <CoursesSection enteredValue={enteredValue} setEnteredValue={setEnteredValue} />
+    </>
+  );
 }
 
-export default Courses
+export default Courses;

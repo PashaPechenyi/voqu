@@ -28,7 +28,7 @@ function PopularCoursesCard() {
         <Box sx={{ display: 'flex', gap: '20px', mt: '13px', flexDirection: 'column' }}>
           {COURSES.map((el) => {
             return (
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', py:"10px" }}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: '5px', py: '10px' }}>
                 <Typography color="secondary" variant="body3">
                   {el.name}
                 </Typography>
@@ -39,14 +39,12 @@ function PopularCoursesCard() {
                 <Box
                   sx={{ display: 'flex', gap: '5px', alignItems: 'center', textAlign: 'center' }}
                 >
-                  
-
                   <Slider
                     disabled
                     defaultValue={el.percent}
                     sx={{
                       '& .MuiSlider-thumb': {
-                       display:"none"
+                        display: 'none',
                       },
                     }}
                   />

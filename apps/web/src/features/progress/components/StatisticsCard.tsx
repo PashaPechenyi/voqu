@@ -5,10 +5,15 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 // FIXME: review feature name after the whole page is done
 
 const ACTIVITIES = [
-  { type: 'New course published', name: 'Business English Advanced', time: '2 hours ago',color:"green" },
-  { type: 'Course updated', name: 'Grammar Essentials', time: '5 hours ago', color:"blue"},
-  { type: 'Lesson deleted', name: 'Vocabulary Builder', time: '1 day ago', color:"orange"},
-   { type: 'New student enrolled', name: 'Speaking Practice', time: '2 day ago', color:"green"},
+  {
+    type: 'New course published',
+    name: 'Business English Advanced',
+    time: '2 hours ago',
+    color: 'green',
+  },
+  { type: 'Course updated', name: 'Grammar Essentials', time: '5 hours ago', color: 'blue' },
+  { type: 'Lesson deleted', name: 'Vocabulary Builder', time: '1 day ago', color: 'orange' },
+  { type: 'New student enrolled', name: 'Speaking Practice', time: '2 day ago', color: 'green' },
 ];
 function StatisticsCard() {
   return (
@@ -18,7 +23,7 @@ function StatisticsCard() {
         border: '3px, solid grey',
         borderRadius: '10px',
         py: '20px',
-        mt:"30px"
+        mt: '30px',
       }}
     >
       <CardContent sx={{ px: '20px', mt: '20px' }}>
@@ -33,11 +38,10 @@ function StatisticsCard() {
               <Box>
                 <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                   <Box
-                    
                     sx={{
                       width: '10px',
                       height: '10px',
-                     backgroundColor:el.color,
+                      backgroundColor: el.color,
                       borderRadius: '100%',
                     }}
                   ></Box>
@@ -49,16 +53,16 @@ function StatisticsCard() {
                   <Typography variant="body1" color="primary">
                     {el.name}
                   </Typography>
-                  <Box sx={{display:"flex", gap:"5px", alignItems:"center", textAlign:"center"}}> 
-                    <AccessTimeIcon fontSize='small' sx={{fill:"#aa9f96"}} />
+                  <Box
+                    sx={{ display: 'flex', gap: '5px', alignItems: 'center', textAlign: 'center' }}
+                  >
+                    <AccessTimeIcon fontSize="small" sx={{ fill: '#aa9f96' }} />
                     <Typography variant="body2" color="tertiary">
-                    {el.time}
-                  </Typography>
+                      {el.time}
+                    </Typography>
                   </Box>
-                 
                 </Box>
-                     <Divider sx={{mt:"20px"}}/>
-                
+                <Divider sx={{ mt: '20px' }} />
               </Box>
             );
           })}

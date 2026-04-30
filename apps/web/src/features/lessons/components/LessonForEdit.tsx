@@ -84,14 +84,13 @@ function LessonForEdit({ icon, title, type, duration, ind }: LessonForEditProps)
             </Box>
           </Box>
         </Box>
-        <Box
-          sx={{ display: 'flex', gap: '20px' }}
-         
-        >
-          <Button sx={{ border: '2px solid grey' }}
-           onClick={() => {
-            setIsOpenChangeModal(true);
-          }}>
+        <Box sx={{ display: 'flex', gap: '20px' }}>
+          <Button
+            sx={{ border: '2px solid grey' }}
+            onClick={() => {
+              setIsOpenChangeModal(true);
+            }}
+          >
             <EditIcon />
           </Button>
           <Button sx={{ border: '2px solid grey' }}>
@@ -119,7 +118,7 @@ function LessonForEdit({ icon, title, type, duration, ind }: LessonForEditProps)
         title={title}
         type={type}
         duration={duration}
-        mainWord='Edit'
+        mainWord="Edit"
       />
     </>
   );

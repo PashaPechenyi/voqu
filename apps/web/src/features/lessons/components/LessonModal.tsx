@@ -23,9 +23,8 @@ type LessonModalProps = {
   title?: string;
   description?: string;
   type?: (typeof LESSON_TYPES)[number];
-  duration?:number
+  duration?: number;
 };
-
 
 export default function LessonModal({
   isOpen,
@@ -33,7 +32,7 @@ export default function LessonModal({
   mainWord,
   title,
   type,
-  duration
+  duration,
 }: LessonModalProps) {
   const handleClickOpen = () => {
     setIsOpen(true);
@@ -92,7 +91,7 @@ export default function LessonModal({
             <Typography>Type : </Typography>
 
             <Select
-             defaultValue={type&& type }
+              defaultValue={type && type}
               labelId="demo-multiple-name-label"
               id="demo-multiple-name"
               label="Level"
@@ -109,7 +108,12 @@ export default function LessonModal({
 
           <Box sx={{ width: '50%' }}>
             <Typography variant="body2">Duration(minutes):</Typography>
-            <TextField size="small" variant="outlined" type="number" defaultValue={duration&& duration }></TextField>
+            <TextField
+              size="small"
+              variant="outlined"
+              type="number"
+              defaultValue={duration && duration}
+            ></TextField>
           </Box>
         </Box>
         <FormGroup>
