@@ -7,11 +7,10 @@ import Button from '@mui/material/Button';
 
 import SchoolIcon from '@mui/icons-material/School';
 import { AppBar, Drawer, IconButton } from '@mui/material';
-import { keys, useMediaQuery } from '@mui/system';
+import { useMediaQuery } from '@mui/material';
 import { theme } from '@/theme';
 import MenuIcon from '@mui/icons-material/Menu';
 import { LINKS } from './PublicFooter';
-import { Key } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 
 //const links: string[] = ['Home', 'About us', 'Our offers', 'Contact'];
@@ -77,15 +76,15 @@ export default function PublicHeader() {
                       // >
                       //   {el.name}
                       // </Button>
-                       <Button
-                      color="inherit"
-                      component={Link}
-                       sx={{ fontSize: { xs: '15px', sm: '20px' } }}
+                      <Button
+                        color="inherit"
+                        component={Link}
+                        sx={{ fontSize: { xs: '15px', sm: '20px' } }}
                         onClick={() => setIsOpen(false)}
-                      to={el.way}
-                    >
-                      {el.name}
-                    </Button>
+                        to={el.way}
+                      >
+                        {el.name}
+                      </Button>
                     );
                   })}
                 </Box>
@@ -115,7 +114,12 @@ export default function PublicHeader() {
                     <Button
                       color="inherit"
                       component={Link}
-                      sx={{ fontSize: '16px', textDecoration: 'none', color: '#37123c', padding: 2 }}
+                      sx={{
+                        fontSize: '16px',
+                        textDecoration: 'none',
+                        color: '#37123c',
+                        padding: 2,
+                      }}
                       to={link.way}
                     >
                       {link.name}
