@@ -3,7 +3,7 @@ import { Box } from '@mui/material';
 import ImportContactsIcon from '@mui/icons-material/ImportContacts';
 import DescriptionIcon from '@mui/icons-material/Description';
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 type Lesson = {
   title: string;
   duration: number;
@@ -20,9 +20,17 @@ export type Course = {
   status: string;
   level: string;
   img: string;
-  link:string
-  lessons: Lesson[]
+  link: string;
+  lessons: Lesson[];
 };
+async function getCourses() {
+  const response = await fetch('http://localhost:5173/api/course', {
+    method: 'GET',
+  });
+  const result = await response.json();
+  console.log(result, 'resultCourses');
+  return result;
+}
 
 export const courses: Course[] = [
   {
@@ -34,7 +42,7 @@ export const courses: Course[] = [
     status: 'published',
     level: 'B1',
     img: 'English Grammar Essentials.jpg',
-    link:"",
+    link: '',
     lessons: [
       {
         title: 'Introductionto Tenses',
@@ -67,7 +75,7 @@ export const courses: Course[] = [
     stdentAmount: 0,
     status: 'draft',
     level: 'C1',
-    link:"",
+    link: '',
     img: 'Advanced vocabulary builder.jpg',
     lessons: [
       {
@@ -98,7 +106,26 @@ type CoursesSectionProps = {
   enteredValue: string;
   setEnteredValue: any;
 };
+type Courses = {
+  name: string;
+  id: string;
+  status: string;
+  LevelId: number;
+  OwnerId: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
 function CoursesSection({ enteredValue, setEnteredValue }: CoursesSectionProps) {
+  const [coursesList, setCoursesList] = useState<Courses[] | []>([]);
+  useEffect(() => {
+    getCourses().then((response) => {
+      setCoursesList(response.items);
+      console.log(response.items, 'items');
+      console.log(coursesList, 'courses');
+    });
+  }, []);
+
   return (
     <Box
       sx={{
@@ -111,35 +138,13 @@ function CoursesSection({ enteredValue, setEnteredValue }: CoursesSectionProps) 
       }}
     >
       {enteredValue != ''
-        ? courses.map((el) => {
-            if (el.title.toLowerCase().startsWith(enteredValue.toLowerCase())) {
-              return (
-                <CourseCard
-                  id={el.id}
-                  title={el.title}
-                  description={el.description}
-                  lessonAmount={el.lessonAmount}
-                  studentAmount={el.stdentAmount}
-                  status={el.status}
-                  level={el.level}
-                  img={el.img}
-                />
-              );
+        ? coursesList.map((el) => {
+            if (el.name.toLowerCase().startsWith(enteredValue.toLowerCase())) {
+              return <CourseCard course={el} />;
             }
           })
-        : courses.map((el) => {
-            return (
-              <CourseCard
-                id={el.id}
-                title={el.title}
-                description={el.description}
-                lessonAmount={el.lessonAmount}
-                studentAmount={el.stdentAmount}
-                status={el.status}
-                level={el.level}
-                img={el.img}
-              />
-            );
+        : coursesList.map((el) => {
+            return <CourseCard course={el} />;
           })}
     </Box>
   );

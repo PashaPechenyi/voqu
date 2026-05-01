@@ -12,33 +12,20 @@ import EditIcon from '@mui/icons-material/Edit';
 import { Link } from 'react-router-dom';
 
 type CourseCardProps = {
-  id: number;
-  title: string;
-  description: string;
-  lessonAmount: number;
-  studentAmount: number;
-  status: string;
-  level: string;
-  img: string;
+  course: any;
 };
 
-function CourseCard({
-  id,
-  title,
-  description,
-  lessonAmount,
-  studentAmount,
-  status,
-  level,
-  img,
-}: CourseCardProps) {
+function CourseCard({ course }: CourseCardProps) {
   return (
-    <Card sx={{ maxWidth: 345, border: '2px solid grey' }}>
-      <CardMedia sx={{ height: 140, position: 'relative' }} image={'/src/assets/images/' + img}>
+    <Card sx={{ minWidth: 345, border: '2px solid grey' }}>
+      <CardMedia
+        sx={{ height: 140, position: 'relative' }}
+        image={'/src/assets/images/Advanced vocabulary builder.jpg'}
+      >
         <Box sx={{ display: 'flex', gap: '15px', position: 'absolute', top: '10px', right: '4px' }}>
           <Box
             sx={
-              status == 'published'
+              course.status == 'published'
                 ? {
                     backgroundColor: 'lightgreen',
                     color: 'white',
@@ -56,7 +43,7 @@ function CourseCard({
                   }
             }
           >
-            {status}
+            {course.status}
           </Box>
           <Box
             sx={{
@@ -67,26 +54,26 @@ function CourseCard({
               backgroundColor: 'white',
             }}
           >
-            {level}
+            {course.LevelId}
           </Box>
         </Box>
       </CardMedia>
       <CardContent>
         <Typography gutterBottom variant="h5" component="div" color="secondary">
-          {title}
+          {course.name}
         </Typography>
         <Typography variant="body2" color="primary">
-          {description}
+          {course.description}
         </Typography>
         <Box sx={{ display: 'flex', gap: '20px', mt: '10px', alignItems: 'center' }}>
           <Typography variant="body2" color="primary">
-            {lessonAmount} lessons
+            {2} lessons
           </Typography>
           <Box
             sx={{ width: '6px', height: '6px', borderRadius: '100%', backgroundColor: 'grey' }}
           ></Box>
           <Typography variant="body2" color="primary">
-            {studentAmount} students
+            {349} students
           </Typography>
         </Box>
       </CardContent>
@@ -102,7 +89,7 @@ function CourseCard({
             width: '95%',
             my: '10px',
           }}
-          to={`/admin/courses/${id}/courseEdit`}
+          to={`/admin/courses/${course.id}/courseEdit`}
         >
           <EditIcon fontSize="small" sx={{ fill: 'white' }} />
           Edit Lessons
