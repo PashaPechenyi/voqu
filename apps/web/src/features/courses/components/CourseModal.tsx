@@ -22,14 +22,16 @@ type FormValues = {
   status: CourseStatusKey | null;
   link: string;
 };
+
 type CourseModalProps = {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   mainWord?: string;
-
   course?: Course;
 };
-const LEVELOPTIONS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+
+// TODO: 1) rename to getLevelsListReg
+// 2) create a custom hook and move all logic related to getting levels list to it
 async function getLevelValue() {
   const response = await fetch('http://localhost:5173/api/level', {
     method: 'GET',
@@ -38,24 +40,21 @@ async function getLevelValue() {
   return result;
 }
 
-export default function CourseModal({
-  isOpen,
-  setIsOpen,
-  mainWord,
-
-  course,
-}: CourseModalProps) {
+export default function CourseModal({ isOpen, setIsOpen, mainWord, course }: CourseModalProps) {
+  // TODO: rename to levelsList
   const [data, setData] = useState<Level[]>([]);
   const { handleSubmit, control } = useForm<FormValues>({
+    // TODO: create a new function above the component getDefaultValues
     defaultValues: {
+      // TODO: remove 'e.g., AdvancedGrammar Mastery'
       title: course?.title ? course.title : 'e.g., AdvancedGrammar Mastery',
-      description: course?.description ? course.description : '',
+      description: course?.description || '',
       level: null,
       status: null,
-      link: course?.link && course.link,
+      link: course?.link || '',
     },
   });
-  console.log(data, 'datA');
+
   useEffect(() => {
     getLevelValue().then((response) => {
       setData(response.items);
@@ -63,13 +62,11 @@ export default function CourseModal({
     });
   }, []);
 
-  const handleClickOpen = () => {
-    setIsOpen(true);
-  };
-
   const handleClose = () => {
     setIsOpen(false);
   };
+
+  // TODO: move it to parent component and pass it as a prop
   const addNewCourse = (inputsValues: FormValues) => {
     const body = {
       name: inputsValues.title,
@@ -86,19 +83,11 @@ export default function CourseModal({
     });
   };
 
-  // const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault();
-  //   const formData = new FormData(event.currentTarget);
-  //   const formJson = Object.fromEntries((formData as any).entries());
-  //   const email = formJson.email;
-  //   console.log(email);
-  //   handleClose();
-  // };
-
   return (
     <Dialog
       open={isOpen}
       onClose={handleClose}
+      // TODO: deprecated -> update it use slotsProps
       PaperProps={{
         sx: {
           p: '20px',
@@ -118,6 +107,10 @@ export default function CourseModal({
             ? 'Update course information and settings'
             : ' Create a new course. You can add lessons after creating the course.'}
         </DialogContentText>
+        {/*
+        TODO:  
+        1) move form into separate component 
+        2) there should be 2 components for modals 1 - to add 2- to update*/}
         <Grid container spacing={2}>
           <Grid size={12}>
             <Controller
@@ -223,7 +216,6 @@ export default function CourseModal({
           onClick={handleSubmit(addNewCourse)}
           sx={{ backgroundColor: '#71677D', color: 'white', p: '10px' }}
         >
-          {' '}
           {mainWord == 'Edit' ? 'Save changes' : ' Add course'}
         </Button>
       </DialogActions>

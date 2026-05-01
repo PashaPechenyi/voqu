@@ -1,13 +1,13 @@
-import { Height } from '@mui/icons-material';
 import { Box, Button, Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import LockIcon from '@mui/icons-material/Lock';
 import EditIcon from '@mui/icons-material/Edit';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import DeleteLessonModule from './DeleteModal';
-
 import LessonModal from './LessonModal';
+
 type LessonForEditProps = {
+  // TODO:  use lesson:Lesson instead
   icon: any;
   title: string;
   type: string;
@@ -15,14 +15,20 @@ type LessonForEditProps = {
   ind: number;
 };
 
+// TODO: rename to AdminLessonItem
 function LessonForEdit({ icon, title, type, duration, ind }: LessonForEditProps) {
   const Icon = icon;
+
+  // TODO: Create global custom hook useToggle
+  // it should return 4 constant/functions:
+  // isOpen,toggle,open,close
+  // const { isOpen: isDeleteModalOpen, open: openDeleteModal, close: closeDeleteModal } = useToggle();
   const [isOpenDeleteModel, setIsOPenDeleteModal] = useState(false);
   const [isOpenChangeModel, setIsOpenChangeModal] = useState(false);
   return (
     <>
-      {' '}
       <Box
+        // TODO: move styles bellow
         sx={{
           p: '20px',
           display: 'flex',
@@ -104,14 +110,9 @@ function LessonForEdit({ icon, title, type, duration, ind }: LessonForEditProps)
           >
             <DeleteIcon sx={{ fill: 'red' }} />
           </Button>
-          <DeleteLessonModule
-            isOpen={isOpenDeleteModel}
-            setIsOpen={setIsOPenDeleteModal}
-            title={title}
-            mainWord="Lesson"
-          />
         </Box>
-      </Box>{' '}
+      </Box>
+
       <LessonModal
         isOpen={isOpenChangeModel}
         setIsOpen={setIsOpenChangeModal}
@@ -119,6 +120,13 @@ function LessonForEdit({ icon, title, type, duration, ind }: LessonForEditProps)
         type={type}
         duration={duration}
         mainWord="Edit"
+      />
+      {/* TODO: it is not a module */}
+      <DeleteLessonModule
+        isOpen={isOpenDeleteModel}
+        setIsOpen={setIsOPenDeleteModal}
+        title={title}
+        mainWord="Lesson"
       />
     </>
   );

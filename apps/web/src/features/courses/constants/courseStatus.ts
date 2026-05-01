@@ -1,9 +1,7 @@
-import { KeyOf } from '@/shared/types/utils.types';
+// TODO: add .const to files name
 
-export const COURSE_STATUS_KEY = {
-  PUBLISHED: 'published',
-  DRAFT: 'draft',
-} as const;
-
-export type CourseStatusKey = KeyOf<typeof COURSE_STATUS_KEY>;
-export const COURSE_STATUSES_LIST = Object.values(COURSE_STATUS_KEY);
+export enum CourseStatusKey {
+  published = 'published',
+  draft = 'draft',
+}
+export const COURSE_STATUSES_LIST = Object.values(CourseStatusKey);

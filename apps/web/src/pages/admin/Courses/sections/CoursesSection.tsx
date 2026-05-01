@@ -4,6 +4,7 @@ import ImportContactsIcon from '@mui/icons-material/ImportContacts';
 import DescriptionIcon from '@mui/icons-material/Description';
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import React, { useEffect, useState } from 'react';
+// TODO: move to the separate type
 type Lesson = {
   title: string;
   duration: number;

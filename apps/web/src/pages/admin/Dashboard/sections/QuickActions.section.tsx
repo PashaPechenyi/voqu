@@ -2,17 +2,21 @@ import ImportContactsIcon from '@mui/icons-material/ImportContacts';
 import GroupIcon from '@mui/icons-material/Group';
 import TimelineIcon from '@mui/icons-material/Timeline';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
-import { Box, Button, Card, CardContent, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
+
+// FIXME: add links to pages later
 const CARDS = [
   { icon: ImportContactsIcon, description: 'Manage Courses' },
   { icon: GroupIcon, description: 'Manage users' },
   { icon: TrendingUpIcon, description: 'View Reports' },
   { icon: TimelineIcon, description: 'Settings' },
 ];
+
 function QuickActions() {
   return (
     <Box
       sx={{
+        // TODO: styles
         width: 1,
         border: '3px solid grey',
         borderRadius: '20px',
@@ -42,7 +46,6 @@ function QuickActions() {
         {CARDS.map((el) => {
           const Icon = el.icon;
           return (
-            
             <Button
               sx={{
                 width: { xs: 1, sm: '23%' },
@@ -54,12 +57,12 @@ function QuickActions() {
                 justifyContent: 'center',
                 alignItems: 'center',
                 border: '2px solid grey',
-                backgroundColor:"white"
+                backgroundColor: 'white',
               }}
             >
               <Icon fontSize="large" sx={{ fill: 'grey' }} />
 
-              <Box sx={{p:"30px"}}>
+              <Box sx={{ p: '30px' }}>
                 <Typography gutterBottom variant="body1" color="secondary">
                   {el.description}
                 </Typography>

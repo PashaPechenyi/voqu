@@ -10,8 +10,16 @@ import {
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import { Link } from 'react-router-dom';
+import { createSxStylesList } from '@/shared/helpers/theme.helpers';
+import clsx from 'clsx';
+
+const CLASSNAME = {
+  PUBLISHED: 'published',
+  DRAFT: 'draft',
+} as const;
 
 type CourseCardProps = {
+  // TODO: do not use any
   course: any;
 };
 
@@ -22,26 +30,14 @@ function CourseCard({ course }: CourseCardProps) {
         sx={{ height: 140, position: 'relative' }}
         image={'/src/assets/images/Advanced vocabulary builder.jpg'}
       >
+        {/* TODO: move ALL sx styles below to sxStyles constant */}
         <Box sx={{ display: 'flex', gap: '15px', position: 'absolute', top: '10px', right: '4px' }}>
           <Box
-            sx={
-              course.status == 'published'
-                ? {
-                    backgroundColor: 'lightgreen',
-                    color: 'white',
-                    p: '5px 10px',
-                    borderRadius: '30px',
-                    fontSize: '12px',
-                    lineHeight: '20px',
-                  }
-                : {
-                    backgroundColor: 'darkgrey',
-                    p: '5px 10px',
-                    borderRadius: '30px',
-                    fontSize: '12px',
-                    lineHeight: '20px',
-                  }
-            }
+            sx={sxStyles.courseStatus}
+            className={clsx({
+              [CLASSNAME.PUBLISHED]: course.status == 'published',
+              [CLASSNAME.DRAFT]: course.status == 'draft',
+            })}
           >
             {course.status}
           </Box>
@@ -98,5 +94,22 @@ function CourseCard({ course }: CourseCardProps) {
     </Card>
   );
 }
+
+const sxStyles = createSxStylesList({
+  courseStatus: {
+    p: '5px 10px',
+    borderRadius: '30px',
+    fontSize: '12px',
+    lineHeight: '20px',
+
+    [`&.${CLASSNAME.PUBLISHED}`]: {
+      backgroundColor: 'lightgreen',
+      color: 'white',
+    },
+    [`&.${CLASSNAME.DRAFT}`]: {
+      backgroundColor: 'darkgrey',
+    },
+  },
+});
 
 export default CourseCard;

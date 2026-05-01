@@ -15,11 +15,13 @@ import {
   Select,
   Typography,
 } from '@mui/material';
+// TODO: use Enum like for course status (LessonTypeKey)
 const LESSON_TYPES = ['grammar', 'reading', 'speaking', 'listening', 'quiz', 'test'];
 type LessonModalProps = {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   mainWord?: string;
+  // TODO:  use lesson:Lesson instead
   title?: string;
   description?: string;
   type?: (typeof LESSON_TYPES)[number];
@@ -34,6 +36,11 @@ export default function LessonModal({
   type,
   duration,
 }: LessonModalProps) {
+  // TODO:
+  // 1) use react hook form
+  // 2) move form to separate component
+  // 3) there should be 2 components 1- to add lesson 2- to update lesson
+
   const handleClickOpen = () => {
     setIsOpen(true);
   };
@@ -42,19 +49,11 @@ export default function LessonModal({
     setIsOpen(false);
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const formJson = Object.fromEntries((formData as any).entries());
-    const email = formJson.email;
-    console.log(email);
-    handleClose();
-  };
-
   return (
     <Dialog
       open={isOpen}
       onClose={handleClose}
+      // TODO: deprecated
       PaperProps={{
         sx: {
           p: '20px',
@@ -65,7 +64,6 @@ export default function LessonModal({
       }}
     >
       <DialogTitle>
-        {' '}
         <Typography variant="h4">{mainWord} Lesson</Typography>
       </DialogTitle>
       <DialogContent>
@@ -125,7 +123,6 @@ export default function LessonModal({
           Cancel
         </Button>
         <Button sx={{ backgroundColor: '#71677D', color: 'white', p: '10px' }}>
-          {' '}
           {mainWord == 'Edit' ? 'Save changes' : ' Add lesson'}
         </Button>
       </DialogActions>

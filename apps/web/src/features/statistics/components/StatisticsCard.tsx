@@ -1,8 +1,6 @@
 import { Box, Card, CardContent, Divider, Typography } from '@mui/material';
 import TimelineIcon from '@mui/icons-material/Timeline';
-
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-// FIXME: review feature name after the whole page is done
 
 const ACTIVITIES = [
   {
@@ -15,9 +13,11 @@ const ACTIVITIES = [
   { type: 'Lesson deleted', name: 'Vocabulary Builder', time: '1 day ago', color: 'orange' },
   { type: 'New student enrolled', name: 'Speaking Practice', time: '2 day ago', color: 'green' },
 ];
+
 function StatisticsCard() {
   return (
     <Card
+      // TODO: move styles
       sx={{
         width: { xs: 1, md: '50%' },
         border: '3px, solid grey',

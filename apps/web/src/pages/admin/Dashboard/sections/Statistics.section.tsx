@@ -1,12 +1,12 @@
-import PopularCoursesCard from '@/features/progress/components/PopularCoursesCard';
-import StatisticsCard from '@/features/progress/components/StatisticsCard';
+import PopularCoursesCard from '@/features/statistics/components/PopularCoursesCard';
+import StatisticsCard from '@/features/statistics/components/StatisticsCard';
 import { Box } from '@mui/material';
 
 function StatisticsPage() {
   return (
     <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: '20px' }}>
       <StatisticsCard />
-      <PopularCoursesCard/>
+      <PopularCoursesCard />
     </Box>
   );
 }

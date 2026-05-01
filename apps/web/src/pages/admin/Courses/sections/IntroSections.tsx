@@ -4,11 +4,11 @@ import AddIcon from '@mui/icons-material/Add';
 import SearchControls from '@/features/search/components/SearchControls';
 
 import CourseModal from '@/features/courses/components/CourseModal';
-type InroSectionProps = {
+type IntroSectionProps = {
   enteredValue: string;
   setEnteredValue: any;
 };
-function IntroSections({ enteredValue, setEnteredValue }: InroSectionProps) {
+function IntroSections({ enteredValue, setEnteredValue }: IntroSectionProps) {
   const [isOpenModal, setIsOpenModal] = useState(false);
   return (
     <Box sx={{ position: 'relative' }}>

@@ -10,6 +10,7 @@ import icon from '@/assets/images/diamond.png';
 import { Link } from 'react-router-dom';
 
 export const LINKS: { name: string; way: string }[] = [
+  // TODO: use global files for urls
   { name: 'Home', way: '/landingPage' },
   { name: 'About us', way: '/landingPage/about' },
   { name: 'Our offers', way: '' },
@@ -23,15 +24,14 @@ const contacts = [
 
 const icons = [FacebookIcon, InstagramIcon, TwitterIcon, LinkedInIcon];
 function PublicFooter() {
-  //const matches = useMediaQuery(theme.breakpoints.down('md'));
   return (
     <>
       <Box
         component="footer"
+        // TODO: styles
         sx={{
           backgroundColor: '#71677D',
           width: 1,
-
           py: '40px',
           px: '20px',
           borderTop: '5px solid grey',
@@ -136,33 +136,30 @@ function PublicFooter() {
             </Typography>
             <Box>
               <List sx={{ display: 'flex', gap: '10px' }}>
-                {icons.map((Icon, ind) => {
-                  //const Icon=icon
-                  return (
-                    <ListItem key={ind} component="a" href="https://www.deepl.com/uk/translator">
-                      <IconButton
-                        sx={{
-                          backgroundColor: 'grey',
-                          cursor: 'pointer',
+                {icons.map((Icon, ind) => (
+                  <ListItem key={ind} component="a" href="https://www.deepl.com/uk/translator">
+                    <IconButton
+                      sx={{
+                        backgroundColor: 'grey',
+                        cursor: 'pointer',
+                        '& svg': {
+                          color: 'white',
+                          transition: 'color 0.3s',
+                        },
+
+                        '&:hover': {
+                          backgroundColor: 'white',
+
                           '& svg': {
-                            color: 'white',
-                            transition: 'color 0.3s',
+                            color: 'grey',
                           },
-
-                          '&:hover': {
-                            backgroundColor: 'white',
-
-                            '& svg': {
-                              color: 'grey',
-                            },
-                          },
-                        }}
-                      >
-                        <Icon />
-                      </IconButton>
-                    </ListItem>
-                  );
-                })}
+                        },
+                      }}
+                    >
+                      <Icon />
+                    </IconButton>
+                  </ListItem>
+                ))}
               </List>
             </Box>
           </Box>

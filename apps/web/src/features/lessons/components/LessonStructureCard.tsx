@@ -1,12 +1,19 @@
 import { Box, Typography } from '@mui/material';
 type LessonStructureCardProps = {
-  alingItems: string;
   icon: any;
   title: string;
   description: string;
-  textAling: string;
   order: number;
+  textAling: string;
+  alingItems: string;
   width: string | { xs: string; sm: string };
+  // TODO: change it to styles above
+  // styles?: {
+  //   width?: string | { xs: string; sm: string };
+  //   textAlign?: string;
+  //   alignItems?: string;
+  //   order?: number;
+  // };
 };
 
 function LessonStructureCard({

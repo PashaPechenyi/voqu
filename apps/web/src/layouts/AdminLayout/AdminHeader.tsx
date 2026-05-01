@@ -15,6 +15,7 @@ import { theme } from '@/theme';
 import { Link } from 'react-router-dom';
 
 const LINKS: { name: string; way: string; img: any }[] = [
+  // TODO: use global files for urls
   { name: 'Dashboard', way: '/admin', img: DashboardIcon },
   { name: 'Courses', way: '/admin/courses', img: ImportContactsIcon },
   { name: 'Users', way: '', img: PersonIcon },
