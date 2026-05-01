@@ -2,8 +2,7 @@ import CourseCard from '@/features/courses/components/CourseCard';
 import { Box } from '@mui/material';
 import ImportContactsIcon from '@mui/icons-material/ImportContacts';
 import DescriptionIcon from '@mui/icons-material/Description';
-import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 // TODO: move to the separate type
 type Lesson = {
   title: string;
@@ -117,7 +116,7 @@ type Courses = {
   updatedAt: string;
 };
 
-function CoursesSection({ enteredValue, setEnteredValue }: CoursesSectionProps) {
+function CoursesSection({ enteredValue }: CoursesSectionProps) {
   const [coursesList, setCoursesList] = useState<Courses[] | []>([]);
   useEffect(() => {
     getCourses().then((response) => {
@@ -139,14 +138,10 @@ function CoursesSection({ enteredValue, setEnteredValue }: CoursesSectionProps) 
       }}
     >
       {enteredValue != ''
-        ? coursesList.map((el) => {
-            if (el.name.toLowerCase().startsWith(enteredValue.toLowerCase())) {
-              return <CourseCard course={el} />;
-            }
-          })
-        : coursesList.map((el) => {
-            return <CourseCard course={el} />;
-          })}
+        ? coursesList
+            .filter((el) => el.name.toLowerCase().startsWith(enteredValue.toLowerCase()))
+            .map((el) => <CourseCard course={el} />)
+        : coursesList.map((el) => <CourseCard course={el} />)}
     </Box>
   );
 }

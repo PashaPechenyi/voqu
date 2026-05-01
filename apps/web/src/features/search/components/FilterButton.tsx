@@ -1,5 +1,4 @@
-import { Box, FormControl, InputLabel, MenuItem, NativeSelect, Select } from '@mui/material';
-import React from 'react';
+import { Box, MenuItem, Select } from '@mui/material';
 
 // FIXME: review feature name and components names
 

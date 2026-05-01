@@ -1,6 +1,5 @@
 import { ThemeProvider } from '@emotion/react';
 import { Box, Container } from '@mui/material';
-import React from 'react';
 import { Outlet } from 'react-router-dom';
 import AdminHeader from './AdminHeader';
 import { theme } from '@/theme';

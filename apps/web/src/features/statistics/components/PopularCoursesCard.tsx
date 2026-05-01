@@ -1,5 +1,4 @@
-import { Box, Card, CardContent, Slider, Stack, Typography } from '@mui/material';
-import React from 'react';
+import { Box, Card, CardContent, Slider, Typography } from '@mui/material';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 const COURSES = [
   { name: 'English Grammar Essentials', studentAmmount: 342, percent: 72 },

@@ -42,7 +42,6 @@ export const theme = createTheme({
       },
     },
     body2: {},
-    // FIXME: fix type
     body3: {
       fontSize: 21,
       color: '#37123c',

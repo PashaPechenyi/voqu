@@ -1,12 +1,12 @@
 import { Box } from '@mui/material';
-import React from 'react';
 import SearchInput from './SearchInput';
 import FilterButton from './FilterButton';
-type SearchControlsProps={
-  enteredValue:string,
-  setEnteredValue:any
-}
-function SearchControls({enteredValue,setEnteredValue}:SearchControlsProps) {
+
+type SearchControlsProps = {
+  setEnteredValue: any;
+};
+
+function SearchControls({ setEnteredValue }: SearchControlsProps) {
   return (
     <Box
       sx={{
@@ -16,11 +16,11 @@ function SearchControls({enteredValue,setEnteredValue}:SearchControlsProps) {
         display: 'flex',
         justifyContent: 'space-between',
         borderRadius: '30px',
-        gap:"10px",
-        mt:"20px"
+        gap: '10px',
+        mt: '20px',
       }}
     >
-      <SearchInput enteredValue={enteredValue} setEnteredValue={setEnteredValue} />
+      <SearchInput setEnteredValue={setEnteredValue} />
       <FilterButton />
     </Box>
   );

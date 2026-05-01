@@ -6,7 +6,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { Autocomplete, Box, Grid, MenuItem, Select, Typography } from '@mui/material';
+import { Autocomplete, Grid, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { Level } from '@/features/levels/types/level.type';
@@ -160,7 +160,7 @@ export default function CourseModal({ isOpen, setIsOpen, mainWord, course }: Cou
                   getOptionLabel={(option) => `${option.cefrLevel} - ${option.name}`}
                   sx={{ width: 1 }}
                   size="small"
-                  onChange={(event, newValue) => {
+                  onChange={(_, newValue) => {
                     onChange(newValue);
                   }}
                   value={value}
@@ -179,7 +179,7 @@ export default function CourseModal({ isOpen, setIsOpen, mainWord, course }: Cou
                   options={COURSE_STATUSES_LIST}
                   sx={{ width: 1 }}
                   size="small"
-                  onChange={(event, newValue) => {
+                  onChange={(_, newValue) => {
                     onChange(newValue);
                   }}
                   value={value}

@@ -1,6 +1,5 @@
 import LessonForEdit from '@/features/lessons/components/LessonForEdit';
-import { Box, Card, CardContent, CardHeader, CardMedia, Divider, Typography } from '@mui/material';
-import React from 'react';
+import { Card, CardContent, CardMedia, Divider, Typography } from '@mui/material';
 // FIXME: review should it be card
 type LessonsListProps = {
   lessons: any[];

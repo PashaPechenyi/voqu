@@ -1,12 +1,9 @@
 import { InputAdornment, TextField } from '@mui/material';
-import React, { useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
-type SearchInputProps={
-  enteredValue:string,
-  setEnteredValue:any
-}
-function SearchInput({enteredValue,setEnteredValue}:SearchInputProps) {
-
+type SearchInputProps = {
+  setEnteredValue: any;
+};
+function SearchInput({ setEnteredValue }: SearchInputProps) {
   return (
     <TextField
       size="small"

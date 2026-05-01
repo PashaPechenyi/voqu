@@ -1,14 +1,13 @@
 import { Box, Button, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import SearchControls from '@/features/search/components/SearchControls';
 
 import CourseModal from '@/features/courses/components/CourseModal';
 type IntroSectionProps = {
-  enteredValue: string;
   setEnteredValue: any;
 };
-function IntroSections({ enteredValue, setEnteredValue }: IntroSectionProps) {
+function IntroSections({ setEnteredValue }: IntroSectionProps) {
   const [isOpenModal, setIsOpenModal] = useState(false);
   return (
     <Box sx={{ position: 'relative' }}>
@@ -54,7 +53,7 @@ function IntroSections({ enteredValue, setEnteredValue }: IntroSectionProps) {
         </Button>
         <CourseModal isOpen={isOpenModal} setIsOpen={setIsOpenModal} mainWord="Add" />
       </Box>
-      <SearchControls enteredValue={enteredValue} setEnteredValue={setEnteredValue} />
+      <SearchControls setEnteredValue={setEnteredValue} />
     </Box>
   );
 }

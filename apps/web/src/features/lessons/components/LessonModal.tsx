@@ -41,10 +41,6 @@ export default function LessonModal({
   // 2) move form to separate component
   // 3) there should be 2 components 1- to add lesson 2- to update lesson
 
-  const handleClickOpen = () => {
-    setIsOpen(true);
-  };
-
   const handleClose = () => {
     setIsOpen(false);
   };
