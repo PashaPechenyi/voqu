@@ -1,7 +1,7 @@
 import { createSxStylesList } from '@/theme/helpers';
 import { Card, CardContent, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import { initialLessons } from '../consts/lessons';
+import { initialLessons } from '../../../../features/lesson/consts/lessons';
 
 export const StatisticSection = () => {
   const duration = initialLessons.grammar.reduce((acc, item) => {
@@ -12,39 +12,26 @@ export const StatisticSection = () => {
     if (item.locked) acc += 1;
     return acc;
   }, 0);
+  const STATISTICS_DATA = [
+    { type: duration, label: 'Total Duration' },
+    { type: totalLessons, label: 'Total Lessons' },
+    { type: lockedLessons, label: 'Locked Lessons' },
+  ];
 
   return (
     <Box sx={sxStyles.root as any}>
-      <Card sx={sxStyles.card}>
-        <CardContent>
-          <Typography gutterBottom variant="h3" component="div">
-            {totalLessons}
-          </Typography>
-          <Typography color={'primary'} variant="body2">
-            Total Lessons
-          </Typography>
-        </CardContent>
-      </Card>
-      <Card sx={sxStyles.card}>
-        <CardContent>
-          <Typography gutterBottom variant="h3" component="div">
-            {duration} min
-          </Typography>
-          <Typography color={'primary'} variant="body2">
-            Total Duration
-          </Typography>
-        </CardContent>
-      </Card>
-      <Card sx={sxStyles.card}>
-        <CardContent>
-          <Typography gutterBottom variant="h3" component="div">
-            {lockedLessons}
-          </Typography>
-          <Typography color={'primary'} variant="body2">
-            Locked Lessons
-          </Typography>
-        </CardContent>
-      </Card>
+      {STATISTICS_DATA.map((item) => (
+        <Card sx={sxStyles.card}>
+          <CardContent>
+            <Typography gutterBottom variant="h3" component="div">
+              {item.type}
+            </Typography>
+            <Typography color={'primary'} variant="body2">
+              {item.label}
+            </Typography>
+          </CardContent>
+        </Card>
+      ))}
     </Box>
   );
 };

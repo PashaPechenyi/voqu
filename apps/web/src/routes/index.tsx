@@ -6,11 +6,11 @@ import AdminLandingPage from '@/pages/admin/dashboard/Dashboard.page';
 import { Routes, Route } from 'react-router-dom';
 import AdminCoursesLayout from '@/pages/admin/adminCourses/AdminCourses.page';
 import {
-  ABOUT,
-  ADMIN,
-  ADMIN_COURSES,
-  ADMIN_COURSES_EDIT,
-  HOME,
+  ABOUT_URL,
+  ADMIN_URL,
+  ADMIN_COURSES_URL,
+  ADMIN_COURSES_EDIT_URL,
+  HOME_URL,
 } from '@/shared/constants/urls.const';
 import EditCoursePage from '@/pages/admin/editCourse/EditCourse.page';
 
@@ -18,16 +18,16 @@ export function AppRoutes() {
   return (
     <Routes>
       {/* Public routes */}
-      <Route path={HOME} element={<PublicLayout />}>
+      <Route path={HOME_URL} element={<PublicLayout />}>
         <Route index element={<LandingPage />} />
       </Route>
-      <Route path={ABOUT} element={<PublicLayout />}>
+      <Route path={ABOUT_URL} element={<PublicLayout />}>
         <Route index element={<AboutUsPage />} />
       </Route>
-      <Route path={ADMIN} element={<AdminLayout />}>
+      <Route path={ADMIN_URL} element={<AdminLayout />}>
         <Route index element={<AdminLandingPage />} />
-        <Route path={ADMIN_COURSES} element={<AdminCoursesLayout />} />
-        <Route path={ADMIN_COURSES_EDIT} element={<EditCoursePage />} />
+        <Route path={ADMIN_COURSES_URL} element={<AdminCoursesLayout />} />
+        <Route path={ADMIN_COURSES_EDIT_URL} element={<EditCoursePage />} />
       </Route>
     </Routes>
   );

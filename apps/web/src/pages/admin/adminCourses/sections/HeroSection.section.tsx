@@ -1,6 +1,6 @@
 import { Box, Button, Typography } from '@mui/material';
 import { useState } from 'react';
-import ModalAddNewForm from '../../../../shared/components/AddNewCourseModal/ModalAddNewForm';
+import ModalAddNewForm from '../../../../features/AddNewModal/ModalAddNewForm';
 import AddIcon from '@mui/icons-material/Add';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 

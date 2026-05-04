@@ -2,7 +2,7 @@ import MenuBookIcon from '@mui/icons-material/MenuBook';
 import HeadphonesIcon from '@mui/icons-material/Headphones';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import ModeCommentOutlinedIcon from '@mui/icons-material/ModeCommentOutlined';
-type Lesson = {
+export type Lesson = {
   id: string;
   title: string;
   duration: number;

@@ -1,5 +1,6 @@
 import { Course } from '@/features/courses/types/course.type';
 import { Level } from '@/features/levels/types/level/level.type';
+import useGetLevelsList from '@/hooks/useLevelsList';
 import { VALIDATION_ERRORS } from '@/shared/constants/validationErrors.consts';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 import { Autocomplete, Box, Button, Modal, TextField, Typography } from '@mui/material';
@@ -20,19 +21,8 @@ type FormValues = {
 };
 const status = ['Draft', 'Published'] as const;
 type CourseStatus = (typeof status)[number];
-const getLevels = async () => {
-  const response = await fetch('/api/level', {
-    method: 'GET',
-  });
-  //console.log(response);
-
-  const result = await response.json();
-  console.log(result);
-  return result;
-};
 
 export default function ModalAddNewForm({ open, handleClose, course }: ModalAddNewFormProps) {
-  const [levelsData, setLevelsData] = useState<Level[]>([]);
   const { handleSubmit, control } = useForm<FormValues>({
     defaultValues: {
       title: '',
@@ -42,7 +32,7 @@ export default function ModalAddNewForm({ open, handleClose, course }: ModalAddN
       image: '',
     },
   });
-
+  const { levelsData, setLevelsData, fetchLevels } = useGetLevelsList();
   const convertCourseFormDataToAPIFormat = (data: FormValues) => {
     return {
       name: data.title,
@@ -66,11 +56,7 @@ export default function ModalAddNewForm({ open, handleClose, course }: ModalAddN
     const result = await response.json();
     console.log(result);
   };
-  useEffect(() => {
-    getLevels().then((responce) => {
-      setLevelsData(responce.items);
-    });
-  }, []);
+  useEffect(() => fetchLevels(), []);
 
   return (
     <>

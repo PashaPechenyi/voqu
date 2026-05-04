@@ -1,5 +1,5 @@
-export const HOME = '/';
-export const ABOUT = '/about';
-export const ADMIN = '/admin';
-export const ADMIN_COURSES = `${ADMIN}/courses`;
-export const ADMIN_COURSES_EDIT = `${ADMIN_COURSES}/edit`;
+export const HOME_URL = '/';
+export const ABOUT_URL = '/about';
+export const ADMIN_URL = '/admin';
+export const ADMIN_COURSES_URL = `${ADMIN_URL}/courses`;
+export const ADMIN_COURSES_EDIT_URL = `${ADMIN_COURSES_URL}/edit`;

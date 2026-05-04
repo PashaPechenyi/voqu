@@ -1,14 +1,15 @@
 import { createSxStylesList } from '@/theme/helpers';
 import { Button, MenuItem, Modal, TextField, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { ExerciseTypeKey } from '../types/exerciseTypeKey.type';
 
 type FormValues = {
   title: string;
   duration: string;
   lessonType: string;
 };
-const lessonType: string[] = ['reading', 'listening', 'grammar', 'quiz'];
+const lessonType = Object.values(ExerciseTypeKey);
 type AddNewLessonModalProps = {
   open: boolean;
   handleClose: () => void;
@@ -61,8 +62,6 @@ export const AddNewLessonModal = ({ open, handleClose }: AddNewLessonModalProps)
                 variant="filled"
                 select
                 focused
-                label="Select"
-                defaultValue="A1"
                 value={form.lessonType}
                 onChange={(e) => setForm((prev) => ({ ...prev, lessonType: e.target.value }))}
               >
