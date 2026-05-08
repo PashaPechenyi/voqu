@@ -36,6 +36,10 @@ export class CourseService {
     return this.courseRepository.getOneByIdWithRelationsOrFail(id);
   }
 
+  async deleteCourse(id: string): Promise<void> {
+    await this.courseRepository.deleteWithLessons(id);
+  }
+
   async listCourses(params: IListCoursesParams): Promise<PaginatedList<CourseListItem>> {
     const { page, limit } = params;
     const isPaginated = page !== undefined || limit !== undefined;
