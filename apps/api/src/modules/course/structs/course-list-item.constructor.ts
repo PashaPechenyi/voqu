@@ -6,8 +6,17 @@ export class CourseListItem {
     this.id = data.id!;
     this.name = data.name!;
     this.status = data.status!;
-    this.LevelId = data.LevelId!;
-    this.OwnerId = data.OwnerId!;
+    this.Level = {
+      id: data.Level!.id!,
+      name: data.Level!.name!,
+      cefrLevel: data.Level!.cefrLevel!,
+    };
+    this.Owner = {
+      id: data.Owner!.id!,
+      firstName: data.Owner!.firstName!,
+      lastName: data.Owner!.lastName!,
+      email: data.Owner!.email!,
+    };
     this.createdAt = data.createdAt!;
     this.updatedAt = data.updatedAt!;
   }
@@ -18,9 +27,18 @@ export class CourseListItem {
 
   status: CourseStatus;
 
-  LevelId: string;
+  Level: {
+    id: string;
+    name: string;
+    cefrLevel: string;
+  };
 
-  OwnerId: string;
+  Owner: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+  };
 
   createdAt: string;
 
