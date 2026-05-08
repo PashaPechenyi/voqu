@@ -1,5 +1,5 @@
 import AdminHeader from '@/components/adminLayout/AdminHeader';
-import React from 'react';
+import { useEffect, useState } from 'react';
 import SummarySection from './sections/SummarySection';
 import QuickActions from './sections/QuickActions';
 import StatisticsPage from './sections/StatisticsPage';
@@ -9,8 +9,8 @@ function DashboardPage() {
     <>
       <AdminHeader />
       <SummarySection />
-      <StatisticsPage/>
-      <QuickActions/>
+      <StatisticsPage />
+      <QuickActions />
     </>
   );
 }

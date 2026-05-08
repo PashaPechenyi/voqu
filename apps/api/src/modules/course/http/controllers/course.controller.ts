@@ -1,12 +1,14 @@
-import { Body, Controller, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { CourseService } from '../../services/course.service';
 import { CourseListResponseDto } from '../dto/course-list-response.dto';
 import { CourseResponseDto } from '../dto/course-response.dto';
 import { CreateCourseDto } from '../dto/create-course.dto';
 import { CreateCourseResponseDto } from '../dto/create-course-response.dto';
+import { DeleteCourseResponseDto } from '../dto/delete-course-response.dto';
 import { ListCoursesQueryDto } from '../dto/list-courses-query.dto';
 import { UpdateCourseDto } from '../dto/update-course.dto';
 import { UpdateCourseResponseDto } from '../dto/update-course-response.dto';
+import { BaseResponseDto } from 'src/common/http/dto/base-response.dto';
 
 @Controller('course')
 export class CourseController {
@@ -37,5 +39,11 @@ export class CourseController {
   ): Promise<UpdateCourseResponseDto> {
     const course = await this.courseService.updateCourse(CourseId, body);
     return new UpdateCourseResponseDto(course);
+  }
+
+  @Delete(':CourseId')
+  async delete(@Param('CourseId') CourseId: string): Promise<DeleteCourseResponseDto> {
+    await this.courseService.deleteCourse(CourseId);
+    return new BaseResponseDto();
   }
 }
