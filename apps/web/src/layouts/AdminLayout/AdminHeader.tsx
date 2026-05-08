@@ -9,7 +9,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import ImportContactsIcon from '@mui/icons-material/ImportContacts';
 import PersonIcon from '@mui/icons-material/Person';
 import SettingsIcon from '@mui/icons-material/Settings';
-import { useMediaQuery } from '@mui/system';
+import { useMediaQuery } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { theme } from '@/theme';
 import { Link } from 'react-router-dom';

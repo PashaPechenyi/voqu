@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 
 import SchoolIcon from '@mui/icons-material/School';
 import { AppBar, Drawer, IconButton } from '@mui/material';
-import { useMediaQuery } from '@mui/system';
+import { useMediaQuery } from '@mui/material';
 import { theme } from '@/theme';
 import MenuIcon from '@mui/icons-material/Menu';
 import { LINKS } from './PublicFooter';
