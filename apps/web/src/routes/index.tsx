@@ -5,21 +5,20 @@ import AboutPage from '@/pages/public/About/About.page';
 import DashboardPage from '@/pages/admin/Dashboard/Dashboard.page';
 import AdminLayout from '@/layouts/AdminLayout/AdminLayout';
 import Courses from '@/pages/admin/Courses/Courses';
-import EditLessons from '@/pages/admin/EditLessons/EditLessons';
+import CourseDetails from '@/pages/admin/CourseDetails/CourseDetails';
+import { about, admin, course, courseEdit, landingPage } from './constants/urls.constant';
 
 export function AppRoutes() {
   return (
     <Routes>
-      {/* TODO: create global constants file for urls */}
-
-      <Route path="/landingPage" element={<PublicLayout />}>
+      <Route path={landingPage} element={<PublicLayout />}>
         <Route index element={<LandingPage />} />
-        <Route path="/landingPage/about" index element={<AboutPage />} />
+        <Route path={about} index element={<AboutPage />} />
       </Route>
-      <Route path="/admin" element={<AdminLayout />}>
+      <Route path={admin} element={<AdminLayout />}>
         <Route index element={<DashboardPage />} />
-        <Route path="/admin/courses" index element={<Courses />} />
-        <Route path="/admin/courses/:courseId/courseEdit" index element={<EditLessons />} />
+        <Route path={course} index element={<Courses />} />
+        <Route path={courseEdit} index element={<CourseDetails />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/landingPage" replace />} />

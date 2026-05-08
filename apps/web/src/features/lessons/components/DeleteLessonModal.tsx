@@ -7,17 +7,19 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Typography } from '@mui/material';
 
-// TODO: create global component in shared folder - ConfirmationModal
-// it will be used everywhere where you need confirmation for something (delete/...)
-type DeleteModalProps = {
+type DeleteLessonModalProps = {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   mainWord: string;
   title: string;
 };
 
-// TODO: rename file, component and props types to add Lesson
-export default function DeleteModal({ isOpen, setIsOpen, mainWord, title }: DeleteModalProps) {
+export default function DeleteLessonModal({
+  isOpen,
+  setIsOpen,
+  mainWord,
+  title,
+}: DeleteLessonModalProps) {
   const handleClose = () => {
     setIsOpen(false);
   };
@@ -26,12 +28,14 @@ export default function DeleteModal({ isOpen, setIsOpen, mainWord, title }: Dele
     <Dialog
       open={isOpen}
       onClose={handleClose}
-      PaperProps={{
-        sx: {
-          p: '20px',
-          borderRadius: '20px',
-          border: '4px solid red',
-          width: 1,
+      slotProps={{
+        paper: {
+          sx: {
+            p: '20px',
+            borderRadius: '20px',
+            border: '4px solid red',
+            width: 1,
+          },
         },
       }}
     >

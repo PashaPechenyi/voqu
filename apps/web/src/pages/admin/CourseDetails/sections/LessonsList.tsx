@@ -1,4 +1,4 @@
-import LessonForEdit from '@/features/lessons/components/LessonForEdit';
+import AdminLessonItem from '@/features/lessons/components/AdminLessonItem';
 import { Card, CardContent, CardMedia, Divider, Typography } from '@mui/material';
 // FIXME: review should it be card
 type LessonsListProps = {
@@ -27,13 +27,7 @@ function LessonsList({ lessons }: LessonsListProps) {
       <CardContent>
         {lessons.map((lesson, ind) => (
           <>
-            <LessonForEdit
-              title={lesson.title}
-              duration={lesson.duration}
-              type={lesson.type}
-              icon={lesson.icon}
-              ind={ind}
-            />
+            <AdminLessonItem lesson={lesson} ind={ind} />
             <Divider />
           </>
         ))}

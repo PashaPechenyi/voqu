@@ -1,14 +1,38 @@
 import { Box, Button, Typography } from '@mui/material';
-import { useState } from 'react';
+
 import AddIcon from '@mui/icons-material/Add';
 import SearchControls from '@/features/search/components/SearchControls';
 
-import CourseModal from '@/features/courses/components/CourseModal';
+import { CourseFormValues } from '@/features/courses/components/CourseAddModal';
+import CourseAddModal from '@/features/courses/components/CourseAddModal';
+import useToggle from '@/features/lessons/customHooks/useToggle';
 type IntroSectionProps = {
   setEnteredValue: any;
 };
+
 function IntroSections({ setEnteredValue }: IntroSectionProps) {
-  const [isOpenModal, setIsOpenModal] = useState(false);
+  const {
+    isOpen: isAddCourseModalOpen,
+    open: openAddCourseModal,
+    close: closeAddCourseModal,
+  } = useToggle();
+
+  const addNewCourse = (inputsValues: CourseFormValues) => {
+    const body = {
+      name: inputsValues.name,
+      //description: inputsValues.description,
+      status: inputsValues.status?.toLowerCase(),
+      LevelId: String(inputsValues.levelId?.id),
+    };
+    fetch('/api/course', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+    closeAddCourseModal();
+  };
   return (
     <Box sx={{ position: 'relative' }}>
       <Box
@@ -39,19 +63,14 @@ function IntroSections({ setEnteredValue }: IntroSectionProps) {
         </Box>
         <Button
           sx={{ p: '15px 25px', backgroundColor: '#71677D' }}
-          onClick={() =>
-            setIsOpenModal((prev) => {
-              return !prev;
-            })
-          }
+          onClick={() => openAddCourseModal()}
         >
           <AddIcon sx={{ fill: 'white' }} />
           <Typography color="white" variant="body1">
-            {' '}
             Add New Course
           </Typography>
         </Button>
-        <CourseModal isOpen={isOpenModal} setIsOpen={setIsOpenModal} mainWord="Add" />
+        <CourseAddModal isOpen={isAddCourseModalOpen} close={close} onclick={addNewCourse} />
       </Box>
       <SearchControls setEnteredValue={setEnteredValue} />
     </Box>

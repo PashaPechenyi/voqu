@@ -12,6 +12,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { Link } from 'react-router-dom';
 import { createSxStylesList } from '@/shared/helpers/theme.helpers';
 import clsx from 'clsx';
+import { Course } from '@/pages/admin/Courses/sections/CoursesSection';
 
 const CLASSNAME = {
   PUBLISHED: 'published',
@@ -19,19 +20,17 @@ const CLASSNAME = {
 } as const;
 
 type CourseCardProps = {
-  // TODO: do not use any
-  course: any;
+  course: Course;
 };
 
 function CourseCard({ course }: CourseCardProps) {
   return (
-    <Card sx={{ minWidth: 345, border: '2px solid grey' }}>
+    <Card sx={sxStyles.card}>
       <CardMedia
         sx={{ height: 140, position: 'relative' }}
-        image={'/src/assets/images/Advanced vocabulary builder.jpg'}
+        image={'/src/assets/images/EnglishGrammarEssentials.jpg'}
       >
-        {/* TODO: move ALL sx styles below to sxStyles constant */}
-        <Box sx={{ display: 'flex', gap: '15px', position: 'absolute', top: '10px', right: '4px' }}>
+        <Box sx={sxStyles.information}>
           <Box
             sx={sxStyles.courseStatus}
             className={clsx({
@@ -41,26 +40,17 @@ function CourseCard({ course }: CourseCardProps) {
           >
             {course.status}
           </Box>
-          <Box
-            sx={{
-              p: '5px 10px',
-              fontSize: '13px',
-              border: '1px solid black',
-              borderRadius: '30px',
-              backgroundColor: 'white',
-            }}
-          >
-            {course.LevelId}
-          </Box>
+          {/* ERR */}
+          {/* <Box sx={sxStyles.courseLevel}>{course.levelId.cefrLevel}</Box> */}
         </Box>
       </CardMedia>
       <CardContent>
         <Typography gutterBottom variant="h5" component="div" color="secondary">
           {course.name}
         </Typography>
-        <Typography variant="body2" color="primary">
+        {/* <Typography variant="body2" color="primary">
           {course.description}
-        </Typography>
+        </Typography> */}
         <Box sx={{ display: 'flex', gap: '20px', mt: '10px', alignItems: 'center' }}>
           <Typography variant="body2" color="primary">
             {2} lessons
@@ -77,14 +67,7 @@ function CourseCard({ course }: CourseCardProps) {
       <CardActions sx={{ justifyContent: 'center', gap: '8px' }}>
         <Button
           component={Link}
-          sx={{
-            p: '10px',
-            backgroundColor: '#71677D',
-            color: 'white',
-            gap: '5px',
-            width: '95%',
-            my: '10px',
-          }}
+          sx={sxStyles.courseLink}
           to={`/admin/courses/${course.id}/courseEdit`}
         >
           <EditIcon fontSize="small" sx={{ fill: 'white' }} />
@@ -109,6 +92,37 @@ const sxStyles = createSxStylesList({
     [`&.${CLASSNAME.DRAFT}`]: {
       backgroundColor: 'darkgrey',
     },
+  },
+  courseLevel: {
+    p: '5px 10px',
+    fontSize: '13px',
+    border: '1px solid black',
+    borderRadius: '30px',
+    backgroundColor: 'white',
+  },
+  courseLink: {
+    p: '10px',
+    backgroundColor: '#71677D',
+    color: 'white',
+    gap: '5px',
+    width: '95%',
+    my: '10px',
+    position: 'absolute',
+    bottom: 20,
+  },
+  information: {
+    display: 'flex',
+    gap: '15px',
+    position: 'absolute',
+    top: '10px',
+    right: '4px',
+  },
+  card: {
+    width: '30%',
+    minWidth: 315,
+    height: 400,
+    border: '2px solid grey',
+    position: 'relative',
   },
 });
 

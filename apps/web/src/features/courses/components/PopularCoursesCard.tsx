@@ -7,7 +7,6 @@ const COURSES = [
   { name: 'Listening Comprehension', studentAmmount: 198, percent: 58 },
 ];
 
-// TODO: move to course feature
 function PopularCoursesCard() {
   return (
     <Card

@@ -8,11 +8,12 @@ import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import icon from '@/assets/images/diamond.png';
 import { Link } from 'react-router-dom';
+import { createSxStylesList } from '@/shared/helpers/theme.helpers';
+import { about, landingPage } from '@/routes/constants/urls.constant';
 
 export const LINKS: { name: string; way: string }[] = [
-  // TODO: use global files for urls
-  { name: 'Home', way: '/landingPage' },
-  { name: 'About us', way: '/landingPage/about' },
+  { name: 'Home', way: landingPage },
+  { name: 'About us', way: about },
   { name: 'Our offers', way: '' },
   { name: 'Contact', way: '' },
 ];
@@ -26,35 +27,9 @@ const icons = [FacebookIcon, InstagramIcon, TwitterIcon, LinkedInIcon];
 function PublicFooter() {
   return (
     <>
-      <Box
-        component="footer"
-        // TODO: styles
-        sx={{
-          backgroundColor: '#71677D',
-          width: 1,
-          py: '40px',
-          px: '20px',
-          borderTop: '5px solid grey',
-        }}
-      >
-        <Box
-          sx={{
-            width: 1,
-            display: 'flex',
-            flexDirection: { xs: 'column', sm: 'row' },
-            justifyContent: { xs: 'center', sm: 'space-around' },
-            alignItems: { xs: 'center', sm: 'flex-start' },
-            gap: { xs: '20px' },
-          }}
-        >
-          <Box
-            sx={{
-              width: '300px',
-              display: { xs: 'flex', sm: 'inline' },
-              alignItems: { xs: 'center', sm: 'flex-start' },
-              flexDirection: 'column',
-            }}
-          >
+      <Box component="footer" sx={sxStyles.footer}>
+        <Box sx={sxStyles.container}>
+          <Box sx={sxStyles.shortDesc}>
             <Typography variant="h6" sx={{ color: 'white' }}>
               Voqu
             </Typography>
@@ -66,29 +41,17 @@ function PublicFooter() {
               innovative methods
             </Typography>
           </Box>
-          <Box
-            sx={{
-              width: '300px',
-            }}
-          >
+          <Box sx={{ width: '300px' }}>
             <Typography variant="h6" sx={{ color: 'white' }}>
               Quick Links
             </Typography>
             <List sx={{ padding: 0 }}>
               {LINKS.map((text, ind) => (
                 <ListItem key={ind}>
-                  {/* <Typography
-                    component="a"
-                    href="#"
-                    variant="body2"
-                    sx={{ fontSize: '16px', textDecoration: 'none', color: 'white', padding: 0 }}
-                  >
-                    {text.name}
-                  </Typography> */}
                   <Button
                     color="inherit"
                     component={Link}
-                    sx={{ fontSize: '16px', textDecoration: 'none', color: 'white', padding: 2 }}
+                    sx={{ fontSize: '16px', textDecoration: 'none', color: 'white' }}
                     to={text.way}
                   >
                     {text.name}
@@ -107,15 +70,7 @@ function PublicFooter() {
                 return (
                   <ListItem key={ind}>
                     <Icon sx={{ fill: 'white', pr: '5px' }} />
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        fontSize: '16px',
-                        textDecoration: 'none',
-                        color: 'white',
-                        padding: 0,
-                      }}
-                    >
+                    <Typography variant="body2" sx={sxStyles.contact}>
                       {el.text}
                     </Typography>
                   </ListItem>
@@ -123,14 +78,7 @@ function PublicFooter() {
               })}
             </List>
           </Box>
-          <Box
-            sx={{
-              width: '300px',
-              display: { xs: 'flex', sm: 'inline' },
-              alignItems: { xs: 'center', sm: 'start' },
-              flexDirection: 'column',
-            }}
-          >
+          <Box sx={sxStyles.followCon}>
             <Typography variant="h6" sx={{ color: 'white' }}>
               Follow Us
             </Typography>
@@ -138,24 +86,7 @@ function PublicFooter() {
               <List sx={{ display: 'flex', gap: '10px' }}>
                 {icons.map((Icon, ind) => (
                   <ListItem key={ind} component="a" href="https://www.deepl.com/uk/translator">
-                    <IconButton
-                      sx={{
-                        backgroundColor: 'grey',
-                        cursor: 'pointer',
-                        '& svg': {
-                          color: 'white',
-                          transition: 'color 0.3s',
-                        },
-
-                        '&:hover': {
-                          backgroundColor: 'white',
-
-                          '& svg': {
-                            color: 'grey',
-                          },
-                        },
-                      }}
-                    >
+                    <IconButton sx={sxStyles.iconButton}>
                       <Icon />
                     </IconButton>
                   </ListItem>
@@ -164,26 +95,8 @@ function PublicFooter() {
             </Box>
           </Box>
         </Box>
-        <Box
-          sx={{
-            borderTop: '2.5px solid grey',
-            width: '100%',
-            textAlign: 'center',
-            py: '30px',
-            color: 'white',
-          }}
-        >
-          <Box
-            sx={{
-              display: 'flex',
-              gap: '5px',
-              alignItems: 'center',
-              margin: '0 auto',
-              my: '30px',
-              width: '140px',
-              flexDirection: { xs: 'column', md: 'row' },
-            }}
-          >
+        <Box sx={sxStyles.icon}>
+          <Box sx={sxStyles.decorationCon}>
             <Box sx={{ width: '60px', height: '1px', backgroundColor: '#AA9F96' }}></Box>
             <Box component="img" src={icon} sx={{ width: '13px' }}></Box>
             <Box sx={{ width: '60px', height: '1px', backgroundColor: '#AA9F96' }}></Box>
@@ -196,5 +109,73 @@ function PublicFooter() {
     </>
   );
 }
+
+const sxStyles = createSxStylesList({
+  footer: {
+    backgroundColor: '#71677D',
+    width: 1,
+    py: '40px',
+    px: '20px',
+    borderTop: '5px solid grey',
+  },
+  container: {
+    width: 1,
+    display: 'flex',
+    flexDirection: { xs: 'column', sm: 'row' },
+    justifyContent: { xs: 'center', sm: 'space-around' },
+    alignItems: { xs: 'center', sm: 'flex-start' },
+    gap: { xs: '20px' },
+  },
+  shortDesc: {
+    width: '300px',
+    display: { xs: 'flex', sm: 'inline' },
+    alignItems: { xs: 'center', sm: 'flex-start' },
+    flexDirection: 'column',
+  },
+  contact: {
+    fontSize: '16px',
+    textDecoration: 'none',
+    color: 'white',
+    padding: 0,
+  },
+  followCon: {
+    width: '300px',
+    display: { xs: 'flex', sm: 'inline' },
+    alignItems: { xs: 'center', sm: 'start' },
+    flexDirection: 'column',
+  },
+  iconButton: {
+    backgroundColor: 'grey',
+    cursor: 'pointer',
+    '& svg': {
+      color: 'white',
+      transition: 'color 0.3s',
+    },
+
+    '&:hover': {
+      backgroundColor: 'white',
+
+      '& svg': {
+        color: 'grey',
+      },
+    },
+  },
+  icon: {
+    borderTop: '2.5px solid grey',
+    width: '100%',
+    textAlign: 'center',
+    py: '30px',
+    color: 'white',
+  },
+  decorationCon: {
+    display: 'flex',
+    gap: '5px',
+    alignItems: 'center',
+    margin: '0 auto',
+    my: '30px',
+    width: '140px',
+    flexDirection: { xs: 'column', md: 'row' },
+  },
+});
 
 export default PublicFooter;

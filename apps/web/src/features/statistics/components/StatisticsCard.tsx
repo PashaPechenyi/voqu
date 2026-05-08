@@ -1,6 +1,7 @@
 import { Box, Card, CardContent, Divider, Typography } from '@mui/material';
 import TimelineIcon from '@mui/icons-material/Timeline';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import { createSxStylesList } from '@/shared/helpers/theme.helpers';
 
 const ACTIVITIES = [
   {
@@ -16,23 +17,14 @@ const ACTIVITIES = [
 
 function StatisticsCard() {
   return (
-    <Card
-      // TODO: move styles
-      sx={{
-        width: { xs: 1, md: '50%' },
-        border: '3px, solid grey',
-        borderRadius: '10px',
-        py: '20px',
-        mt: '30px',
-      }}
-    >
+    <Card sx={sxStyles.card}>
       <CardContent sx={{ px: '20px', mt: '20px' }}>
-        <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center', pb: '30px' }}>
+        <Box sx={sxStyles.title}>
           <TimelineIcon fontSize="large" sx={{ fill: 'grey' }} />
           <Typography variant="h4">Recent Activity</Typography>
         </Box>
 
-        <Box sx={{ display: 'flex', gap: '40px', mt: '13px', flexDirection: 'column' }}>
+        <Box sx={sxStyles.activitiesCon}>
           {ACTIVITIES.map((el) => {
             return (
               <Box>
@@ -53,9 +45,7 @@ function StatisticsCard() {
                   <Typography variant="body1" color="primary">
                     {el.name}
                   </Typography>
-                  <Box
-                    sx={{ display: 'flex', gap: '5px', alignItems: 'center', textAlign: 'center' }}
-                  >
+                  <Box sx={sxStyles.timeBox}>
                     <AccessTimeIcon fontSize="small" sx={{ fill: '#aa9f96' }} />
                     <Typography variant="body2" color="tertiary">
                       {el.time}
@@ -71,5 +61,17 @@ function StatisticsCard() {
     </Card>
   );
 }
+const sxStyles = createSxStylesList({
+  card: {
+    width: { xs: 1, md: '50%' },
+    border: '3px, solid grey',
+    borderRadius: '10px',
+    py: '20px',
+    mt: '30px',
+  },
+  title: { display: 'flex', gap: '10px', alignItems: 'center', pb: '30px' },
+  timeBox: { display: 'flex', gap: '5px', alignItems: 'center', textAlign: 'center' },
+  activitiesCon: { display: 'flex', gap: '40px', mt: '13px', flexDirection: 'column' },
+});
 
 export default StatisticsCard;

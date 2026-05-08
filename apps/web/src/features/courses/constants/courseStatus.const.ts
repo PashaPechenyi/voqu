@@ -1,5 +1,3 @@
-// TODO: add .const to files name
-
 export enum CourseStatusKey {
   published = 'published',
   draft = 'draft',

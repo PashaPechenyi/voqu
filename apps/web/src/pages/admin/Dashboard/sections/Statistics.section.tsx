@@ -1,4 +1,4 @@
-import PopularCoursesCard from '@/features/statistics/components/PopularCoursesCard';
+import PopularCoursesCard from '@/features/courses/components/PopularCoursesCard';
 import StatisticsCard from '@/features/statistics/components/StatisticsCard';
 import { Box } from '@mui/material';
 

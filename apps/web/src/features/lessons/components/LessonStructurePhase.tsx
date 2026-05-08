@@ -8,6 +8,12 @@ type LessonStructurePhaseProps = {
   title: string;
   description: string;
 };
+export type Style = {
+  width: string | { xs: string; sm: string };
+  textAlign: string;
+  alignItems: string;
+  order: number;
+};
 function LessonStructurePhase({
   icon,
   title,
@@ -23,10 +29,12 @@ function LessonStructurePhase({
           icon={icon}
           title={title}
           description={description}
-          textAling="left"
-          alingItems="start"
-          order={1}
-          width={'calc((100% - 100px) / 2)'}
+          cardStyles={{
+            width: 'calc((100% - 100px) / 2)',
+            textAlign: 'left',
+            alignItems: 'start',
+            order: 1,
+          }}
         />
       </Box>
     ) : (
@@ -35,10 +43,12 @@ function LessonStructurePhase({
           icon={icon}
           title={title}
           description={description}
-          textAling="right"
-          alingItems="end"
-          order={3}
-          width={'calc((100% - 100px) / 2)'}
+          cardStyles={{
+            width: 'calc((100% - 100px) / 2)',
+            textAlign: 'right',
+            alignItems: 'end',
+            order: 3,
+          }}
         />
 
         <SectionCounterDecoration ind={phaseNumber} />
@@ -50,20 +60,24 @@ function LessonStructurePhase({
         icon={icon}
         title={title}
         description={description}
-        textAling="left"
-        alingItems="start"
-        order={1}
-        width={{ xs: '100%', sm: '90%' }}
+        cardStyles={{
+          width: { xs: '100%', sm: '90%' },
+          textAlign: 'left',
+          alignItems: 'start',
+          order: 1,
+        }}
       />
     ) : (
       <LessonStructureCard
         icon={icon}
         title={title}
         description={description}
-        textAling="left"
-        alingItems="start"
-        order={1}
-        width="100%"
+        cardStyles={{
+          width: '100%',
+          textAlign: 'left',
+          alignItems: 'start',
+          order: 1,
+        }}
       />
     );
   }

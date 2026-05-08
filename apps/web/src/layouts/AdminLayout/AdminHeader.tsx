@@ -13,11 +13,11 @@ import { useMediaQuery } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { theme } from '@/theme';
 import { Link } from 'react-router-dom';
+import { admin, course } from '@/routes/constants/urls.constant';
 
 const LINKS: { name: string; way: string; img: any }[] = [
-  // TODO: use global files for urls
-  { name: 'Dashboard', way: '/admin', img: DashboardIcon },
-  { name: 'Courses', way: '/admin/courses', img: ImportContactsIcon },
+  { name: 'Dashboard', way: admin, img: DashboardIcon },
+  { name: 'Courses', way: course, img: ImportContactsIcon },
   { name: 'Users', way: '', img: PersonIcon },
   { name: 'Settings', way: '', img: SettingsIcon },
 ];
@@ -84,6 +84,7 @@ export default function AdminHeader() {
                   {LINKS.map((el) => {
                     return (
                       <Button
+                        key={el.name + el.way}
                         color="inherit"
                         component={Link}
                         sx={{ fontSize: { xs: '15px', sm: '20px' } }}
@@ -117,6 +118,7 @@ export default function AdminHeader() {
                   const Icon = link.img;
                   return (
                     <Button
+                      key={link.name + link.way}
                       color="inherit"
                       component={Link}
                       sx={{

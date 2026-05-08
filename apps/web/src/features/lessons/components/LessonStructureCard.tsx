@@ -1,42 +1,26 @@
 import { Box, Typography } from '@mui/material';
+import { Style } from './LessonStructurePhase';
 type LessonStructureCardProps = {
   icon: any;
   title: string;
   description: string;
-  order: number;
-  textAling: string;
-  alingItems: string;
-  width: string | { xs: string; sm: string };
-  // TODO: change it to styles above
-  // styles?: {
-  //   width?: string | { xs: string; sm: string };
-  //   textAlign?: string;
-  //   alignItems?: string;
-  //   order?: number;
-  // };
+
+  cardStyles: Style;
 };
 
-function LessonStructureCard({
-  icon,
-  title,
-  description,
-  alingItems,
-  textAling,
-  order,
-  width,
-}: LessonStructureCardProps) {
+function LessonStructureCard({ icon, title, description, cardStyles }: LessonStructureCardProps) {
   const Icon = icon;
   return (
-    <Box sx={{ alignItems: alingItems, width: width, ...styles.card }}>
+    <Box sx={{ alignItems: cardStyles.alignItems, width: cardStyles.width, ...styles.card }}>
       <Box sx={styles.header}>
-        <Box color="secondary" sx={{ order: order, ...styles.icon }}>
+        <Box color="secondary" sx={{ order: cardStyles.order, ...styles.icon }}>
           <Icon sx={{ fill: 'white', fontSize: '28px' }} />
         </Box>
-        <Typography variant="h6" sx={{ textAlign: textAling, mx: '10px', order: 2 }}>
+        <Typography variant="h6" sx={{ textAlign: cardStyles.textAlign, mx: '10px', order: 2 }}>
           {title}
         </Typography>
       </Box>
-      <Typography variant="body1" sx={{ textAlign: textAling }}>
+      <Typography variant="body1" sx={{ textAlign: cardStyles.textAlign }}>
         {description}
       </Typography>
     </Box>
