@@ -33,7 +33,11 @@ export class CourseService {
   }
 
   async getCourseById(id: string): Promise<Course> {
-    return this.courseRepository.getOneByIdOrFail(id);
+    return this.courseRepository.getOneByIdWithRelationsOrFail(id);
+  }
+
+  async deleteCourse(id: string): Promise<void> {
+    await this.courseRepository.deleteWithLessons(id);
   }
 
   async listCourses(params: IListCoursesParams): Promise<PaginatedList<CourseListItem>> {
