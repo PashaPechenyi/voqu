@@ -9,7 +9,7 @@ const useGetLevelsList = () => {
     setLevelsData(levels);
   };
 
-  return { levelsData, setLevelsData, fetchLevels };
+  return { levelsData, fetchLevels };
 };
 
 export default useGetLevelsList;

@@ -35,8 +35,8 @@ function FuturesSection() {
     <Box sx={sxStyles.root}>
       <Typography variant={'h3'}>Чому обирають Voqu?</Typography>
       <Box sx={sxStyles.cards}>
-        {CARDS.map(({ Icon, title, sub }) => (
-          <Card sx={sxStyles.card}>
+        {CARDS.map(({ Icon, title, sub }, index) => (
+          <Card key={index} sx={sxStyles.card}>
             <CardContent sx={sxStyles.cardContent}>
               <Box sx={sxStyles.iconBox}>
                 <Icon color="secondary" height={40} width={40} />

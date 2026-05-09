@@ -1,11 +1,10 @@
 import { Box, Button, Typography } from '@mui/material';
 import { useState } from 'react';
-import ModalAddNewForm from '../../../../features/AddNewModal/ModalAddNewForm';
 import AddIcon from '@mui/icons-material/Add';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
+import AddCourseModal from '@/features/courses/components/AddCourseModal';
 
 export default function HeroSection() {
-  //   const isOpen = true;
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -21,7 +20,7 @@ export default function HeroSection() {
         <AddIcon />
         Add New Course
       </Button>
-      <ModalAddNewForm open={open} handleClose={handleClose} />
+      <AddCourseModal open={open} handleClose={handleClose} />
     </Box>
   );
 }

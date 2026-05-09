@@ -1,26 +1,15 @@
 import { Box } from '@mui/material';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
-import { useEffect, useState } from 'react';
-import { Course } from '../types/course.type';
+import { useEffect } from 'react';
+
 import { CourseCardSection } from './CourseCard.section';
+import useGetCourses from '@/features/courses/hooks/useGetCourses';
 
 export default function CoursesSection() {
-  const [coursesData, setCoursesData] = useState<Course[]>([]);
-  const getCourses = async () => {
-    const response = await fetch('/api/course', {
-      method: 'GET',
-    });
-    //console.log(response);
-
-    const result = await response.json();
-    console.log(result);
-    return result;
-  };
+  const { coursesData, fetchCourses } = useGetCourses();
 
   useEffect(() => {
-    getCourses().then((responce) => {
-      setCoursesData(responce.items);
-    });
+    fetchCourses();
   }, []);
 
   return (

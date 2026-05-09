@@ -18,6 +18,7 @@ type CourseCardSectionProps = {
 };
 
 export const CourseCardSection = ({ courseData }: CourseCardSectionProps) => {
+  console.log(ADMIN_COURSES_EDIT_URL(courseData.id));
   return (
     <Card key={courseData.id} sx={sxStyles.card}>
       <CardMedia
@@ -28,26 +29,18 @@ export const CourseCardSection = ({ courseData }: CourseCardSectionProps) => {
             <Chip color="info" label={courseData.LevelId} />
           </Box>
         }
-        //image={courseData.image}
         title={courseData.name}
       />
       <CardContent sx={sxStyles.content}>
         <Typography gutterBottom variant="h4" component="div">
           {courseData.name}
         </Typography>
-
-        {/* <Typography variant="h6" color={'primary'}>
-      {courseData.description}
-    </Typography> */}
         <Box sx={{ flex: 1 }}></Box>
-        {/* <Typography variant="body2" color={'primary'}>
-      {courseData.lessons} lessons • {courseData.students} students
-    </Typography> */}
       </CardContent>
 
       <Divider variant="middle" />
       <CardActions sx={sxStyles.actions}>
-        <Button href={ADMIN_COURSES_EDIT_URL} variant="contained" fullWidth>
+        <Button href={ADMIN_COURSES_EDIT_URL(courseData.id)} variant="contained" fullWidth>
           Edit Course
         </Button>
       </CardActions>

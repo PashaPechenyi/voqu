@@ -4,16 +4,17 @@ import { Box } from '@mui/system';
 import { useState } from 'react';
 import { initialLessons } from '../../../../features/lesson/consts/lessons';
 import AddIcon from '@mui/icons-material/Add';
-import ModalAddNewForm from '@/features/AddNewModal/ModalAddNewForm';
-import { Course } from '@/features/courses/types/course.type';
-import { DeleteCourseModal } from '../../../../features/courses/components/PopularCourse/modals/DeleteCourseModal';
+import { DeleteCourseModal } from '../../../../features/courses/components/DeleteCourseModal';
 import { LessonCardSection } from './LessonCard.section';
+import { Course } from '../../adminCourses/types/course.type';
+import EditCourseModal from '@/features/courses/components/EditCourseModal';
 
 type CourseLessonsAreaSectionProps = {
-  course?: Course;
+  course: Course;
+  onSuccess: (data: Course) => void;
 };
 
-export const CourseLessonsAreaSection = ({ course }: CourseLessonsAreaSectionProps) => {
+export const CourseLessonsAreaSection = ({ course, onSuccess }: CourseLessonsAreaSectionProps) => {
   const lessons = initialLessons.grammar;
   const [open, setOpen] = useState<'edit' | 'delete' | null>(null);
   const handleCloseDelete = () => setOpen(null);
@@ -36,7 +37,12 @@ export const CourseLessonsAreaSection = ({ course }: CourseLessonsAreaSectionPro
           <AddIcon />
           Edit Course
         </Button>
-        <ModalAddNewForm course={course} open={open === 'edit'} handleClose={handleCloseEdit} />
+        <EditCourseModal
+          onSuccess={onSuccess}
+          course={course}
+          open={open === 'edit'}
+          handleClose={handleCloseEdit}
+        />
         <Button
           sx={sxStyles.btn}
           variant="outlined"
@@ -46,7 +52,7 @@ export const CourseLessonsAreaSection = ({ course }: CourseLessonsAreaSectionPro
           Delete Course
         </Button>
         <DeleteCourseModal
-          courseName={course?.title}
+          courseName={course?.name}
           open={open === 'delete'}
           handleClose={handleCloseDelete}
         />

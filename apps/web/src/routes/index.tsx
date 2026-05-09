@@ -27,7 +27,7 @@ export function AppRoutes() {
       <Route path={ADMIN_URL} element={<AdminLayout />}>
         <Route index element={<AdminLandingPage />} />
         <Route path={ADMIN_COURSES_URL} element={<AdminCoursesLayout />} />
-        <Route path={ADMIN_COURSES_EDIT_URL} element={<EditCoursePage />} />
+        <Route path={ADMIN_COURSES_EDIT_URL(':courseId')} element={<EditCoursePage />} />
       </Route>
     </Routes>
   );
