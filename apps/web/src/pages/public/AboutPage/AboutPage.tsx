@@ -8,6 +8,7 @@ import DoneIcon from '@mui/icons-material/Done';
 import CloseIcon from '@mui/icons-material/Close';
 import { Box, TabClassKey, TableCell } from '@mui/material';
 import { Cancel, KeyOff } from '@mui/icons-material';
+
 export type Word = {
   id: string;
   word: string;

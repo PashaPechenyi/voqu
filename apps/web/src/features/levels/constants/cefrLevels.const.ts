@@ -1,4 +1,4 @@
-import { CefrLevel } from '@/features/levels/types/level.type';
+import { CefrLevel } from '@/features/levels/types/levelDemo.type/levelDemo.type';
 
 export const cefrLevels: CefrLevel[] = [
   {
