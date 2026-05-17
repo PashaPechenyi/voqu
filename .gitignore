@@ -48,3 +48,5 @@ yarn-error.log*
 # Docks
 /docs/phases
 /docs/IMPLEMENTATION_PLAN.md
+
+.serena/cache
