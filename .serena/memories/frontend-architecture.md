@@ -22,18 +22,23 @@ apps/web/src/
 When you create a new file, ask in order:
 
 ### 1. Is it tied to a backend entity (course, lesson, level, progress, quiz, vocabulary, ...)?
+
 → `features/<entity>/...`
 
 ### 2. Is it generic, with no business logic, reusable anywhere?
+
 → `shared/...`
 `shared` must stay business-agnostic — nothing entity-specific lives here.
 Examples: `Pagination`, `Accordion`, a generic `useDebounce`, date helpers.
 
 ### 3. Specific to one page or section, not tied to an entity?
+
 → co-locate inside that page.
 
 ### Promotion rule
+
 Promote on the **second** use, not preemptively:
+
 - gained an entity link → move to `features/<entity>/`
 - turned out to be generic → move to `shared/`
 
@@ -86,19 +91,20 @@ shared/
 
 All role suffixes are **singular**.
 
-| Kind | Pattern | Example |
-|---|---|---|
-| React component | `PascalCase.tsx` | `CourseCard.tsx` |
-| Page | `PascalCase.page.tsx` | `Dashboard.page.tsx` |
-| Page section | `PascalCase.section.tsx` | `Hero.section.tsx` |
-| Hook | `useXxx.ts` (no suffix) | `useResolveColor.ts` |
-| Type | `xxx.type.ts` | `lesson.type.ts` |
-| Helper / pure utils | `xxx.helper.ts` | `string.helper.ts` |
-| Constants | `xxx.const.ts` | `courseStatus.const.ts` |
-| Enum | `xxx.enum.ts` | `courseStatus.enum.ts` |
+| Kind                    | Pattern                     | Example                     |
+| ----------------------- | --------------------------- | --------------------------- |
+| React component         | `PascalCase.tsx`            | `CourseCard.tsx`            |
+| Page                    | `PascalCase.page.tsx`       | `Dashboard.page.tsx`        |
+| Page section            | `PascalCase.section.tsx`    | `Hero.section.tsx`          |
+| Hook                    | `useXxx.ts` (no suffix)     | `useResolveColor.ts`        |
+| Type                    | `xxx.type.ts`               | `lesson.type.ts`            |
+| Helper / pure utils     | `xxx.helper.ts`             | `string.helper.ts`          |
+| Constants               | `xxx.const.ts`              | `courseStatus.const.ts`     |
+| Enum                    | `xxx.enum.ts`               | `courseStatus.enum.ts`      |
 | Shared component folder | `PascalCase/PascalCase.tsx` | `Pagination/Pagination.tsx` |
 
 Notes:
+
 - A single file may declare multiple types / constants / helpers — that's fine. Split only when the file gets unwieldy.
 - Hooks are the one exception to the `.<role>.ts` pattern: the `use` prefix already signals their role, so no `.hook.ts` suffix.
 - Use `.const.ts` for plain values, `.enum.ts` for enums (an enum is both a type and a value — keep it separate).

@@ -13,19 +13,20 @@ An app where people can create their own English course, discover courses made b
 
 ## Common commands
 
-| Command | What |
-|---|---|
-| `npm run dev` | Run web + api concurrently |
-| `npm run dev:web` | Web only (http://localhost:5173) |
-| `npm run dev:api` | API only (http://localhost:3001) |
-| `docker compose up -d` | Start Postgres |
-| `npm run migration:run` (in `apps/api`) | Apply TypeORM migrations |
-| `npm run lint` | Lint all workspaces |
-| `npm run format` | Prettier write |
+| Command                                 | What                             |
+| --------------------------------------- | -------------------------------- |
+| `npm run dev`                           | Run web + api concurrently       |
+| `npm run dev:web`                       | Web only (http://localhost:5173) |
+| `npm run dev:api`                       | API only (http://localhost:3001) |
+| `docker compose up -d`                  | Start Postgres                   |
+| `npm run migration:run` (in `apps/api`) | Apply TypeORM migrations         |
+| `npm run lint`                          | Lint all workspaces              |
+| `npm run format`                        | Prettier write                   |
 
 ## Backend conventions (`apps/api`)
 
 ### Module layout
+
 Only `{name}.module.ts` lives at the module root. Everything else is split into subfolders:
 
 ```
@@ -40,15 +41,19 @@ modules/<name>/
 ```
 
 ### Naming
+
 - **FK columns and TypeORM relations start with uppercase:** `RoleId`, not `roleId`. Same for relation property names.
 
 ### Entities
+
 - **Every column, FK, and relation is declared optional (`?`)** so partial objects are assignable. No required fields on entity classes.
 
 ### Services
+
 - **Services must not reference DTO classes.** They accept an input interface defined in `structs/`. The DTO `implements` that interface; the controller passes the body straight through.
 
 ### Controllers / responses
+
 - **Every endpoint returns a response-DTO class that extends `BaseResponseDto`.** Never return entities directly.
 
 ## Frontend conventions (`apps/web`)
@@ -83,6 +88,7 @@ Example: a generic `Button`, a `useDebounce` hook, date helpers.
 
 **3. Specific to one page/section, not tied to an entity?**
 → co-locate inside that page:
+
 ```
 pages/<area>/<Page>/
 ├── <Page>.tsx
@@ -90,7 +96,9 @@ pages/<area>/<Page>/
 ├── components/   # local components used only by this page
 └── hooks/        # local hooks used only by this page
 ```
+
 The moment a **second** page needs it, promote it:
+
 - gained an entity link → move to `features/<entity>/`
 - turned out to be generic → move to `shared/`
 
