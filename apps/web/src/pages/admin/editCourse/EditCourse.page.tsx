@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Box, Typography } from '@mui/material';
 import { Course } from '@/features/courses/types/course.type';
-import useGetCourseById from '@/features/courses/hooks/useGetCourseById';
+import { useCourseById } from '@/features/courses/hooks/useCourseById';
 import CourseLessonsAreaSection from './sections/CourseLessonsArea.section';
 import GoBackSection from './sections/GoBack.section';
 import EditCourseHeaderSection from './sections/EditCourseHeader.section';
@@ -10,7 +10,7 @@ import StatisticSection from './sections/Statistic.section';
 
 function EditCoursePage() {
   const { courseId } = useParams();
-  const { course, setCourse, fetchCourseById } = useGetCourseById();
+  const { course, setCourse, fetchCourseById } = useCourseById();
 
   useEffect(() => {
     if (!courseId) return;

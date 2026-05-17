@@ -1,19 +1,20 @@
 import { Box, Dialog, Typography } from '@mui/material';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import useGetLevels from '@/features/levels/hooks/useGetLevels';
+import { useLevelsList } from '@/features/levels/hooks/useLevelsList';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 import CourseForm from './CourseForm';
 import { Course } from '../types/course.type';
 import { CourseFormValues } from '../types/courseFormValues.type';
 import { CourseStatusKey } from '../types/courseStatus.type';
-import useEditCourse from '../hooks/useEditCourse';
+import { courseFormToReqBody } from '../helpers/courseFormToReqBody.helper';
+import { useEditCourse } from '../hooks/useEditCourse';
 
 type EditCourseModalProps = {
   open: boolean;
   handleClose: () => void;
   course: Course;
-  onSuccess: (data: Course) => void;
+  onSuccess: (course: Course) => void;
 };
 
 const COURSE_STATUSES = Object.values(CourseStatusKey);
@@ -28,11 +29,11 @@ function EditCourseModal({ open, handleClose, course, onSuccess }: EditCourseMod
       image: '',
     },
   });
-  const { levelsList, fetchLevels } = useGetLevels();
-  const { updateCourseById } = useEditCourse({ onSuccess });
+  const { levelsList, fetchLevels } = useLevelsList();
+  const { editCourse } = useEditCourse({ onSuccess });
 
-  const onSubmit = (data: CourseFormValues) => {
-    updateCourseById(course.id, data);
+  const onSubmit = (formValues: CourseFormValues) => {
+    editCourse(course.id, courseFormToReqBody(formValues));
   };
 
   useEffect(() => {

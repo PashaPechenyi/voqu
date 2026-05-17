@@ -13,7 +13,7 @@ function AdminDashboardPopularCourses() {
       />
       <CardContent>
         {MOCK_POPULAR_COURSES.map((course) => (
-          <PopularCourse key={course.name} data={course} />
+          <PopularCourse key={course.name} course={course} />
         ))}
       </CardContent>
     </Card>

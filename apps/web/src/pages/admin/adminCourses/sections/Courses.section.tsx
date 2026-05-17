@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 import { Box } from '@mui/material';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
-import useGetCourses from '@/features/courses/hooks/useGetCourses';
+import { useCoursesList } from '@/features/courses/hooks/useCoursesList';
 import CourseCard from '@/features/courses/components/CourseCard/CourseCard';
 
 function CoursesSection() {
-  const { coursesList, fetchCourses } = useGetCourses();
+  const { coursesList, fetchCourses } = useCoursesList();
 
   useEffect(() => {
     fetchCourses();

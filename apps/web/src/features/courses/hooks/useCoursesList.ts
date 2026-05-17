@@ -1,13 +1,12 @@
 import { useCallback, useState } from 'react';
-import getCourses from '@/features/courses/helpers/getCourses';
+import { getCoursesReq } from '@/features/courses/helpers/getCoursesReq.helper';
 import { Course } from '@/features/courses/types/course.type';
 
-const useGetCourses = () => {
+export const useCoursesList = () => {
   const [coursesList, setCoursesList] = useState<Course[]>([]);
 
   const fetchCourses = useCallback(async () => {
-    const result = await getCourses();
-    if (!result) return;
+    const result = await getCoursesReq();
     setCoursesList(result.items);
   }, []);
 
@@ -21,5 +20,3 @@ const useGetCourses = () => {
 
   return { coursesList, fetchCourses, updateCourseInList, addCourseToList };
 };
-
-export default useGetCourses;

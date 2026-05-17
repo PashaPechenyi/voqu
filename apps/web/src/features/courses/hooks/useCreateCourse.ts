@@ -1,22 +1,22 @@
 import { useState } from 'react';
-import { editCourseReq } from '@/features/courses/helpers/editCourseReq.helper';
+import { createCourseReq } from '@/features/courses/helpers/createCourseReq.helper';
 import { Course } from '@/features/courses/types/course.type';
 import { CourseReqBody } from '@/features/courses/types/courseReqBody.type';
 
-type UseEditCourseProps = {
-  onSuccess?: (updatedCourse: Course) => void;
+type UseCreateCourseProps = {
+  onSuccess?: (createdCourse: Course) => void;
   onError?: (error: unknown) => void;
 };
 
-export const useEditCourse = ({ onSuccess, onError }: UseEditCourseProps = {}) => {
+export const useCreateCourse = ({ onSuccess, onError }: UseCreateCourseProps = {}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<unknown>(null);
 
-  const editCourse = async (courseId: Course['id'], body: CourseReqBody) => {
+  const createCourse = async (body: CourseReqBody) => {
     setIsLoading(true);
     setError(null);
     try {
-      const result = await editCourseReq(courseId, body);
+      const result = await createCourseReq(body);
       onSuccess?.(result.course);
     } catch (err) {
       setError(err);
@@ -26,5 +26,5 @@ export const useEditCourse = ({ onSuccess, onError }: UseEditCourseProps = {}) =
     }
   };
 
-  return { editCourse, isLoading, error };
+  return { createCourse, isLoading, error };
 };

@@ -1,24 +1,22 @@
 import { Box, Button, Dialog, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
-import deleteCourse from '../helpers/deleteCourse';
+import { useDeleteCourse } from '../hooks/useDeleteCourse';
 
 type DeleteCourseModalProps = {
   open: boolean;
   handleClose: () => void;
   courseName?: string;
+  onDeleted?: () => void;
 };
 
-function DeleteCourseModal({ open, handleClose, courseName }: DeleteCourseModalProps) {
+function DeleteCourseModal({ open, handleClose, courseName, onDeleted }: DeleteCourseModalProps) {
   const { courseId } = useParams();
+  const { deleteCourse } = useDeleteCourse({ onSuccess: onDeleted });
 
-  const onSubmit = async () => {
+  const onSubmit = () => {
     if (!courseId) return;
-    try {
-      await deleteCourse(courseId);
-    } catch (error) {
-      // Surface the error via UI once an error-toaster is in place.
-    }
+    deleteCourse(courseId);
   };
 
   return (

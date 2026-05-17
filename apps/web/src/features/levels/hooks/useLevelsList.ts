@@ -1,17 +1,14 @@
 import { useCallback, useState } from 'react';
-import getLevels from '@/features/levels/helpers/getLevels';
+import { getLevelsReq } from '@/features/levels/helpers/getLevelsReq.helper';
 import { Level } from '@/features/levels/types/level.type';
 
-const useGetLevels = () => {
+export const useLevelsList = () => {
   const [levelsList, setLevelsList] = useState<Level[]>([]);
 
   const fetchLevels = useCallback(async () => {
-    const levels = await getLevels();
-    if (!levels) return;
+    const levels = await getLevelsReq();
     setLevelsList(levels);
   }, []);
 
   return { levelsList, fetchLevels };
 };
-
-export default useGetLevels;

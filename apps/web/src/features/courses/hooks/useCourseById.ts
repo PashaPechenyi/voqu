@@ -1,17 +1,14 @@
 import { useCallback, useState } from 'react';
-import getCourseById from '@/features/courses/helpers/getCourseById';
+import { getCourseByIdReq } from '@/features/courses/helpers/getCourseByIdReq.helper';
 import { Course } from '@/features/courses/types/course.type';
 
-const useGetCourseById = () => {
+export const useCourseById = () => {
   const [course, setCourse] = useState<Course | null>(null);
 
   const fetchCourseById = useCallback(async (courseId: Course['id']) => {
-    const result = await getCourseById(courseId);
-    if (!result) return;
+    const result = await getCourseByIdReq(courseId);
     setCourse(result.course);
   }, []);
 
   return { course, setCourse, fetchCourseById };
 };
-
-export default useGetCourseById;

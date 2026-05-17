@@ -1,6 +1,6 @@
 import { Course } from '@/features/courses/types/course.type';
 
-const deleteCourse = async (courseId: Course['id']): Promise<void> => {
+export const deleteCourseReq = async (courseId: Course['id']): Promise<void> => {
   const response = await fetch(`/api/course/${courseId}`, {
     method: 'DELETE',
   });
@@ -8,5 +8,3 @@ const deleteCourse = async (courseId: Course['id']): Promise<void> => {
     throw new Error('Something went wrong...');
   }
 };
-
-export default deleteCourse;

@@ -10,7 +10,7 @@ import LessonCard from '@/features/lesson/components/LessonCard/LessonCard';
 
 type CourseLessonsAreaSectionProps = {
   course: Course;
-  onSuccess: (data: Course) => void;
+  onSuccess: (course: Course) => void;
 };
 
 function CourseLessonsAreaSection({ course, onSuccess }: CourseLessonsAreaSectionProps) {

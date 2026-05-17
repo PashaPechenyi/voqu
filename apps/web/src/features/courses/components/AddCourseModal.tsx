@@ -1,21 +1,24 @@
 import { Box, Dialog, Typography } from '@mui/material';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import useGetLevels from '@/features/levels/hooks/useGetLevels';
+import { useLevelsList } from '@/features/levels/hooks/useLevelsList';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 import CourseForm from './CourseForm';
+import { Course } from '../types/course.type';
 import { CourseFormValues } from '../types/courseFormValues.type';
 import { CourseStatusKey } from '../types/courseStatus.type';
-import { convertCourseFormDataToAPIFormat } from '../helpers/convertCourseFormDataToAPIFormat';
+import { courseFormToReqBody } from '../helpers/courseFormToReqBody.helper';
+import { useCreateCourse } from '../hooks/useCreateCourse';
 
 type AddCourseModalProps = {
   open: boolean;
   handleClose: () => void;
+  onCreated?: (course: Course) => void;
 };
 
 const COURSE_STATUSES = Object.values(CourseStatusKey);
 
-function AddCourseModal({ open, handleClose }: AddCourseModalProps) {
+function AddCourseModal({ open, handleClose, onCreated }: AddCourseModalProps) {
   const { handleSubmit, control } = useForm<CourseFormValues>({
     defaultValues: {
       title: '',
@@ -25,20 +28,11 @@ function AddCourseModal({ open, handleClose }: AddCourseModalProps) {
       image: '',
     },
   });
-  const { levelsList, fetchLevels } = useGetLevels();
+  const { levelsList, fetchLevels } = useLevelsList();
+  const { createCourse } = useCreateCourse({ onSuccess: onCreated });
 
-  const addCourse = async (data: CourseFormValues) => {
-    await fetch('/api/course', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(convertCourseFormDataToAPIFormat(data)),
-    });
-  };
-
-  const onSubmit = (data: CourseFormValues) => {
-    addCourse(data);
+  const onSubmit = (formValues: CourseFormValues) => {
+    createCourse(courseFormToReqBody(formValues));
   };
 
   useEffect(() => {

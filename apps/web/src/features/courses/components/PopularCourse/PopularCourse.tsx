@@ -1,22 +1,22 @@
 import { Box, LinearProgress, Typography } from '@mui/material';
 
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
-import { PopularCourse as PopularCourseData } from '../../types/popularCourse.type';
+import { PopularCourse as TPopularCourse } from '../../types/popularCourse.type';
 
 type PopularCourseProps = {
-  data: PopularCourseData;
+  course: TPopularCourse;
 };
 
-function PopularCourse({ data }: PopularCourseProps) {
+function PopularCourse({ course }: PopularCourseProps) {
   return (
     <Box sx={sxStyles.recentItem}>
-      <Typography variant="body1">{data.name}</Typography>
+      <Typography variant="body1">{course.name}</Typography>
       <Typography color="primary" variant="body2">
-        {data.students} students enrolled
+        {course.students} students enrolled
       </Typography>
       <Box sx={sxStyles.progressRow}>
-        <LinearProgress variant="determinate" value={data.completion} sx={sxStyles.progress} />
-        <Typography color="primary">{data.completion}%</Typography>
+        <LinearProgress variant="determinate" value={course.completion} sx={sxStyles.progress} />
+        <Typography color="primary">{course.completion}%</Typography>
       </Box>
     </Box>
   );
