@@ -15,9 +15,10 @@ type ConfirmModalProps = {
   isOpen: boolean;
   buttonText: string;
   close: () => void;
+  deleteFunc?:() => void;
 };
 
-function ConfirmModal({ title, subtitle, isOpen, buttonText, close }: ConfirmModalProps) {
+function ConfirmModal({ title, subtitle, isOpen, buttonText, close, deleteFunc}: ConfirmModalProps) {
   // const handleClose = () => {
   //   setIsOpen(false);
   // };
@@ -48,7 +49,7 @@ function ConfirmModal({ title, subtitle, isOpen, buttonText, close }: ConfirmMod
         <Button onClick={close} sx={{ p: '10px' }}>
           Cancel
         </Button>
-        <Button sx={{ backgroundColor: 'red', color: 'white', p: '10px' }}>{buttonText}</Button>
+        <Button onClick={deleteFunc} sx={{ backgroundColor: 'red', color: 'white', p: '10px' }}>{buttonText}</Button>
       </DialogActions>
     </Dialog>
   );

@@ -16,7 +16,7 @@ import useFetchLevels from '../customHooks/useFetchLevels';
 export type CourseFormValues = {
   name: string;
   //  description?: string;
-  levelId: Level | null;
+  level: Level | null;
   status: CourseStatusKey | null;
   // link?: string;
 };
@@ -24,20 +24,20 @@ export type CourseFormValues = {
 type CourseEditModalProps = {
   isOpen: boolean;
   close: () => void;
-  mainWord?: string;
   course?: Course;
+  editCourse:(inputsValues: CourseFormValues)=> void
 };
 function getDefaultValues(value: CourseFormValues) {
   return {
     name: value.name || '',
     // description: value.description || '',
-    levelId: null,
-    status: null,
+    levelId:  value.level?.cefrLevel||null,
+    status: value.status||null,
     // link: value?.link || '',
   };
 }
 
-export default function CourseEditModal({ isOpen, close, course }: CourseEditModalProps) {
+export default function CourseEditModal({ isOpen, close, course,editCourse }: CourseEditModalProps) {
   const { getLevelsList, levelsList } = useFetchLevels();
 
   const { handleSubmit, control } = useForm<CourseFormValues>({
@@ -76,7 +76,7 @@ export default function CourseEditModal({ isOpen, close, course }: CourseEditMod
           Cancel
         </Button>
         <Button
-          //onClick={handleSubmit(addNewCourse)}
+          onClick={handleSubmit(editCourse)}
           sx={{ backgroundColor: '#71677D', color: 'white', p: '10px' }}
         >
           {'Edit'}

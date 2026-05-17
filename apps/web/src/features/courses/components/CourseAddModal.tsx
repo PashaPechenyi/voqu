@@ -15,7 +15,7 @@ import useFetchLevels from '../customHooks/useFetchLevels';
 
 export type CourseFormValues = {
   name: string;
-  levelId: Level | null;
+  level: Level | null;
   status: CourseStatusKey | null;
 };
 

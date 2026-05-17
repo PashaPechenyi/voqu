@@ -13,6 +13,8 @@ import { Link } from 'react-router-dom';
 import { createSxStylesList } from '@/shared/helpers/theme.helpers';
 import clsx from 'clsx';
 import { Course } from '@/pages/admin/Courses/sections/CoursesSection';
+import { CourseFormValues } from './CourseAddModal';
+import { CourseStatusKey } from '../constants/courseStatus.const';
 
 const CLASSNAME = {
   PUBLISHED: 'published',
@@ -22,8 +24,26 @@ const CLASSNAME = {
 type CourseCardProps = {
   course: Course;
 };
+const changeStatus= ( id:string, course:Course) => {
+    const body = {
+      LevelId:course.level?.id,
+      name: course.name,
+      status: course.status == CourseStatusKey.draft ? CourseStatusKey.published:  CourseStatusKey.draft,
+      
+    };
+     fetch(`/api/course/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+    
+    
+  };
 
 function CourseCard({ course }: CourseCardProps) {
+ // console.log(course.level.id,"level ")
   return (
     <Card sx={sxStyles.card}>
       <CardMedia
@@ -31,7 +51,8 @@ function CourseCard({ course }: CourseCardProps) {
         image={'/src/assets/images/EnglishGrammarEssentials.jpg'}
       >
         <Box sx={sxStyles.information}>
-          <Box
+          <Button
+          onClick={()=>{changeStatus(course.id, course)}}
             sx={sxStyles.courseStatus}
             className={clsx({
               [CLASSNAME.PUBLISHED]: course.status == 'published',
@@ -39,9 +60,9 @@ function CourseCard({ course }: CourseCardProps) {
             })}
           >
             {course.status}
-          </Box>
+          </Button>
           {/* ERR */}
-          {/* <Box sx={sxStyles.courseLevel}>{course.levelId.cefrLevel}</Box> */}
+          {/* <Box sx={sxStyles.courseLevel}>{course.level.cefrLevel}</Box> */}
         </Box>
       </CardMedia>
       <CardContent>

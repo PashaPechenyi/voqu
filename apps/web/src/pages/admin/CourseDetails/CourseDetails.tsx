@@ -6,11 +6,13 @@ import useFetchCourses from '@/features/courses/customHooks/useFetchCourses';
 import ConfirmModal from '@/shared/components/ConfirmModal/ConfirmModal';
 import useToggle from '@/features/lessons/customHooks/useToggle';
 import { useEffect } from 'react';
+import { CourseFormValues } from '@/features/courses/components/CourseAddModal';
 function CourseDetails() {
   const { courseId } = useParams();
   const { coursesList, getCourses } = useFetchCourses();
   const { isOpen: isDeleteModalOpen, open: openDeleteModal, close: closeDeleteModal } = useToggle();
   const { isOpen: isEditModalOpen, open: openEditModal, close: closeEditModal } = useToggle();
+
   useEffect(() => {
     getCourses();
   }, []);
@@ -18,7 +20,31 @@ function CourseDetails() {
     return course.id === courseId;
   });
 
-  console.log(coursesList, 'COURSEID');
+  async function deleteCourse() {
+    await fetch(`/api/course/${courseId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  }
+  const editCourse = async (inputsValues: CourseFormValues) => {
+    const body = {
+      name: inputsValues.name,
+      //description: inputsValues.description,
+      status: inputsValues.status?.toLowerCase(),
+      LevelId: String(inputsValues.level?.id),
+    };
+    await fetch(`/api/course/${courseId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+    await getCourses();
+    closeEditModal();
+  };
 
   if (!activeCourse) return null;
   return (
@@ -43,11 +69,17 @@ function CourseDetails() {
           title="Delete Course"
           subtitle={`Are you sure you want to delete "${activeCourse.name}"? This action cannot be undone.`}
           isOpen={isDeleteModalOpen}
-          buttonText="Delete lesson"
+          buttonText="Delete Course"
           close={closeDeleteModal}
+          deleteFunc={deleteCourse}
         />
       </Box>
-      <CourseEditModal isOpen={isEditModalOpen} close={closeEditModal} course={activeCourse} />
+      <CourseEditModal
+        isOpen={isEditModalOpen}
+        close={closeEditModal}
+        course={activeCourse}
+        editCourse={editCourse}
+      />
     </>
   );
 }

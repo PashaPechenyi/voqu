@@ -6,6 +6,7 @@ import SearchControls from '@/features/search/components/SearchControls';
 import { CourseFormValues } from '@/features/courses/components/CourseAddModal';
 import CourseAddModal from '@/features/courses/components/CourseAddModal';
 import useToggle from '@/features/lessons/customHooks/useToggle';
+import useFetchCourses from '@/features/courses/customHooks/useFetchCourses';
 type IntroSectionProps = {
   setEnteredValue: any;
 };
@@ -22,7 +23,7 @@ function IntroSections({ setEnteredValue }: IntroSectionProps) {
       name: inputsValues.name,
       //description: inputsValues.description,
       status: inputsValues.status?.toLowerCase(),
-      LevelId: String(inputsValues.levelId?.id),
+      LevelId: String(inputsValues.level?.id),
     };
     fetch('/api/course', {
       method: 'POST',
@@ -31,6 +32,7 @@ function IntroSections({ setEnteredValue }: IntroSectionProps) {
       },
       body: JSON.stringify(body),
     });
+
     closeAddCourseModal();
   };
   return (
@@ -70,7 +72,11 @@ function IntroSections({ setEnteredValue }: IntroSectionProps) {
             Add New Course
           </Typography>
         </Button>
-        <CourseAddModal isOpen={isAddCourseModalOpen} close={close} onclick={addNewCourse} />
+        <CourseAddModal
+          isOpen={isAddCourseModalOpen}
+          close={closeAddCourseModal}
+          onclick={addNewCourse}
+        />
       </Box>
       <SearchControls setEnteredValue={setEnteredValue} />
     </Box>

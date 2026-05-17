@@ -57,7 +57,7 @@ function CourseModalForm({ control, levelsList }: CourseModalFormProps) {
       <Grid size={6}>
         <Controller
           control={control}
-          name="levelId"
+          name="level"
           rules={{ required: { value: true, message: ERROR_MESSAGE.message } }}
           render={({ field: { onChange, value }, formState: { errors } }) => (
             <Autocomplete
@@ -70,7 +70,7 @@ function CourseModalForm({ control, levelsList }: CourseModalFormProps) {
               }}
               value={value}
               renderInput={(params) => (
-                <TextField {...params} label="Level" error={!!errors.levelId} />
+                <TextField {...params} label="Level" error={!!errors.level} />
               )}
             />
           )}

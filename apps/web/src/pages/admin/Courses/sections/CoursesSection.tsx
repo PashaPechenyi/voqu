@@ -9,12 +9,22 @@ type CoursesSectionProps = {
   enteredValue: string;
   setEnteredValue: any;
 };
+type Owner={
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+  };
 export type Course = {
   name: string;
   id: string;
   status: CourseStatusKey;
-  levelId: Level;
-  OwnerId?: string;
+  level: {
+    id: string;
+    name: string;
+    cefrLevel: string;
+  };
+  OwnerId?: Owner;
   createdAt?: string;
   updatedAt?: string;
 };
