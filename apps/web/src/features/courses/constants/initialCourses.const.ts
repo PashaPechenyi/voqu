@@ -1,3 +1,5 @@
+// TODO: This mock data is only used by `SearchCourse.section.tsx` for its `<Autocomplete>` options. Since the real list comes from `useGetCourses`, the autocomplete must be driven by the same data — delete this constants file and feed the autocomplete from `coursesData` in the section's parent.
+// TODO: Constant name `courses` shadows feature-level vocabulary; rename to `MOCK_COURSES` / `INITIAL_COURSES`.
 import { Course } from '../types/course.type';
 
 export const courses: Course[] = [

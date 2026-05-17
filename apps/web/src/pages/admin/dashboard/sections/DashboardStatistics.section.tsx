@@ -1,3 +1,6 @@
+// TODO: Mock `stats` data displayed as if real. Wire to a real metrics endpoint.
+// TODO: `<Card key={index}>` — use `item.label` as key, never the array index.
+// TODO: `aria-label=""` on `<Avatar>` is empty — either remove or provide a meaningful description.
 import { Avatar, Box, Card, CardContent, CardHeader, Typography } from '@mui/material';
 import { stats } from '../constants/dashboardStatistics.const';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';

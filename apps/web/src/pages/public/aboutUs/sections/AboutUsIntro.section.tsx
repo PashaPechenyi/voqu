@@ -1,3 +1,4 @@
+// TODO: Three nearly identical `<Typography variant="body1" color="primary">` blocks. Extract the texts into a `constants/aboutUsIntroParagraphs.const.ts` array and map over them, so adding a paragraph doesn't grow the JSX.
 import { Box, Typography } from '@mui/material';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 

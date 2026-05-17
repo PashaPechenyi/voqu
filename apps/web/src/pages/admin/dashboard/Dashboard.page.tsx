@@ -1,3 +1,4 @@
+// TODO: `<Box>` wrapper with no styling adds a DOM node for no reason — use a fragment `<>...</>` if no styles are needed.
 import { Box } from '@mui/material';
 import DashboardHeroSection from './sections/DashboardHero.section';
 import DashboardQuickActionsSection from './sections/DashboardQuickActions.section';

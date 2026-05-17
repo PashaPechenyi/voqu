@@ -1,3 +1,8 @@
+// TODO: No mobile/tablet variant — `AdminHeader` renders the same desktop layout on all viewports. Add a Drawer + hamburger like `PublicHeader` does.
+// TODO: `href={btn.path}` on a `<Button>` causes a full page navigation. Use react-router's `<Link>` / `component={RouterLink}` to keep SPA navigation; otherwise React re-mounts the whole tree.
+// TODO: `<Button key={index}>` uses array index as key. Use `btn.path` (unique) instead.
+// TODO: Hardcoded text `'Admin'` and `'Log out'` — wire to actual user state and auth handler; "Log out" button currently does nothing.
+// TODO: `'Voqu'` brand string is duplicated between `AdminHeader`, `PublicHeader`, `PublicFooter`. Extract a `<BrandLogo />` shared component.
 import { AppBar, Box, Button, IconButton, Toolbar, Typography } from '@mui/material';
 import SchoolIcon from '@mui/icons-material/School';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';

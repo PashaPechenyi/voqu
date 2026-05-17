@@ -1,3 +1,10 @@
+// TODO: Folder is `consts/` but every other feature in the project uses `constants/`. Rename to `features/lesson/constants/`.
+// TODO: Single file `lessons.ts` mixes THREE different concerns: (1) the `Lesson` type — should be `features/lesson/types/lesson.type.ts`, (2) seeded data `initialLessons` — should be `features/lesson/constants/initialLessons.const.ts`, (3) icon/color maps `lessonTypeIcons`/`lessonTypeColors` — should be `features/lesson/constants/lessonTypeIcons.const.ts` and `lessonTypeColors.const.ts`. Split per the project pattern.
+// TODO: `Lesson['type']` is a string union but the same set is also expressed as `ExerciseTypeKey` enum in `features/courseLevel/types/`. One source of truth.
+// TODO: `initialLessons` is hardcoded per-category data but the consumer (`StatisticSection`, `CourseLessonsAreaSection`) always reads `.grammar` regardless of which course is open — that is a bug masked by mock data. Wire to a real `useGetLessons(courseId)` hook.
+// TODO: `lessonTypeColors` uses raw hex strings — those also appear in the MUI theme. Reference theme palette instead of the literal strings.
+// TODO: `Record<string, string>` is too loose; type as `Record<Lesson['type'], string>` so adding a new lesson type is a compile error if a color is missing.
+// TODO: File name `lessons.ts` should be `lessons.const.ts` (per project pattern) — or split as above.
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import HeadphonesIcon from '@mui/icons-material/Headphones';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';

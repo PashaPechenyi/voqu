@@ -1,3 +1,11 @@
+// TODO: A "QuizCard" is business-specific (quiz feature). Move out of `shared/` into `features/quiz/components/` along with `QuizSlider`, `QuizResults`, and the `QuizEntry` type.
+// TODO: `sxStyles.answers as any` — `as any` is forbidden in this project. Fix the sx typing instead (it should already match `TSxItem`).
+// TODO: Hardcoded `oklch(...)` colors for correct/incorrect state. Move those into theme palette (e.g. `palette.success.light`, `palette.error.light`) so they participate in theming and dark mode.
+// TODO: User-facing string `'Excelent!'` is misspelled — should be `Excellent!`.
+// TODO: `<Button key={ansIndex}>` uses array index as React key. The answers list is mutable in principle and using the answer string itself is safer.
+// TODO: `<>...</>` wrapping a single `<Card>` is unnecessary — remove the fragment.
+// TODO: Title `Practice Quiz` is hardcoded in English while the rest of the public landing is Ukrainian (`'Вивчай англійську ...'`). Either localize via i18n or keep one language consistently.
+// TODO: Component file name does not include `.component.tsx` / no convention agreed; OK if intentional, but matches the section convention used elsewhere (`*.section.tsx`). Make sure component naming convention is documented in CLAUDE.md.
 import {
   Alert,
   Box,

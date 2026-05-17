@@ -1,3 +1,9 @@
+// TODO: Two independent `expanded` states exist: one in the parent `AboutUsCefrSection` (passed via props) and another `useState` in this child — they shadow each other. The child's local state is the one that ends up controlling the accordion, so the parent's state is dead. Either remove the local `useState` (use the props) or remove the props entirely.
+// TODO: Props `expanded`/`setExpanded` are typed but never consumed (only `accordion` is destructured). Remove the dead props.
+// TODO: Import path `@/features/levels/types/levelDemo.type/levelDemo.type` doesn't exist (see TODO in `cefrLevels.const.ts`).
+// TODO: `<>...</>` wrapping a single `<Accordion>` — remove the fragment.
+// TODO: `<ListItem key={index}>` — use the `skill` string as the key.
+// TODO: `React.Dispatch<React.SetStateAction<number | false>>` exposes React internals via props. Replace with a simple `onExpandedChange: (id: number | false) => void`.
 import { useState } from 'react';
 import {
   ListItemText,

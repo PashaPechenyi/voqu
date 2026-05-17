@@ -1,3 +1,8 @@
+// TODO: Empty `<Box sx={sxStyles.pointsRoot}></Box>` renders nothing — dead markup. Remove.
+// TODO: `<Box key={cardIndex}>` should use `cardData.id` as key.
+// TODO: Inline boolean odd/even alternation via `dir={cardData.id % 2 === 0 ? 'rtl' : 'ltr'}` is clever but `dir` is for text direction, not for layout flipping. Use a sx prop / `flexDirection: 'row-reverse'` instead — `dir` mis-orients screen readers.
+// TODO: `borderColor: 'background'` is meaningless ("background" without `.default`/`.paper`). Pick one explicit color.
+// TODO: `lessonPhazeNumber` typo (`Phaze` should be `Phase`).
 import { Box, Typography } from '@mui/material';
 import { aboutUsMethodologyCards } from '../constants/aboutUsMethodologyCards.const';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';

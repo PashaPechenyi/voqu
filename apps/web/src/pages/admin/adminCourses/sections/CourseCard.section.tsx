@@ -1,3 +1,11 @@
+// TODO: A "CourseCard" is a reusable visual unit tied to the `course` entity. Per the architecture rule, it belongs in `features/courses/components/CourseCard/`, not in a `pages/.../sections/` folder, since it would be reused on any page that lists courses. The `.section.tsx` suffix is for page-local compositions, not entity-bound cards.
+// TODO: `console.log(ADMIN_COURSES_EDIT_URL(courseData.id))` — remove debug log.
+// TODO: Imports `createSxStylesList` from `@/theme/helpers` — use the canonical `@/shared/helpers/styles/createSxStylesList.helper`.
+// TODO: `<CardMedia>` is rendered with no `image=` prop — the title overlay covers a blank gray area. Use the course `image` field once the merged `Course` type has it.
+// TODO: `<Button href={...}>` causes a full page reload; use react-router `<Link>`.
+// TODO: `key={courseData.id}` is set on the `<Card>` here, but the parent already sets `key` on the list element when mapping. Keys belong on the mapped element only — remove this duplicate.
+// TODO: `Chip color="info" label={courseData.LevelId}` shows a numeric FK to the user — show the level NAME (`A1`, `B1`, etc.), not the id. This requires joining with levels data on the page.
+// TODO: `export const` here while many other sections use `export default function`. Standardize.
 import { ADMIN_COURSES_EDIT_URL } from '@/shared/constants/urls.const';
 import { createSxStylesList } from '@/theme/helpers';
 import {

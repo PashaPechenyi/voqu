@@ -1,3 +1,8 @@
+// TODO: `recentActivity` is mock data; wire to real endpoint.
+// TODO: `<>...</>` inside `.map()` cannot accept a `key`. The `key` is set on the inner `<Box>` but the wrapping fragment is what React diffs — switch to `<React.Fragment key={index}>` (or restructure the markup so a single keyed element wraps the children).
+// TODO: Use the activity's own id (when the API provides one) as the key rather than the array index.
+// TODO: `<CircleIcon ... color={item.type as any} />` — `as any` is forbidden. Type `item.type` as `'success' | 'info' | 'warning'` instead of `string` (see `recentActivity.type.ts`).
+// TODO: `color={'primary'}` and `color={'adminSecondary'}` strings instead of without the `{}` wrapper — minor inconsistency throughout the file.
 import { Box, Card, CardContent, CardHeader, Divider, Typography } from '@mui/material';
 import HistoryIcon from '@mui/icons-material/History';
 import WatchLaterOutlinedIcon from '@mui/icons-material/WatchLaterOutlined';

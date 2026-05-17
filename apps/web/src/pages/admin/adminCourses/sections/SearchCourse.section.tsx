@@ -1,3 +1,9 @@
+// TODO: Uses `courses` mock data from `initialCourses.const` — the displayed list (`CoursesSection`) comes from the API. The autocomplete must be driven by the same real data, not by mocks.
+// TODO: Component has no state and no `onChange` handler — the search input does literally nothing on the page right now. Wire the value into the parent so `CoursesSection` can filter.
+// TODO: `id="free-solo-demo"` is leftover from MUI examples — give it a meaningful id (or omit).
+// TODO: The second `<Autocomplete>` lists course IDs (UUIDs) as options for "categories" — wrong data. It should list course CATEGORIES (e.g. CEFR level, status), not ids.
+// TODO: `getOptionLabel` is commented out for the second autocomplete — clean up.
+// TODO: `width: '30%'` and other magic widths inline; extract to sxStyles.
 import { courses } from '@/features/courses/constants/initialCourses.const';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 import { Autocomplete, Box, TextField } from '@mui/material';

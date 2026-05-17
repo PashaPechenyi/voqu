@@ -1,3 +1,11 @@
+// TODO: Imports `createSxStylesList` from `@/theme/helpers` — the project has a duplicate at `@/shared/helpers/styles/createSxStylesList.helper`. The rest of the file's "neighborhood" uses the shared one. Standardize on one path everywhere.
+// TODO: All commented-out `<Grid2>` markup must be removed — dead code makes the file unreadable. Either rebuild the grid layout or delete the comments.
+// TODO: `console.log(errors, 'errors')` inside the `render` callback runs on every keystroke — remove.
+// TODO: `Control<CourseFormValues, any, CourseFormValues>` — second generic is `any`. Either omit (default is fine) or pass the context type.
+// TODO: Same-named `<Autocomplete>` for level and status both use `label="Status"` — the level field is mislabeled "Status" too. Should be "Level".
+// TODO: Validation rules differ between add and edit via the `edit?: boolean` prop. Lift this into a parent-provided `rules` prop or let the parent pass the resolver — leaking the "is it add or edit" knowledge into a generic form is wrong.
+// TODO: Image is a plain `TextField` for an arbitrary URL. Either accept upload or validate the URL with the shared `VALIDATION_ERRORS` regex.
+// TODO: No loading state on the submit button while a `fetch` is in flight (the parent doesn't track it either).
 import { Level } from '@/features/levels/types/level/level.type';
 import { VALIDATION_ERRORS } from '@/shared/constants/validationErrors.consts';
 import { createSxStylesList } from '@/theme/helpers';

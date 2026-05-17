@@ -1,3 +1,11 @@
+// TODO: DELETE THIS ENTIRE FILE. It is a stale duplicate of `pages/public/aboutUs/AboutUs.page.tsx` (which is the one actually wired to the router in `routes/index.tsx`). All imports here (`@/components/publicLayout/*`) point to a folder that does not exist — the file does not compile.
+// TODO: File name `AboutPage.tsx` violates the page convention `<Name>.page.tsx`. The valid sibling is `AboutUs.page.tsx`.
+// TODO: Exports a `Word` type and a `words` mock array from a page file — wrong location, also commented-out usage. Remove.
+// TODO: `import { TabClassKey, TableCell } from '@mui/material'` — both unused. Same for `Cancel`, `KeyOff` from `@mui/icons-material`.
+// TODO: The huge commented-out `<Table1<Word> ...>` block must be deleted; dead code makes the file unreadable.
+// TODO: `import SectionDevider` — misspelled `Devider` (should be `Divider`). Also the import path `@/components/publicLayout/SectionDevider` doesn't exist.
+// TODO: `import Table1 from '@/components/publicLayout/Table'` — `Table1` is not a meaningful name. Use `Table`/`TableSection`. Path also broken.
+// TODO: `React` is imported but unused with the new JSX transform.
 import React from 'react';
 import IntroSection from './sections/IntroSection';
 import LevelsDescription from './sections/LevelsDescription';

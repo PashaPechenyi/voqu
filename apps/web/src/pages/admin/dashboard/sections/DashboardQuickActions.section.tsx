@@ -1,3 +1,7 @@
+// TODO: `<Card key={index}>` — use `item.path` as key.
+// TODO: `<CardActionArea href={item.path}>` causes a full-page reload. Use react-router navigation.
+// TODO: `'&[data-active]'` style applied to `actionArea` references MUI's experimental selected state — but `data-active` is not set anywhere. Either remove the dead style or wire active state.
+// TODO: `adminQuickActions[2]` has `path: '/table'` which is not a route (see TODO in `adminNavItems.const.ts` and routes).
 import { Box, Card, CardActionArea, CardContent, Typography } from '@mui/material';
 import { adminQuickActions } from '../constants/adminQuickActions.const';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';

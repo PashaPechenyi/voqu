@@ -1,3 +1,7 @@
+// TODO: File is `HeroSection.section.tsx` but the component is named just `HeroSection`. With the `.section.tsx` suffix the convention is `<Name>.section.tsx`. Either rename file to `Hero.section.tsx` or rename component to `HeroSectionSection` (don't). Pattern: `Hero.section.tsx` exporting `HeroSection`.
+// TODO: `onClick={() => handleOpen()}` — pass the function reference directly.
+// TODO: `AddCourseModal` does not accept an `onSuccess` prop (yet). When that's added, wire it here to call `addCoursesToTheList` from `useGetCourses`, so the new course shows up immediately.
+// TODO: This is a thin wrapper around two `Typography` + one `Button`. Probably doesn't need its own section file — could be inlined in `AdminCoursesLayout` (the page).
 import { Box, Button, Typography } from '@mui/material';
 import { useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';

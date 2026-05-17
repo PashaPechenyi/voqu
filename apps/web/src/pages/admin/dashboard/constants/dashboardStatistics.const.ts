@@ -1,3 +1,5 @@
+// TODO: Constant variable name `stats` is too generic. Rename to `DASHBOARD_STATISTICS` (uppercase + descriptive).
+// TODO: All values are hardcoded mocks — wire to API.
 import ImportContactsRoundedIcon from '@mui/icons-material/ImportContactsRounded';
 import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 import TrendingUpOutlinedIcon from '@mui/icons-material/TrendingUpOutlined';

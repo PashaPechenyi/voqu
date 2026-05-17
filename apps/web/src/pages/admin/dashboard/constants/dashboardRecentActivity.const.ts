@@ -1,3 +1,5 @@
+// TODO: Mock data — replace with API call.
+// TODO: `time: '2 hours ago'` is a pre-formatted human-readable string. Store ISO dates and format in the UI.
 import { RecentActivity } from '../types/recentActivity.type';
 
 export const recentActivity: RecentActivity[] = [

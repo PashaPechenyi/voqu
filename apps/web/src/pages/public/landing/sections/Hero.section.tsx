@@ -1,3 +1,10 @@
+// TODO: `theme` is imported from `@/theme` and used inside the sxStyles callbacks. The `sx={(theme) => ({...})}` callback form already gives you the theme — use that, don't import the static theme object. The static import bypasses `<ThemeProvider>` and breaks any theme override.
+// TODO: Some sx blocks use `theme.breakpoints.between('xs', 'sm')` (e.g. `root`) while neighbors use `theme.breakpoints.up('sm')` — pick one and apply consistently.
+// TODO: External image URL hardcoded inline — extract to a constant near the section or move to `public/`/`img/` assets so it's controlled by the project.
+// TODO: `<Box component="img" alt="#">` — `alt="#"` is a placeholder; provide a meaningful description for accessibility.
+// TODO: Two CTA buttons have no `onClick` handler — they don't do anything yet.
+// TODO: `paddind` is misspelled `padding` in `Futures.section.tsx` (also see TODO there).
+// TODO: Inline magic `transform: 'translate(5%,25%)'` etc. — extract to named constants once the design is final.
 import { Box, Button, Stack, Typography } from '@mui/material';
 import { theme } from '@/theme';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';

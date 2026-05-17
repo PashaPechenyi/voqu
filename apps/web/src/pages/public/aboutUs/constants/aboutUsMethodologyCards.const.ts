@@ -1,3 +1,4 @@
+// TODO: Constant array name is fine; `id` is sequential and used for parity / rendering — confirm we don't actually need an id (the parent uses `cardData.id` for `dir` and the badge label). If only the badge label is needed, derive `cardIndex + 1`.
 import ImportContactsIcon from '@mui/icons-material/ImportContacts';
 import DonutLargeRoundedIcon from '@mui/icons-material/DonutLargeRounded';
 import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';

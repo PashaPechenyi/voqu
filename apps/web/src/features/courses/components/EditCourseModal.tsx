@@ -1,3 +1,10 @@
+// TODO: Imports `Course` from `@/pages/admin/adminCourses/types/course.type` — but this is a feature-level modal. The feature folder should own the `Course` type (see TODO in `features/courses/types/course.type.ts`). Right now you have two conflicting `Course` shapes.
+// TODO: The local re-declaration of `enum CourseStatusKey` shadows the one already exported from `../types/courseStatus.type`. Delete the local enum and import the real one.
+// TODO: `defaultValues` populates only `title: course.name` and leaves description/level/status/image empty. After opening "Edit" on a course, the user sees blank fields and silently overwrites the real description on submit. Pre-fill all fields from `course`.
+// TODO: `<>...</>` wrapping a single `<Dialog>` — remove.
+// TODO: `useEffect(() => { fetchLevels(); }, [])` — same exhaustive-deps caveat as in `AddCourseModal`.
+// TODO: Modal closes on click-outside (`onClose={handleClose}`) but no "are you sure / discard unsaved changes" guard. Combined with the prefill bug above this can clobber data.
+// TODO: This file is ~95% identical to `AddCourseModal.tsx`. Build a single `<CourseFormModal mode="add" | "edit">` to remove the duplication.
 import useGetLevelsList from '@/features/levels/hooks/useGetLevelsList';
 import { Course } from '@/pages/admin/adminCourses/types/course.type';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';

@@ -1,3 +1,5 @@
+// TODO: This constant is never imported anywhere. The level options used by `CourseForm` come from `useGetLevelsList()` (the API). Delete this file once confirmed unused.
+// TODO: If kept, the data duplicates `cefrLevels.const.ts` (`A1 - Beginner`, ...). One source of truth only.
 import { CourseLevel } from '../types/courseLevel.type';
 
 export const courseLevels: CourseLevel[] = [

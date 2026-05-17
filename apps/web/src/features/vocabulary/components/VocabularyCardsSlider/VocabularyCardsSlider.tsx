@@ -1,3 +1,11 @@
+// TODO: Typo `isTranlate` → `isTranslate`. Affects state, setter, and `getCurrentDataByLanuage` (also misspelled, should be `getCurrentDataByLanguage`).
+// TODO: Boolean naming `isTranslate` is also ambiguous — it sounds like "is currently translating". Use a clearer name like `showOriginal` / `isShowingTranslation`, or a `language: 'en' | 'uk'` state.
+// TODO: `previous()` does `prev === 0 ? 0 : prev - 1` — but `next()` wraps around (`prev === cards.length - 1 ? 0 : prev + 1`). Inconsistent UX. Pick one (wrap both or stop at boundaries on both).
+// TODO: When a slide changes, `setIsTranlate(false)` resets to translation, but on first mount `isTranlate` is `true`. So the very first slide shows the original word and every subsequent slide shows the translation first. Probably a bug — initial state should align with the rest of the flow.
+// TODO: Clicking the card toggles translation (`onClick={() => setIsTranlate(...)}`), but clicking the audio `<IconButton>` inside the card also toggles because the click bubbles. Stop propagation on the icon button or move the toggle to a button.
+// TODO: Audio button does nothing — no `audio` field is on `VocabularyEntry`. Wire to a real audio source or remove the button.
+// TODO: "ps. click to see translation" caption is mixed-language and very informal; replace with a proper localized hint.
+// TODO: Inline `style={{ width: '50%' }}` on each button — extract to sxStyles.
 import { useState } from 'react';
 import {
   Box,

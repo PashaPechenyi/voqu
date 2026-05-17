@@ -1,3 +1,11 @@
+// TODO: The component does the `fetch('/api/course', ...)` call inline. Move all data-mutation code to a `useAddCourse` hook under `features/courses/hooks/`, mirroring `useEditCourse`. Component must not touch `fetch` directly (it cannot be tested or reused).
+// TODO: `console.log(result)` left in production code — remove.
+// TODO: `useEffect(() => { fetchLevels(); }, [])` has an empty dep array but ESLint react-hooks/exhaustive-deps will warn — `fetchLevels` is not memoized in `useGetLevelsList`. Memoize it with `useCallback` or accept the lint warning intentionally.
+// TODO: `addCourse` doesn't `await` the modal close, doesn't show an error toast, doesn't disable the submit button while loading, and doesn't call `handleClose`/refresh the courses list on success. The flow is incomplete.
+// TODO: No `onSuccess` prop — after creating, the parent has no way to refresh its list. Add `onSuccess: (course: Course) => void` like `EditCourseModal` already does.
+// TODO: `<>...</>` wrapping a single `<Dialog>` — remove the fragment.
+// TODO: This file uses `export default function AddCourseModal` (one style) while other files use `function Foo() {} export default Foo;`. Pick one style.
+// TODO: `bgcolor: 'background.paper', border: '2px solid #000'` — black border is jarring; use `theme.palette.divider`.
 import useGetLevelsList from '@/features/levels/hooks/useGetLevelsList';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 import { Box, Dialog, Typography } from '@mui/material';

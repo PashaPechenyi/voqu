@@ -1,5 +1,10 @@
 import { createTheme } from '@mui/material/styles';
 
+// TODO: Magic hex colors (`#71677C`, `#F5F1ED`, `#37123C`, `#A99F96`) should be extracted into named constants at the top of the file — they are reused across the project (e.g. `lessonTypeColors`, sx blocks) and must be the single source of truth.
+// TODO: `text.secondary: '#f5f1ed'` is white-on-light — invisible on the default background. Looks like a bug.
+// TODO: Typography breakpoints are inlined for h2/h3/h4/h5 via `@media (min-width:600px)` strings. Use `theme.breakpoints.up('sm')` style consistently to share breakpoint definitions.
+// TODO: Font sizes mix `number` (15, 24, 35) and `string` ('24px', '32px') — pick one (numbers are recommended by MUI).
+// TODO: `fontFamily: '"Georgia", "Times New Roman", sans-serif'` — Georgia/Times are serif fonts; the fallback should be `serif`, not `sans-serif`.
 export const theme = createTheme({
   palette: {
     primary: {

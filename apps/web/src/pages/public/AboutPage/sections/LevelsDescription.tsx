@@ -1,3 +1,8 @@
+// TODO: DELETE — part of the stale `AboutPage/` duplicate page. The canonical version is `pages/public/aboutUs/sections/AboutUsCefr.section.tsx`.
+// TODO: `import CustomizedAccordions from '@/components/publicLayout/Accordion'` — path does not exist.
+// TODO: `AccordionSummary` imported from `@mui/material` is unused.
+// TODO: File missing `.section.tsx` suffix used elsewhere in the project for page-local sections.
+// TODO: Uses a plain object literal `const styles = { main: { ... } }` instead of the project's `createSxStylesList` helper — inconsistent styling pattern.
 import CustomizedAccordions from '@/components/publicLayout/Accordion';
 import { AccordionSummary, Box, Typography } from '@mui/material';
 

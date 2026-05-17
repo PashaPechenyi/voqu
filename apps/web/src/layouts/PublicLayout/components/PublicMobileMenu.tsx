@@ -1,3 +1,7 @@
+// TODO: `'Sing up'` is misspelled — should be `'Sign up'`.
+// TODO: Buttons `Log in` / `Sing up` have no handlers — clicking does nothing.
+// TODO: `ListItemButton href={btn.path}` causes a hard reload; use react-router `<Link>`.
+// TODO: Drawer width `250` is magic — extract to a named constant or theme spacing.
 import {
   Box,
   Button,

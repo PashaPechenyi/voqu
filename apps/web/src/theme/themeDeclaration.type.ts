@@ -1,3 +1,5 @@
+// TODO: Merge this file with `theme/types.ts` — having three theme-augmentation files (`themeDeclaration.type.ts`, `types.ts`, `theme.type.ts`) for the same MUI module augmentation is confusing and error-prone (e.g. `tertiary` is in one file, `adminPrimary` in another, so they can drift).
+// TODO: `PaletteOptions.adminSecondary` is missing the `?` modifier present on `adminPrimary?` — both should be optional to match MUI conventions.
 import { PaletteColor, PaletteColorOptions } from '@mui/material';
 import '@mui/material/styles';
 import '@mui/material/Button';

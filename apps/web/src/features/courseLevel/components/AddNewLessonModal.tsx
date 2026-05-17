@@ -1,3 +1,13 @@
+// TODO: Belongs in `features/lesson/components/AddNewLessonModal.tsx`, not `features/courseLevel/`. The thing being added is a lesson, not a course level.
+// TODO: Imports `createSxStylesList` from `@/theme/helpers` — use the canonical `@/shared/helpers/styles/createSxStylesList.helper` path used by 90% of the codebase.
+// TODO: `sxStyles.modal as any` / `sxStyles.form as any` / `sxStyles.selectBox as any` — `as any` is forbidden. Fix the sx typing.
+// TODO: Local `useState<FormValues>` instead of `react-hook-form`. The rest of the project uses RHF + `<Controller>` (see `CourseForm.tsx`) — use the same pattern here.
+// TODO: Submit button label is `close/make` — placeholder text. The button currently only closes the modal and does not POST anywhere — implement the actual `addLesson` call.
+// TODO: Modal does not accept a `courseId` / `onSuccess` prop — caller cannot know what to refresh.
+// TODO: No required-field validation on `title` and `duration` beyond the HTML `required` flag; on real form mismatch the user sees nothing.
+// TODO: `duration` is captured as `string` (`'15 min'`) — should be a `number` in minutes (and a `<TextField type="number">`).
+// TODO: `lessonType: 'reading'` is hardcoded as default. Use the enum value: `ExerciseTypeKey.reading`.
+// TODO: `export const` here while sibling modals use `export default function`. Pick one.
 import { createSxStylesList } from '@/theme/helpers';
 import { Button, MenuItem, Modal, TextField, Typography } from '@mui/material';
 import { Box } from '@mui/system';

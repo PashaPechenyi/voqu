@@ -1,3 +1,12 @@
+// TODO: Hardcodes `initialLessons.grammar` regardless of which course is selected — bug. Should be fetched per courseId via a `useGetLessons(courseId)` hook.
+// TODO: Title says "Drag to reorder lessons" but no drag-and-drop is implemented. Either remove the hint or wire DnD (e.g. `@dnd-kit/sortable`).
+// TODO: `{lessons.map((item) => { return <LessonCardSection data={item} />; })}` — no `key` prop on the rendered card. Add `key={item.id}`.
+// TODO: `sxStyles.root as any` and `sxStyles.title as any` — `as any` is forbidden.
+// TODO: `Box from '@mui/system'` — use `@mui/material`.
+// TODO: Relative imports `'../../../../features/lesson/...'` reach across 4 levels — switch to the `@/features/lesson/...` alias which the rest of the file already uses for sibling imports.
+// TODO: The "Edit Course" button is in the lessons area (semantically weird) AND uses the `<AddIcon />` icon for an Edit action — replace with an `<EditIcon />`.
+// TODO: `handleCloseDelete` and `handleCloseEdit` are two identical no-op closures returning `setOpen(null)` — replace both with `() => setOpen(null)`.
+// TODO: `course?.name` — `course` is required (not optional) per the props type. Drop the `?`.
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 import { Button, Typography } from '@mui/material';
 import { Box } from '@mui/system';

@@ -1,3 +1,7 @@
+// TODO: This component is only used by the "About Us / methodology" section. It is not generic — move to `pages/public/aboutUs/components/MethodologyCard/` (or co-locate inside `sections/AboutUsMethodology.section.tsx`). Promote to `shared/` only when a second consumer appears (CLAUDE.md rule).
+// TODO: `sxStyles.middleLine` is defined here but unused — only `AboutUsMethodology.section.tsx` uses a `middleLine` style. Remove dead style.
+// TODO: Hardcoded `oklch(.708 0 0)` and `rgb(55, 18, 60)` colors — should reference the theme palette.
+// TODO: `MethodologyCard.types.ts` file name uses plural `.types.ts` — switch to `methodologyCard.type.ts` (singular) to match the project convention.
 import { Box, Card, CardContent, Typography } from '@mui/material';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 import { MethodologyCardData } from './MethodologyCard.types';

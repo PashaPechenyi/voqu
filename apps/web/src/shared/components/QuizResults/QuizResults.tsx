@@ -1,3 +1,6 @@
+// TODO: Move to `features/quiz/components/QuizResults/` — this is quiz-specific, not generic shared UI.
+// TODO: Hardcoded `3` in `{rightAnswersAmount}/3`. The total should come from the parent (`quizEntriesList.length`) via a `totalQuestions` prop.
+// TODO: `onClick={() => handleTryAgainAction()}` — wrapping a no-arg handler in a new arrow function on every render. Pass the function directly: `onClick={handleTryAgainAction}`.
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 import {
   Button,

@@ -1,3 +1,11 @@
+// TODO: `socialMediaBtns` and `contacts` arrays + their types are defined inline inside this component file. Per the architecture, constants live under a `constants/` folder (`publicFooterSocials.const.ts`, `publicFooterContacts.const.ts`) and types under `types/`.
+// TODO: `SocialMediBtn` is misspelled — should be `SocialMediaButton`. Also it should be a type, not declared in a component file (see above).
+// TODO: All social/contact `path: '#'` placeholders should be real URLs or absent; `<IconButton href="#">` reloads/scrolls to top.
+// TODO: `<Button key={index}>` and `<IconButton key={index}>` — use stable keys (e.g. `btn.path`, `Icon.muiName`).
+// TODO: `<>...</>` wrap two sibling `<Box>`s — replace with a single `<Box component="footer">` to give the footer semantic meaning (no `<footer>` is rendered anywhere right now).
+// TODO: Hardcoded copyright year `2025`. Use `new Date().getFullYear()` so it stays current.
+// TODO: Logo button links to `'/'` (hardcoded). Use the `HOME_URL` constant.
+// TODO: Phone `+11 222 333 444` and address `T. Shewchenka 11. Kyiv` look like placeholders — replace before launch.
 import { FC } from 'react';
 import { Box, Button, IconButton, SvgIconProps, Toolbar, Typography } from '@mui/material';
 import SchoolIcon from '@mui/icons-material/School';

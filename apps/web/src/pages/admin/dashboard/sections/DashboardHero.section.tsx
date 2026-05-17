@@ -1,3 +1,4 @@
+// TODO: Welcome text says "Welcome back!" — placeholder. Use the actual user name from Auth0 once wired (`useAuth0().user.name`).
 import { Box, Typography } from '@mui/material';
 
 function DashboardHeroSection() {

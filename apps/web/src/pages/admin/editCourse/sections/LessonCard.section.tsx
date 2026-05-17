@@ -1,3 +1,11 @@
+// TODO: A `LessonCard` is tied to the lesson entity and would be reused on any course-detail view — move to `features/lesson/components/LessonCard/`, not `pages/.../sections/`.
+// TODO: Local variable names `LessType`, `LessonIcon`, `IconColor` use PascalCase for non-component values — only React components should be PascalCase. Rename to `lessonType`, `LessonIcon` (this one IS a component, OK), and `iconColor`.
+// TODO: `backgroundColor: IconColor + 20` — string-concatenating a hex color with the literal `20` (`'#71677C20'`) coincidentally produces a 25% alpha. Use `alpha(IconColor, 0.13)` from `@mui/material/styles` for clarity.
+// TODO: `Chip label={data.id}` shows a database id (`'1'`) to the user as if it were a sequence number — use `data.order` instead.
+// TODO: Button intents are not wired: lock/edit/delete `IconButton`s have no `onClick`. Either implement or remove.
+// TODO: Imports `createSxStylesList` from `@/theme/helpers` — use the canonical shared path.
+// TODO: `sxStyles.lessonInfo as any` — drop `as any`.
+// TODO: `Button` is imported but unused — remove.
 import {
   Box,
   Button,

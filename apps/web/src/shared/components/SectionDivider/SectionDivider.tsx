@@ -1,3 +1,5 @@
+// TODO: Inline `sx` block here mixes random raw values (`'8px'`, `'1px'`, `2.5`) — extract to `createSxStylesList` for consistency with the rest of the project.
+// TODO: This component has no props but its width/colors are hardcoded. Expose `width`, `color`, and `iconSize` props so it can be reused on dark backgrounds and different sections.
 import { Box } from '@mui/material';
 
 function SectionDivider() {

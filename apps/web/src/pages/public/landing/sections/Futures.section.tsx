@@ -1,3 +1,10 @@
+// TODO: File and component are named `Futures` (the future) but the content is "Features" (product features). Rename `Futures.section.tsx` → `Features.section.tsx` and `FuturesSection` → `FeaturesSection`. This is a project-wide misnomer.
+// TODO: Local type `Card` shadows the MUI `Card` component imported just below — confusing. Rename `Card` to `FeatureCard` and move to a constants/types file.
+// TODO: Local `CARDS: Card[]` array should live in a `constants/featureCards.const.ts` (matches `aboutUsMethodologyCards.const.ts` pattern).
+// TODO: `paddind: 2` — misspelled, should be `padding`. Affects both `card` and `cardContent` sxStyles. The property is silently ignored.
+// TODO: `Card key={index}` — use a stable key (e.g. `title`).
+// TODO: `<Icon color="secondary" height={40} width={40} />` — MUI `SvgIcon`'s `height`/`width` props are HTML attributes, not size; use `fontSize` or `sx={{ fontSize: 40 }}`.
+// TODO: Headline "Чому обирають Voqu?" is Ukrainian, while other public pages use English. Choose one source language and localize.
 import { FC } from 'react';
 import { Bookmark, MenuBook, School, Timeline } from '@mui/icons-material';
 import { Box, Card, CardContent, SvgIconProps, Typography } from '@mui/material';

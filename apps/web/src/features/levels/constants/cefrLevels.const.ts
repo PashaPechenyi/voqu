@@ -1,3 +1,6 @@
+// TODO: Import path `@/features/levels/types/levelDemo.type/levelDemo.type` does not exist anywhere in the codebase. This import is broken — `tsc` will fail. Create `features/levels/types/cefrLevel.type.ts` (`{ id: number; level: string; description: string; skills: string[] }`) and use it here.
+// TODO: Mock data — once an API endpoint exists, drive this via a `useGetCefrLevels` hook + `helpers/getCefrLevels.ts`.
+// TODO: Type name `CefrLevel` overlaps with the more general `Level` (`features/levels/types/level/level.type.ts`) that already has a `cefrLevel: string` field. Decide: is `CefrLevel` part of the `Level` entity (then it's a sub-shape), or is it a static enumeration (then it should be a const-as-array of literal strings)?
 import { CefrLevel } from '@/features/levels/types/levelDemo.type/levelDemo.type';
 
 export const cefrLevels: CefrLevel[] = [

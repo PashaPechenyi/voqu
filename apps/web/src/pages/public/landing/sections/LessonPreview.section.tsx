@@ -1,3 +1,7 @@
+// TODO: Lots of unused sxStyles (`word`, `definition`, `example`, `card`) — those look copy-pasted from `VocabularyCardsSlider`. Remove dead styles.
+// TODO: Title text duplicates `Hero.section.tsx` (same "Вивчай англійську крок за кроком" headline + identical subtitle). Either intentional emphasis (then it should be one shared component) or accidental copy-paste (then change one).
+// TODO: `<Chip label="A1" size="small" />` is hardcoded — the demo lesson's level should come from data, not be hardcoded as `A1`.
+// TODO: Section file mixes two unrelated demos (vocabulary slider + quiz) inside `mainCard`. The `mainCard` header text ("First lesson / Basic words") only describes the vocabulary part — the quiz placement is unexplained UX.
 import { Box, Chip, Typography } from '@mui/material';
 import VocabularyCardsSlider from '@/features/vocabulary/components/VocabularyCardsSlider/VocabularyCardsSlider';
 import QuizSlider from '@/shared/components/QuizSlider/QuizSlider';

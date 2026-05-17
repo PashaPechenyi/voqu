@@ -1,3 +1,7 @@
+// TODO: DELETE — part of the stale `AboutPage/` duplicate. Canonical version is `pages/public/aboutUs/sections/AboutUsIntro.section.tsx` (identical content).
+// TODO: `<>...</>` wrapping a single `<Box>` — unnecessary.
+// TODO: Uses raw `const styles = {...}` instead of `createSxStylesList` — inconsistent.
+// TODO: File missing `.section.tsx` suffix.
 import { Box, Typography } from '@mui/material';
 
 function IntroSection() {
