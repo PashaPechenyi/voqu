@@ -1,7 +1,3 @@
-// TODO: `'Sing up'` is misspelled — should be `'Sign up'`.
-// TODO: Buttons `Log in` / `Sing up` have no handlers — clicking does nothing.
-// TODO: `ListItemButton href={btn.path}` causes a hard reload; use react-router `<Link>`.
-// TODO: Drawer width `250` is magic — extract to a named constant or theme spacing.
 import {
   Box,
   Button,
@@ -14,7 +10,7 @@ import {
   Typography,
 } from '@mui/material';
 
-import { publicNavItems } from '../constants/publicNavItems.const';
+import { PUBLIC_NAV_ITEMS } from '../constants/publicNavItems.const';
 
 type PublicMobileMenuProps = {
   toggleDrawer: (newOpen: boolean) => () => void;
@@ -26,10 +22,10 @@ function PublicMobileMenu({ toggleDrawer, open }: PublicMobileMenuProps) {
     <Drawer open={open} onClose={toggleDrawer(false)}>
       <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
         <List>
-          {publicNavItems.map((btn) => (
-            <ListItem key={btn.label} disablePadding>
-              <ListItemButton href={btn.path}>
-                <ListItemText primary={btn.label} />
+          {PUBLIC_NAV_ITEMS.map((navItem) => (
+            <ListItem key={navItem.path} disablePadding>
+              <ListItemButton href={navItem.path}>
+                <ListItemText primary={navItem.label} />
               </ListItemButton>
             </ListItem>
           ))}
@@ -40,7 +36,7 @@ function PublicMobileMenu({ toggleDrawer, open }: PublicMobileMenuProps) {
             <Typography>Log in</Typography>
           </Button>
           <Button variant="outlined">
-            <Typography>Sing up</Typography>
+            <Typography>Sign up</Typography>
           </Button>
         </Box>
       </Box>

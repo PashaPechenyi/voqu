@@ -1,7 +1,20 @@
-// TODO: This file duplicates `theme/types.ts`. Pick a single name (`theme.type.ts` is consistent with the project convention `<name>.type.ts`) and delete the other.
-// TODO: `Extract<TSxProps, ReadonlyArray<any>>` uses `any`. Replace with `unknown` or a stricter generic.
 import { Theme, SxProps } from '@mui/material';
 
+export type TCustomPalette<T> = {
+  tertiary: T;
+  adminPrimary: T;
+  adminSecondary: T;
+};
+
+export type TMuiColors =
+  | keyof TCustomPalette<unknown>
+  | 'primary'
+  | 'secondary'
+  | 'error'
+  | 'warning'
+  | 'info'
+  | 'success';
+
 export type TSxProps = SxProps<Theme>;
-export type TSxItem = Exclude<TSxProps, ReadonlyArray<any>>;
-export type TSxArray = Extract<TSxProps, ReadonlyArray<any>>;
+export type TSxItem = Exclude<TSxProps, ReadonlyArray<unknown>>;
+export type TSxArray = Extract<TSxProps, ReadonlyArray<unknown>>;

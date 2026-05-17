@@ -1,11 +1,10 @@
-// TODO: Constant array name is fine; `id` is sequential and used for parity / rendering — confirm we don't actually need an id (the parent uses `cardData.id` for `dir` and the badge label). If only the badge label is needed, derive `cardIndex + 1`.
 import ImportContactsIcon from '@mui/icons-material/ImportContacts';
 import DonutLargeRoundedIcon from '@mui/icons-material/DonutLargeRounded';
 import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
-import { MethodologyCardData } from '@/shared/components/MethodologyCard/MethodologyCard.types';
+import { MethodologyCardItem } from '@/shared/components/MethodologyCard/MethodologyCard.type';
 
-export const aboutUsMethodologyCards: MethodologyCardData[] = [
+export const ABOUT_US_METHODOLOGY_CARDS: MethodologyCardItem[] = [
   {
     id: 1,
     title: 'Vocabulary Introduction',

@@ -1,8 +1,3 @@
-// TODO: Export name `TableSection` does not match the file name `Table.tsx` or the prop type `TableSectionProps`. Either rename the file to `TableSection.tsx`, or rename the component to `Table`. The `Section` suffix is reserved for page-local sections per the project pattern (`pages/.../sections/*.section.tsx`).
-// TODO: `valueGetter: (row: TRow) => any` and `renderCell: (value: any, ...)` use `any`. Either constrain with a generic per-column value type, or use `unknown` + caller-side narrowing.
-// TODO: `columnSize?: 'medium' | 'small'` is in the column-settings type but never read by the component. Either implement it (`<TableCell size={...}>`) or remove the field.
-// TODO: Hardcoded `minWidth: 650` on the table — should be a prop, the table is supposed to be reusable.
-// TODO: `aria-label="simple table"` is generic. Accept a `caption`/`ariaLabel` prop so each consumer can describe its data.
 import {
   Paper,
   Table,
@@ -12,38 +7,38 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import { TableColumnSettings } from './Table.types';
+import { TableColumnSettings } from './Table.type';
 
-type TableSectionProps<TRow> = {
-  data: TRow[];
-  settings: TableColumnSettings<TRow>[];
+type TableProps<TRow> = {
+  rows: TRow[];
+  columns: TableColumnSettings<TRow>[];
   getRowId: (row: TRow) => string | number;
 };
 
-function TableSection<TRow>({ data, settings, getRowId }: TableSectionProps<TRow>) {
+function SharedTable<TRow>({ rows, columns, getRowId }: TableProps<TRow>) {
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <Table>
         <TableHead>
           <TableRow>
-            {settings.map((value) => (
-              <TableCell align="center" key={value.key as string}>
+            {columns.map((value) => (
+              <TableCell align="center" key={value.key as string} size={value.columnSize}>
                 {value.columnName}
               </TableCell>
             ))}
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((row) => (
+          {rows.map((row) => (
             <TableRow
               key={getRowId(row)}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
-              {settings.map((item) => {
+              {columns.map((item) => {
                 const value = item.valueGetter ? item.valueGetter(row) : row[item.key];
                 return (
-                  <TableCell key={item.key as string} align="center">
-                    {item.renderCell ? item.renderCell(value, row) : value}
+                  <TableCell key={item.key as string} align="center" size={item.columnSize}>
+                    {item.renderCell ? item.renderCell(value, row) : (value as React.ReactNode)}
                   </TableCell>
                 );
               })}
@@ -55,4 +50,4 @@ function TableSection<TRow>({ data, settings, getRowId }: TableSectionProps<TRow
   );
 }
 
-export default TableSection;
+export default SharedTable;

@@ -1,47 +1,36 @@
-// TODO: This component is only used by the "About Us / methodology" section. It is not generic — move to `pages/public/aboutUs/components/MethodologyCard/` (or co-locate inside `sections/AboutUsMethodology.section.tsx`). Promote to `shared/` only when a second consumer appears (CLAUDE.md rule).
-// TODO: `sxStyles.middleLine` is defined here but unused — only `AboutUsMethodology.section.tsx` uses a `middleLine` style. Remove dead style.
-// TODO: Hardcoded `oklch(.708 0 0)` and `rgb(55, 18, 60)` colors — should reference the theme palette.
-// TODO: `MethodologyCard.types.ts` file name uses plural `.types.ts` — switch to `methodologyCard.type.ts` (singular) to match the project convention.
 import { Box, Card, CardContent, Typography } from '@mui/material';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
-import { MethodologyCardData } from './MethodologyCard.types';
+import { MethodologyCardItem } from './MethodologyCard.type';
 
 type MethodologyCardProps = {
-  cardData: MethodologyCardData;
+  card: MethodologyCardItem;
 };
 
-function MethodologyCard({ cardData }: MethodologyCardProps) {
+function MethodologyCard({ card: { title, description, Icon } }: MethodologyCardProps) {
   return (
     <Card sx={sxStyles.point}>
       <CardContent>
         <Box sx={sxStyles.pointTitleRoot}>
-          <Typography variant="h6">{cardData.title}</Typography>
+          <Typography variant="h6">{title}</Typography>
           <Box sx={sxStyles.imgBackground}>
-            <cardData.Icon color="secondary" />
+            <Icon color="secondary" />
           </Box>
         </Box>
-        <Typography variant="body1" color="primary" textAlign={'right'}>
-          {cardData.description}
+        <Typography variant="body1" color="primary" textAlign="right">
+          {description}
         </Typography>
       </CardContent>
     </Card>
   );
 }
-const sxStyles = createSxStylesList({
-  middleLine: {
-    width: '3px',
-    backgroundColor: 'oklch(.708 0 0)',
-    height: '120%',
-    //flex: 1,
-  },
 
+const sxStyles = createSxStylesList({
   point: (theme) => ({
     p: 3,
     border: '2px solid',
     borderColor: 'oklch(.708 0 0)',
     boxShadow: '0 4px 6px -1px #0000001a, 0 2px 4px -2px #0000001a',
     width: '100%',
-
     [theme.breakpoints.up('md')]: {
       width: 'calc((100% - 100px) / 2)',
     },
@@ -56,7 +45,7 @@ const sxStyles = createSxStylesList({
     display: 'flex',
     justifyContent: 'center',
     alignContent: 'center',
-    backgroundColor: 'rgb(55, 18, 60)',
+    backgroundColor: 'adminPrimary.main',
     p: 2,
     borderRadius: '100%',
   },

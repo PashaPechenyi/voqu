@@ -1,99 +1,57 @@
-// TODO: `socialMediaBtns` and `contacts` arrays + their types are defined inline inside this component file. Per the architecture, constants live under a `constants/` folder (`publicFooterSocials.const.ts`, `publicFooterContacts.const.ts`) and types under `types/`.
-// TODO: `SocialMediBtn` is misspelled — should be `SocialMediaButton`. Also it should be a type, not declared in a component file (see above).
-// TODO: All social/contact `path: '#'` placeholders should be real URLs or absent; `<IconButton href="#">` reloads/scrolls to top.
-// TODO: `<Button key={index}>` and `<IconButton key={index}>` — use stable keys (e.g. `btn.path`, `Icon.muiName`).
-// TODO: `<>...</>` wrap two sibling `<Box>`s — replace with a single `<Box component="footer">` to give the footer semantic meaning (no `<footer>` is rendered anywhere right now).
-// TODO: Hardcoded copyright year `2025`. Use `new Date().getFullYear()` so it stays current.
-// TODO: Logo button links to `'/'` (hardcoded). Use the `HOME_URL` constant.
-// TODO: Phone `+11 222 333 444` and address `T. Shewchenka 11. Kyiv` look like placeholders — replace before launch.
-import { FC } from 'react';
-import { Box, Button, IconButton, SvgIconProps, Toolbar, Typography } from '@mui/material';
+import { Box, Button, IconButton, Toolbar, Typography } from '@mui/material';
 import SchoolIcon from '@mui/icons-material/School';
-import InstagramIcon from '@mui/icons-material/Instagram';
-import FacebookIcon from '@mui/icons-material/Facebook';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import MailOutlineIcon from '@mui/icons-material/MailOutline';
-import PhoneIcon from '@mui/icons-material/Phone';
-import PinDropIcon from '@mui/icons-material/PinDrop';
-import { publicFooterLinks } from '../constants/publicFooterLinks.const';
+import { PUBLIC_FOOTER_LINKS } from '../constants/publicFooterLinks.const';
+import { PUBLIC_FOOTER_SOCIALS } from '../constants/publicFooterSocials.const';
+import { PUBLIC_FOOTER_CONTACTS } from '../constants/publicFooterContacts.const';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
-type SocialMediBtn = { Icon: FC<SvgIconProps>; path: string };
-const socialMediaBtns: SocialMediBtn[] = [
-  { Icon: InstagramIcon, path: '#' },
-  { Icon: FacebookIcon, path: '#' },
-  { Icon: LinkedInIcon, path: '#' },
-];
-type ContactItem = {
-  Icon: FC<SvgIconProps>;
-  path: string;
-  value: string;
-};
-const contacts: ContactItem[] = [
-  {
-    Icon: MailOutlineIcon,
-    path: '#',
-    value: 'voqu@gmail.com',
-  },
-  {
-    Icon: PhoneIcon,
-    path: '#',
-    value: '+11 222 333 444',
-  },
-  {
-    Icon: PinDropIcon,
-    path: '#',
-    value: 'T. Shewchenka 11. Kyiv',
-  },
-];
+import { HOME_URL } from '@/shared/constants/urls.const';
+
 function PublicFooter() {
   return (
-    <>
+    <Box component="footer">
       <Box sx={sxStyles.root}>
         <Box sx={sxStyles.boxLogo}>
-          <IconButton href={'/'}>
-            <SchoolIcon color={'secondary'} />
+          <IconButton href={HOME_URL}>
+            <SchoolIcon color="secondary" />
           </IconButton>
-
-          <Typography color={'textSecondary'} variant="h5">
+          <Typography color="textSecondary" variant="h5">
             Voqu
           </Typography>
         </Box>
         <Toolbar sx={sxStyles.toolbar}>
-          {publicFooterLinks.map((btn, index) => {
-            return (
-              <Button key={index} href={btn.path} color="inherit">
-                <Typography color={'textSecondary'}>{btn.label}</Typography>
-              </Button>
-            );
-          })}
+          {PUBLIC_FOOTER_LINKS.map((link) => (
+            <Button key={link.path} href={link.path} color="inherit">
+              <Typography color="textSecondary">{link.label}</Typography>
+            </Button>
+          ))}
         </Toolbar>
         <Box sx={sxStyles.boxSocials}>
           <Box sx={sxStyles.socials}>
-            <Typography color={'textSecondary'}>Follow us</Typography>
-            {socialMediaBtns.map(({ path, Icon }, index) => (
-              <IconButton key={index} href={path}>
-                <Icon color={'secondary'} />
+            <Typography color="textSecondary">Follow us</Typography>
+            {PUBLIC_FOOTER_SOCIALS.map(({ id, path, Icon }) => (
+              <IconButton key={id} href={path}>
+                <Icon color="secondary" />
               </IconButton>
             ))}
           </Box>
         </Box>
         <Box sx={sxStyles.boxContacts}>
-          <Typography color={'textSecondary'}>Contact us</Typography>
-          {contacts.map(({ Icon, path, value }, index) => (
-            <Box key={index} sx={sxStyles.contacts}>
+          <Typography color="textSecondary">Contact us</Typography>
+          {PUBLIC_FOOTER_CONTACTS.map(({ id, Icon, path, value }) => (
+            <Box key={id} sx={sxStyles.contacts}>
               <IconButton href={path}>
-                <Icon color={'secondary'} />
+                <Icon color="secondary" />
               </IconButton>
-              <Typography color={'textSecondary'}>{value}</Typography>
+              <Typography color="textSecondary">{value}</Typography>
             </Box>
           ))}
         </Box>
       </Box>
 
       <Box sx={sxStyles.boxCopyright}>
-        <Typography>&copy; 2025 Voqu. All rights reserved.</Typography>
+        <Typography>&copy; {new Date().getFullYear()} Voqu. All rights reserved.</Typography>
       </Box>
-    </>
+    </Box>
   );
 }
 
@@ -111,7 +69,6 @@ const sxStyles = createSxStylesList({
       gap: '25px',
     },
   }),
-
   boxLogo: {
     display: 'flex',
     flexDirection: 'column',

@@ -1,55 +1,54 @@
-// TODO: Move to `features/quiz/components/QuizSlider/` together with QuizCard / QuizResults / QuizEntry.
-// TODO: Typo `isTranlate` should be `isTranslate` (also propagated to `VocabularyCardsSlider.tsx` — fix in both).
-// TODO: `<>...</>` wrapping a single child is unnecessary — remove the fragment.
-// TODO: `previous()`/`next()` are passed inline as `() => previous()` in `VocabularyCardsSlider` and similar code — pass the function reference directly to avoid creating new closures on each render.
 import { useState } from 'react';
 import { QuizEntry } from '@/shared/types/quizEntry.type';
 import QuizResults from '../QuizResults/QuizResults';
 import QuizCard from '../QuizCard/QuizCard';
 
-type QuizProps = {
-  quizEntriesList: QuizEntry[];
+type QuizSliderProps = {
+  quizEntries: QuizEntry[];
 };
-function QuizSlider({ quizEntriesList }: QuizProps) {
+
+function QuizSlider({ quizEntries }: QuizSliderProps) {
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
   const [selectedAnswerIndex, setSelectedAnswerIndex] = useState<number | null>(null);
-  const [rightAnswersAmount, setRightAnswersAmount] = useState(0);
-  const activeQuizEntry = quizEntriesList[activeQuestionIndex];
-  const isQuizCompleted = activeQuestionIndex >= quizEntriesList.length;
+  const [correctAnswersCount, setCorrectAnswersCount] = useState(0);
+  const activeQuizEntry = quizEntries[activeQuestionIndex];
+  const isQuizCompleted = activeQuestionIndex >= quizEntries.length;
 
-  const handleTryAgainAction = () => {
+  const handleTryAgain = () => {
     setActiveQuestionIndex(0);
     setSelectedAnswerIndex(null);
-    setRightAnswersAmount(0);
+    setCorrectAnswersCount(0);
   };
 
-  const nextAction = () => {
+  const handleNext = () => {
     setActiveQuestionIndex((prev) => prev + 1);
     setSelectedAnswerIndex(null);
   };
+
   const handleSelectAnswer = (answerIndex: number) => {
     setSelectedAnswerIndex(answerIndex);
-
     if (answerIndex === activeQuizEntry.rightOption) {
-      setRightAnswersAmount((prev) => prev + 1);
+      setCorrectAnswersCount((prev) => prev + 1);
     }
   };
+
+  if (isQuizCompleted) {
+    return (
+      <QuizResults
+        correctAnswersCount={correctAnswersCount}
+        totalQuestions={quizEntries.length}
+        onTryAgain={handleTryAgain}
+      />
+    );
+  }
+
   return (
-    <>
-      {isQuizCompleted ? (
-        <QuizResults
-          rightAnswersAmount={rightAnswersAmount}
-          handleTryAgainAction={handleTryAgainAction}
-        />
-      ) : (
-        <QuizCard
-          activeQuizEntry={activeQuizEntry}
-          selectedAnswerIndex={selectedAnswerIndex}
-          nextAction={nextAction}
-          handleSelectAnswer={handleSelectAnswer}
-        />
-      )}
-    </>
+    <QuizCard
+      activeQuizEntry={activeQuizEntry}
+      selectedAnswerIndex={selectedAnswerIndex}
+      onNext={handleNext}
+      onSelectAnswer={handleSelectAnswer}
+    />
   );
 }
 

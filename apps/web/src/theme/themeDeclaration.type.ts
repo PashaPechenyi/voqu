@@ -1,45 +1,33 @@
-// TODO: Merge this file with `theme/types.ts` — having three theme-augmentation files (`themeDeclaration.type.ts`, `types.ts`, `theme.type.ts`) for the same MUI module augmentation is confusing and error-prone (e.g. `tertiary` is in one file, `adminPrimary` in another, so they can drift).
-// TODO: `PaletteOptions.adminSecondary` is missing the `?` modifier present on `adminPrimary?` — both should be optional to match MUI conventions.
 import { PaletteColor, PaletteColorOptions } from '@mui/material';
 import '@mui/material/styles';
 import '@mui/material/Button';
 import '@mui/material/AppBar';
 import '@mui/material/SvgIcon';
 import '@mui/material/Typography';
+import { TCustomPalette } from './theme.type';
 
 declare module '@mui/material/styles' {
-  interface Palette {
-    adminPrimary: PaletteColor;
-    adminSecondary: PaletteColor;
-  }
+  interface Palette extends TCustomPalette<PaletteColor> {}
 
-  interface PaletteOptions {
-    adminPrimary?: PaletteColorOptions;
-    adminSecondary: PaletteColorOptions;
-  }
+  interface PaletteOptions extends Partial<TCustomPalette<PaletteColorOptions>> {}
 }
 
 declare module '@mui/material/Button' {
-  interface ButtonPropsColorOverrides {
-    adminPrimary: true;
-    adminSecondary: true;
-  }
+  interface ButtonPropsColorOverrides extends TCustomPalette<true> {}
 }
+
 declare module '@mui/material/AppBar' {
-  interface AppBarPropsColorOverrides {
-    adminPrimary: true;
-    adminSecondary: true;
-  }
+  interface AppBarPropsColorOverrides extends TCustomPalette<true> {}
 }
+
 declare module '@mui/material/SvgIcon' {
-  interface SvgIconPropsColorOverrides {
-    adminPrimary: true;
-    adminSecondary: true;
-  }
+  interface SvgIconPropsColorOverrides extends TCustomPalette<true> {}
 }
+
 declare module '@mui/material/Typography' {
-  interface TypographyPropsColorOverrides {
-    adminPrimary: true;
-    adminSecondary: true;
+  interface TypographyPropsColorOverrides extends TCustomPalette<true> {}
+
+  interface TypographyPropsVariantOverrides {
+    body3: true;
   }
 }

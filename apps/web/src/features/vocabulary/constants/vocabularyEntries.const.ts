@@ -1,4 +1,3 @@
-// TODO: Hardcoded mock data shown in production UI on the landing page. Replace with a real API fetch (`useGetVocabularyForLesson`).
 import { VocabularyEntry } from '@/features/vocabulary/types/vocabularyEntry.type';
 
 export const VOCABULARY_ENTRIES: VocabularyEntry[] = [

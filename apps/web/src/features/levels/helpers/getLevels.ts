@@ -1,8 +1,6 @@
-// TODO: No return type annotation — annotate as `Promise<Level[]>`.
-// TODO: Empty catch swallows errors — let them surface.
-// TODO: Stray commented-out `//console.log(response);` and `console.log(result);` — remove debug output.
-// TODO: Duplicates the `fetch + try/catch + console.log` pattern in `getCourses.ts` and friends. Build a shared `apiClient` and use it across helpers.
-const getLevels = async () => {
+import { Level } from '@/features/levels/types/level.type';
+
+const getLevels = async (): Promise<Level[] | undefined> => {
   try {
     const response = await fetch('/api/level', {
       method: 'GET',
@@ -10,12 +8,10 @@ const getLevels = async () => {
     if (!response.ok) {
       throw new Error('Something went wrong...');
     }
-    const result = await response.json();
-    console.log(result);
-    return result;
-  } catch (error) {}
-
-  //console.log(response);
+    return await response.json();
+  } catch (error) {
+    return undefined;
+  }
 };
 
 export default getLevels;

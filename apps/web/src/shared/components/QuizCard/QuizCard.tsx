@@ -1,11 +1,3 @@
-// TODO: A "QuizCard" is business-specific (quiz feature). Move out of `shared/` into `features/quiz/components/` along with `QuizSlider`, `QuizResults`, and the `QuizEntry` type.
-// TODO: `sxStyles.answers as any` — `as any` is forbidden in this project. Fix the sx typing instead (it should already match `TSxItem`).
-// TODO: Hardcoded `oklch(...)` colors for correct/incorrect state. Move those into theme palette (e.g. `palette.success.light`, `palette.error.light`) so they participate in theming and dark mode.
-// TODO: User-facing string `'Excelent!'` is misspelled — should be `Excellent!`.
-// TODO: `<Button key={ansIndex}>` uses array index as React key. The answers list is mutable in principle and using the answer string itself is safer.
-// TODO: `<>...</>` wrapping a single `<Card>` is unnecessary — remove the fragment.
-// TODO: Title `Practice Quiz` is hardcoded in English while the rest of the public landing is Ukrainian (`'Вивчай англійську ...'`). Either localize via i18n or keep one language consistently.
-// TODO: Component file name does not include `.component.tsx` / no convention agreed; OK if intentional, but matches the section convention used elsewhere (`*.section.tsx`). Make sure component naming convention is documented in CLAUDE.md.
 import {
   Alert,
   Box,
@@ -22,74 +14,71 @@ import clsx from 'clsx';
 import { QuizEntry } from '@/shared/types/quizEntry.type';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 
-type QuizSliderProps = {
+type QuizCardProps = {
   activeQuizEntry: QuizEntry;
   selectedAnswerIndex: number | null;
-  handleSelectAnswer: (ansIndex: number) => void;
-  nextAction: () => void;
+  onSelectAnswer: (answerIndex: number) => void;
+  onNext: () => void;
 };
 
 function QuizCard({
-  handleSelectAnswer,
   activeQuizEntry,
   selectedAnswerIndex,
-  nextAction,
-}: QuizSliderProps) {
+  onSelectAnswer,
+  onNext,
+}: QuizCardProps) {
   const isSelectedAnswerCorrect = selectedAnswerIndex === activeQuizEntry.rightOption;
   const isAnswerSelected = selectedAnswerIndex !== null;
+
   return (
-    <>
-      <Card sx={sxStyles.card}>
-        <CardHeader
-          avatar={<StarBorderRoundedIcon fontSize="large" color="primary" />}
-          title={
-            <Typography variant={'h4'} sx={{ textAlign: 'start' }}>
-              Practice Quiz
-            </Typography>
-          }
-        ></CardHeader>
-        <Divider variant="middle" />
-        <CardContent>
-          <Typography>{activeQuizEntry.question}</Typography>
-          <Box sx={sxStyles.answers as any} mb={2}>
-            {activeQuizEntry.answers.map((answer, ansIndex) => (
-              <Button
-                key={ansIndex}
-                size="large"
-                disabled={isAnswerSelected}
-                className={clsx({
-                  correct: isAnswerSelected && ansIndex === activeQuizEntry.rightOption,
-                  incorrect: selectedAnswerIndex === ansIndex && !isSelectedAnswerCorrect,
-                })}
-                sx={sxStyles.answerBtn}
-                onClick={() => handleSelectAnswer(ansIndex)}
-              >
-                {answer}
-              </Button>
-            ))}
-          </Box>
-          {isAnswerSelected && (
-            <Alert severity={isSelectedAnswerCorrect ? 'success' : 'error'}>
-              {isSelectedAnswerCorrect ? 'Excelent!' : 'Not Quite right'}
-            </Alert>
-          )}
-        </CardContent>
-        <Divider variant="middle" />
-        <CardActions sx={sxStyles.actionsBox}>
-          <Button
-            disabled={!isAnswerSelected}
-            variant="contained"
-            size="large"
-            sx={sxStyles.btnNext}
-            onClick={() => {
-              nextAction();
-            }}
-          >
-            Next
-          </Button>
-        </CardActions>
-      </Card>
-    </>
+    <Card sx={sxStyles.card}>
+      <CardHeader
+        avatar={<StarBorderRoundedIcon fontSize="large" color="primary" />}
+        title={
+          <Typography variant="h4" sx={{ textAlign: 'start' }}>
+            Practice Quiz
+          </Typography>
+        }
+      />
+      <Divider variant="middle" />
+      <CardContent>
+        <Typography>{activeQuizEntry.question}</Typography>
+        <Box sx={sxStyles.answers} mb={2}>
+          {activeQuizEntry.answers.map((answer, answerIndex) => (
+            <Button
+              key={answer}
+              size="large"
+              disabled={isAnswerSelected}
+              className={clsx({
+                correct: isAnswerSelected && answerIndex === activeQuizEntry.rightOption,
+                incorrect: selectedAnswerIndex === answerIndex && !isSelectedAnswerCorrect,
+              })}
+              sx={sxStyles.answerBtn}
+              onClick={() => onSelectAnswer(answerIndex)}
+            >
+              {answer}
+            </Button>
+          ))}
+        </Box>
+        {isAnswerSelected && (
+          <Alert severity={isSelectedAnswerCorrect ? 'success' : 'error'}>
+            {isSelectedAnswerCorrect ? 'Excellent!' : 'Not quite right'}
+          </Alert>
+        )}
+      </CardContent>
+      <Divider variant="middle" />
+      <CardActions sx={sxStyles.actionsBox}>
+        <Button
+          disabled={!isAnswerSelected}
+          variant="contained"
+          size="large"
+          sx={sxStyles.btnNext}
+          onClick={onNext}
+        >
+          Next
+        </Button>
+      </CardActions>
+    </Card>
   );
 }
 
@@ -128,7 +117,6 @@ const sxStyles = createSxStylesList({
       width: '50%',
     },
   }),
-
   btnNext: {
     width: '100%',
   },

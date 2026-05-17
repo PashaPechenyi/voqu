@@ -1,12 +1,7 @@
-// TODO: No mobile/tablet variant — `AdminHeader` renders the same desktop layout on all viewports. Add a Drawer + hamburger like `PublicHeader` does.
-// TODO: `href={btn.path}` on a `<Button>` causes a full page navigation. Use react-router's `<Link>` / `component={RouterLink}` to keep SPA navigation; otherwise React re-mounts the whole tree.
-// TODO: `<Button key={index}>` uses array index as key. Use `btn.path` (unique) instead.
-// TODO: Hardcoded text `'Admin'` and `'Log out'` — wire to actual user state and auth handler; "Log out" button currently does nothing.
-// TODO: `'Voqu'` brand string is duplicated between `AdminHeader`, `PublicHeader`, `PublicFooter`. Extract a `<BrandLogo />` shared component.
 import { AppBar, Box, Button, IconButton, Toolbar, Typography } from '@mui/material';
 import SchoolIcon from '@mui/icons-material/School';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
-import { adminNavItems } from '../constants/adminNavItems.const';
+import { ADMIN_NAV_ITEMS } from '../constants/adminNavItems.const';
 
 function AdminHeader() {
   return (
@@ -16,33 +11,32 @@ function AdminHeader() {
           <IconButton>
             <SchoolIcon fontSize="large" color="secondary" />
           </IconButton>
-          <Typography color={'textSecondary'} variant="h6">
+          <Typography color="textSecondary" variant="h6">
             Voqu
           </Typography>
         </Box>
 
         <Box>
-          {adminNavItems.map((btn, index) => {
-            return (
-              <Button sx={sxStyles.link} key={index} href={btn.path} color="inherit">
-                <btn.Icon />
-                <Typography marginLeft={'5px'} color={'secondary'}>
-                  {btn.label}
-                </Typography>
-              </Button>
-            );
-          })}
+          {ADMIN_NAV_ITEMS.map(({ path, Icon, label }) => (
+            <Button sx={sxStyles.link} key={path} href={path} color="inherit">
+              {Icon && <Icon />}
+              <Typography marginLeft="5px" color="secondary">
+                {label}
+              </Typography>
+            </Button>
+          ))}
         </Box>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <Box sx={sxStyles.user}>
           <Typography ml={2}>Admin</Typography>
           <Button sx={sxStyles.link} variant="outlined" color="inherit">
-            <Typography color={'secondary'}>Log out</Typography>
+            <Typography color="secondary">Log out</Typography>
           </Button>
         </Box>
       </Toolbar>
     </AppBar>
   );
 }
+
 const sxStyles = createSxStylesList({
   logoBox: {
     display: 'flex',
@@ -57,11 +51,15 @@ const sxStyles = createSxStylesList({
   },
   link: {
     transition: 'ease-in-out 500ms',
-
     ':hover': {
       backgroundColor: 'rgba(255, 255, 255, 0.30)',
       mb: 0.5,
     },
+  },
+  user: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '10px',
   },
 });
 
