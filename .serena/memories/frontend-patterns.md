@@ -36,6 +36,7 @@ export default CourseCard;
 - Props type name: `<Component>Props`. Declared as `type`, not `interface`, unless declaration merging or `implements` is genuinely needed.
 - Never use `any`.
 - **Pass entities under their domain name, not `data`/`info`.** `course: Course`, not `data: Course`. `lesson: Lesson`, not `data: Lesson`.
+- **The `Data` suffix is a smell on values too, not just on type names.** A variable holding a `Word` is `activeWord`, not `activeWordData`. Drop generic noise — the type name already says what the value is.
 
 ### Event handlers
 
@@ -70,6 +71,12 @@ export const useCourseSearch = (query: string) => {
 
 - Pure functions in `*.helper.ts` files. Named exports. No side effects at module scope.
 - Constants in `*.const.ts`. `UPPER_SNAKE_CASE` for static-data constants and primitive constants. Runtime singletons (configured `theme`, local `sxStyles`) stay camelCase.
+- **Group related primitive constants into a single object instead of exporting them flat.** When two or more constants share a scope (theme colours, error messages, etc.), export one `UPPER_SNAKE_CASE` object whose keys describe each value, instead of two top-level constants. Examples:
+  - `COLORS = { secondary: '#37123c', tertiary: '#aa9f96' }` rather than separate `SECONDARY_COLOR`/`TERTIARY_COLOR`.
+  - `FORM_VALIDATION_ERRORS = { requiredField: '...' }` rather than a flat `REQUIRED_FIELD_MESSAGE`.
+
+  Name the object by the **scope it covers** (`FORM_VALIDATION_ERRORS`, not `ERROR_MESSAGES`) so the symbol declares which slice of the domain it owns.
+
 - Mock data is named `MOCK_*` so it's obvious it's a placeholder: `MOCK_POPULAR_COURSES`.
 - Enums in `*.enum.ts`.
 - **File suffixes are singular: `.type.ts`, `.const.ts`, `.enum.ts`, `.helper.ts`.** Never `.types.ts`, `.consts.ts`.
@@ -161,30 +168,41 @@ Pattern: **page/component → hook → helper → `fetch`**.
 - The hook in `features/<entity>/hooks/` owns the state (`data`, `setData`, `isLoading`, `error`) and exposes a stable `fetchX` (wrapped in `useCallback`). It accepts lifecycle callbacks (`onSuccess`, `onError`) and is generic about the caller.
 - Mutation hooks pass the updated entity through the callback: `onSuccess?: (updatedCourse: Course) => void`.
 
+### Naming
+
+- **API helper functions end with `Req`.** Each helper in `features/<entity>/helpers/` corresponds to one network call and is named `<verb><Entity>Req` (`getCoursesReq`, `createCourseReq`, `editCourseReq`, `deleteCourseReq`, `updateCourseStatusReq`). The `Req` suffix marks the function as "this hits the network" and keeps the helper symbol distinct from the same-named local symbol inside its wrapping hook.
+- **Hook names never contain `get`/`getBy`.** `useGetCourses` is wrong; use `useCoursesList` for collections and `useCourseById` (or `useCourse`) for a single entity. The internal fetcher returned by the hook uses `fetch`, not `get`: `fetchCourses`, `fetchLevels`, `fetchCourseById`.
+
+### Per-call hooks
+
+- **Every API helper has its own custom hook.** A component never imports a `*Req` helper directly. Mutations get a dedicated hook (`useCreateCourse`, `useEditCourse`, `useDeleteCourse`, `useUpdateCourseStatus`) that wraps a single helper and exposes `{ <verb>, isLoading, error }` plus `{ onSuccess, onError }` lifecycle callbacks.
+
+### Request payload types
+
+- **Form-values types are for forms only — never for API helpers or mutation hooks.** A `*FormValues` type carries the UI's nullable, draft-stage shape (`level: Level | null`, `status: CourseStatus | null`). Helpers and hooks take a strictly-typed request body (`CreateCourseReqBody`, `EditCourseReqBody`) where every field is required and non-null.
+- **Map form values to request body at the call site**, via a dedicated helper (e.g. `courseFormToReqBody`). The runtime null-check for "required form fields" lives in that mapper, not in the API helper. The network layer assumes its input is already valid.
+
 ```ts
-// helpers/getCourseById.ts
+// helpers/getCourseById.helper.ts
 export type GetCourseResponse = { course: Course };
 
-const getCourseById = async (id: Course['id']): Promise<GetCourseResponse | undefined> => {
+export const getCourseByIdReq = async (id: Course['id']): Promise<GetCourseResponse> => {
   const response = await fetch(`/api/course/${id}`);
   if (!response.ok) throw new Error('Failed to fetch course');
   return response.json();
 };
-export default getCourseById;
 ```
 
 ```ts
-// hooks/useGetCourseById.ts
-const useGetCourseById = () => {
+// hooks/useCourseById.ts
+export const useCourseById = () => {
   const [course, setCourse] = useState<Course | null>(null);
   const fetchCourseById = useCallback(async (id: Course['id']) => {
-    const result = await getCourseById(id);
-    if (!result) return;
+    const result = await getCourseByIdReq(id);
     setCourse(result.course);
   }, []);
   return { course, setCourse, fetchCourseById };
 };
-export default useGetCourseById;
 ```
 
 ## Async UI
@@ -274,7 +292,8 @@ This lets Vite hash, fingerprint, and tree-shake the assets.
 ## Comments
 
 - Default to **no comments**. Names should explain intent.
-- Add a comment only when the *why* is non-obvious: a workaround, a non-trivial invariant, an external constraint.
+- Add a comment only when the _why_ is non-obvious: a workaround, a non-trivial invariant, an external constraint.
+- **Deferred-work comments start with `TODO:`.** Any comment that explains a temporary workaround, a known-suboptimal pattern, or a follow-up the codebase should eventually do should begin with `TODO:` so it shows up in search and review. Plain explanatory comments without a `TODO:` prefix are reserved for invariants that won't change.
 - No commented-out code blocks committed. If it's dead, delete it.
 - No `console.log` in committed code.
 
