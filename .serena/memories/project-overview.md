@@ -3,6 +3,7 @@
 ## Product
 
 Voqu — web app where people can:
+
 - create their own English course,
 - discover courses made by others,
 - learn from those courses,
@@ -28,13 +29,13 @@ voqu/
 
 ## Stack at a glance
 
-| Layer | Tech |
-|---|---|
+| Layer    | Tech                                                                          |
+| -------- | ----------------------------------------------------------------------------- |
 | Frontend | React 18, Vite, Material UI 7, react-router-dom 7, react-hook-form, Auth0 SDK |
-| Backend | NestJS, TypeORM, PostgreSQL 16 |
-| Auth | Auth0 (frontend SDK + backend token validation) |
-| Tooling | TypeScript 5.7, ESLint 9, Prettier 3 |
-| Node | >= 20 |
+| Backend  | NestJS, TypeORM, PostgreSQL 16                                                |
+| Auth     | Auth0 (frontend SDK + backend token validation)                               |
+| Tooling  | TypeScript 5.7, ESLint 9, Prettier 3                                          |
+| Node     | >= 20                                                                         |
 
 ## Domain entities (current)
 
@@ -53,15 +54,15 @@ Roughly, one frontend feature folder maps to one backend module of the same name
 
 ## Common commands
 
-| Command | What |
-|---|---|
-| `npm run dev` | Run web + api concurrently |
-| `npm run dev:web` | Web only (http://localhost:5173) |
-| `npm run dev:api` | API only (http://localhost:3001) |
-| `docker compose up -d` | Start Postgres |
-| `npm run migration:run` (in `apps/api`) | Apply TypeORM migrations |
-| `npm run lint` | Lint all workspaces |
-| `npm run format` | Prettier write |
+| Command                                 | What                             |
+| --------------------------------------- | -------------------------------- |
+| `npm run dev`                           | Run web + api concurrently       |
+| `npm run dev:web`                       | Web only (http://localhost:5173) |
+| `npm run dev:api`                       | API only (http://localhost:3001) |
+| `docker compose up -d`                  | Start Postgres                   |
+| `npm run migration:run` (in `apps/api`) | Apply TypeORM migrations         |
+| `npm run lint`                          | Lint all workspaces              |
+| `npm run format`                        | Prettier write                   |
 
 ## Related memories
 
