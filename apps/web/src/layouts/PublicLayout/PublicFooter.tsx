@@ -1,123 +1,99 @@
+import { FC } from 'react';
 import { Box, Button, IconButton, List, ListItem, Typography } from '@mui/material';
-import FacebookIcon from '@mui/icons-material/Facebook';
-import InstagramIcon from '@mui/icons-material/Instagram';
-import TwitterIcon from '@mui/icons-material/Twitter';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
-import MailOutlineIcon from '@mui/icons-material/MailOutline';
-import icon from '@/assets/images/diamond.png';
+import diamondIcon from '@/assets/images/diamond.png';
 import { Link } from 'react-router-dom';
-import { createSxStylesList } from '@/shared/helpers/theme.helpers';
-import { about, landingPage } from '@/routes/constants/urls.constant';
+import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
+import { PUBLIC_NAV_LINKS } from './constants/navLinks.const';
+import { CONTACTS } from './constants/contacts.const';
+import { SOCIAL_LINKS } from './constants/socialLinks.const';
 
-export const LINKS: { name: string; way: string }[] = [
-  { name: 'Home', way: landingPage },
-  { name: 'About us', way: about },
-  { name: 'Our offers', way: '' },
-  { name: 'Contact', way: '' },
-];
-const contacts = [
-  { icon: MailOutlineIcon, text: ' info@englishpro.com' },
-  { icon: LocalPhoneIcon, text: '+1 (555) 123-4567' },
-  { icon: LocationOnIcon, text: ' 123 Learning Street, Education City' },
-];
-
-const icons = [FacebookIcon, InstagramIcon, TwitterIcon, LinkedInIcon];
-function PublicFooter() {
+const PublicFooter: FC = () => {
   return (
-    <>
-      <Box component="footer" sx={sxStyles.footer}>
-        <Box sx={sxStyles.container}>
-          <Box sx={sxStyles.shortDesc}>
-            <Typography variant="h6" sx={{ color: 'white' }}>
-              Voqu
-            </Typography>
-            <Typography
-              variant="body2"
-              sx={{ color: 'white', textAlign: { xs: 'center', sm: 'start' } }}
-            >
-              Empowering learners to achieve English fluency through expert instruction and
-              innovative methods
-            </Typography>
-          </Box>
-          <Box sx={{ width: '300px' }}>
-            <Typography variant="h6" sx={{ color: 'white' }}>
-              Quick Links
-            </Typography>
-            <List sx={{ padding: 0 }}>
-              {LINKS.map((text, ind) => (
-                <ListItem key={ind}>
-                  <Button
-                    color="inherit"
-                    component={Link}
-                    sx={{ fontSize: '16px', textDecoration: 'none', color: 'white' }}
-                    to={text.way}
-                  >
-                    {text.name}
-                  </Button>
+    <Box component="footer" sx={sxStyles.footer}>
+      <Box sx={sxStyles.container}>
+        <Box sx={sxStyles.shortDesc}>
+          <Typography variant="h6" sx={sxStyles.whiteText}>
+            Voqu
+          </Typography>
+          <Typography variant="body2" sx={sxStyles.descriptionText}>
+            Empowering learners to achieve English fluency through expert instruction and
+            innovative methods
+          </Typography>
+        </Box>
+        <Box sx={sxStyles.columnWidth}>
+          <Typography variant="h6" sx={sxStyles.whiteText}>
+            Quick Links
+          </Typography>
+          <List sx={sxStyles.flatList}>
+            {PUBLIC_NAV_LINKS.map((link) => (
+              <ListItem key={link.name}>
+                <Button color="inherit" component={Link} sx={sxStyles.linkButton} to={link.url}>
+                  {link.name}
+                </Button>
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+        <Box sx={sxStyles.columnWidth}>
+          <Typography variant="h6" sx={sxStyles.whiteText}>
+            Contact Us
+          </Typography>
+          <List sx={sxStyles.flatList}>
+            {CONTACTS.map((contact) => {
+              const Icon = contact.icon;
+              return (
+                <ListItem key={contact.text}>
+                  <Icon sx={sxStyles.contactIcon} />
+                  <Typography variant="body2" sx={sxStyles.contact}>
+                    {contact.text}
+                  </Typography>
                 </ListItem>
-              ))}
-            </List>
-          </Box>
-          <Box sx={{ width: '300px' }}>
-            <Typography variant="h6" sx={{ color: 'white' }}>
-              Contact Us
-            </Typography>
-            <List sx={{ padding: 0 }}>
-              {contacts.map((el, ind) => {
-                const Icon = el.icon;
+              );
+            })}
+          </List>
+        </Box>
+        <Box sx={sxStyles.followCon}>
+          <Typography variant="h6" sx={sxStyles.whiteText}>
+            Follow Us
+          </Typography>
+          <Box>
+            <List sx={sxStyles.socialList}>
+              {SOCIAL_LINKS.map((social) => {
+                const Icon = social.icon;
                 return (
-                  <ListItem key={ind}>
-                    <Icon sx={{ fill: 'white', pr: '5px' }} />
-                    <Typography variant="body2" sx={sxStyles.contact}>
-                      {el.text}
-                    </Typography>
+                  <ListItem key={social.name} component="a" href={social.url}>
+                    <IconButton sx={sxStyles.iconButton}>
+                      <Icon />
+                    </IconButton>
                   </ListItem>
                 );
               })}
             </List>
           </Box>
-          <Box sx={sxStyles.followCon}>
-            <Typography variant="h6" sx={{ color: 'white' }}>
-              Follow Us
-            </Typography>
-            <Box>
-              <List sx={{ display: 'flex', gap: '10px' }}>
-                {icons.map((Icon, ind) => (
-                  <ListItem key={ind} component="a" href="https://www.deepl.com/uk/translator">
-                    <IconButton sx={sxStyles.iconButton}>
-                      <Icon />
-                    </IconButton>
-                  </ListItem>
-                ))}
-              </List>
-            </Box>
-          </Box>
-        </Box>
-        <Box sx={sxStyles.icon}>
-          <Box sx={sxStyles.decorationCon}>
-            <Box sx={{ width: '60px', height: '1px', backgroundColor: '#AA9F96' }}></Box>
-            <Box component="img" src={icon} sx={{ width: '13px' }}></Box>
-            <Box sx={{ width: '60px', height: '1px', backgroundColor: '#AA9F96' }}></Box>
-          </Box>
-          <Typography variant="body2" sx={{ textAlign: 'center' }}>
-            © 2025 EnglishPro. All rights reserved.
-          </Typography>
         </Box>
       </Box>
-    </>
+      <Box sx={sxStyles.icon}>
+        <Box sx={sxStyles.decorationCon}>
+          <Box sx={sxStyles.decorationLine} />
+          <Box component="img" src={diamondIcon} sx={sxStyles.decorationIcon} />
+          <Box sx={sxStyles.decorationLine} />
+        </Box>
+        <Typography variant="body2" sx={sxStyles.copyright}>
+          © 2025 Voqu. All rights reserved.
+        </Typography>
+      </Box>
+    </Box>
   );
-}
+};
 
 const sxStyles = createSxStylesList({
-  footer: {
-    backgroundColor: '#71677D',
+  footer: (theme) => ({
+    backgroundColor: theme.palette.primary.main,
     width: 1,
     py: '40px',
     px: '20px',
-    borderTop: '5px solid grey',
-  },
+    borderTop: `5px solid ${theme.palette.divider}`,
+  }),
   container: {
     width: 1,
     display: 'flex',
@@ -132,41 +108,48 @@ const sxStyles = createSxStylesList({
     alignItems: { xs: 'center', sm: 'flex-start' },
     flexDirection: 'column',
   },
-  contact: {
+  whiteText: (theme) => ({ color: theme.palette.common.white }),
+  descriptionText: (theme) => ({
+    color: theme.palette.common.white,
+    textAlign: { xs: 'center', sm: 'start' },
+  }),
+  columnWidth: { width: '300px' },
+  flatList: { padding: 0 },
+  linkButton: (theme) => ({
     fontSize: '16px',
     textDecoration: 'none',
-    color: 'white',
+    color: theme.palette.common.white,
+  }),
+  contactIcon: (theme) => ({ fill: theme.palette.common.white, pr: '5px' }),
+  contact: (theme) => ({
+    fontSize: '16px',
+    textDecoration: 'none',
+    color: theme.palette.common.white,
     padding: 0,
-  },
+  }),
   followCon: {
     width: '300px',
     display: { xs: 'flex', sm: 'inline' },
     alignItems: { xs: 'center', sm: 'start' },
     flexDirection: 'column',
   },
-  iconButton: {
-    backgroundColor: 'grey',
+  socialList: { display: 'flex', gap: '10px' },
+  iconButton: (theme) => ({
+    backgroundColor: theme.palette.divider,
     cursor: 'pointer',
-    '& svg': {
-      color: 'white',
-      transition: 'color 0.3s',
-    },
-
+    '& svg': { color: theme.palette.common.white, transition: 'color 0.3s' },
     '&:hover': {
-      backgroundColor: 'white',
-
-      '& svg': {
-        color: 'grey',
-      },
+      backgroundColor: theme.palette.common.white,
+      '& svg': { color: theme.palette.divider },
     },
-  },
-  icon: {
-    borderTop: '2.5px solid grey',
+  }),
+  icon: (theme) => ({
+    borderTop: `2.5px solid ${theme.palette.divider}`,
     width: '100%',
     textAlign: 'center',
     py: '30px',
-    color: 'white',
-  },
+    color: theme.palette.common.white,
+  }),
   decorationCon: {
     display: 'flex',
     gap: '5px',
@@ -176,6 +159,13 @@ const sxStyles = createSxStylesList({
     width: '140px',
     flexDirection: { xs: 'column', md: 'row' },
   },
+  decorationLine: (theme) => ({
+    width: '60px',
+    height: '1px',
+    backgroundColor: theme.palette.tertiary.main,
+  }),
+  decorationIcon: { width: '13px' },
+  copyright: { textAlign: 'center' },
 });
 
 export default PublicFooter;

@@ -1,22 +1,25 @@
-import CustomizedAccordions from '@/shared/components/Accordion/Accordion';
+import { FC } from 'react';
 import { Box, Typography } from '@mui/material';
+import LevelsAccordion from '@/features/levels/components/LevelsAccordion';
+import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 
-function LevelsDescription() {
+const LevelsDescriptionSection: FC = () => {
   return (
     <>
-      <Box sx={styles.main}>
+      <Box sx={sxStyles.main}>
         <Typography variant="h4">CEFR Proficiency Levels</Typography>
         <Typography variant="body1" color="primary">
-          The Common European Framework of Reference provides a standardized way to measure language
-          proficiency. Explore each level to understand your current standing and plan your learning
-          path.
+          The Common European Framework of Reference provides a standardized way to measure
+          language proficiency. Explore each level to understand your current standing and plan
+          your learning path.
         </Typography>
       </Box>
-      <CustomizedAccordions />
+      <LevelsAccordion />
     </>
   );
-}
-const styles = {
+};
+
+const sxStyles = createSxStylesList({
   main: {
     display: 'flex',
     py: '30px',
@@ -25,9 +28,9 @@ const styles = {
     justifyContent: 'space-around',
     textAlign: 'center',
     gap: '40px',
-    width: '65%',
+    width: { xs: 1, md: '65%' },
     margin: '0 auto',
   },
-};
+});
 
-export default LevelsDescription;
+export default LevelsDescriptionSection;

@@ -1,15 +1,27 @@
+import { ChangeEvent, FC } from 'react';
 import { InputAdornment, TextField } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
+
 type SearchInputProps = {
-  setEnteredValue: any;
+  onSearchChange: (value: string) => void;
+  placeholder?: string;
 };
-function SearchInput({ setEnteredValue }: SearchInputProps) {
+
+const SearchInput: FC<SearchInputProps> = ({
+  onSearchChange,
+  placeholder = 'Search courses...',
+}) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    onSearchChange(event.target.value);
+  };
+
   return (
     <TextField
       size="small"
       variant="outlined"
-      label="Search courses..."
-      sx={{ width: '75%', borderRadius: '30px' }}
+      label={placeholder}
+      sx={sxStyles.field}
       slotProps={{
         input: {
           startAdornment: (
@@ -19,8 +31,13 @@ function SearchInput({ setEnteredValue }: SearchInputProps) {
           ),
         },
       }}
-      onChange={(value)=>{setEnteredValue(value.target.value)}}
-    ></TextField>
+      onChange={handleChange}
+    />
   );
-}
+};
+
+const sxStyles = createSxStylesList({
+  field: { width: 1, borderRadius: '30px' },
+});
+
 export default SearchInput;

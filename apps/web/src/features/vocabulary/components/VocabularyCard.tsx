@@ -1,143 +1,85 @@
+import { FC, useState } from 'react';
 import { Box, Button, Card, CardActions, CardContent, Typography } from '@mui/material';
-import { useState } from 'react';
-import SliderIndicator from '@/shared/components/SliderIndicator/SliderIndicator';
-import { Word } from '@/features/vocabulary/types/word.types';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
-import Pagination from '@/shared/components/Pagination/Pagination';
-const words: Word[] = [
-  {
-    word: 'Serendipity',
-    transcription: '/ˌserənˈdɪpəti/',
-    partOfSpeech: 'noun',
-    audio: 'audio',
-    definition: 'The occurrence of events by chance in a happy or beneficial way',
-    example: '"A fortunate stroke of serendipity brought us together."',
-    synonyms: ['chance', 'fortune', 'luck'],
-  },
-  {
-    word: 'Eloquent',
-    transcription: '/ˈeləkwənt/',
-    partOfSpeech: 'adjective',
-    audio: 'audio',
-    definition: 'Fluent or persuasive in speaking or writing',
-    example: '"She gave an eloquent speech at the ceremony."',
-    synonyms: ['articulate', 'fluent', 'persuasive'],
-  },
-];
-let wordsAmount = words.length;
+import SliderIndicator from './SliderIndicator';
+import StepCounter from '@/shared/components/StepCounter/StepCounter';
+import { MOCK_WORDS } from '../constants/mockWords.const';
+import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 
-function VocabularyCard() {
+const VocabularyCard: FC = () => {
   const [activeWordNumber, setActiveWordNumber] = useState<number>(0);
+  const wordsAmount = MOCK_WORDS.length;
+  const activeWord = MOCK_WORDS[activeWordNumber];
 
-  function handlePrevWord() {
+  const handlePrevWord = () => {
     if (activeWordNumber > 0) {
       setActiveWordNumber((prev) => prev - 1);
     }
-  }
-  function handleNextWord() {
-    if (activeWordNumber < words.length - 1) {
+  };
+
+  const handleNextWord = () => {
+    if (activeWordNumber < wordsAmount - 1) {
       setActiveWordNumber((prev) => prev + 1);
     }
-  }
-  const activeWordData = words[activeWordNumber];
+  };
+
   return (
-    <Card
-      sx={{
-        width: { xs: 1, md: '50%' },
-        border: '3px, solid grey',
-        borderRadius: '10px',
-        py: '20px',
-      }}
-    >
-      <CardContent sx={{ display: 'flex', width: 1, justifyContent: 'space-between' }}>
-        <Pagination activeWordNumber={activeWordNumber} wordsAmount={wordsAmount} />
-        <SliderIndicator words={words} />
+    <Card sx={sxStyles.card}>
+      <CardContent sx={sxStyles.topRow}>
+        <StepCounter activeIndex={activeWordNumber} total={wordsAmount} />
+        <SliderIndicator total={wordsAmount} activeIndex={activeWordNumber} />
       </CardContent>
 
-      <CardContent sx={{ px: '20px', mt: '20px' }}>
-        <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-          <Typography variant="h4">{activeWordData.word}</Typography>
-          <VolumeUpIcon fontSize="large" sx={{ fill: '#71677D', ':hover': { fill: '#37123c' } }} />
+      <CardContent sx={sxStyles.bodyContent}>
+        <Box sx={sxStyles.wordHeader}>
+          <Typography variant="h4">{activeWord.word}</Typography>
+          <VolumeUpIcon fontSize="large" sx={sxStyles.volumeIcon} />
         </Box>
-        <Box sx={{ display: 'flex', gap: '10px', mt: '13px' }}>
-          <Typography variant="body1">{activeWordData.transcription}</Typography>
-          <Box sx={{ px: '13px', border: '1px solid grey', borderRadius: '7px', fontSize: '14px' }}>
-            {activeWordData.partOfSpeech}
-          </Box>
+        <Box sx={sxStyles.transcriptionRow}>
+          <Typography variant="body1">{activeWord.transcription}</Typography>
+          <Box sx={sxStyles.partOfSpeech}>{activeWord.partOfSpeech}</Box>
         </Box>
-        <Box sx={{ height: '3.5px', backgroundColor: 'grey', width: 1, my: '40px' }} />
+        <Box sx={sxStyles.divider} />
         <Box>
           <Typography color="secondary" variant="body3">
             Description
           </Typography>
-          <Typography variant="body1" sx={{ color: '#71677D' }}>
-            {activeWordData.definition}
+          <Typography variant="body1" sx={sxStyles.definitionText}>
+            {activeWord.definition}
           </Typography>
         </Box>
 
-        <Box sx={{ mt: '25px' }}>
+        <Box sx={sxStyles.section}>
           <Typography variant="body3" color="secondary">
             Example
           </Typography>
-          <Box sx={{ display: 'flex', gap: '20px' }}>
-            <Box sx={{ width: '5px', height: '27px', backgroundColor: 'grey' }}></Box>
+          <Box sx={sxStyles.exampleRow}>
+            <Box sx={sxStyles.exampleBar} />
             <Typography color="primary" variant="body1">
-              {activeWordData.example}
+              {activeWord.example}
             </Typography>
           </Box>
         </Box>
-        <Box sx={{ mt: '25px' }}>
+        <Box sx={sxStyles.section}>
           <Typography variant="body3">Synonyms</Typography>
-          <Box sx={{ display: 'flex', gap: '10px', flexWrap: 'wrap', mt: '10px' }}>
-            {activeWordData.synonyms.map((synonym) => {
-              return (
-                <Box
-                  sx={{
-                    px: '13px',
-                    py: '5px',
-                    border: '1px solid grey',
-                    borderRadius: '7px',
-                    fontSize: '14px',
-                  }}
-                >
-                  {synonym}
-                </Box>
-              );
-            })}
+          <Box sx={sxStyles.synonymsRow}>
+            {activeWord.synonyms.map((synonym) => (
+              <Box key={synonym} sx={sxStyles.synonymChip}>
+                {synonym}
+              </Box>
+            ))}
           </Box>
         </Box>
-        <Box sx={{ height: '3.5px', backgroundColor: 'grey', width: 1, my: '30px' }} />
+        <Box sx={sxStyles.dividerBottom} />
       </CardContent>
-      <CardActions
-        sx={{
-          display: 'flex',
-          px: '20px',
-          width: 1,
-          gap: '10px',
-          flexDirection: { xs: 'column', sm: 'row' },
-        }}
-      >
-        <Button
-          variant="outlined"
-          onClick={handlePrevWord}
-          sx={{
-            width: { xs: 1, md: '50%' },
-            height: '50px',
-            border: '2px solid #71677D',
-            '&:hover': { backgroundColor: '#71677D', color: 'white' },
-          }}
-        >
+      <CardActions sx={sxStyles.actions}>
+        <Button variant="outlined" onClick={handlePrevWord} sx={sxStyles.prevButton}>
           Previous
         </Button>
         <Button
           color="tertiary"
           variant="contained"
-          sx={{
-            width: { xs: 1, md: '50%' },
-            height: '50px',
-            color: 'white',
-            '&:hover': { backgroundColor: '#71677D' },
-          }}
+          sx={sxStyles.nextButton}
           onClick={handleNextWord}
         >
           Next
@@ -145,6 +87,79 @@ function VocabularyCard() {
       </CardActions>
     </Card>
   );
-}
+};
+
+const sxStyles = createSxStylesList({
+  card: (theme) => ({
+    width: { xs: 1, md: '50%' },
+    border: `3px solid ${theme.palette.divider}`,
+    borderRadius: '10px',
+    py: '20px',
+  }),
+  topRow: { display: 'flex', width: 1, justifyContent: 'space-between' },
+  bodyContent: { px: '20px', mt: '20px' },
+  wordHeader: { display: 'flex', gap: '10px', alignItems: 'center' },
+  volumeIcon: (theme) => ({
+    fill: theme.palette.primary.main,
+    ':hover': { fill: theme.palette.secondary.main },
+  }),
+  transcriptionRow: { display: 'flex', gap: '10px', mt: '13px' },
+  partOfSpeech: (theme) => ({
+    px: '13px',
+    border: `1px solid ${theme.palette.divider}`,
+    borderRadius: '7px',
+    fontSize: '14px',
+  }),
+  divider: (theme) => ({
+    height: '3.5px',
+    backgroundColor: theme.palette.divider,
+    width: 1,
+    my: '40px',
+  }),
+  dividerBottom: (theme) => ({
+    height: '3.5px',
+    backgroundColor: theme.palette.divider,
+    width: 1,
+    my: '30px',
+  }),
+  definitionText: (theme) => ({ color: theme.palette.primary.main }),
+  section: { mt: '25px' },
+  exampleRow: { display: 'flex', gap: '20px' },
+  exampleBar: (theme) => ({
+    width: '5px',
+    height: '27px',
+    backgroundColor: theme.palette.divider,
+  }),
+  synonymsRow: { display: 'flex', gap: '10px', flexWrap: 'wrap', mt: '10px' },
+  synonymChip: (theme) => ({
+    px: '13px',
+    py: '5px',
+    border: `1px solid ${theme.palette.divider}`,
+    borderRadius: '7px',
+    fontSize: '14px',
+  }),
+  actions: {
+    display: 'flex',
+    px: '20px',
+    width: 1,
+    gap: '10px',
+    flexDirection: { xs: 'column', sm: 'row' },
+  },
+  prevButton: (theme) => ({
+    width: { xs: 1, md: '50%' },
+    height: '50px',
+    border: `2px solid ${theme.palette.primary.main}`,
+    '&:hover': {
+      backgroundColor: theme.palette.primary.main,
+      color: theme.palette.common.white,
+    },
+  }),
+  nextButton: (theme) => ({
+    width: { xs: 1, md: '50%' },
+    height: '50px',
+    color: theme.palette.common.white,
+    '&:hover': { backgroundColor: theme.palette.primary.main },
+  }),
+});
 
 export default VocabularyCard;

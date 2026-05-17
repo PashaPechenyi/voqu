@@ -1,26 +1,33 @@
+import { FC } from 'react';
 import { Outlet } from 'react-router-dom';
-import { Box, Container, ThemeProvider } from '@mui/material';
-import { theme } from '@/theme';
+import { Box, Container } from '@mui/material';
 import PublicHeader from './PublicHeader';
 import PublicFooter from './PublicFooter';
+import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 
-export function PublicLayout() {
+const PublicLayout: FC = () => {
   return (
-    <ThemeProvider theme={theme}>
-      <Box
-        sx={{
-          minHeight: '100vh',
-          display: 'flex',
-          flexDirection: 'column',
-          backgroundColor: '#f6f1ee',
-        }}
-      >
-        <PublicHeader />
-        <Container component="main" sx={{ flex: 1, py: 4 }}>
-          <Outlet />
-        </Container>
-        <PublicFooter />
-      </Box>
-    </ThemeProvider>
+    <Box sx={sxStyles.root}>
+      <PublicHeader />
+      <Container component="main" sx={sxStyles.content}>
+        <Outlet />
+      </Container>
+      <PublicFooter />
+    </Box>
   );
-}
+};
+
+const sxStyles = createSxStylesList({
+  root: (theme) => ({
+    minHeight: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
+    backgroundColor: theme.palette.background.paper,
+  }),
+  content: {
+    flex: 1,
+    py: 4,
+  },
+});
+
+export default PublicLayout;

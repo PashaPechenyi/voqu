@@ -1,0 +1,20 @@
+import { Course } from '../types/course.type';
+import { CourseStatus } from '../enums/courseStatus.enum';
+
+export const updateCourseStatusReq = async (course: Course): Promise<void> => {
+  const nextStatus =
+    course.status === CourseStatus.Draft ? CourseStatus.Published : CourseStatus.Draft;
+
+  const body = {
+    LevelId: course.level?.id,
+    name: course.name,
+    status: nextStatus,
+  };
+
+  const response = await fetch(`/api/course/${course.id}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  if (!response.ok) throw new Error('Failed to update course status');
+};

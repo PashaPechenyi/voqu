@@ -1,73 +1,52 @@
+import { FC } from 'react';
 import { Autocomplete, Grid, TextField } from '@mui/material';
-
 import { Control, Controller } from 'react-hook-form';
-import { ERROR_MESSAGE } from '../constants/errorMessage.const';
-import { COURSE_STATUSES_LIST } from '../constants/courseStatus.const';
-import { capitalizeFirstLetter } from '@/shared/helpers/string.helpers';
-import { CourseFormValues } from './CourseAddModal';
+import { FORM_VALIDATION_ERRORS } from '@/shared/constants/formValidationErrors.const';
+import { COURSE_STATUSES_LIST } from '../constants/courseStatusesList.const';
+import { capitalizeWords } from '@/shared/helpers/string.helper';
+import { CourseFormValues } from '../types/courseForm.type';
 import { Level } from '@/features/levels/types/level.type';
+import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 
 type CourseModalFormProps = {
-  control: Control<CourseFormValues, any, CourseFormValues>;
+  control: Control<CourseFormValues>;
   levelsList: Level[];
 };
 
-function CourseModalForm({ control, levelsList }: CourseModalFormProps) {
+const CourseModalForm: FC<CourseModalFormProps> = ({ control, levelsList }) => {
   return (
     <Grid container spacing={2}>
       <Grid size={12}>
         <Controller
           control={control}
           name="name"
-          rules={{ required: { value: true, message: ERROR_MESSAGE.message } }}
+          rules={{ required: { value: true, message: FORM_VALIDATION_ERRORS.requiredField } }}
           render={({ field, formState: { errors } }) => (
             <TextField
-              placeholder="e.g., AdvancedGrammar Mastery"
+              placeholder="e.g., Advanced Grammar Mastery"
               label="Course title"
               size="small"
               variant="outlined"
-              sx={{ width: 1, borderRadius: '30px' }}
+              sx={sxStyles.field}
               error={!!errors.name}
               helperText={errors.name?.message}
               {...field}
-            ></TextField>
+            />
           )}
         />
       </Grid>
-
-      {/* <Grid size={12}>
-        <Controller
-          control={control}
-          name="description"
-          rules={{ required: { value: true, message: ERROR_MESSAGE.message } }}
-          render={({ field, formState: { errors } }) => (
-            <TextField
-              label="Description"
-              variant="outlined"
-              rows={4}
-              error={!!errors.title}
-              helperText={errors.title?.message}
-              sx={{ width: 1, borderRadius: '30px' }}
-              {...field}
-            ></TextField>
-          )}
-        />
-      </Grid> */}
-
       <Grid size={6}>
         <Controller
           control={control}
           name="level"
-          rules={{ required: { value: true, message: ERROR_MESSAGE.message } }}
+          rules={{ required: { value: true, message: FORM_VALIDATION_ERRORS.requiredField } }}
           render={({ field: { onChange, value }, formState: { errors } }) => (
             <Autocomplete
               options={levelsList}
               getOptionLabel={(option) => `${option.cefrLevel} - ${option.name}`}
-              sx={{ width: 1 }}
+              sx={sxStyles.fullWidth}
               size="small"
-              onChange={(_, newValue) => {
-                onChange(newValue);
-              }}
+              onChange={(_, newValue) => onChange(newValue)}
               value={value}
               renderInput={(params) => (
                 <TextField {...params} label="Level" error={!!errors.level} />
@@ -76,22 +55,19 @@ function CourseModalForm({ control, levelsList }: CourseModalFormProps) {
           )}
         />
       </Grid>
-
       <Grid size={6}>
         <Controller
           control={control}
           name="status"
-          rules={{ required: { value: true, message: ERROR_MESSAGE.message } }}
+          rules={{ required: { value: true, message: FORM_VALIDATION_ERRORS.requiredField } }}
           render={({ field: { onChange, value }, formState: { errors } }) => (
             <Autocomplete
               options={COURSE_STATUSES_LIST}
-              sx={{ width: 1 }}
+              sx={sxStyles.fullWidth}
               size="small"
-              onChange={(_, newValue) => {
-                onChange(newValue);
-              }}
+              onChange={(_, newValue) => onChange(newValue)}
               value={value}
-              getOptionLabel={(option) => capitalizeFirstLetter(option)}
+              getOptionLabel={(option) => capitalizeWords(option)}
               renderInput={(params) => (
                 <TextField {...params} label="Status" error={!!errors.status} />
               )}
@@ -99,25 +75,13 @@ function CourseModalForm({ control, levelsList }: CourseModalFormProps) {
           )}
         />
       </Grid>
-      {/* <Grid size={12}>
-        <Controller
-          control={control}
-          name="link"
-          render={({ field }) => (
-            <TextField
-              label="Image URL (optional)"
-              size="small"
-              variant="outlined"
-              placeholder="https://..."
-              rows={4}
-              sx={{ width: 1, borderRadius: '30px' }}
-              {...field}
-            ></TextField>
-          )}
-        />
-      </Grid> */}
     </Grid>
   );
-}
+};
+
+const sxStyles = createSxStylesList({
+  field: { width: 1, borderRadius: '30px' },
+  fullWidth: { width: 1 },
+});
 
 export default CourseModalForm;

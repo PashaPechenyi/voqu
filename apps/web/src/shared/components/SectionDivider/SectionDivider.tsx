@@ -1,16 +1,19 @@
+import { FC } from 'react';
 import { Box } from '@mui/material';
-import icon from '@/assets/images/diamond.png';
+import diamondIcon from '@/assets/images/diamond.png';
+import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 
-function SectionDivider() {
+const SectionDivider: FC = () => {
   return (
-    <Box sx={styles.container}>
-      <Box sx={{ width: '50%', height: '1.5px', backgroundColor: '#AA9F96' }}></Box>
-      <Box component="img" src={icon} sx={{ width: '13px' }}></Box>
-      <Box sx={{ width: '50%', height: '1.5px', backgroundColor: '#AA9F96' }}></Box>
+    <Box sx={sxStyles.container}>
+      <Box sx={sxStyles.line} />
+      <Box component="img" src={diamondIcon} sx={sxStyles.icon} />
+      <Box sx={sxStyles.line} />
     </Box>
   );
-}
-const styles = {
+};
+
+const sxStyles = createSxStylesList({
   container: {
     display: 'flex',
     gap: '5px',
@@ -20,6 +23,12 @@ const styles = {
     width: '200px',
     flexDirection: { xs: 'column', md: 'row' },
   },
-};
+  line: (theme) => ({
+    width: '50%',
+    height: '1.5px',
+    backgroundColor: theme.palette.tertiary.main,
+  }),
+  icon: { width: '13px' },
+});
 
 export default SectionDivider;

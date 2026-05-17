@@ -1,4 +1,4 @@
-import Table from '@mui/material/Table';
+import MuiTable from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
@@ -6,31 +6,32 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
-type Column<TRow extends Record<string, any>> = {
+export type Column<TRow extends Record<string, unknown>> = {
   key: keyof TRow;
   name: string;
-  valueGetter?: (row: TRow) => any;
-  renderCell?: (row: TRow, value: any) => any;
+  valueGetter?: (row: TRow) => unknown;
+  renderCell?: (row: TRow, value: unknown) => React.ReactNode;
 };
 
-function Table1<TRow extends Record<string, any>>({
+type TableProps<TRow extends Record<string, unknown>> = {
+  rows: TRow[];
+  columns: Column<TRow>[];
+  rowsId: (row: TRow) => string;
+};
+
+const Table = <TRow extends Record<string, unknown>>({
   rows,
   columns,
   rowsId,
-}: {
-  rows: TRow[];
-  columns: Column<TRow>[];
-  rowsId: (row: TRow) => any;
-}) {
-  
+}: TableProps<TRow>) => {
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <MuiTable sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            {columns.map((el, ind) => (
-              <TableCell key={ind} align="right">
-                {el.name}
+            {columns.map((col) => (
+              <TableCell key={String(col.key)} align="right">
+                {col.name}
               </TableCell>
             ))}
           </TableRow>
@@ -39,20 +40,18 @@ function Table1<TRow extends Record<string, any>>({
           {rows.map((row) => (
             <TableRow key={rowsId(row)} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
               {columns.map(({ valueGetter, key, renderCell }) => (
-                <TableCell key={key as any} align="right">
+                <TableCell key={String(key)} align="right">
                   {renderCell
                     ? renderCell(row, valueGetter ? valueGetter(row) : row[key])
-                    : valueGetter
-                      ? valueGetter(row)
-                      : row[key]}
+                    : ((valueGetter ? valueGetter(row) : row[key]) as React.ReactNode)}
                 </TableCell>
               ))}
             </TableRow>
           ))}
         </TableBody>
-      </Table>
+      </MuiTable>
     </TableContainer>
   );
-}
+};
 
-export default Table1;
+export default Table;

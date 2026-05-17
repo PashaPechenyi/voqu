@@ -1,22 +1,29 @@
+import { FC } from 'react';
 import { Box, Typography } from '@mui/material';
-import { Style } from './LessonStructurePhase';
+import { SvgIconComponent } from '@mui/icons-material';
+import { LessonCardStyle } from '../types/lessonCardStyle.type';
+import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
+
 type LessonStructureCardProps = {
-  icon: any;
+  icon: SvgIconComponent;
   title: string;
   description: string;
-
-  cardStyles: Style;
+  cardStyles: LessonCardStyle;
 };
 
-function LessonStructureCard({ icon, title, description, cardStyles }: LessonStructureCardProps) {
-  const Icon = icon;
+const LessonStructureCard: FC<LessonStructureCardProps> = ({
+  icon: Icon,
+  title,
+  description,
+  cardStyles,
+}) => {
   return (
-    <Box sx={{ alignItems: cardStyles.alignItems, width: cardStyles.width, ...styles.card }}>
-      <Box sx={styles.header}>
-        <Box color="secondary" sx={{ order: cardStyles.order, ...styles.icon }}>
-          <Icon sx={{ fill: 'white', fontSize: '28px' }} />
+    <Box sx={[sxStyles.card, { alignItems: cardStyles.alignItems, width: cardStyles.width }]}>
+      <Box sx={sxStyles.header}>
+        <Box sx={[sxStyles.icon, { order: cardStyles.order }]}>
+          <Icon sx={sxStyles.iconSvg} />
         </Box>
-        <Typography variant="h6" sx={{ textAlign: cardStyles.textAlign, mx: '10px', order: 2 }}>
+        <Typography variant="h6" sx={[sxStyles.title, { textAlign: cardStyles.textAlign }]}>
           {title}
         </Typography>
       </Box>
@@ -25,28 +32,30 @@ function LessonStructureCard({ icon, title, description, cardStyles }: LessonStr
       </Typography>
     </Box>
   );
-}
-const styles = {
+};
+
+const sxStyles = createSxStylesList({
   header: {
-    with: '60px',
+    width: '60px',
     height: '60px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  icon: {
+  icon: (theme) => ({
     width: '50px',
     height: '50px',
     borderRadius: '100%',
-    backgroundColor: '#37123c',
-
+    backgroundColor: theme.palette.secondary.main,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  card: {
+  }),
+  iconSvg: (theme) => ({ fill: theme.palette.common.white, fontSize: '28px' }),
+  title: { mx: '10px', order: 2 },
+  card: (theme) => ({
     p: '15px',
-    border: '1.5px, solid grey',
+    border: `1.5px solid ${theme.palette.divider}`,
     borderRadius: '10px',
     display: 'flex',
     flexDirection: 'column',
@@ -54,7 +63,7 @@ const styles = {
     height: '200px',
     gap: '20px',
     my: '20px',
-  },
-};
+  }),
+});
 
 export default LessonStructureCard;

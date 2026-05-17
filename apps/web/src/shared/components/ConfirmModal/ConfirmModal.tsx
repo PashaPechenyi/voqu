@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import {
   Button,
   Dialog,
@@ -7,38 +8,29 @@ import {
   DialogTitle,
   Typography,
 } from '@mui/material';
+import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 
 type ConfirmModalProps = {
   title: string;
   subtitle: string;
-  onDelete?: () => void;
   isOpen: boolean;
   buttonText: string;
-  close: () => void;
-  deleteFunc?:() => void;
+  onClose: () => void;
+  onConfirm?: () => void;
 };
 
-function ConfirmModal({ title, subtitle, isOpen, buttonText, close, deleteFunc}: ConfirmModalProps) {
-  // const handleClose = () => {
-  //   setIsOpen(false);
-  // };
+const ConfirmModal: FC<ConfirmModalProps> = ({
+  title,
+  subtitle,
+  isOpen,
+  buttonText,
+  onClose,
+  onConfirm,
+}) => {
   return (
-    <Dialog
-      open={isOpen}
-      onClose={close}
-      slotProps={{
-        paper: {
-          sx: {
-            p: '20px',
-            borderRadius: '20px',
-            border: '4px solid red',
-            width: 1,
-          },
-        },
-      }}
-    >
+    <Dialog open={isOpen} onClose={onClose} slotProps={{ paper: { sx: sxStyles.paper } }}>
       <DialogTitle>
-        <Typography variant="h4" color="red">
+        <Typography variant="h4" color="error">
           {title}
         </Typography>
       </DialogTitle>
@@ -46,13 +38,30 @@ function ConfirmModal({ title, subtitle, isOpen, buttonText, close, deleteFunc}:
         <DialogContentText>{subtitle}</DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={close} sx={{ p: '10px' }}>
+        <Button onClick={onClose} sx={sxStyles.cancelButton}>
           Cancel
         </Button>
-        <Button onClick={deleteFunc} sx={{ backgroundColor: 'red', color: 'white', p: '10px' }}>{buttonText}</Button>
+        <Button onClick={onConfirm} sx={sxStyles.confirmButton}>
+          {buttonText}
+        </Button>
       </DialogActions>
     </Dialog>
   );
-}
+};
+
+const sxStyles = createSxStylesList({
+  paper: (theme) => ({
+    p: '20px',
+    borderRadius: '20px',
+    border: `4px solid ${theme.palette.error.main}`,
+    width: 1,
+  }),
+  cancelButton: { p: '10px' },
+  confirmButton: (theme) => ({
+    backgroundColor: theme.palette.error.main,
+    color: theme.palette.common.white,
+    p: '10px',
+  }),
+});
 
 export default ConfirmModal;

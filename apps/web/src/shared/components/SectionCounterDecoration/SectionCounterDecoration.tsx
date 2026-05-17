@@ -1,58 +1,56 @@
+import { FC } from 'react';
 import { Box } from '@mui/material';
+import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 
 type SectionCounterDecorationProps = {
-  ind: number;
+  index: number;
 };
 
-function SectionCounterDecoration({ ind }: SectionCounterDecorationProps) {
+const SectionCounterDecoration: FC<SectionCounterDecorationProps> = ({ index }) => {
   return (
-    <Box
-      sx={{
-        width: '100px',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-    >
-      <Box
-        sx={{
-          height: '95px',
-          // my: -5,
-          width: '3px',
-          backgroundColor: 'grey',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      ></Box>
-      <Box
-        sx={{
-          width: '70px',
-          height: '70px',
-          borderRadius: '100%',
-          color: 'white',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: '#71677D',
-          border: '5px solid #dfdde1ff',
-        }}
-      >
-        {ind + 1}
-      </Box>
-      <Box
-        sx={{
-          height: '115px',
-          width: '3px',
-          backgroundColor: 'grey',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      ></Box>
+    <Box sx={sxStyles.root}>
+      <Box sx={sxStyles.upperLine} />
+      <Box sx={sxStyles.badge}>{index + 1}</Box>
+      <Box sx={sxStyles.lowerLine} />
     </Box>
   );
-}
+};
+
+const sxStyles = createSxStylesList({
+  root: {
+    width: '100px',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  upperLine: (theme) => ({
+    height: '95px',
+    width: '3px',
+    backgroundColor: theme.palette.divider,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  }),
+  badge: (theme) => ({
+    width: '70px',
+    height: '70px',
+    borderRadius: '100%',
+    color: theme.palette.common.white,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: theme.palette.primary.main,
+    border: `5px solid ${theme.palette.background.paper}`,
+  }),
+  lowerLine: (theme) => ({
+    height: '115px',
+    width: '3px',
+    backgroundColor: theme.palette.divider,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  }),
+});
 
 export default SectionCounterDecoration;

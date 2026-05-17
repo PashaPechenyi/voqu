@@ -1,75 +1,71 @@
+import { FC } from 'react';
 import Button from '@mui/material/Button';
-
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Typography } from '@mui/material';
-import { LessonTypeKey } from '../constants/lessonType.constant';
-import { Lesson } from '../types/lesson.types';
-import LessonModalForm from './LessonModalForm';
 import { useForm } from 'react-hook-form';
-
-//const LESSON_TYPES = ['grammar', 'reading', 'speaking', 'listening', 'quiz', 'test'];
+import { LessonFormValues } from '../types/lessonForm.type';
+import LessonModalForm from './LessonModalForm';
+import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 
 type LessonAddModalProps = {
   isOpen: boolean;
-  close: () => void;
-  lesson?: Lesson;
-  onclick?: (inputsValues: LessonFormValues) => void;
+  onClose: () => void;
+  onSubmit?: (values: LessonFormValues) => void;
 };
-export type LessonFormValues = {
-  title: string;
-  type: LessonTypeKey | null;
-};
-function getDefaultValues(value: LessonFormValues) {
-  return {
-    title: value.title || '',
-    type: null,
-  };
-}
 
-export default function LessonAddModal({ isOpen, close, lesson }: LessonAddModalProps) {
+const DEFAULT_VALUES: LessonFormValues = {
+  title: '',
+  type: null,
+};
+
+const LessonAddModal: FC<LessonAddModalProps> = ({ isOpen, onClose, onSubmit }) => {
   const { handleSubmit, control } = useForm<LessonFormValues>({
-    defaultValues: lesson && getDefaultValues(lesson),
+    defaultValues: DEFAULT_VALUES,
   });
 
   return (
-    <Dialog
-      open={isOpen}
-      onClose={close}
-      slotProps={{
-        paper: {
-          sx: {
-            p: '20px',
-            borderRadius: '20px',
-            border: '3px solid grey',
-            width: 1,
-          },
-        },
-      }}
-    >
+    <Dialog open={isOpen} onClose={onClose} slotProps={{ paper: { sx: sxStyles.paper } }}>
       <DialogTitle>
         <Typography variant="h4">Add Lesson</Typography>
       </DialogTitle>
       <DialogContent>
         <DialogContentText>
-          {' Create a new lesson. You can change lessons after adding lesson'}
+          Create a new lesson. You can change it after adding.
         </DialogContentText>
         <LessonModalForm control={control} />
       </DialogContent>
       <DialogActions>
-        <Button onClick={close} sx={{ p: '10px' }}>
+        <Button onClick={onClose} sx={sxStyles.cancelButton}>
           Cancel
         </Button>
         <Button
-          //onClick={handleSubmit()}
-          sx={{ backgroundColor: '#71677D', color: 'white', p: '10px' }}
+          onClick={onSubmit ? handleSubmit(onSubmit) : undefined}
+          sx={sxStyles.submitButton}
         >
-          {'Add lesson'}
+          Add lesson
         </Button>
       </DialogActions>
     </Dialog>
   );
-}
+};
+
+const sxStyles = createSxStylesList({
+  paper: (theme) => ({
+    p: '20px',
+    borderRadius: '20px',
+    border: `3px solid ${theme.palette.divider}`,
+    width: 1,
+  }),
+  cancelButton: { p: '10px' },
+  submitButton: (theme) => ({
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.common.white,
+    p: '10px',
+  }),
+});
+
+export default LessonAddModal;

@@ -1,18 +1,30 @@
-import { TMuiColors } from '@/shared/types/theme.types';
+import { useCallback } from 'react';
 import { useTheme } from '@mui/material';
+import { MuiColor } from '@/shared/types/sx.type';
 
-/**
- * Hook to resolve MUI color names to actual color values
- * @returns Function that converts MUI color name or CSS color value to CSS color value
- */
-const useResolveColor = () => {
+const PALETTE_KEYS: readonly MuiColor[] = [
+  'tertiary',
+  'primary',
+  'secondary',
+  'error',
+  'warning',
+  'info',
+  'success',
+];
+
+const isMuiColor = (color: string): color is MuiColor =>
+  (PALETTE_KEYS as readonly string[]).includes(color);
+
+export const useResolveColor = () => {
   const theme = useTheme();
 
-  const resolveColorFromPalette = (color: TMuiColors | string): string => {
-    return theme?.palette?.[color as TMuiColors]?.main || color;
-  };
+  const resolveColorFromPalette = useCallback(
+    (color: MuiColor | string): string => {
+      if (isMuiColor(color)) return theme.palette[color].main;
+      return color;
+    },
+    [theme],
+  );
 
   return { resolveColorFromPalette };
 };
-
-export default useResolveColor;

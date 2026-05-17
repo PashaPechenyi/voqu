@@ -1,99 +1,111 @@
+import { FC } from 'react';
 import { Button, Typography, CardContent, Card, CardHeader } from '@mui/material';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
+import StepCounter from '@/shared/components/StepCounter/StepCounter';
+import { AnswerVariant, Question } from '@/features/quiz/types/question.type';
+import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 
-import Pagination from '@/shared/components/Pagination/Pagination';
-import clsx from 'clsx';
-import { Question } from '@/features/quiz/types/question.types';
+const CLASSNAME = {
+  CORRECT: 'correct',
+  INCORRECT: 'incorrect',
+} as const;
 
-type QuizCardType = {
-  activeQuestionData: Question;
-  handleAnswerClick: (selectedAnswer: string) => void;
+type QuizCardProps = {
+  question: Question;
   activeQuestionNumber: number;
   questionsAmount: number;
-  handleNextQuestion: () => void;
-  usersAnswer: string | null;
+  selectedAnswerId: AnswerVariant['id'] | null;
+  onSelectAnswer: (id: AnswerVariant['id']) => void;
+  onNext: () => void;
 };
-function QuizCard({
-  activeQuestionData,
-  handleAnswerClick,
+
+const QuizCard: FC<QuizCardProps> = ({
+  question,
   activeQuestionNumber,
   questionsAmount,
-  handleNextQuestion,
-  usersAnswer,
-}: QuizCardType) {
+  selectedAnswerId,
+  onSelectAnswer,
+  onNext,
+}) => {
   return (
-    <Card sx={styles.card}>
+    <Card sx={sxStyles.card}>
       <CardHeader
-        sx={{ display: 'flex', alignItems: 'center' }}
-        avatar={<StarBorderIcon fontSize="large" sx={{ fill: '#71677D' }} />}
+        sx={sxStyles.cardHeader}
+        avatar={<StarBorderIcon fontSize="large" sx={sxStyles.avatarIcon} />}
         title={<Typography variant="h4">Practice Quiz</Typography>}
-        action={
-          <Pagination activeWordNumber={activeQuestionNumber} wordsAmount={questionsAmount} />
-        }
+        action={<StepCounter activeIndex={activeQuestionNumber} total={questionsAmount} />}
       />
-
-      <CardContent sx={styles.cardContent}>
-        <Typography variant="h6" sx={{ px: '28px', mt: '10px', mb: '20px' }}>
-          {activeQuestionData.question}
+      <CardContent sx={sxStyles.cardContent}>
+        <Typography variant="h6" sx={sxStyles.question}>
+          {question.question}
         </Typography>
-        {activeQuestionData.variants.map((variant, ind) => {
+        {question.variants.map((variant) => {
+          const isCorrect = selectedAnswerId && variant.id === question.answerId;
+          const isIncorrect =
+            selectedAnswerId &&
+            variant.id !== question.answerId &&
+            variant.id === selectedAnswerId;
+
           return (
             <Button
-              key={ind}
-              className={clsx({
-                correct: usersAnswer && variant == activeQuestionData.answer,
-                incorrect:
-                  usersAnswer && variant !== activeQuestionData.answer && variant == usersAnswer,
-              })}
-              sx={styles.options}
-              onClick={() => {
-                if (usersAnswer) return;
-                handleAnswerClick(variant);
-              }}
+              key={variant.id}
+              disabled={!!selectedAnswerId}
+              className={isCorrect ? CLASSNAME.CORRECT : isIncorrect ? CLASSNAME.INCORRECT : ''}
+              sx={sxStyles.options}
+              onClick={() => onSelectAnswer(variant.id)}
             >
-              <Typography sx={{ textAlign: 'start' }} variant="body1">
-                {variant}
+              <Typography sx={sxStyles.variantText} variant="body1">
+                {variant.text}
               </Typography>
             </Button>
           );
         })}
-
-        {usersAnswer && (
-          <Button
-            sx={{ width: 1, color: 'white', borderRadius: '10px', py: '10px', mt: '30px' }}
-            onClick={() => {
-              handleNextQuestion();
-            }}
-            variant="contained"
-            color="tertiary"
-          >
-            <Typography sx={{ textAlign: 'start' }} variant="body1">
+        {selectedAnswerId && (
+          <Button sx={sxStyles.nextButton} onClick={onNext} variant="contained" color="tertiary">
+            <Typography sx={sxStyles.variantText} variant="body1">
               Next
             </Typography>
           </Button>
         )}
       </CardContent>
     </Card>
-    //
   );
-}
-const styles = {
-  options: {
+};
+
+const sxStyles = createSxStylesList({
+  cardHeader: { display: 'flex', alignItems: 'center' },
+  avatarIcon: (theme) => ({ fill: theme.palette.primary.main }),
+  question: { px: '28px', mt: '10px', mb: '20px' },
+  variantText: { textAlign: 'start' },
+  nextButton: (theme) => ({
+    width: 1,
+    color: theme.palette.common.white,
+    borderRadius: '10px',
+    py: '10px',
+    mt: '30px',
+  }),
+  options: (theme) => ({
     width: '100%',
-    border: '3px solid grey',
+    border: `3px solid ${theme.palette.divider}`,
     borderRadius: '10px',
     py: '20px',
-    ':hover': { border: '3px solid #38353b' },
-    '&.correct': { border: '3px solid green', backgroundColor: '#00a90667' },
-    '&.incorrect': { border: '3px solid red', backgroundColor: '#de290082' },
-  },
-  card: {
+    ':hover': { border: `3px solid ${theme.palette.grey[800]}` },
+    [`&.${CLASSNAME.CORRECT}`]: {
+      border: `3px solid ${theme.palette.success.main}`,
+      backgroundColor: theme.palette.success.light,
+    },
+    [`&.${CLASSNAME.INCORRECT}`]: {
+      border: `3px solid ${theme.palette.error.main}`,
+      backgroundColor: theme.palette.error.light,
+    },
+  }),
+  card: (theme) => ({
     width: { xs: 1, md: '50%' },
-    border: '3px, solid grey',
+    border: `3px solid ${theme.palette.divider}`,
     borderRadius: '10px',
     py: '20px',
     px: '20px',
-  },
+  }),
   cardContent: {
     display: 'flex',
     flexDirection: 'column',
@@ -101,6 +113,6 @@ const styles = {
     alignItems: 'center',
     mt: '30px',
   },
-};
+});
 
 export default QuizCard;

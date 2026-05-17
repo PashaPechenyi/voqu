@@ -1,51 +1,38 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
+import { FC, useState } from 'react';
+import {
+  AppBar,
+  Box,
+  Button,
+  Drawer,
+  IconButton,
+  Toolbar,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
 import SchoolIcon from '@mui/icons-material/School';
-import { AppBar, Drawer, IconButton } from '@mui/material';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import ImportContactsIcon from '@mui/icons-material/ImportContacts';
-import PersonIcon from '@mui/icons-material/Person';
-import SettingsIcon from '@mui/icons-material/Settings';
-import { useMediaQuery } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { theme } from '@/theme';
 import { Link } from 'react-router-dom';
-import { admin, course } from '@/routes/constants/urls.constant';
+import { ADMIN_NAV_LINKS } from './constants/navLinks.const';
+import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 
-const LINKS: { name: string; way: string; img: any }[] = [
-  { name: 'Dashboard', way: admin, img: DashboardIcon },
-  { name: 'Courses', way: course, img: ImportContactsIcon },
-  { name: 'Users', way: '', img: PersonIcon },
-  { name: 'Settings', way: '', img: SettingsIcon },
-];
-
-export default function AdminHeader() {
-  const [isOpen, setIsOpen] = React.useState(false);
+const AdminHeader: FC = () => {
+  const theme = useTheme();
+  const [isOpen, setIsOpen] = useState(false);
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
+  const handleOpenDrawer = () => setIsOpen(true);
+  const handleCloseDrawer = () => setIsOpen(false);
 
   return (
     <>
-      <AppBar
-        sx={{
-          width: 1,
-          backgroundColor: '#37123c',
-          borderBottom: '2px solid grey',
-          position: 'fixed',
-          top: '0px',
-          left: 'auto',
-          right: '0px',
-          py: 2,
-        }}
-      >
-        <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Box sx={{ display: 'flex' }}>
-            <SchoolIcon sx={{ color: '#aa9f96', mr: '10px', width: '40px', height: '40px' }} />
-
+      <AppBar sx={sxStyles.appBar}>
+        <Toolbar sx={sxStyles.toolbar}>
+          <Box sx={sxStyles.logoWrapper}>
+            <SchoolIcon sx={sxStyles.schoolIcon} />
             <Box>
-              <Typography variant="h4" component="div" sx={{ flexGrow: 1, color: '#f6f1ee' }}>
+              <Typography variant="h4" component="div" sx={sxStyles.brand}>
                 Voqu
               </Typography>
               <Typography variant="body2" color="tertiary">
@@ -59,101 +46,66 @@ export default function AdminHeader() {
                 size="large"
                 edge="start"
                 aria-label="menu"
-                onClick={() => setIsOpen(true)}
-                sx={{ mr: 2 }}
+                onClick={handleOpenDrawer}
+                sx={sxStyles.menuButton}
               >
-                <LogoutIcon sx={{ fill: 'white' }} />
+                <MenuIcon sx={sxStyles.menuIcon} />
               </IconButton>
               <Drawer
-                PaperProps={{
-                  sx: {
-                    width: { xs: '80%', sm: '40%' },
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    gap: '20px',
-                  },
-                }}
+                slotProps={{ paper: { sx: sxStyles.drawerPaper } }}
                 anchor="right"
                 open={isOpen}
-                onClick={() => setIsOpen(false)}
+                onClick={handleCloseDrawer}
               >
-                <Box
-                  sx={{ width: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}
-                >
-                  {LINKS.map((el) => {
-                    return (
-                      <Button
-                        key={el.name + el.way}
-                        color="inherit"
-                        component={Link}
-                        sx={{ fontSize: { xs: '15px', sm: '20px' } }}
-                        onClick={() => setIsOpen(false)}
-                        to={el.way}
-                      >
-                        {el.name}
-                      </Button>
-                    );
-                  })}
+                <Box sx={sxStyles.drawerLinksWrapper}>
+                  {ADMIN_NAV_LINKS.map((link) => (
+                    <Button
+                      key={link.name}
+                      color="inherit"
+                      component={Link}
+                      sx={sxStyles.drawerLink}
+                      onClick={handleCloseDrawer}
+                      to={link.url}
+                    >
+                      {link.name}
+                    </Button>
+                  ))}
                 </Box>
 
-                <Box
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'space-around',
-                    width: '65%',
-                    gap: '10px',
-                    flexDirection: { xs: 'column', sm: 'row' },
-                  }}
-                >
+                <Box sx={sxStyles.drawerActions}>
                   <Button variant="contained">Login</Button>
-                  <Button variant="outlined">Sing up</Button>
+                  <Button variant="outlined">Sign up</Button>
                 </Box>
               </Drawer>
             </>
           ) : (
             <>
-              <Box sx={{ display: 'flex', justifyContent: 'space-around', width: '400px' }}>
-                {LINKS.map((link) => {
-                  const Icon = link.img;
+              <Box sx={sxStyles.desktopLinksWrapper}>
+                {ADMIN_NAV_LINKS.map((link) => {
+                  const Icon = link.icon;
                   return (
                     <Button
-                      key={link.name + link.way}
+                      key={link.name}
                       color="inherit"
                       component={Link}
-                      sx={{
-                        fontSize: '16px',
-                        textDecoration: 'none',
-                        color: '#aa9f96',
-                        px: 8,
-                        '&:hover': {
-                          color: '#f6f1ee',
-                        },
-                      }}
-                      to={link.way}
+                      sx={sxStyles.desktopLink}
+                      to={link.url}
                     >
-                      <Icon sx={{ pr: '5px' }} />
+                      <Icon sx={sxStyles.desktopLinkIcon} />
                       {link.name}
                     </Button>
                   );
                 })}
               </Box>
-              <Box sx={{ display: 'flex', justifyContent: 'space-around', width: '200px' }}>
-                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'end' }}>
+              <Box sx={sxStyles.userWrapper}>
+                <Box sx={sxStyles.userInfo}>
                   <Typography variant="body2">Admin user</Typography>
                   <Typography variant="body2" color="tertiary">
-                    admin@vogu.com
+                    admin@voqu.com
                   </Typography>
                 </Box>
                 <Button>
-                  <LogoutIcon
-                    sx={{
-                      fill: '#aa9f96',
-                      '&:hover': {
-                        fill: '#f6f1ee',
-                      },
-                    }}
-                  />
+                  <LogoutIcon sx={sxStyles.logoutIconDesktop} />
                 </Button>
               </Box>
             </>
@@ -163,4 +115,74 @@ export default function AdminHeader() {
       <Toolbar />
     </>
   );
-}
+};
+
+const sxStyles = createSxStylesList({
+  appBar: (theme) => ({
+    width: 1,
+    backgroundColor: theme.palette.secondary.main,
+    borderBottom: `2px solid ${theme.palette.divider}`,
+    position: 'fixed',
+    top: '0px',
+    left: 'auto',
+    right: '0px',
+    py: 2,
+  }),
+  toolbar: { display: 'flex', justifyContent: 'space-between' },
+  logoWrapper: { display: 'flex' },
+  schoolIcon: (theme) => ({
+    color: theme.palette.tertiary.main,
+    mr: '10px',
+    width: '40px',
+    height: '40px',
+  }),
+  brand: (theme) => ({ flexGrow: 1, color: theme.palette.background.paper }),
+  menuButton: { mr: 2 },
+  menuIcon: (theme) => ({ fill: theme.palette.common.white }),
+  drawerPaper: {
+    width: { xs: '80%', sm: '40%' },
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: '20px',
+  },
+  drawerLinksWrapper: {
+    width: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  drawerLink: { fontSize: { xs: '15px', sm: '20px' } },
+  drawerActions: {
+    display: 'flex',
+    justifyContent: 'space-around',
+    width: '65%',
+    gap: '10px',
+    flexDirection: { xs: 'column', sm: 'row' },
+  },
+  desktopLinksWrapper: {
+    display: 'flex',
+    justifyContent: 'space-around',
+    width: '400px',
+  },
+  desktopLink: (theme) => ({
+    fontSize: '16px',
+    textDecoration: 'none',
+    color: theme.palette.tertiary.main,
+    px: 8,
+    '&:hover': { color: theme.palette.background.paper },
+  }),
+  desktopLinkIcon: { pr: '5px' },
+  userWrapper: {
+    display: 'flex',
+    justifyContent: 'space-around',
+    width: '200px',
+  },
+  userInfo: { display: 'flex', flexDirection: 'column', alignItems: 'end' },
+  logoutIconDesktop: (theme) => ({
+    fill: theme.palette.tertiary.main,
+    '&:hover': { fill: theme.palette.background.paper },
+  }),
+});
+
+export default AdminHeader;

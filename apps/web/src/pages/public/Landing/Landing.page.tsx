@@ -1,8 +1,9 @@
+import { FC } from 'react';
 import HeroSection from './sections/Hero.section';
 import FeaturesSection from './sections/Features.section';
 import LessonPreviewSection from './sections/LessonPreview.section';
 
-export function LandingPage() {
+const LandingPage: FC = () => {
   return (
     <>
       <HeroSection />
@@ -10,4 +11,6 @@ export function LandingPage() {
       <LessonPreviewSection />
     </>
   );
-}
+};
+
+export default LandingPage;

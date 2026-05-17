@@ -1,27 +1,31 @@
-import { ThemeProvider } from '@emotion/react';
+import { FC } from 'react';
 import { Box, Container } from '@mui/material';
 import { Outlet } from 'react-router-dom';
 import AdminHeader from './AdminHeader';
-import { theme } from '@/theme';
+import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 
-function AdminLayout() {
+const AdminLayout: FC = () => {
   return (
-    <ThemeProvider theme={theme}>
-      <Box
-        sx={{
-          minHeight: '100vh',
-          display: 'flex',
-          flexDirection: 'column',
-          backgroundColor: '#f6f1ee',
-        }}
-      >
-        <AdminHeader />
-        <Container component="main" sx={{ flex: 1, py: 4 }}>
-          <Outlet />
-        </Container>
-      </Box>
-    </ThemeProvider>
+    <Box sx={sxStyles.root}>
+      <AdminHeader />
+      <Container component="main" sx={sxStyles.content}>
+        <Outlet />
+      </Container>
+    </Box>
   );
-}
+};
+
+const sxStyles = createSxStylesList({
+  root: (theme) => ({
+    minHeight: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
+    backgroundColor: theme.palette.background.paper,
+  }),
+  content: {
+    flex: 1,
+    py: 4,
+  },
+});
 
 export default AdminLayout;

@@ -1,42 +1,26 @@
-import * as React from 'react';
-
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-
+import { FC, useState } from 'react';
+import { AppBar, Box, Button, Drawer, IconButton, Toolbar, Typography, useMediaQuery, useTheme } from '@mui/material';
 import SchoolIcon from '@mui/icons-material/School';
-import { AppBar, Drawer, IconButton } from '@mui/material';
-import { useMediaQuery } from '@mui/material';
-import { theme } from '@/theme';
 import MenuIcon from '@mui/icons-material/Menu';
-import { LINKS } from './PublicFooter';
 import { Link } from 'react-router-dom';
+import { PUBLIC_NAV_LINKS } from './constants/navLinks.const';
+import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 
-//const links: string[] = ['Home', 'About us', 'Our offers', 'Contact'];
-
-export default function PublicHeader() {
-  const [isOpen, setIsOpen] = React.useState(false);
+const PublicHeader: FC = () => {
+  const theme = useTheme();
+  const [isOpen, setIsOpen] = useState(false);
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
+  const handleOpenDrawer = () => setIsOpen(true);
+  const handleCloseDrawer = () => setIsOpen(false);
 
   return (
     <>
-      <AppBar
-        sx={{
-          width: 1,
-          backgroundColor: '#f6f1ee',
-          borderBottom: '2px solid grey',
-          position: 'fixed',
-          top: '0px',
-          left: 'auto',
-          right: '0px',
-        }}
-      >
-        <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Box sx={{ display: 'flex' }}>
-            <SchoolIcon sx={{ color: '#71677D', mr: '10px', width: '40px', height: '40px' }} />
-
-            <Typography variant="h4" component="div" sx={{ flexGrow: 1 }}>
+      <AppBar sx={sxStyles.appBar}>
+        <Toolbar sx={sxStyles.toolbar}>
+          <Box sx={sxStyles.logoWrapper}>
+            <SchoolIcon sx={sxStyles.schoolIcon} />
+            <Typography variant="h4" component="div" sx={sxStyles.brand}>
               Voqu
             </Typography>
           </Box>
@@ -46,90 +30,55 @@ export default function PublicHeader() {
                 size="large"
                 edge="start"
                 aria-label="menu"
-                onClick={() => setIsOpen(true)}
-                sx={{ mr: 2 }}
+                onClick={handleOpenDrawer}
+                sx={sxStyles.menuButton}
               >
-                <MenuIcon sx={{ color: '#37123c' }} />
+                <MenuIcon sx={sxStyles.menuIcon} />
               </IconButton>
               <Drawer
-                PaperProps={{
-                  sx: {
-                    width: { xs: '80%', sm: '40%' },
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    gap: '20px',
-                  },
-                }}
+                slotProps={{ paper: { sx: sxStyles.drawerPaper } }}
                 anchor="right"
                 open={isOpen}
-                onClick={() => setIsOpen(false)}
+                onClick={handleCloseDrawer}
               >
-                <Box
-                  sx={{ width: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}
-                >
-                  {LINKS.map((el) => {
-                    return (
-                      // <Button
-                      //   sx={{ fontSize: { xs: '15px', sm: '20px' } }}
-                      //   onClick={() => setIsOpen(false)}
-                      // >
-                      //   {el.name}
-                      // </Button>
-                      <Button
-                        color="inherit"
-                        component={Link}
-                        sx={{ fontSize: { xs: '15px', sm: '20px' } }}
-                        onClick={() => setIsOpen(false)}
-                        to={el.way}
-                      >
-                        {el.name}
-                      </Button>
-                    );
-                  })}
+                <Box sx={sxStyles.drawerLinksWrapper}>
+                  {PUBLIC_NAV_LINKS.map((link) => (
+                    <Button
+                      key={link.name}
+                      color="inherit"
+                      component={Link}
+                      sx={sxStyles.drawerLink}
+                      onClick={handleCloseDrawer}
+                      to={link.url}
+                    >
+                      {link.name}
+                    </Button>
+                  ))}
                 </Box>
-
-                <Box
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'space-around',
-                    width: '65%',
-                    gap: '10px',
-                    flexDirection: { xs: 'column', sm: 'row' },
-                  }}
-                >
+                <Box sx={sxStyles.drawerActions}>
                   <Button variant="contained">Login</Button>
-                  <Button variant="outlined">Sing up</Button>
+                  <Button variant="outlined">Sign up</Button>
                 </Box>
               </Drawer>
             </>
           ) : (
             <>
-              <Box sx={{ display: 'flex', justifyContent: 'space-around', width: '400px' }}>
-                {LINKS.map((link) => {
-                  return (
-                    // <Typography key={ind} variant="body1" sx={{ color: '#37123c' }}>
-                    //   {link.name}
-                    // </Typography>
-                    <Button
-                      color="inherit"
-                      component={Link}
-                      sx={{
-                        fontSize: '16px',
-                        textDecoration: 'none',
-                        color: '#37123c',
-                        padding: 2,
-                      }}
-                      to={link.way}
-                    >
-                      {link.name}
-                    </Button>
-                  );
-                })}
+              <Box sx={sxStyles.desktopLinksWrapper}>
+                {PUBLIC_NAV_LINKS.map((link) => (
+                  <Button
+                    key={link.name}
+                    color="inherit"
+                    component={Link}
+                    sx={sxStyles.desktopLink}
+                    to={link.url}
+                  >
+                    {link.name}
+                  </Button>
+                ))}
               </Box>
-              <Box sx={{ display: 'flex', justifyContent: 'space-around', width: '200px' }}>
+              <Box sx={sxStyles.actionsWrapper}>
                 <Button variant="contained">Login</Button>
-                <Button variant="outlined">Sing up</Button>
+                <Button variant="outlined">Sign up</Button>
               </Box>
             </>
           )}
@@ -138,4 +87,66 @@ export default function PublicHeader() {
       <Toolbar />
     </>
   );
-}
+};
+
+const sxStyles = createSxStylesList({
+  appBar: (theme) => ({
+    width: 1,
+    backgroundColor: theme.palette.background.paper,
+    borderBottom: `2px solid ${theme.palette.divider}`,
+    position: 'fixed',
+    top: '0px',
+    left: 'auto',
+    right: '0px',
+  }),
+  toolbar: { display: 'flex', justifyContent: 'space-between' },
+  logoWrapper: { display: 'flex' },
+  schoolIcon: (theme) => ({
+    color: theme.palette.primary.main,
+    mr: '10px',
+    width: '40px',
+    height: '40px',
+  }),
+  brand: { flexGrow: 1 },
+  menuButton: { mr: 2 },
+  menuIcon: (theme) => ({ color: theme.palette.secondary.main }),
+  drawerPaper: {
+    width: { xs: '80%', sm: '40%' },
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: '20px',
+  },
+  drawerLinksWrapper: {
+    width: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  drawerLink: { fontSize: { xs: '15px', sm: '20px' } },
+  drawerActions: {
+    display: 'flex',
+    justifyContent: 'space-around',
+    width: '65%',
+    gap: '10px',
+    flexDirection: { xs: 'column', sm: 'row' },
+  },
+  desktopLinksWrapper: {
+    display: 'flex',
+    justifyContent: 'space-around',
+    width: '400px',
+  },
+  desktopLink: (theme) => ({
+    fontSize: '16px',
+    textDecoration: 'none',
+    color: theme.palette.secondary.main,
+    padding: 2,
+  }),
+  actionsWrapper: {
+    display: 'flex',
+    justifyContent: 'space-around',
+    width: '200px',
+  },
+});
+
+export default PublicHeader;

@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import {
   Box,
   Button,
@@ -10,127 +11,98 @@ import {
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import { Link } from 'react-router-dom';
-import { createSxStylesList } from '@/shared/helpers/theme.helpers';
-import clsx from 'clsx';
-import { Course } from '@/pages/admin/Courses/sections/CoursesSection';
-import { CourseFormValues } from './CourseAddModal';
-import { CourseStatusKey } from '../constants/courseStatus.const';
-
-const CLASSNAME = {
-  PUBLISHED: 'published',
-  DRAFT: 'draft',
-} as const;
+import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
+import { Course } from '@/features/courses/types/course.type';
+import { CourseStatus } from '../enums/courseStatus.enum';
+import { ADMIN_COURSE_DETAILS_URL } from '@/shared/constants/urls.const';
+import { useUpdateCourseStatus } from '../hooks/useUpdateCourseStatus';
+import courseImage from '@/assets/images/EnglishGrammarEssentials.jpg';
 
 type CourseCardProps = {
   course: Course;
+  onStatusChanged?: () => void;
 };
-const changeStatus= ( id:string, course:Course) => {
-    const body = {
-      LevelId:course.level?.id,
-      name: course.name,
-      status: course.status == CourseStatusKey.draft ? CourseStatusKey.published:  CourseStatusKey.draft,
-      
-    };
-     fetch(`/api/course/${id}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
-    });
-    
-    
-  };
 
-function CourseCard({ course }: CourseCardProps) {
- // console.log(course.level.id,"level ")
+const CourseCard: FC<CourseCardProps> = ({ course, onStatusChanged }) => {
+  const isPublished = course.status === CourseStatus.Published;
+  const { updateCourseStatus } = useUpdateCourseStatus({
+    onSuccess: () => onStatusChanged?.(),
+  });
+
+  const handleStatusToggle = () => updateCourseStatus(course);
+
   return (
     <Card sx={sxStyles.card}>
-      <CardMedia
-        sx={{ height: 140, position: 'relative' }}
-        image={'/src/assets/images/EnglishGrammarEssentials.jpg'}
-      >
+      <CardMedia sx={sxStyles.media} image={courseImage}>
         <Box sx={sxStyles.information}>
           <Button
-          onClick={()=>{changeStatus(course.id, course)}}
-            sx={sxStyles.courseStatus}
-            className={clsx({
-              [CLASSNAME.PUBLISHED]: course.status == 'published',
-              [CLASSNAME.DRAFT]: course.status == 'draft',
-            })}
+            onClick={handleStatusToggle}
+            sx={[sxStyles.courseStatus, isPublished ? sxStyles.published : sxStyles.draft]}
           >
             {course.status}
           </Button>
-          {/* ERR */}
-          {/* <Box sx={sxStyles.courseLevel}>{course.level.cefrLevel}</Box> */}
         </Box>
       </CardMedia>
       <CardContent>
         <Typography gutterBottom variant="h5" component="div" color="secondary">
           {course.name}
         </Typography>
-        {/* <Typography variant="body2" color="primary">
-          {course.description}
-        </Typography> */}
-        <Box sx={{ display: 'flex', gap: '20px', mt: '10px', alignItems: 'center' }}>
+        <Box sx={sxStyles.metaRow}>
           <Typography variant="body2" color="primary">
             {2} lessons
           </Typography>
-          <Box
-            sx={{ width: '6px', height: '6px', borderRadius: '100%', backgroundColor: 'grey' }}
-          ></Box>
+          <Box sx={sxStyles.metaDot} />
           <Typography variant="body2" color="primary">
             {349} students
           </Typography>
         </Box>
       </CardContent>
-      <Divider sx={{ maxWidth: '90%', ml: '5%' }} />
-      <CardActions sx={{ justifyContent: 'center', gap: '8px' }}>
-        <Button
-          component={Link}
-          sx={sxStyles.courseLink}
-          to={`/admin/courses/${course.id}/courseEdit`}
-        >
-          <EditIcon fontSize="small" sx={{ fill: 'white' }} />
+      <Divider sx={sxStyles.divider} />
+      <CardActions sx={sxStyles.actions}>
+        <Button component={Link} sx={sxStyles.courseLink} to={ADMIN_COURSE_DETAILS_URL(course.id)}>
+          <EditIcon fontSize="small" sx={sxStyles.editIcon} />
           Edit Lessons
         </Button>
       </CardActions>
     </Card>
   );
-}
+};
 
 const sxStyles = createSxStylesList({
+  media: { height: 140, position: 'relative' },
+  metaRow: { display: 'flex', gap: '20px', mt: '10px', alignItems: 'center' },
+  metaDot: (theme) => ({
+    width: '6px',
+    height: '6px',
+    borderRadius: '100%',
+    backgroundColor: theme.palette.divider,
+  }),
+  divider: { maxWidth: '90%', ml: '5%' },
+  actions: { justifyContent: 'center', gap: '8px' },
+  editIcon: (theme) => ({ fill: theme.palette.common.white }),
   courseStatus: {
     p: '5px 10px',
     borderRadius: '30px',
     fontSize: '12px',
     lineHeight: '20px',
-
-    [`&.${CLASSNAME.PUBLISHED}`]: {
-      backgroundColor: 'lightgreen',
-      color: 'white',
-    },
-    [`&.${CLASSNAME.DRAFT}`]: {
-      backgroundColor: 'darkgrey',
-    },
   },
-  courseLevel: {
-    p: '5px 10px',
-    fontSize: '13px',
-    border: '1px solid black',
-    borderRadius: '30px',
-    backgroundColor: 'white',
-  },
-  courseLink: {
+  published: (theme) => ({
+    backgroundColor: theme.palette.success.light,
+    color: theme.palette.common.white,
+  }),
+  draft: (theme) => ({
+    backgroundColor: theme.palette.grey[500],
+  }),
+  courseLink: (theme) => ({
     p: '10px',
-    backgroundColor: '#71677D',
-    color: 'white',
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.common.white,
     gap: '5px',
     width: '95%',
     my: '10px',
     position: 'absolute',
     bottom: 20,
-  },
+  }),
   information: {
     display: 'flex',
     gap: '15px',
@@ -138,13 +110,12 @@ const sxStyles = createSxStylesList({
     top: '10px',
     right: '4px',
   },
-  card: {
-    width: '30%',
+  card: (theme) => ({
     minWidth: 315,
     height: 400,
-    border: '2px solid grey',
+    border: `2px solid ${theme.palette.divider}`,
     position: 'relative',
-  },
+  }),
 });
 
 export default CourseCard;
