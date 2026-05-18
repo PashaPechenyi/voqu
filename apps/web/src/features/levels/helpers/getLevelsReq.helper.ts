@@ -1,6 +1,6 @@
 import { Level } from '@/features/levels/types/level.type';
 
-export const getLevelsReq = async (): Promise<Level[]> => {
+export const getLevelsReq = async (): Promise<{ items: Level[]; success: boolean }> => {
   const response = await fetch('/api/level', {
     method: 'GET',
   });

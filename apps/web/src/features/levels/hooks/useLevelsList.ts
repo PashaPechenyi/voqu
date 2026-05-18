@@ -6,8 +6,8 @@ export const useLevelsList = () => {
   const [levelsList, setLevelsList] = useState<Level[]>([]);
 
   const fetchLevels = useCallback(async () => {
-    const levels = await getLevelsReq();
-    setLevelsList(levels);
+    const responseData = await getLevelsReq();
+    setLevelsList(responseData.items);
   }, []);
 
   return { levelsList, fetchLevels };
