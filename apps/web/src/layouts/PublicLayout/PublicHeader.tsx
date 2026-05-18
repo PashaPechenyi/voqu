@@ -1,5 +1,15 @@
 import { FC, useState } from 'react';
-import { AppBar, Box, Button, Drawer, IconButton, Toolbar, Typography, useMediaQuery, useTheme } from '@mui/material';
+import {
+  AppBar,
+  Box,
+  Button,
+  Drawer,
+  IconButton,
+  Toolbar,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
 import SchoolIcon from '@mui/icons-material/School';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Link } from 'react-router-dom';
@@ -44,7 +54,7 @@ const PublicHeader: FC = () => {
                 <Box sx={sxStyles.drawerLinksWrapper}>
                   {PUBLIC_NAV_LINKS.map((link) => (
                     <Button
-                      key={link.name}
+                      key={link.url}
                       color="inherit"
                       component={Link}
                       sx={sxStyles.drawerLink}
@@ -66,7 +76,7 @@ const PublicHeader: FC = () => {
               <Box sx={sxStyles.desktopLinksWrapper}>
                 {PUBLIC_NAV_LINKS.map((link) => (
                   <Button
-                    key={link.name}
+                    key={link.url}
                     color="inherit"
                     component={Link}
                     sx={sxStyles.desktopLink}

@@ -16,8 +16,8 @@ const PublicFooter: FC = () => {
             Voqu
           </Typography>
           <Typography variant="body2" sx={sxStyles.descriptionText}>
-            Empowering learners to achieve English fluency through expert instruction and
-            innovative methods
+            Empowering learners to achieve English fluency through expert instruction and innovative
+            methods
           </Typography>
         </Box>
         <Box sx={sxStyles.columnWidth}>
@@ -26,7 +26,7 @@ const PublicFooter: FC = () => {
           </Typography>
           <List sx={sxStyles.flatList}>
             {PUBLIC_NAV_LINKS.map((link) => (
-              <ListItem key={link.name}>
+              <ListItem key={link.url}>
                 <Button color="inherit" component={Link} sx={sxStyles.linkButton} to={link.url}>
                   {link.name}
                 </Button>
@@ -61,8 +61,13 @@ const PublicFooter: FC = () => {
               {SOCIAL_LINKS.map((social) => {
                 const Icon = social.icon;
                 return (
-                  <ListItem key={social.name} component="a" href={social.url}>
-                    <IconButton sx={sxStyles.iconButton}>
+                  <ListItem key={social.name} disablePadding>
+                    <IconButton
+                      component="a"
+                      href={social.url}
+                      aria-label={social.name}
+                      sx={sxStyles.iconButton}
+                    >
                       <Icon />
                     </IconButton>
                   </ListItem>
@@ -75,7 +80,7 @@ const PublicFooter: FC = () => {
       <Box sx={sxStyles.icon}>
         <Box sx={sxStyles.decorationCon}>
           <Box sx={sxStyles.decorationLine} />
-          <Box component="img" src={diamondIcon} sx={sxStyles.decorationIcon} />
+          <Box component="img" src={diamondIcon} alt="" sx={sxStyles.decorationIcon} />
           <Box sx={sxStyles.decorationLine} />
         </Box>
         <Typography variant="body2" sx={sxStyles.copyright}>

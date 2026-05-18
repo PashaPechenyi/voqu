@@ -28,7 +28,12 @@ const HeroSection: FC = () => {
       </Box>
       <Box sx={sxStyles.rightColumn}>
         <Box sx={sxStyles.imageWrapper}>
-          <Box component="img" src={heroImage} sx={sxStyles.heroImage} />
+          <Box
+            component="img"
+            src={heroImage}
+            alt="Students learning English together"
+            sx={sxStyles.heroImage}
+          />
           <Box sx={sxStyles.statCard}>
             <Box sx={sxStyles.statCardInner}>
               <Typography variant="h5">500+</Typography>

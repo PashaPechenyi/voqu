@@ -7,7 +7,7 @@ const SectionDivider: FC = () => {
   return (
     <Box sx={sxStyles.container}>
       <Box sx={sxStyles.line} />
-      <Box component="img" src={diamondIcon} sx={sxStyles.icon} />
+      <Box component="img" src={diamondIcon} alt="" sx={sxStyles.icon} />
       <Box sx={sxStyles.line} />
     </Box>
   );

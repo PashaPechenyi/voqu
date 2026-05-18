@@ -60,7 +60,7 @@ const AdminHeader: FC = () => {
                 <Box sx={sxStyles.drawerLinksWrapper}>
                   {ADMIN_NAV_LINKS.map((link) => (
                     <Button
-                      key={link.name}
+                      key={link.url}
                       color="inherit"
                       component={Link}
                       sx={sxStyles.drawerLink}
@@ -85,7 +85,7 @@ const AdminHeader: FC = () => {
                   const Icon = link.icon;
                   return (
                     <Button
-                      key={link.name}
+                      key={link.url}
                       color="inherit"
                       component={Link}
                       sx={sxStyles.desktopLink}

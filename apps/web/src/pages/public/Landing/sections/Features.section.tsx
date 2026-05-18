@@ -54,7 +54,7 @@ const FeaturesSection: FC = () => {
       </Box>
 
       <Box sx={sxStyles.aboutRow}>
-        <Box component="img" src={aboutUsImage} sx={sxStyles.aboutImage} />
+        <Box component="img" src={aboutUsImage} alt="Voqu teaching team" sx={sxStyles.aboutImage} />
         <Box sx={sxStyles.aboutCopy}>
           <Typography variant="h4">Why Choose Voqu?</Typography>
           <Typography sx={sxStyles.muted} variant="body1">
@@ -64,8 +64,8 @@ const FeaturesSection: FC = () => {
             engaging and effective learning experience.
           </Typography>
           <Typography variant="body1" sx={sxStyles.muted}>
-            Whether you're preparing for exams, advancing your career, or simply want to
-            communicate confidently in English, we have the perfect program for you.
+            Whether you're preparing for exams, advancing your career, or simply want to communicate
+            confidently in English, we have the perfect program for you.
           </Typography>
         </Box>
       </Box>
