@@ -1,5 +1,5 @@
 import { FC, useEffect } from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 import CourseCard from '@/features/courses/components/CourseCard';
 import { useCoursesList } from '@/features/courses/hooks/useCoursesList';
 import { CourseStatusFilterValue } from '@/features/search/constants/courseStatusFilterOptions.const';
@@ -42,9 +42,13 @@ const CoursesSection: FC<CoursesSectionProps> = ({ enteredValue, statusFilter })
       {!isLoading && !error && visible.length === 0 && (
         <Typography color="primary">No courses found.</Typography>
       )}
-      {visible.map((course) => (
-        <CourseCard key={course.id} course={course} onStatusChanged={fetchCourses} />
-      ))}
+      <Grid container spacing={2}>
+        {visible.map((course) => (
+          <Grid key={course.id} size={4} sx={sxStyles.gridItem}>
+            <CourseCard course={course} onStatusChanged={fetchCourses} />
+          </Grid>
+        ))}
+      </Grid>
     </Box>
   );
 };
@@ -58,6 +62,9 @@ const sxStyles = createSxStylesList({
     flexWrap: 'wrap',
     justifyContent: 'center',
     mt: '40px',
+  },
+  gridItem: {
+    display: 'flex',
   },
 });
 

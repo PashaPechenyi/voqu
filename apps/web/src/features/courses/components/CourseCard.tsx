@@ -43,7 +43,7 @@ const CourseCard: FC<CourseCardProps> = ({ course, onStatusChanged }) => {
           </Button>
         </Box>
       </CardMedia>
-      <CardContent>
+      <CardContent sx={sxStyles.content}>
         <Typography gutterBottom variant="h5" component="div" color="secondary">
           {course.name}
         </Typography>
@@ -57,9 +57,18 @@ const CourseCard: FC<CourseCardProps> = ({ course, onStatusChanged }) => {
           </Typography>
         </Box>
       </CardContent>
+
       <Divider sx={sxStyles.divider} />
+
       <CardActions sx={sxStyles.actions}>
-        <Button component={Link} sx={sxStyles.courseLink} to={ADMIN_COURSE_DETAILS_URL(course.id)}>
+        <Button
+          fullWidth
+          component={Link}
+          sx={sxStyles.courseLink}
+          to={ADMIN_COURSE_DETAILS_URL(course.id)}
+          variant="contained"
+          size="large"
+        >
           <EditIcon fontSize="small" sx={sxStyles.editIcon} />
           Edit Lessons
         </Button>
@@ -77,7 +86,9 @@ const sxStyles = createSxStylesList({
     borderRadius: '100%',
     backgroundColor: theme.palette.divider,
   }),
-  divider: { maxWidth: '90%', ml: '5%' },
+  divider: {
+    mx: '16px',
+  },
   actions: { justifyContent: 'center', gap: '8px' },
   editIcon: (theme) => ({ fill: theme.palette.common.white }),
   courseStatus: {
@@ -93,16 +104,9 @@ const sxStyles = createSxStylesList({
   draft: (theme) => ({
     backgroundColor: theme.palette.grey[500],
   }),
-  courseLink: (theme) => ({
-    p: '10px',
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.common.white,
-    gap: '5px',
-    width: '95%',
-    my: '10px',
-    position: 'absolute',
-    bottom: 20,
-  }),
+  courseLink: {
+    my: '8px',
+  },
   information: {
     display: 'flex',
     gap: '15px',
@@ -111,11 +115,16 @@ const sxStyles = createSxStylesList({
     right: '4px',
   },
   card: (theme) => ({
-    minWidth: 315,
-    height: 400,
+    minHeight: 400,
     border: `2px solid ${theme.palette.divider}`,
     position: 'relative',
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
   }),
+  content: {
+    flex: 1,
+  },
 });
 
 export default CourseCard;
