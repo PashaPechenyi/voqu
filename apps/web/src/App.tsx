@@ -1,12 +1,7 @@
-import { BrowserRouter } from 'react-router-dom';
-import { AppRoutes } from './routes';
+import { Box } from '@mui/material';
 
 function App() {
-  return (
-    <BrowserRouter>
-      <AppRoutes />
-    </BrowserRouter>
-  );
+  return <Box> HELLO! </Box>;
 }
 
 export default App;
