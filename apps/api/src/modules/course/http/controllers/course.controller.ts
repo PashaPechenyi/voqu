@@ -4,7 +4,6 @@ import { CourseListResponseDto } from '../dto/course-list-response.dto';
 import { CourseResponseDto } from '../dto/course-response.dto';
 import { CreateCourseDto } from '../dto/create-course.dto';
 import { CreateCourseResponseDto } from '../dto/create-course-response.dto';
-import { DeleteCourseResponseDto } from '../dto/delete-course-response.dto';
 import { ListCoursesQueryDto } from '../dto/list-courses-query.dto';
 import { UpdateCourseDto } from '../dto/update-course.dto';
 import { UpdateCourseResponseDto } from '../dto/update-course-response.dto';
@@ -42,7 +41,7 @@ export class CourseController {
   }
 
   @Delete(':CourseId')
-  async delete(@Param('CourseId') CourseId: string): Promise<DeleteCourseResponseDto> {
+  async delete(@Param('CourseId') CourseId: string): Promise<BaseResponseDto> {
     await this.courseService.deleteCourse(CourseId);
     return new BaseResponseDto();
   }
