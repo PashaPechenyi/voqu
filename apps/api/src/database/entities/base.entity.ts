@@ -1,4 +1,4 @@
-import { PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Column } from 'typeorm';
+import { PrimaryGeneratedColumn, UpdateDateColumn, Column } from 'typeorm';
 
 export abstract class BaseEntity {
   @PrimaryGeneratedColumn('increment')
