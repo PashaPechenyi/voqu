@@ -3,12 +3,17 @@ import { useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 import AddCourseModal from '@/features/courses/components/AddCourseModal';
-
-function HeroSection() {
+type HeroSectionProps = {
+  refetchCourses: () => void;
+};
+function HeroSection({ refetchCourses }: HeroSectionProps) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
+  const onCreated = () => {
+    refetchCourses();
+    handleClose();
+  };
   return (
     <Box sx={sxStyles.root}>
       <Box>
@@ -21,7 +26,7 @@ function HeroSection() {
         <AddIcon />
         Add New Course
       </Button>
-      <AddCourseModal open={open} handleClose={handleClose} />
+      <AddCourseModal open={open} handleClose={handleClose} onCreated={onCreated} />
     </Box>
   );
 }

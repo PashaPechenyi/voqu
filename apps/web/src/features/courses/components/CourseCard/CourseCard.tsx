@@ -12,18 +12,61 @@ import {
 import { ADMIN_COURSES_EDIT_URL } from '@/shared/constants/urls.const';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 import { Course } from '@/features/courses/types/course.type';
+import { useLevelsList } from '@/features/levels/hooks/useLevelsList';
+import { useEditCourse } from '../../hooks/useEditCourse';
+import { useEffect } from 'react';
+import { CourseStatusKey } from '../../types/courseStatus.type';
 
 type CourseCardProps = {
   course: Course;
+  onSuccess: () => void;
 };
 
-function CourseCard({ course }: CourseCardProps) {
+function CourseCard({ course, onSuccess }: CourseCardProps) {
+  const { fetchLevels } = useLevelsList();
+  const { editCourse, isLoading } = useEditCourse({ onSuccess });
+
+  const fromCourseToReqData = (coursedata: Course) => {
+    if (!coursedata.Level) throw new Error('Course coursedata is missing a level');
+    if (!coursedata.status) throw new Error('Course coursedata is missing a status');
+    return {
+      name: coursedata.name,
+      status: coursedata.status,
+      description: '',
+      LevelId: String(coursedata.Level.id),
+    };
+  };
+
+  const onChangeStatus = (courseData: Course) => {
+    editCourse(
+      course.id,
+      fromCourseToReqData({
+        ...courseData,
+        status:
+          courseData.status === CourseStatusKey.Draft
+            ? CourseStatusKey.Published
+            : CourseStatusKey.Draft,
+      }),
+    );
+  };
+
+  useEffect(() => {
+    fetchLevels();
+  }, [fetchLevels]);
   return (
     <Card sx={sxStyles.card}>
       <CardMedia sx={sxStyles.media} title={course.name}>
         <Box>
-          <Chip sx={{ mr: 1 }} color="success" label={course.status} />
-          <Chip color="info" label={course.LevelId} />
+          <Button
+            sx={{ mr: 1 }}
+            onClick={() => onChangeStatus(course)}
+            variant="contained"
+            color={course.status === CourseStatusKey.Published ? 'success' : 'inherit'}
+            loading={isLoading}
+          >
+            {course.status}
+          </Button>
+          <Chip color="info" label={'lvl'} />
         </Box>
       </CardMedia>
       <CardContent sx={sxStyles.content}>
@@ -54,7 +97,7 @@ const sxStyles = createSxStylesList({
     display: 'flex',
     flexDirection: 'column',
     minHeight: 500,
-    maxWidth: 345,
+    //width: 345,
   },
   content: {
     display: 'flex',

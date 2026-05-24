@@ -20,20 +20,22 @@ type EditCourseModalProps = {
 const COURSE_STATUSES = Object.values(CourseStatusKey);
 
 function EditCourseModal({ open, handleClose, course, onSuccess }: EditCourseModalProps) {
+  console.log(course, 'course');
   const { handleSubmit, control } = useForm<CourseFormValues>({
     defaultValues: {
       title: course.name,
-      description: '',
+      description: course.createdAt,
       level: null,
-      status: null,
-      image: '',
+      status: course.status,
+      image: course.updatedAt,
     },
   });
   const { levelsList, fetchLevels } = useLevelsList();
-  const { editCourse } = useEditCourse({ onSuccess });
+  const { editCourse, isLoading } = useEditCourse({ onSuccess });
 
   const onSubmit = (formValues: CourseFormValues) => {
     editCourse(course.id, courseFormToReqBody(formValues));
+    handleClose();
   };
 
   useEffect(() => {
@@ -50,6 +52,7 @@ function EditCourseModal({ open, handleClose, course, onSuccess }: EditCourseMod
 
         <CourseForm
           edit
+          isLoading={isLoading}
           control={control}
           onSubmit={handleSubmit(onSubmit)}
           levelsOptions={levelsList}

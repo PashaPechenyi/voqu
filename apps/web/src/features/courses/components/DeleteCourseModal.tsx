@@ -12,7 +12,7 @@ type DeleteCourseModalProps = {
 
 function DeleteCourseModal({ open, handleClose, courseName, onDeleted }: DeleteCourseModalProps) {
   const { courseId } = useParams();
-  const { deleteCourse } = useDeleteCourse({ onSuccess: onDeleted });
+  const { deleteCourse, isLoading } = useDeleteCourse({ onSuccess: onDeleted });
 
   const onSubmit = () => {
     if (!courseId) return;
@@ -30,7 +30,7 @@ function DeleteCourseModal({ open, handleClose, courseName, onDeleted }: DeleteC
         </Typography>
 
         <Box sx={sxStyles.actions}>
-          <Button variant="contained" color="error" onClick={onSubmit}>
+          <Button loading={isLoading} variant="contained" color="error" onClick={onSubmit}>
             Delete
           </Button>
           <Button variant="outlined" onClick={handleClose}>

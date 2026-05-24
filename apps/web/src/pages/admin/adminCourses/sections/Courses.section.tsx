@@ -1,21 +1,23 @@
 import { useEffect } from 'react';
-import { Box } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 import { useCoursesList } from '@/features/courses/hooks/useCoursesList';
 import CourseCard from '@/features/courses/components/CourseCard/CourseCard';
-
-function CoursesSection() {
-  const { coursesList, fetchCourses } = useCoursesList();
-
-  useEffect(() => {
-    fetchCourses();
-  }, [fetchCourses]);
-
+import { Course } from '@/features/courses/types/course.type';
+type CoursesSectionProps = {
+  coursesList: Course[];
+  onSuccess: () => void;
+};
+function CoursesSection({ coursesList, onSuccess }: CoursesSectionProps) {
   return (
     <Box sx={sxStyles.root}>
-      {coursesList.map((course) => (
-        <CourseCard key={course.id} course={course} />
-      ))}
+      <Grid container spacing={2}>
+        {coursesList.map((course) => (
+          <Grid size={4}>
+            <CourseCard onSuccess={onSuccess} key={course.id} course={course} />
+          </Grid>
+        ))}
+      </Grid>
     </Box>
   );
 }

@@ -29,7 +29,7 @@ function AddCourseModal({ open, handleClose, onCreated }: AddCourseModalProps) {
     },
   });
   const { levelsList, fetchLevels } = useLevelsList();
-  const { createCourse } = useCreateCourse({ onSuccess: onCreated });
+  const { createCourse, isLoading } = useCreateCourse({ onSuccess: onCreated });
 
   const onSubmit = (formValues: CourseFormValues) => {
     createCourse(courseFormToReqBody(formValues));
@@ -40,21 +40,24 @@ function AddCourseModal({ open, handleClose, onCreated }: AddCourseModalProps) {
   }, [fetchLevels]);
 
   return (
-    <Dialog open={open} onClose={handleClose}>
-      <Box sx={sxStyles.modal}>
-        <Typography variant="h3">Add New Course</Typography>
-        <Typography color="primary" sx={{ mt: 2, mb: 2 }}>
-          Create a new course. You can add lessons after creating the course.
-        </Typography>
+    <>
+      <Dialog open={open} onClose={handleClose}>
+        <Box sx={sxStyles.modal}>
+          <Typography variant="h3">Add New Course</Typography>
+          <Typography color="primary" sx={{ mt: 2, mb: 2 }}>
+            Create a new course. You can add lessons after creating the course.
+          </Typography>
 
-        <CourseForm
-          control={control}
-          onSubmit={handleSubmit(onSubmit)}
-          levelsOptions={levelsList}
-          statusesOptions={COURSE_STATUSES}
-        />
-      </Box>
-    </Dialog>
+          <CourseForm
+            isLoading={isLoading}
+            control={control}
+            onSubmit={handleSubmit(onSubmit)}
+            levelsOptions={levelsList}
+            statusesOptions={COURSE_STATUSES}
+          />
+        </Box>
+      </Dialog>
+    </>
   );
 }
 

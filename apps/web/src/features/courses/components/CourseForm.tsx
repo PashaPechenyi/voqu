@@ -12,16 +12,20 @@ type CourseFormProps = {
   levelsOptions: Level[];
   statusesOptions: CourseStatusKey[];
   edit?: boolean;
+  isLoading: boolean;
 };
 
 function CourseForm({
+  isLoading,
   control,
   onSubmit,
   statusesOptions,
   levelsOptions,
   edit,
 }: CourseFormProps) {
-  const requiredRule = edit ? {} : { required: { value: true, message: VALIDATION_ERRORS.REQUIRED } };
+  const requiredRule = edit
+    ? {}
+    : { required: { value: true, message: VALIDATION_ERRORS.REQUIRED } };
 
   return (
     <Box component="form" onSubmit={onSubmit} sx={sxStyles.form}>
@@ -118,7 +122,7 @@ function CourseForm({
           />
         )}
       />
-      <Button type="submit" variant="contained">
+      <Button loading={isLoading} type="submit" variant="contained">
         Save
       </Button>
     </Box>

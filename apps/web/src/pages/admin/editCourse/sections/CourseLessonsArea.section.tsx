@@ -7,6 +7,8 @@ import DeleteCourseModal from '@/features/courses/components/DeleteCourseModal';
 import EditCourseModal from '@/features/courses/components/EditCourseModal';
 import { Course } from '@/features/courses/types/course.type';
 import LessonCard from '@/features/lesson/components/LessonCard/LessonCard';
+import { useNavigate } from 'react-router-dom';
+import { ADMIN_COURSES_URL } from '@/shared/constants/urls.const';
 
 type CourseLessonsAreaSectionProps = {
   course: Course;
@@ -16,8 +18,12 @@ type CourseLessonsAreaSectionProps = {
 function CourseLessonsAreaSection({ course, onSuccess }: CourseLessonsAreaSectionProps) {
   const lessons = INITIAL_LESSONS.grammar;
   const [open, setOpen] = useState<'edit' | 'delete' | null>(null);
+  const navigate = useNavigate();
   const handleClose = () => setOpen(null);
-
+  const handleDeleted = () => {
+    handleClose();
+    navigate(ADMIN_COURSES_URL);
+  };
   return (
     <Box sx={sxStyles.root}>
       <Box sx={sxStyles.title}>
@@ -50,6 +56,7 @@ function CourseLessonsAreaSection({ course, onSuccess }: CourseLessonsAreaSectio
           Delete Course
         </Button>
         <DeleteCourseModal
+          onDeleted={handleDeleted}
           courseName={course.name}
           open={open === 'delete'}
           handleClose={handleClose}

@@ -18,6 +18,9 @@ function EditCourseHeaderSection({ course }: EditCourseHeaderSectionProps) {
     <Box sx={sxStyles.root}>
       <Box>
         <Typography variant="h3">{course.name}</Typography>
+        <Typography variant="h6" color={'adminSecondary'}>
+          description
+        </Typography>
       </Box>
       <Box sx={{ flex: 1 }} />
       <Button sx={sxStyles.btn} variant="contained" onClick={handleOpen}>
