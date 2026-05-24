@@ -22,8 +22,9 @@ type CourseEditModalProps = {
 
 const getDefaultValues = (course?: Course): CourseFormValues => ({
   name: course?.name ?? '',
-  level: course?.level ?? null,
+  level: course?.Level ?? null,
   status: course?.status ?? null,
+  description: course?.description ?? '',
 });
 
 const CourseEditModal: FC<CourseEditModalProps> = ({ isOpen, onClose, course, onEdit }) => {

@@ -5,4 +5,5 @@ export type CourseFormValues = {
   name: string;
   level: Level | null;
   status: CourseStatus | null;
+  description: string;
 };

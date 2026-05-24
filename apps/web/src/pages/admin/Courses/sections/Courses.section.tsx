@@ -7,45 +7,20 @@ import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.h
 import { Course } from '@/features/courses/types/course.type';
 
 type CoursesSectionProps = {
-  enteredValue: string;
-  statusFilter: CourseStatusFilterValue;
+  coursesList: Course[];
+  refetchCourses: () => void;
 };
 
-const filterCourses = (
-  courses: Course[],
-  search: string,
-  statusFilter: CourseStatusFilterValue,
-): Course[] =>
-  courses.filter((course) => {
-    const matchesSearch =
-      search.length === 0 || course.name.toLowerCase().includes(search.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || course.status === statusFilter;
-    return matchesSearch && matchesStatus;
-  });
-
-const CoursesSection: FC<CoursesSectionProps> = ({ enteredValue, statusFilter }) => {
-  const { coursesList, fetchCourses, isLoading, error } = useCoursesList();
-
+const CoursesSection: FC<CoursesSectionProps> = ({ coursesList, refetchCourses }) => {
   // TODO: fetch once on mount; fetchCourses' identity depends on onSuccess/onError,
   // so listing it as a dep would refire the request whenever those callbacks change.
-  useEffect(() => {
-    fetchCourses();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const visible = filterCourses(coursesList, enteredValue, statusFilter);
 
   return (
     <Box sx={sxStyles.root}>
-      {isLoading && <Typography>Loading…</Typography>}
-      {error && <Typography color="error">Failed to load courses.</Typography>}
-      {!isLoading && !error && visible.length === 0 && (
-        <Typography color="primary">No courses found.</Typography>
-      )}
       <Grid container spacing={2}>
-        {visible.map((course) => (
+        {coursesList.map((course) => (
           <Grid key={course.id} size={4} sx={sxStyles.gridItem}>
-            <CourseCard course={course} onStatusChanged={fetchCourses} />
+            <CourseCard course={course} onStatusChanged={refetchCourses} />
           </Grid>
         ))}
       </Grid>

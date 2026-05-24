@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { SvgIcon, SvgIconProps } from '@mui/material';
-import { keyframes } from '@mui/system';
+// import { keyframes } from '@mui/system';
 import { SxStyleProps, MuiColor } from '@/shared/types/sx.type';
 import { combineSxStyles } from '@/shared/helpers/styles/combineSxStyles.helper';
 import { useResolveColor } from '@/shared/hooks/useResolveColor';
@@ -38,10 +38,10 @@ const ProgressCircleIcon: FC<ProgressCircleIconProps> = ({
   const offset = circumference - (clampedPercentage / 100) * circumference;
   const fullOffset = circumference;
 
-  const fillKeyframes = keyframes`
-    from { stroke-dashoffset: ${fullOffset}; }
-    to { stroke-dashoffset: ${offset}; }
-  `;
+  // const fillKeyframes = keyframes`
+  //   from { stroke-dashoffset: ${fullOffset}; }
+  //   to { stroke-dashoffset: ${offset}; }
+  // `;
 
   return (
     <SvgIcon
@@ -67,12 +67,12 @@ const ProgressCircleIcon: FC<ProgressCircleIconProps> = ({
         strokeDasharray={circumference}
         strokeLinecap="round"
         transform={`rotate(-90 ${diameter / 2} ${diameter / 2})`}
-        style={{
-          animation: animate
-            ? `${fillKeyframes} ${animationDuration}s ease-out forwards`
-            : 'none',
-          strokeDashoffset: animate ? fullOffset : offset,
-        }}
+        // style={{
+        //   animation: animate
+        //     ? `${fillKeyframes} ${animationDuration}s ease-out forwards`
+        //     : 'none',
+        //   strokeDashoffset: animate ? fullOffset : offset,
+        // }}
       />
     </SvgIcon>
   );

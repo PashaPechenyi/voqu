@@ -8,3 +8,19 @@ export const createCourseReq = async (body: CreateCourseReqBody): Promise<void> 
   });
   if (!response.ok) throw new Error('Failed to create course');
 };
+
+// export async function createCourseReq<Tbody>(
+//   way: string,
+//   method: string,
+//   body: Tbody,
+//   headers: { 'Content-Type': string },
+//   error: string,
+//   id?: string,
+// ) {
+//   const response = await fetch(`${way}`, {
+//     method: `${method}`,
+//     headers: headers,
+//     body: JSON.stringify(body),
+//   });
+//   if (!response.ok) throw new Error(`${error}`);
+// }

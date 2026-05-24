@@ -30,7 +30,7 @@ const CourseCard: FC<CourseCardProps> = ({ course, onStatusChanged }) => {
   });
 
   const handleStatusToggle = () => updateCourseStatus(course);
-
+  console.log(course, 'Course');
   return (
     <Card sx={sxStyles.card}>
       <CardMedia sx={sxStyles.media} image={courseImage}>
@@ -41,11 +41,15 @@ const CourseCard: FC<CourseCardProps> = ({ course, onStatusChanged }) => {
           >
             {course.status}
           </Button>
+          <Box sx={sxStyles.courseLevel}>{course?.Level?.cefrLevel}</Box>
         </Box>
       </CardMedia>
       <CardContent sx={sxStyles.content}>
         <Typography gutterBottom variant="h5" component="div" color="secondary">
           {course.name}
+        </Typography>
+        <Typography gutterBottom variant="body1" component="div" color="secondary">
+          {course.description}
         </Typography>
         <Box sx={sxStyles.metaRow}>
           <Typography variant="body2" color="primary">
@@ -124,6 +128,14 @@ const sxStyles = createSxStylesList({
   }),
   content: {
     flex: 1,
+  },
+  courseLevel: {
+    p: '5px 10px',
+    borderRadius: '30px',
+    fontSize: '12px',
+    lineHeight: '20px',
+    border: '1px solid black',
+    backgroundColor: 'white',
   },
 });
 

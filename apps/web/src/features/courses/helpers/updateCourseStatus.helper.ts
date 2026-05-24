@@ -6,9 +6,10 @@ export const updateCourseStatusReq = async (course: Course): Promise<void> => {
     course.status === CourseStatus.Draft ? CourseStatus.Published : CourseStatus.Draft;
 
   const body = {
-    LevelId: course.level?.id,
+    LevelId: course.Level?.id,
     name: course.name,
     status: nextStatus,
+    description: course.description,
   };
 
   const response = await fetch(`/api/course/${course.id}`, {

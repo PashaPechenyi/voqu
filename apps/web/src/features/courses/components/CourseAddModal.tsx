@@ -22,11 +22,12 @@ const DEFAULT_VALUES: CourseFormValues = {
   name: '',
   level: null,
   status: null,
+  description: '',
 };
 
 const CourseAddModal: FC<CourseAddModalProps> = ({ isOpen, onClose, onSubmit }) => {
   const { fetchLevels, levelsList } = useLevelsList();
-  const { handleSubmit, control } = useForm<CourseFormValues>({
+  const { handleSubmit, control, reset } = useForm<CourseFormValues>({
     defaultValues: DEFAULT_VALUES,
   });
 
@@ -49,10 +50,21 @@ const CourseAddModal: FC<CourseAddModalProps> = ({ isOpen, onClose, onSubmit }) 
         <CourseModalForm control={control} levelsList={levelsList} />
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} sx={sxStyles.cancelButton}>
+        <Button
+          onClick={() => {
+            (onClose(), reset());
+          }}
+          sx={sxStyles.cancelButton}
+        >
           Cancel
         </Button>
-        <Button onClick={handleSubmit(onSubmit)} sx={sxStyles.submitButton}>
+        <Button
+          onClick={handleSubmit((values) => {
+            onSubmit(values);
+            reset();
+          })}
+          sx={sxStyles.submitButton}
+        >
           Add course
         </Button>
       </DialogActions>

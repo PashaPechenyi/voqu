@@ -26,6 +26,7 @@ export const useCreateCourse = ({ onSuccess, onError }: UseCreateCourseOptions =
         setIsLoading(false);
       }
     },
+
     [onSuccess, onError],
   );
 

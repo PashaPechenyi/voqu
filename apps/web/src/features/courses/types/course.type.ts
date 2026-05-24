@@ -12,8 +12,9 @@ export type Course = {
   id: string;
   name: string;
   status: CourseStatus;
-  level: Level;
+  Level: Level;
   owner?: Owner;
   createdAt?: string;
   updatedAt?: string;
+  description: string;
 };

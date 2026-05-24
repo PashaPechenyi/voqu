@@ -23,7 +23,7 @@ export class CreateCourseDto implements ICreateCourseParams {
   @IsEnum(CourseStatus)
   status?: CourseStatus;
 
-  @IsNumberString()
+  //@IsNumberString()
   @IsNotEmpty()
   LevelId: string;
 }

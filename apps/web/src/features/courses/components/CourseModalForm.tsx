@@ -35,6 +35,24 @@ const CourseModalForm: FC<CourseModalFormProps> = ({ control, levelsList }) => {
           )}
         />
       </Grid>
+      <Grid size={12}>
+        <Controller
+          control={control}
+          name="description"
+          rules={{ required: { value: true, message: FORM_VALIDATION_ERRORS.requiredField } }}
+          render={({ field, formState: { errors } }) => (
+            <TextField
+              label="Course description"
+              size="small"
+              variant="outlined"
+              sx={sxStyles.field}
+              error={!!errors.description}
+              helperText={errors.description?.message}
+              {...field}
+            />
+          )}
+        />
+      </Grid>
       <Grid size={6}>
         <Controller
           control={control}
@@ -49,7 +67,12 @@ const CourseModalForm: FC<CourseModalFormProps> = ({ control, levelsList }) => {
               onChange={(_, newValue) => onChange(newValue)}
               value={value}
               renderInput={(params) => (
-                <TextField {...params} label="Level" error={!!errors.level} />
+                <TextField
+                  {...params}
+                  label="Level"
+                  error={!!errors.level}
+                  helperText={errors.level?.message}
+                />
               )}
             />
           )}
@@ -69,7 +92,12 @@ const CourseModalForm: FC<CourseModalFormProps> = ({ control, levelsList }) => {
               value={value}
               getOptionLabel={(option) => capitalizeWords(option)}
               renderInput={(params) => (
-                <TextField {...params} label="Status" error={!!errors.status} />
+                <TextField
+                  {...params}
+                  label="Status"
+                  error={!!errors.status}
+                  helperText={errors.status?.message}
+                />
               )}
             />
           )}

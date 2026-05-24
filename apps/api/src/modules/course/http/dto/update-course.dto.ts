@@ -27,7 +27,7 @@ export class UpdateCourseDto implements IUpdateCourseParams {
   status?: CourseStatus;
 
   @IsOptional()
-  @IsNumberString()
+  //@IsNumberString()
   @IsNotEmpty()
   LevelId?: string;
 }

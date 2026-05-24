@@ -12,6 +12,39 @@ import { CourseFormValues } from '@/features/courses/types/courseForm.type';
 import { courseFormToReqBody } from '@/features/courses/helpers/courseFormToReqBody.helper';
 import { ADMIN_COURSES_URL } from '@/shared/constants/urls.const';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
+import LessonListItem from '@/features/lessons/components/LessonListItem';
+import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
+import { LessonType } from '@/features/lessons/enums/lessonType.enum';
+import LessonsSection from './sections/Lessons.section';
+const LESSONS = [
+  {
+    id: '1',
+    title: 'Past Simple',
+    description: 'lorem ipsum dolor sit',
+    duration: 12,
+    type: LessonType.Grammar,
+    isLocked: false,
+    icon: LibraryBooksIcon,
+  },
+  {
+    id: '2',
+    title: 'Present Simple',
+    description: 'lorem ipsum dolor sit',
+    duration: 20,
+    type: LessonType.Grammar,
+    isLocked: false,
+    icon: LibraryBooksIcon,
+  },
+  {
+    id: '3',
+    title: 'Present Perfect Simple',
+    description: 'lorem ipsum dolor sit',
+    duration: 30,
+    type: LessonType.Grammar,
+    isLocked: false,
+    icon: LibraryBooksIcon,
+  },
+];
 
 const CourseDetailsPage: FC = () => {
   const { courseId } = useParams<{ courseId: string }>();
@@ -56,6 +89,7 @@ const CourseDetailsPage: FC = () => {
   return (
     <>
       <CourseSummarySection title={activeCourse.name} />
+      <LessonsSection lessons={LESSONS} />
       <Box sx={sxStyles.actionsWrapper}>
         <Box sx={sxStyles.actionsRow}>
           <Button sx={sxStyles.editButton} onClick={openEditModal}>

@@ -9,5 +9,6 @@ export const courseFormToReqBody = (values: CourseFormValues): CreateCourseReqBo
     name: values.name,
     status: values.status,
     LevelId: values.level.id,
+    description: values.description,
   };
 };
