@@ -5,6 +5,7 @@ export class CourseListItem {
   constructor(data: Course) {
     this.id = data.id!;
     this.name = data.name!;
+    this.description = data.description ?? null;
     this.status = data.status!;
     this.Level = {
       id: data.Level!.id!,
@@ -24,6 +25,8 @@ export class CourseListItem {
   id: string;
 
   name: string;
+
+  description: string | null;
 
   status: CourseStatus;
 

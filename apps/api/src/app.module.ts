@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { dataSourceOptions } from './database/data-source';
 import { CourseModule } from './modules/course/course.module';
+import { LessonModule } from './modules/lesson/lesson.module';
 import { LevelModule } from './modules/level/level.module';
 
 @Module({
@@ -14,6 +15,7 @@ import { LevelModule } from './modules/level/level.module';
     TypeOrmModule.forRoot(dataSourceOptions),
     LevelModule,
     CourseModule,
+    LessonModule,
   ],
   controllers: [],
   providers: [],
