@@ -1,4 +1,4 @@
-import { Box, Button, MenuItem, Modal, TextField, Typography } from '@mui/material';
+import { Box, Button, Grid, MenuItem, Modal, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 import { LessonSegmentType } from '../types/lessonSegmentType.type';
@@ -24,41 +24,51 @@ function AddNewLessonModal({ open, handleClose }: AddNewLessonModalProps) {
   });
 
   return (
-    <Modal
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
+    <Modal open={open} onClose={handleClose}>
       <Box sx={sxStyles.modal}>
-        <Typography id="modal-modal-title" variant="h3">
-          Add New Lesson
-        </Typography>
-        <Typography color="primary" id="modal-modal-description" sx={{ mt: 2, mb: 2 }}>
+        <Typography variant="h3">Add New Lesson</Typography>
+
+        <Typography color="primary" sx={{ mt: 2, mb: 4 }}>
           Create a new lesson for this course.
         </Typography>
-        <Box sx={sxStyles.form}>
-          <TextField
-            sx={sxStyles.textField}
-            color="primary"
-            required
-            variant="filled"
-            placeholder="Title"
-            value={formValues.title}
-            onChange={(e) => setFormValues((prev) => ({ ...prev, title: e.target.value }))}
-          />
-          <TextField
-            sx={sxStyles.textField}
-            required
-            variant="filled"
-            multiline
-            placeholder="Duration"
-            value={formValues.duration}
-            onChange={(e) => setFormValues((prev) => ({ ...prev, duration: e.target.value }))}
-          />
-          <Box sx={sxStyles.selectBox}>
+
+        <Grid container spacing={3}>
+          <Grid size={{ xs: 12 }}>
             <TextField
-              sx={sxStyles.select}
+              fullWidth
+              color="primary"
+              required
+              variant="filled"
+              placeholder="Title"
+              value={formValues.title}
+              onChange={(e) =>
+                setFormValues((prev) => ({
+                  ...prev,
+                  title: e.target.value,
+                }))
+              }
+            />
+          </Grid>
+
+          <Grid size={{ xs: 12, md: 6 }}>
+            <TextField
+              fullWidth
+              required
+              variant="filled"
+              placeholder="Duration"
+              value={formValues.duration}
+              onChange={(e) =>
+                setFormValues((prev) => ({
+                  ...prev,
+                  duration: e.target.value,
+                }))
+              }
+            />
+          </Grid>
+
+          <Grid size={{ xs: 12, md: 6 }}>
+            <TextField
+              fullWidth
               variant="filled"
               select
               focused
@@ -76,11 +86,26 @@ function AddNewLessonModal({ open, handleClose }: AddNewLessonModalProps) {
                 </MenuItem>
               ))}
             </TextField>
-          </Box>
-        </Box>
-        <Button variant="contained" onClick={handleClose}>
-          Close
-        </Button>
+          </Grid>
+
+          <Grid size={{ xs: 12 }}>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                gap: 2,
+                mt: 2,
+                flexWrap: 'wrap',
+              }}
+            >
+              <Button variant="outlined" onClick={handleClose}>
+                Close
+              </Button>
+
+              <Button variant="contained">Create Lesson</Button>
+            </Box>
+          </Grid>
+        </Grid>
       </Box>
     </Modal>
   );
@@ -99,24 +124,24 @@ const sxStyles = createSxStylesList({
     boxShadow: 24,
     p: 4,
   },
-  form: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    gap: 2,
-    mb: 2,
-  },
-  textField: {
-    width: '100%',
-  },
-  selectBox: {
-    display: 'flex',
-    flexDirection: 'row',
-    gap: 2,
-    flex: 1,
-  },
-  select: {
-    width: '50%',
-  },
+  // form: {
+  //   display: 'flex',
+  //   flexWrap: 'wrap',
+  //   gap: 2,
+  //   mb: 2,
+  // },
+  // textField: {
+  //   width: '100%',
+  // },
+  // selectBox: {
+  //   display: 'flex',
+  //   flexDirection: 'row',
+  //   gap: 2,
+  //   flex: 1,
+  // },
+  // select: {
+  //   width: '50%',
+  // },
 });
 
 export default AddNewLessonModal;

@@ -9,6 +9,8 @@ import { Course } from '@/features/courses/types/course.type';
 import LessonCard from '@/features/lesson/components/LessonCard/LessonCard';
 import { useNavigate } from 'react-router-dom';
 import { ADMIN_COURSES_URL } from '@/shared/constants/urls.const';
+import { move } from '@dnd-kit/helpers';
+import { DragDropProvider } from '@dnd-kit/react';
 
 type CourseLessonsAreaSectionProps = {
   course: Course;
@@ -18,12 +20,18 @@ type CourseLessonsAreaSectionProps = {
 function CourseLessonsAreaSection({ course, onSuccess }: CourseLessonsAreaSectionProps) {
   const lessons = INITIAL_LESSONS.grammar;
   const [open, setOpen] = useState<'edit' | 'delete' | null>(null);
+  const [items, setItems] = useState(createRange(lessons.length));
+
   const navigate = useNavigate();
   const handleClose = () => setOpen(null);
   const handleDeleted = () => {
     handleClose();
     navigate(ADMIN_COURSES_URL);
   };
+  function createRange(length: number) {
+    return Array.from({ length }, (_, i) => i + 1);
+  }
+
   return (
     <Box sx={sxStyles.root}>
       <Box sx={sxStyles.title}>
@@ -31,10 +39,15 @@ function CourseLessonsAreaSection({ course, onSuccess }: CourseLessonsAreaSectio
         <Box sx={{ flex: 1 }} />
         <Typography>Drag to reorder lessons</Typography>
       </Box>
-
-      {lessons.map((lesson) => (
-        <LessonCard key={lesson.id} lesson={lesson} />
-      ))}
+      <DragDropProvider
+        onDragEnd={(event) => {
+          setItems((items) => move(items, event));
+        }}
+      >
+        {lessons.map((lesson, index) => (
+          <LessonCard key={lesson.id} lessonId={lesson.id} lessonIndex={index} lesson={lesson} />
+        ))}
+      </DragDropProvider>
 
       <Box sx={sxStyles.controls}>
         <Button sx={sxStyles.btn} variant="contained" onClick={() => setOpen('edit')}>

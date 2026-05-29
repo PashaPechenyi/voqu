@@ -55,7 +55,11 @@ function CourseCard({ course, onSuccess }: CourseCardProps) {
   }, [fetchLevels]);
   return (
     <Card sx={sxStyles.card}>
-      <CardMedia sx={sxStyles.media} title={course.name}>
+      <CardMedia
+        sx={sxStyles.media}
+        title={course.name}
+        image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTi-Ev7Uu_sqkQXYE0heikrzY2UAlsdqdeLg&s"
+      >
         <Box>
           <Button
             sx={{ mr: 1 }}
@@ -105,7 +109,7 @@ const sxStyles = createSxStylesList({
     flex: 1,
   },
   media: {
-    height: 140,
+    height: 200,
     display: 'flex',
     justifyContent: 'end',
     p: 1,

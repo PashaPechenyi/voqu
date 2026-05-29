@@ -4,7 +4,7 @@ import { LessonSegmentType } from '@/features/lesson/types/lessonSegmentType.typ
 export const INITIAL_LESSONS: Record<string, Lesson[]> = {
   grammar: [
     {
-      id: '1',
+      id: 1,
       title: 'Introduction to Tenses',
       duration: 12,
       segmentType: LessonSegmentType.reading,
@@ -12,7 +12,7 @@ export const INITIAL_LESSONS: Record<string, Lesson[]> = {
       order: 1,
     },
     {
-      id: '2',
+      id: 2,
       title: 'Present Simple vs Present Continuous',
       duration: 15,
       segmentType: LessonSegmentType.grammar,
@@ -20,7 +20,7 @@ export const INITIAL_LESSONS: Record<string, Lesson[]> = {
       order: 2,
     },
     {
-      id: '3',
+      id: 3,
       title: 'Present Tense Practice Quiz',
       duration: 8,
       segmentType: LessonSegmentType.quiz,
@@ -28,7 +28,7 @@ export const INITIAL_LESSONS: Record<string, Lesson[]> = {
       order: 3,
     },
     {
-      id: '4',
+      id: 4,
       title: 'Past Simple - Regular Verbs',
       duration: 14,
       segmentType: LessonSegmentType.reading,
@@ -36,7 +36,7 @@ export const INITIAL_LESSONS: Record<string, Lesson[]> = {
       order: 4,
     },
     {
-      id: '5',
+      id: 5,
       title: 'Past Simple - Irregular Verbs',
       duration: 16,
       segmentType: LessonSegmentType.grammar,
@@ -46,7 +46,7 @@ export const INITIAL_LESSONS: Record<string, Lesson[]> = {
   ],
   vocabulary: [
     {
-      id: '1',
+      id: 1,
       title: 'Business English Essentials',
       duration: 15,
       segmentType: LessonSegmentType.reading,
@@ -54,7 +54,7 @@ export const INITIAL_LESSONS: Record<string, Lesson[]> = {
       order: 1,
     },
     {
-      id: '2',
+      id: 2,
       title: 'Workplace Idioms',
       duration: 12,
       segmentType: LessonSegmentType.grammar,
@@ -64,7 +64,7 @@ export const INITIAL_LESSONS: Record<string, Lesson[]> = {
   ],
   speaking: [
     {
-      id: '1',
+      id: 1,
       title: 'Greetings and Introductions',
       duration: 10,
       segmentType: LessonSegmentType.listening,
@@ -74,7 +74,7 @@ export const INITIAL_LESSONS: Record<string, Lesson[]> = {
   ],
   listening: [
     {
-      id: '1',
+      id: 1,
       title: 'News Reports - Basic',
       duration: 15,
       segmentType: LessonSegmentType.listening,

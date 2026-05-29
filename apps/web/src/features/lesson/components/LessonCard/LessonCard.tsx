@@ -1,10 +1,11 @@
 import {
   Box,
-  Card,
+  Button,
   CardActions,
   CardContent,
   Chip,
   IconButton,
+  ListItem,
   Typography,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -14,17 +15,38 @@ import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.h
 import { Lesson } from '@/features/lesson/types/lesson.type';
 import { LESSON_SEGMENT_ICONS } from '@/features/lesson/constants/lessonSegmentIcons.const';
 import { LESSON_SEGMENT_COLORS } from '@/features/lesson/constants/lessonSegmentColors.const';
+import { useRef, useState } from 'react';
+import { useSortable } from '@dnd-kit/react/sortable';
+import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 
 type LessonCardProps = {
   lesson: Lesson;
+  lessonId: number;
+  lessonIndex: number;
 };
 
-function LessonCard({ lesson }: LessonCardProps) {
+function LessonCard({ lesson, lessonId, lessonIndex }: LessonCardProps) {
   const SegmentIcon = LESSON_SEGMENT_ICONS[lesson.segmentType];
   const segmentColor = LESSON_SEGMENT_COLORS[lesson.segmentType];
+  const dragButtonRef = useRef<HTMLButtonElement | null>(null);
+  const listItemRef = useRef<HTMLLIElement | null>(null);
+  const { isDragging } = useSortable({
+    id: lessonId,
+    index: lessonIndex,
+    element: listItemRef,
+    handle: dragButtonRef,
+  });
 
   return (
-    <Card sx={sxStyles.card}>
+    <ListItem
+      ref={listItemRef}
+      className="item"
+      data-shadow={isDragging || undefined}
+      sx={sxStyles.card}
+    >
+      <Button ref={dragButtonRef}>
+        <DragIndicatorIcon />
+      </Button>
       <CardContent sx={sxStyles.cardContent}>
         <Chip label={lesson.order} color="primary" />
         <Box
@@ -57,7 +79,7 @@ function LessonCard({ lesson }: LessonCardProps) {
           <DeleteIcon />
         </IconButton>
       </CardActions>
-    </Card>
+    </ListItem>
   );
 }
 
@@ -66,6 +88,9 @@ const sxStyles = createSxStylesList({
     display: 'flex',
     borderRadius: 0,
     flexDirection: 'row',
+    backgroundColor: 'white',
+    borderBottom: '1px solid',
+    borderColor: 'secondary.main',
   },
   cardContent: {
     display: 'flex',
