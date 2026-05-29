@@ -45,6 +45,7 @@ export class CourseRepository extends BaseRepository<Course> {
       .select([
         'Course.id',
         'Course.name',
+        'Course.description',
         'Course.status',
         'Course.createdAt',
         'Course.updatedAt',
