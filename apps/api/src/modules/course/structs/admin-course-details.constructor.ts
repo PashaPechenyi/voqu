@@ -1,7 +1,7 @@
 import { Course } from '../../../database/entities/course.entity';
 import { CourseStatus } from './course-status.enum';
 
-export class CourseListItem {
+export class AdminCourseDetails {
   constructor(data: Course) {
     this.id = data.id!;
     this.name = data.name!;

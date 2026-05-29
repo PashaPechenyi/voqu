@@ -1,9 +1,9 @@
 import {
   IsEnum,
   IsNotEmpty,
-  IsNumberString,
   IsOptional,
   IsString,
+  Matches,
   MaxLength,
   ValidateIf,
 } from 'class-validator';
@@ -27,7 +27,6 @@ export class UpdateCourseDto implements IUpdateCourseParams {
   status?: CourseStatus;
 
   @IsOptional()
-  //@IsNumberString()
-  @IsNotEmpty()
+  @Matches(/^\d+$/, { message: 'LevelId must be a positive integer id' })
   LevelId?: string;
 }

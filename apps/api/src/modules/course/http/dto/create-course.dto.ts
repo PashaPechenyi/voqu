@@ -1,11 +1,4 @@
-import {
-  IsEnum,
-  IsNotEmpty,
-  IsNumberString,
-  IsOptional,
-  IsString,
-  MaxLength,
-} from 'class-validator';
+import { IsEnum, IsNotEmpty, IsOptional, IsString, Matches, MaxLength } from 'class-validator';
 import { CourseStatus } from '../../structs/course-status.enum';
 import { ICreateCourseParams } from '../../structs/create-course-params.interface';
 
@@ -23,7 +16,6 @@ export class CreateCourseDto implements ICreateCourseParams {
   @IsEnum(CourseStatus)
   status?: CourseStatus;
 
-  //@IsNumberString()
-  @IsNotEmpty()
+  @Matches(/^\d+$/, { message: 'LevelId must be a positive integer id' })
   LevelId: string;
 }
