@@ -1,5 +1,5 @@
-import { FC, useState } from 'react';
-import { Box, Button, Typography } from '@mui/material';
+import { FC, useRef, useState } from 'react';
+import { Box, Button, ListItem, Typography, ListItemText } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import LockIcon from '@mui/icons-material/Lock';
 import EditIcon from '@mui/icons-material/Edit';
@@ -9,6 +9,8 @@ import { LessonFormValues } from '../types/lessonForm.type';
 import ConfirmModal from '@/shared/components/ConfirmModal/ConfirmModal';
 import LessonEditModal from './LessonEditModal';
 import { useToggle } from '@/shared/hooks/useToggle';
+import { useSortable } from '@dnd-kit/react/sortable';
+import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 
 type LessonListItemProps = {
   lesson: Lesson;
@@ -16,6 +18,7 @@ type LessonListItemProps = {
   onDelete?: (lesson: Lesson) => void;
   onEdit?: (lesson: Lesson, values: LessonFormValues) => void;
   onToggleLock?: (lesson: Lesson) => void;
+  id: string;
 };
 
 const LessonListItem: FC<LessonListItemProps> = ({
@@ -24,11 +27,15 @@ const LessonListItem: FC<LessonListItemProps> = ({
   onDelete,
   onEdit,
   onToggleLock,
+  id,
 }) => {
   const Icon = lesson.icon;
   const [pendingDelete, setPendingDelete] = useState(false);
   const { isOpen: isDeleteOpen, open: openDelete, close: closeDelete } = useToggle();
   const { isOpen: isEditOpen, open: openEdit, close: closeEdit } = useToggle();
+  const listItemRef = useRef<HTMLLIElement | null>(null);
+  const dragButtonRef = useRef<HTMLButtonElement | null>(null);
+  const { isDragging } = useSortable({ id, index, element: listItemRef, handle: dragButtonRef });
 
   const handleConfirmDelete = () => {
     setPendingDelete(true);
@@ -44,13 +51,16 @@ const LessonListItem: FC<LessonListItemProps> = ({
 
   return (
     <>
-      <Box sx={sxStyles.item}>
+      <ListItem ref={listItemRef} data-shadow={isDragging || undefined} sx={sxStyles.item}>
         <Box sx={sxStyles.leftCluster}>
+          <Button ref={dragButtonRef} className="handle">
+            <DragIndicatorIcon />
+          </Button>
           <Box sx={sxStyles.index}>{index + 1}</Box>
           <Box sx={sxStyles.iconCon}>
             <Icon sx={sxStyles.lessonIcon} />
           </Box>
-          <Box>
+          <ListItemText>
             <Typography variant="h6" color="secondary">
               {lesson.title}
             </Typography>
@@ -62,7 +72,7 @@ const LessonListItem: FC<LessonListItemProps> = ({
                 {lesson.type}
               </Typography>
             </Box>
-          </Box>
+          </ListItemText>
         </Box>
         <Box sx={sxStyles.actionsRow}>
           <Button sx={sxStyles.actionButton} onClick={openEdit}>
@@ -75,7 +85,7 @@ const LessonListItem: FC<LessonListItemProps> = ({
             <DeleteIcon sx={sxStyles.deleteIcon} />
           </Button>
         </Box>
-      </Box>
+      </ListItem>
 
       <LessonEditModal
         isOpen={isEditOpen}

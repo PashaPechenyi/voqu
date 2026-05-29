@@ -3,12 +3,16 @@ import { Card, CardContent, CardMedia, Divider, Typography } from '@mui/material
 import LessonListItem from '@/features/lessons/components/LessonListItem';
 import { Lesson } from '@/features/lessons/types/lesson.type';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
+import { useState } from 'react';
+import { DragDropProvider } from '@dnd-kit/react';
+import { move } from '@dnd-kit/helpers';
 
 type LessonsSectionProps = {
   lessons: Lesson[];
 };
 
 const LessonsSection: FC<LessonsSectionProps> = ({ lessons }) => {
+  const [items, setItems] = useState(lessons);
   return (
     <Card sx={sxStyles.card}>
       <CardMedia sx={sxStyles.header}>
@@ -20,12 +24,20 @@ const LessonsSection: FC<LessonsSectionProps> = ({ lessons }) => {
         </Typography>
       </CardMedia>
       <CardContent>
-        {lessons.map((lesson, index) => (
-          <Fragment key={lesson.id}>
-            <LessonListItem lesson={lesson} index={index} />
-            <Divider />
-          </Fragment>
-        ))}
+        <DragDropProvider
+          onDragEnd={(event) => {
+            setItems((items) => move(items, event));
+          }}
+        >
+          <ul>
+            {items.map((lesson, index) => (
+              <Fragment key={lesson.id}>
+                <LessonListItem id={lesson.id} lesson={lesson} index={index} />
+                <Divider />
+              </Fragment>
+            ))}
+          </ul>
+        </DragDropProvider>
       </CardContent>
     </Card>
   );

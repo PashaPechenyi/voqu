@@ -12,7 +12,6 @@ import { CourseFormValues } from '@/features/courses/types/courseForm.type';
 import { courseFormToReqBody } from '@/features/courses/helpers/courseFormToReqBody.helper';
 import { ADMIN_COURSES_URL } from '@/shared/constants/urls.const';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
-import LessonListItem from '@/features/lessons/components/LessonListItem';
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import { LessonType } from '@/features/lessons/enums/lessonType.enum';
 import LessonsSection from './sections/Lessons.section';
