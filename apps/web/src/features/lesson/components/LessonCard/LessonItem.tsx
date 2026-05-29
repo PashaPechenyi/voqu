@@ -25,7 +25,7 @@ type LessonCardProps = {
   lessonIndex: number;
 };
 
-function LessonCard({ lesson, lessonId, lessonIndex }: LessonCardProps) {
+function LessonItem({ lesson, lessonId, lessonIndex }: LessonCardProps) {
   const SegmentIcon = LESSON_SEGMENT_ICONS[lesson.segmentType];
   const segmentColor = LESSON_SEGMENT_COLORS[lesson.segmentType];
   const dragButtonRef = useRef<HTMLButtonElement | null>(null);
@@ -111,4 +111,4 @@ const sxStyles = createSxStylesList({
   },
 });
 
-export default LessonCard;
+export default LessonItem;
