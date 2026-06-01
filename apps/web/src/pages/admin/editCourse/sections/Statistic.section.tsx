@@ -1,12 +1,16 @@
 import { Box, Card, CardContent, Typography } from '@mui/material';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 import { INITIAL_LESSONS } from '@/features/lesson/constants/initialLessons.const';
-
-function StatisticSection() {
-  const lessons = INITIAL_LESSONS.grammar;
-  const duration = lessons.reduce((acc, item) => acc + item.duration, 0);
-  const totalLessons = lessons.length;
-  const lockedLessons = lessons.reduce((acc, item) => (item.locked ? acc + 1 : acc), 0);
+import { LessonListItem } from '../../../../../../api/src/modules/lesson/structs/lesson-list-item.constructor';
+type StatisticSectionProps = {
+  lessonsList: LessonListItem[];
+};
+function StatisticSection({ lessonsList }: StatisticSectionProps) {
+  const duration = 0;
+  //lessons.reduce((acc, item) => acc + item.duration, 0);
+  const totalLessons = lessonsList.length;
+  const lockedLessons = 0;
+  //lessonsList.reduce((acc, item) => (item.locked ? acc + 1 : acc), 0);
 
   const statisticsList = [
     { id: 'duration', value: duration, label: 'Total Duration' },

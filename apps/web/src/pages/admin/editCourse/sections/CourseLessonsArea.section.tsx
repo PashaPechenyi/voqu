@@ -6,18 +6,25 @@ import { INITIAL_LESSONS } from '@/features/lesson/constants/initialLessons.cons
 import DeleteCourseModal from '@/features/courses/components/DeleteCourseModal';
 import EditCourseModal from '@/features/courses/components/EditCourseModal';
 import { Course } from '@/features/courses/types/course.type';
-import LessonCard from '@/features/lesson/components/LessonCard/LessonCard';
+import LessonCard from '@/features/lesson/components/LessonCard/LessonItem';
 import { useNavigate } from 'react-router-dom';
 import { ADMIN_COURSES_URL } from '@/shared/constants/urls.const';
 import { move } from '@dnd-kit/helpers';
 import { DragDropProvider } from '@dnd-kit/react';
+import { Lesson } from '@/features/lesson/types/lesson.type';
+import { LessonListItem } from '../../../../../../api/src/modules/lesson/structs/lesson-list-item.constructor';
 
 type CourseLessonsAreaSectionProps = {
+  lessonsList: LessonListItem[];
   course: Course;
   onSuccess: (course: Course) => void;
 };
 
-function CourseLessonsAreaSection({ course, onSuccess }: CourseLessonsAreaSectionProps) {
+function CourseLessonsAreaSection({
+  course,
+  onSuccess,
+  lessonsList,
+}: CourseLessonsAreaSectionProps) {
   const lessons = INITIAL_LESSONS.grammar;
   const [open, setOpen] = useState<'edit' | 'delete' | null>(null);
   const [items, setItems] = useState(createRange(lessons.length));
@@ -44,7 +51,7 @@ function CourseLessonsAreaSection({ course, onSuccess }: CourseLessonsAreaSectio
           setItems((items) => move(items, event));
         }}
       >
-        {lessons.map((lesson, index) => (
+        {lessonsList.map((lesson, index) => (
           <LessonCard key={lesson.id} lessonId={lesson.id} lessonIndex={index} lesson={lesson} />
         ))}
       </DragDropProvider>

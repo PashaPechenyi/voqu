@@ -7,13 +7,17 @@ import { Course } from '@/features/courses/types/course.type';
 
 type EditCourseHeaderSectionProps = {
   course: Course;
+  refetchLessons: () => void;
 };
 
-function EditCourseHeaderSection({ course }: EditCourseHeaderSectionProps) {
+function EditCourseHeaderSection({ course, refetchLessons }: EditCourseHeaderSectionProps) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
+  const onCreated = () => {
+    refetchLessons();
+    handleClose();
+  };
   return (
     <Box sx={sxStyles.root}>
       <Box>
@@ -27,7 +31,12 @@ function EditCourseHeaderSection({ course }: EditCourseHeaderSectionProps) {
         <AddIcon />
         Add lesson
       </Button>
-      <AddNewLessonModal open={open} handleClose={handleClose} />
+      <AddNewLessonModal
+        onCreated={onCreated}
+        courseId={course.id}
+        open={open}
+        handleClose={handleClose}
+      />
     </Box>
   );
 }

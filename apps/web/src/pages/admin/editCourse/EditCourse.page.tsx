@@ -7,28 +7,37 @@ import CourseLessonsAreaSection from './sections/CourseLessonsArea.section';
 import GoBackSection from './sections/GoBack.section';
 import EditCourseHeaderSection from './sections/EditCourseHeader.section';
 import StatisticSection from './sections/Statistic.section';
+import { useLessonsList } from '@/features/lesson/hooks/useLessonsList';
 
 function EditCoursePage() {
   const { courseId } = useParams();
   const { course, setCourse, fetchCourseById } = useCourseById();
+  const { lessonsList, fetchLessons } = useLessonsList();
 
   useEffect(() => {
     if (!courseId) return;
     fetchCourseById(courseId);
-  }, [courseId, fetchCourseById]);
+    fetchLessons();
+  }, [courseId, fetchCourseById, fetchLessons]);
 
+  const refetchLessons = () => {
+    fetchLessons();
+  };
   const handleCourseUpdated = (updatedCourse: Course) => {
     setCourse(updatedCourse);
   };
-
   if (!course) return <Typography>No course found..</Typography>;
 
   return (
     <Box>
       <GoBackSection />
-      <EditCourseHeaderSection course={course} />
-      <StatisticSection />
-      <CourseLessonsAreaSection course={course} onSuccess={handleCourseUpdated} />
+      <EditCourseHeaderSection refetchLessons={refetchLessons} course={course} />
+      <StatisticSection lessonsList={lessonsList} />
+      <CourseLessonsAreaSection
+        lessonsList={lessonsList}
+        course={course}
+        onSuccess={handleCourseUpdated}
+      />
     </Box>
   );
 }

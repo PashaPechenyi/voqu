@@ -18,16 +18,20 @@ import { LESSON_SEGMENT_COLORS } from '@/features/lesson/constants/lessonSegment
 import { useRef, useState } from 'react';
 import { useSortable } from '@dnd-kit/react/sortable';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
+import { LessonListItem } from '../../../../../../api/src/modules/lesson/structs/lesson-list-item.constructor';
 
 type LessonCardProps = {
-  lesson: Lesson;
-  lessonId: number;
+  lesson: LessonListItem;
+  lessonId: string;
   lessonIndex: number;
 };
 
 function LessonItem({ lesson, lessonId, lessonIndex }: LessonCardProps) {
-  const SegmentIcon = LESSON_SEGMENT_ICONS[lesson.segmentType];
-  const segmentColor = LESSON_SEGMENT_COLORS[lesson.segmentType];
+  // const SegmentIcon = LESSON_SEGMENT_ICONS[lesson.status];
+  // const segmentColor = LESSON_SEGMENT_COLORS[lesson.status];
+  const SegmentIcon = MenuBookIcon;
+  const segmentColor = '#71677C';
   const dragButtonRef = useRef<HTMLButtonElement | null>(null);
   const listItemRef = useRef<HTMLLIElement | null>(null);
   const { isDragging } = useSortable({
@@ -48,7 +52,7 @@ function LessonItem({ lesson, lessonId, lessonIndex }: LessonCardProps) {
         <DragIndicatorIcon />
       </Button>
       <CardContent sx={sxStyles.cardContent}>
-        <Chip label={lesson.order} color="primary" />
+        <Chip label={lessonIndex} color="primary" />
         <Box
           sx={{
             ...sxStyles.iconBackground,
@@ -62,8 +66,8 @@ function LessonItem({ lesson, lessonId, lessonIndex }: LessonCardProps) {
         <Box>
           <Typography>{lesson.title}</Typography>
           <Box sx={sxStyles.lessonInfo}>
-            <Typography variant="body2">{lesson.duration} min</Typography>
-            <Chip label={lesson.segmentType} color="primary" variant="outlined" size="small" />
+            <Typography variant="body2">{lesson.subtitle} min</Typography>
+            <Chip label="reading" color="primary" variant="outlined" size="small" />
           </Box>
         </Box>
       </CardContent>

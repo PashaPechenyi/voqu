@@ -1,111 +1,173 @@
 import { Box, Button, Grid, MenuItem, Modal, TextField, Typography } from '@mui/material';
-import { useState } from 'react';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 import { LessonSegmentType } from '../types/lessonSegmentType.type';
-
-type FormValues = {
-  title: string;
-  duration: string;
-  segmentType: LessonSegmentType;
-};
+import { useCreateLesson } from '../hooks/useCreateLesson';
+import { LessonFormValues } from '../types/lessonFormValues.type';
+import { lessonFormToReqBody } from '../helpers/lessonFormToReqBody.helper';
+import { Lesson } from '../types/lesson.type';
+import { Course } from '@/features/courses/types/course.type';
+import { Controller, useForm } from 'react-hook-form';
+import { VALIDATION_ERRORS } from '@/shared/constants/validationErrors.const';
 
 const LESSON_SEGMENT_TYPES = Object.values(LessonSegmentType);
 
 type AddNewLessonModalProps = {
   open: boolean;
   handleClose: () => void;
+  onCreated?: (lesson: Lesson) => void;
+  courseId: Course['id'];
 };
 
-function AddNewLessonModal({ open, handleClose }: AddNewLessonModalProps) {
-  const [formValues, setFormValues] = useState<FormValues>({
-    title: '',
-    duration: '',
-    segmentType: LessonSegmentType.reading,
+function AddNewLessonModal({ open, handleClose, onCreated, courseId }: AddNewLessonModalProps) {
+  const { handleSubmit, control, reset } = useForm<LessonFormValues>({
+    defaultValues: {
+      title: '',
+      subtitle: '',
+      description: '',
+      duration: '',
+      segmentType: LessonSegmentType.reading,
+    },
   });
+
+  const { createLesson, isLoading } = useCreateLesson({ onSuccess: onCreated });
+
+  const onSubmit = (formValues: LessonFormValues) => {
+    createLesson(lessonFormToReqBody(formValues, courseId));
+  };
+  const requiredRule = { required: { value: true, message: VALIDATION_ERRORS.REQUIRED } };
 
   return (
     <Modal open={open} onClose={handleClose}>
       <Box sx={sxStyles.modal}>
-        <Typography variant="h3">Add New Lesson</Typography>
+        <Typography variant="h4" fontWeight={700}>
+          Add New Lesson
+        </Typography>
 
-        <Typography color="primary" sx={{ mt: 2, mb: 4 }}>
+        <Typography color="primary" sx={{ mt: 1, mb: 4 }}>
           Create a new lesson for this course.
         </Typography>
 
-        <Grid container spacing={3}>
-          <Grid size={{ xs: 12 }}>
-            <TextField
-              fullWidth
-              color="primary"
-              required
-              variant="filled"
-              placeholder="Title"
-              value={formValues.title}
-              onChange={(e) =>
-                setFormValues((prev) => ({
-                  ...prev,
-                  title: e.target.value,
-                }))
-              }
-            />
-          </Grid>
+        <Box component="form" onSubmit={handleSubmit(onSubmit)}>
+          <Grid container spacing={3}>
+            <Grid size={{ xs: 12 }}>
+              <Controller
+                name="title"
+                control={control}
+                rules={requiredRule}
+                render={({ field, formState: { errors } }) => (
+                  <TextField
+                    fullWidth
+                    color="primary"
+                    variant="filled"
+                    placeholder="Title"
+                    error={!!errors.title}
+                    helperText={errors.title?.message}
+                    {...field}
+                  />
+                )}
+              />
+            </Grid>
 
-          <Grid size={{ xs: 12, md: 6 }}>
-            <TextField
-              fullWidth
-              required
-              variant="filled"
-              placeholder="Duration"
-              value={formValues.duration}
-              onChange={(e) =>
-                setFormValues((prev) => ({
-                  ...prev,
-                  duration: e.target.value,
-                }))
-              }
-            />
-          </Grid>
+            <Grid size={{ xs: 12 }}>
+              <Controller
+                name="subtitle"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    color="primary"
+                    fullWidth
+                    variant="filled"
+                    placeholder="Subtitle"
+                  />
+                )}
+              />
+            </Grid>
 
-          <Grid size={{ xs: 12, md: 6 }}>
-            <TextField
-              fullWidth
-              variant="filled"
-              select
-              focused
-              value={formValues.segmentType}
-              onChange={(e) =>
-                setFormValues((prev) => ({
-                  ...prev,
-                  segmentType: e.target.value as LessonSegmentType,
-                }))
-              }
-            >
-              {LESSON_SEGMENT_TYPES.map((option) => (
-                <MenuItem key={option} value={option}>
-                  {option}
-                </MenuItem>
-              ))}
-            </TextField>
-          </Grid>
+            <Grid size={{ xs: 12 }}>
+              <Controller
+                name="description"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    fullWidth
+                    color="primary"
+                    multiline
+                    minRows={4}
+                    variant="filled"
+                    placeholder="Description"
+                  />
+                )}
+              />
+            </Grid>
 
-          <Grid size={{ xs: 12 }}>
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'flex-end',
-                gap: 2,
-                mt: 2,
-                flexWrap: 'wrap',
-              }}
-            >
-              <Button variant="outlined" onClick={handleClose}>
-                Close
-              </Button>
+            <Grid size={{ xs: 12, md: 6 }}>
+              <Controller
+                name="duration"
+                control={control}
+                rules={requiredRule}
+                render={({ field, formState: { errors } }) => (
+                  <TextField
+                    {...field}
+                    fullWidth
+                    color="primary"
+                    required
+                    variant="filled"
+                    label="Duration"
+                    placeholder="e.g. 15 min"
+                    error={!!errors.duration}
+                    helperText={errors.duration?.message}
+                  />
+                )}
+              />
+            </Grid>
 
-              <Button variant="contained">Create Lesson</Button>
-            </Box>
+            <Grid size={{ xs: 12, md: 6 }}>
+              <Controller
+                name="segmentType"
+                control={control}
+                rules={requiredRule}
+                render={({ field, formState: { errors } }) => (
+                  <TextField
+                    {...field}
+                    fullWidth
+                    color="primary"
+                    select
+                    variant="filled"
+                    label="Segment Type"
+                    error={!!errors.segmentType}
+                    helperText={errors.segmentType?.message}
+                  >
+                    {LESSON_SEGMENT_TYPES.map((option) => (
+                      <MenuItem key={option} value={option}>
+                        {option}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                )}
+              />
+            </Grid>
+
+            <Grid size={{ xs: 12 }}>
+              <Box sx={sxStyles.actions}>
+                <Button
+                  variant="outlined"
+                  onClick={() => {
+                    reset();
+                    handleClose();
+                  }}
+                >
+                  Cancel
+                </Button>
+
+                <Button type="submit" variant="contained" loading={isLoading}>
+                  Create Lesson
+                </Button>
+              </Box>
+            </Grid>
           </Grid>
-        </Grid>
+        </Box>
       </Box>
     </Modal>
   );
@@ -124,24 +186,13 @@ const sxStyles = createSxStylesList({
     boxShadow: 24,
     p: 4,
   },
-  // form: {
-  //   display: 'flex',
-  //   flexWrap: 'wrap',
-  //   gap: 2,
-  //   mb: 2,
-  // },
-  // textField: {
-  //   width: '100%',
-  // },
-  // selectBox: {
-  //   display: 'flex',
-  //   flexDirection: 'row',
-  //   gap: 2,
-  //   flex: 1,
-  // },
-  // select: {
-  //   width: '50%',
-  // },
+  actions: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    gap: 2,
+    mt: 2,
+    flexWrap: 'wrap',
+  },
 });
 
 export default AddNewLessonModal;
