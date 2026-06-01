@@ -8,6 +8,6 @@ export const courseFormToReqBody = (form: CourseFormValues): CourseReqBody => {
     name: form.title,
     description: form.description,
     status: form.status,
-    LevelId: String(form.level.id),
+    LevelId: form.level.id,
   };
 };
