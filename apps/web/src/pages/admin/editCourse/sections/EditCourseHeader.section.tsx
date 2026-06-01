@@ -7,7 +7,7 @@ import { Course } from '@/features/courses/types/course.type';
 
 type EditCourseHeaderSectionProps = {
   course: Course;
-  refetchLessons: () => void;
+  refetchLessons: (courseId: Course['id']) => void;
 };
 
 function EditCourseHeaderSection({ course, refetchLessons }: EditCourseHeaderSectionProps) {
@@ -15,7 +15,7 @@ function EditCourseHeaderSection({ course, refetchLessons }: EditCourseHeaderSec
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const onCreated = () => {
-    refetchLessons();
+    refetchLessons(course.id);
     handleClose();
   };
   return (

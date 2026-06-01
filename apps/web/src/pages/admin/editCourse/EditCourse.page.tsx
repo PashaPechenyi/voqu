@@ -17,7 +17,7 @@ function EditCoursePage() {
   useEffect(() => {
     if (!courseId) return;
     fetchCourseById(courseId);
-    fetchLessons();
+    fetchLessons(courseId);
   }, [courseId, fetchCourseById, fetchLessons]);
 
   const handleCourseUpdated = (updatedCourse: Course) => {
