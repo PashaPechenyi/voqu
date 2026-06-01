@@ -1,4 +1,3 @@
-import { Lesson } from '@/features/lesson/types/lesson.type';
 import { LessonSegmentType } from '@/features/lesson/types/lessonSegmentType.type';
 
 export const INITIAL_LESSONS: Record<string, Lesson[]> = {

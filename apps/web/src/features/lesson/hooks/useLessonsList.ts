@@ -18,5 +18,5 @@ export const useLessonsList = () => {
     setLessonsList((prev) => [lesson, ...prev]);
   };
 
-  return { lessonsList, fetchLessons, addLessonToList };
+  return { lessonsList, setLessonsList, fetchLessons, addLessonToList };
 };

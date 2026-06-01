@@ -4,7 +4,7 @@ import { LessonSegmentType } from '../types/lessonSegmentType.type';
 import { useCreateLesson } from '../hooks/useCreateLesson';
 import { LessonFormValues } from '../types/lessonFormValues.type';
 import { lessonFormToReqBody } from '../helpers/lessonFormToReqBody.helper';
-import { Lesson } from '../types/lesson.type';
+import { LessonListItem } from '../types/lessonListItem.type';
 import { Course } from '@/features/courses/types/course.type';
 import { Controller, useForm } from 'react-hook-form';
 import { VALIDATION_ERRORS } from '@/shared/constants/validationErrors.const';
@@ -14,7 +14,7 @@ const LESSON_SEGMENT_TYPES = Object.values(LessonSegmentType);
 type AddNewLessonModalProps = {
   open: boolean;
   handleClose: () => void;
-  onCreated?: (lesson: Lesson) => void;
+  onCreated?: (lesson: LessonListItem) => void;
   courseId: Course['id'];
 };
 

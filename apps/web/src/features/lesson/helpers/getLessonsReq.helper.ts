@@ -1,5 +1,4 @@
 import { LessonListItem } from './../../../../../api/src/modules/lesson/structs/lesson-list-item.constructor';
-import { Lesson } from '../types/lesson.type';
 
 export type GetLessonsResponse = {
   items: LessonListItem[];

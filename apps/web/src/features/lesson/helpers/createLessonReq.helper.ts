@@ -1,8 +1,8 @@
-import { Lesson } from '@/features/lesson/types/lesson.type';
+import { LessonListItem } from '../types/lessonListItem.type';
 import { LessonReqBody } from '../types/lessonReqBody.type';
 
 export type CreateLessonResponse = {
-  lesson: Lesson;
+  lesson: LessonListItem;
 };
 
 export const createLessonReq = async (body: LessonReqBody): Promise<CreateLessonResponse> => {

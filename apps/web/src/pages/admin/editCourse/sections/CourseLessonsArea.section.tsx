@@ -11,23 +11,23 @@ import { useNavigate } from 'react-router-dom';
 import { ADMIN_COURSES_URL } from '@/shared/constants/urls.const';
 import { move } from '@dnd-kit/helpers';
 import { DragDropProvider } from '@dnd-kit/react';
-import { Lesson } from '@/features/lesson/types/lesson.type';
-import { LessonListItem } from '../../../../../../api/src/modules/lesson/structs/lesson-list-item.constructor';
+import { LessonListItem } from '@/features/lesson/types/lessonListItem.type';
 
 type CourseLessonsAreaSectionProps = {
   lessonsList: LessonListItem[];
   course: Course;
   onSuccess: (course: Course) => void;
+  setLessonsList: React.Dispatch<React.SetStateAction<LessonListItem[]>>;
 };
 
 function CourseLessonsAreaSection({
   course,
   onSuccess,
   lessonsList,
+  setLessonsList,
 }: CourseLessonsAreaSectionProps) {
-  const lessons = INITIAL_LESSONS.grammar;
   const [open, setOpen] = useState<'edit' | 'delete' | null>(null);
-  const [items, setItems] = useState(createRange(lessons.length));
+  const [items, setItems] = useState(createRange(lessonsList.length));
 
   const navigate = useNavigate();
   const handleClose = () => setOpen(null);
@@ -48,7 +48,7 @@ function CourseLessonsAreaSection({
       </Box>
       <DragDropProvider
         onDragEnd={(event) => {
-          setItems((items) => move(items, event));
+          setLessonsList((prev) => move(prev, event));
         }}
       >
         {lessonsList.map((lesson, index) => (

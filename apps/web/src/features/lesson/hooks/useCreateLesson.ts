@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { Lesson } from '../types/lesson.type';
+import { LessonListItem } from '../types/lessonListItem.type';
 import { LessonReqBody } from '../types/lessonReqBody.type';
 import { createLessonReq } from '../helpers/createLessonReq.helper';
 
 type UseCreateLessonProps = {
-  onSuccess?: (createdLesson: Lesson) => void;
+  onSuccess?: (createdLesson: LessonListItem) => void;
   onError?: (error: unknown) => void;
 };
 

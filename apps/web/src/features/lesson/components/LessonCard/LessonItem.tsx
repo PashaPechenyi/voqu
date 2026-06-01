@@ -12,14 +12,11 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
-import { Lesson } from '@/features/lesson/types/lesson.type';
-import { LESSON_SEGMENT_ICONS } from '@/features/lesson/constants/lessonSegmentIcons.const';
-import { LESSON_SEGMENT_COLORS } from '@/features/lesson/constants/lessonSegmentColors.const';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { useSortable } from '@dnd-kit/react/sortable';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
-import { LessonListItem } from '../../../../../../api/src/modules/lesson/structs/lesson-list-item.constructor';
+import { LessonListItem } from '@/features/lesson/types/lessonListItem.type';
 
 type LessonCardProps = {
   lesson: LessonListItem;
@@ -52,7 +49,7 @@ function LessonItem({ lesson, lessonId, lessonIndex }: LessonCardProps) {
         <DragIndicatorIcon />
       </Button>
       <CardContent sx={sxStyles.cardContent}>
-        <Chip label={lessonIndex} color="primary" />
+        <Chip label={lessonIndex + 1} color="primary" />
         <Box
           sx={{
             ...sxStyles.iconBackground,

@@ -12,7 +12,7 @@ import { useLessonsList } from '@/features/lesson/hooks/useLessonsList';
 function EditCoursePage() {
   const { courseId } = useParams();
   const { course, setCourse, fetchCourseById } = useCourseById();
-  const { lessonsList, fetchLessons } = useLessonsList();
+  const { lessonsList, fetchLessons, setLessonsList } = useLessonsList();
 
   useEffect(() => {
     if (!courseId) return;
@@ -20,9 +20,6 @@ function EditCoursePage() {
     fetchLessons();
   }, [courseId, fetchCourseById, fetchLessons]);
 
-  const refetchLessons = () => {
-    fetchLessons();
-  };
   const handleCourseUpdated = (updatedCourse: Course) => {
     setCourse(updatedCourse);
   };
@@ -31,9 +28,10 @@ function EditCoursePage() {
   return (
     <Box>
       <GoBackSection />
-      <EditCourseHeaderSection refetchLessons={refetchLessons} course={course} />
+      <EditCourseHeaderSection refetchLessons={fetchLessons} course={course} />
       <StatisticSection lessonsList={lessonsList} />
       <CourseLessonsAreaSection
+        setLessonsList={setLessonsList}
         lessonsList={lessonsList}
         course={course}
         onSuccess={handleCourseUpdated}

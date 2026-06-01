@@ -1,7 +1,6 @@
 import { Box, Card, CardContent, Typography } from '@mui/material';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
-import { INITIAL_LESSONS } from '@/features/lesson/constants/initialLessons.const';
-import { LessonListItem } from '../../../../../../api/src/modules/lesson/structs/lesson-list-item.constructor';
+import { LessonListItem } from '@/features/lesson/types/lessonListItem.type';
 type StatisticSectionProps = {
   lessonsList: LessonListItem[];
 };
