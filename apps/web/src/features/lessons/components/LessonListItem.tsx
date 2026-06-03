@@ -4,7 +4,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import LockIcon from '@mui/icons-material/Lock';
 import EditIcon from '@mui/icons-material/Edit';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
-import { Lesson } from '../types/lesson.type';
+import { LessonListItem as TLessonListItem } from '../types/lesson.type';
 import { LessonFormValues } from '../types/lessonForm.type';
 import ConfirmModal from '@/shared/components/ConfirmModal/ConfirmModal';
 import LessonEditModal from './LessonEditModal';
@@ -13,11 +13,11 @@ import { useSortable } from '@dnd-kit/react/sortable';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 
 type LessonListItemProps = {
-  lesson: Lesson;
+  lesson: TLessonListItem;
   index: number;
-  onDelete?: (lesson: Lesson) => void;
-  onEdit?: (lesson: Lesson, values: LessonFormValues) => void;
-  onToggleLock?: (lesson: Lesson) => void;
+  onDelete?: (lesson: TLessonListItem) => void;
+  onEdit?: (lesson: TLessonListItem, values: LessonFormValues) => void;
+  onToggleLock?: (lesson: TLessonListItem) => void;
   id: string;
 };
 
@@ -29,7 +29,7 @@ const LessonListItem: FC<LessonListItemProps> = ({
   onToggleLock,
   id,
 }) => {
-  const Icon = lesson.icon;
+  //const Icon = lesson.icon;
   const [pendingDelete, setPendingDelete] = useState(false);
   const { isOpen: isDeleteOpen, open: openDelete, close: closeDelete } = useToggle();
   const { isOpen: isEditOpen, open: openEdit, close: closeEdit } = useToggle();
@@ -57,19 +57,20 @@ const LessonListItem: FC<LessonListItemProps> = ({
             <DragIndicatorIcon />
           </Button>
           <Box sx={sxStyles.index}>{index + 1}</Box>
-          <Box sx={sxStyles.iconCon}>
-            <Icon sx={sxStyles.lessonIcon} />
-          </Box>
+          <Box sx={sxStyles.iconCon}>{/* <Icon sx={sxStyles.lessonIcon} /> */}</Box>
           <ListItemText>
             <Typography variant="h6" color="secondary">
               {lesson.title}
             </Typography>
             <Box sx={sxStyles.metaRow}>
               <Typography variant="body1" color="tertiary">
-                {lesson.duration} min
+                {/* {lesson.duration} min */}
               </Typography>
-              <Typography sx={sxStyles.lessonType} color="tertiary">
+              {/* <Typography sx={sxStyles.lessonType} color="tertiary">
                 {lesson.type}
+              </Typography> */}
+              <Typography variant="body2" color="secondary">
+                {lesson.description}
               </Typography>
             </Box>
           </ListItemText>
@@ -95,7 +96,7 @@ const LessonListItem: FC<LessonListItemProps> = ({
       />
       <ConfirmModal
         subtitle={`Are you sure you want to delete "${lesson.title}"? This action cannot be undone.`}
-        title="Delete Lesson"
+        title="Delete TLessonListItem"
         isOpen={isDeleteOpen}
         buttonText="Delete lesson"
         onClose={closeDelete}

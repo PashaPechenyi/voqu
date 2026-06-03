@@ -19,11 +19,12 @@ type LessonAddModalProps = {
 
 const DEFAULT_VALUES: LessonFormValues = {
   title: '',
-  type: null,
+  subtitle: '',
+  description: '',
 };
 
 const LessonAddModal: FC<LessonAddModalProps> = ({ isOpen, onClose, onSubmit }) => {
-  const { handleSubmit, control } = useForm<LessonFormValues>({
+  const { handleSubmit, control, reset } = useForm<LessonFormValues>({
     defaultValues: DEFAULT_VALUES,
   });
 
@@ -33,9 +34,7 @@ const LessonAddModal: FC<LessonAddModalProps> = ({ isOpen, onClose, onSubmit }) 
         <Typography variant="h4">Add Lesson</Typography>
       </DialogTitle>
       <DialogContent>
-        <DialogContentText>
-          Create a new lesson. You can change it after adding.
-        </DialogContentText>
+        <DialogContentText>Create a new lesson. You can change it after adding.</DialogContentText>
         <LessonModalForm control={control} />
       </DialogContent>
       <DialogActions>
@@ -43,7 +42,10 @@ const LessonAddModal: FC<LessonAddModalProps> = ({ isOpen, onClose, onSubmit }) 
           Cancel
         </Button>
         <Button
-          onClick={onSubmit ? handleSubmit(onSubmit) : undefined}
+          onClick={handleSubmit((values) => {
+            onSubmit ? onSubmit(values) : undefined;
+            reset();
+          })}
           sx={sxStyles.submitButton}
         >
           Add lesson

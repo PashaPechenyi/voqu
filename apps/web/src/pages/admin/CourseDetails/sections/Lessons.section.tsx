@@ -1,18 +1,21 @@
-import { FC, Fragment } from 'react';
+import { FC, Fragment, useEffect } from 'react';
 import { Card, CardContent, CardMedia, Divider, Typography } from '@mui/material';
 import LessonListItem from '@/features/lessons/components/LessonListItem';
-import { Lesson } from '@/features/lessons/types/lesson.type';
+import { LessonListItem as TLessonListItem } from '@/features/lessons/types/lesson.type';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 import { useState } from 'react';
 import { DragDropProvider } from '@dnd-kit/react';
 import { move } from '@dnd-kit/helpers';
 
 type LessonsSectionProps = {
-  lessons: Lesson[];
+  lessons: TLessonListItem[];
 };
 
 const LessonsSection: FC<LessonsSectionProps> = ({ lessons }) => {
   const [items, setItems] = useState(lessons);
+  useEffect(() => {
+    setItems(lessons);
+  }, [lessons]);
   return (
     <Card sx={sxStyles.card}>
       <CardMedia sx={sxStyles.header}>

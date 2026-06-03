@@ -32,7 +32,7 @@ const LessonModalForm: FC<LessonModalFormProps> = ({ control }) => {
           )}
         />
       </Grid>
-      <Grid size={6}>
+      {/* <Grid size={6}>
         <Controller
           control={control}
           name="type"
@@ -46,6 +46,42 @@ const LessonModalForm: FC<LessonModalFormProps> = ({ control }) => {
               value={value}
               getOptionLabel={(option) => capitalizeWords(option)}
               renderInput={(params) => <TextField {...params} label="Type" error={!!errors.type} />}
+            />
+          )}
+        />
+      </Grid> */}
+      <Grid size={12}>
+        <Controller
+          control={control}
+          name="subtitle"
+          rules={{ required: { value: true, message: FORM_VALIDATION_ERRORS.requiredField } }}
+          render={({ field, formState: { errors } }) => (
+            <TextField
+              label="Lesson subtitle"
+              size="small"
+              variant="outlined"
+              sx={sxStyles.field}
+              error={!!errors.subtitle}
+              helperText={errors.subtitle?.message}
+              {...field}
+            />
+          )}
+        />
+      </Grid>
+      <Grid size={12}>
+        <Controller
+          control={control}
+          name="description"
+          rules={{ required: { value: true, message: FORM_VALIDATION_ERRORS.requiredField } }}
+          render={({ field, formState: { errors } }) => (
+            <TextField
+              label="Lesson description"
+              size="small"
+              variant="outlined"
+              sx={sxStyles.field}
+              error={!!errors.description}
+              helperText={errors.description?.message}
+              {...field}
             />
           )}
         />

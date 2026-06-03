@@ -3,13 +3,20 @@ import { Box, Button, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import CourseSummaryCard from '@/features/courses/components/CourseSummaryCard';
 import LessonAddModal from '@/features/lessons/components/LessonAddModal';
-import { Lesson } from '@/features/lessons/types/lesson.type';
+import { LessonListItem } from '@/features/lessons/types/lesson.type';
 import { useToggle } from '@/shared/hooks/useToggle';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
+import { useCreateLesson } from '@/features/lessons/hooks/useCreateLesson';
+import { lessonFormValuesToReqBody } from '@/features/lessons/helpers/lessonFormValuesToReqBody.helper';
+import { LessonFormValues } from '@/features/lessons/types/lessonForm.type';
+import { getLessonReq } from '@/features/lessons/helpers/getLessonReq.helpers';
+import { useLessonsList } from '@/features/lessons/hooks/useLessonsList';
 
 type CourseSummarySectionProps = {
   title: string;
-  lessons?: Lesson[];
+  lessons?: LessonListItem[];
+  courseId: string;
+  getLessons: () => void;
 };
 
 type CourseTotal = {
@@ -17,22 +24,35 @@ type CourseTotal = {
   label: string;
 };
 
-const buildTotals = (lessons: Lesson[]): CourseTotal[] => {
-  const totalTime = lessons.reduce((acc, lesson) => acc + lesson.duration, 0);
-  const lockedLessons = lessons.filter((lesson) => lesson.isLocked);
+const buildTotals = (lessons: LessonListItem[]): CourseTotal[] => {
+  // const totalTime = lessons.reduce((acc, lesson) => acc + lesson.duration, 0);
+  // const lockedLessons = lessons.filter((lesson) => lesson.isLocked);
   return [
     { value: lessons.length, label: 'Total Lessons' },
-    { value: totalTime, label: 'Total Duration' },
-    { value: lockedLessons.length, label: 'Locked Lessons' },
+    { value: 0, label: 'Total Duration' },
+    { value: 0, label: 'Locked Lessons' },
   ];
 };
 
-const CourseSummarySection: FC<CourseSummarySectionProps> = ({ title, lessons = [] }) => {
+const CourseSummarySection: FC<CourseSummarySectionProps> = ({
+  courseId,
+  getLessons,
+  title,
+  lessons = [],
+}) => {
+  // const { getLessons } = useLessonsList();
   const {
     isOpen: isAddLessonModalOpen,
     open: openAddLessonModal,
     close: closeAddLessonModal,
   } = useToggle();
+  const { createLesson } = useCreateLesson({
+    onSuccess: () => {
+      console.log(2222);
+      getLessons();
+      closeAddLessonModal();
+    },
+  });
 
   const totals = buildTotals(lessons);
 
@@ -53,7 +73,13 @@ const CourseSummarySection: FC<CourseSummarySectionProps> = ({ title, lessons = 
             Add Lesson
           </Typography>
         </Button>
-        <LessonAddModal onClose={closeAddLessonModal} isOpen={isAddLessonModalOpen} />
+        <LessonAddModal
+          onClose={closeAddLessonModal}
+          onSubmit={(values: LessonFormValues) =>
+            createLesson(lessonFormValuesToReqBody(values, courseId))
+          }
+          isOpen={isAddLessonModalOpen}
+        />
       </Box>
 
       <Box sx={sxStyles.totalsRow}>

@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Box, Button } from '@mui/material';
 import CourseEditModal from '@/features/courses/components/CourseEditModal';
@@ -15,38 +15,28 @@ import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.h
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import { LessonType } from '@/features/lessons/enums/lessonType.enum';
 import LessonsSection from './sections/Lessons.section';
-const LESSONS = [
+import { LessonStatus } from '@/features/lessons/types/lessonStatus.type';
+import { LessonListItem } from '@/features/lessons/types/lesson.type';
+import { useLessonsList } from '@/features/lessons/hooks/useLessonsList';
+import { useCreateLesson } from '@/features/lessons/hooks/useCreateLesson';
+const LESSONS: LessonListItem[] = [
   {
     id: '1',
-    title: 'Past Simple',
-    description: 'lorem ipsum dolor sit',
-    duration: 12,
-    type: LessonType.Grammar,
-    isLocked: false,
-    icon: LibraryBooksIcon,
-  },
-  {
-    id: '2',
+    CourseId: '2',
     title: 'Present Simple',
+    subtitle: 'kjnl,lkjk',
     description: 'lorem ipsum dolor sit',
-    duration: 20,
-    type: LessonType.Grammar,
-    isLocked: false,
-    icon: LibraryBooksIcon,
-  },
-  {
-    id: '3',
-    title: 'Present Perfect Simple',
-    description: 'lorem ipsum dolor sit',
-    duration: 30,
-    type: LessonType.Grammar,
-    isLocked: false,
-    icon: LibraryBooksIcon,
+    order: 2,
+    status: LessonStatus.Draft,
+    createdAt: '2025-05-09',
+    updatedAt: '',
   },
 ];
 
 const CourseDetailsPage: FC = () => {
   const { courseId } = useParams<{ courseId: string }>();
+
+  const { lessonsList, getLessons } = useLessonsList();
   const navigate = useNavigate();
   const { coursesList, fetchCourses, isLoading, error } = useCoursesList();
   const { isOpen: isDeleteModalOpen, open: openDeleteModal, close: closeDeleteModal } = useToggle();
@@ -66,6 +56,10 @@ const CourseDetailsPage: FC = () => {
   // so listing it as a dep would refire the request whenever those callbacks change.
   useEffect(() => {
     fetchCourses();
+    {
+      courseId && getLessons(courseId);
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -87,8 +81,12 @@ const CourseDetailsPage: FC = () => {
 
   return (
     <>
-      <CourseSummarySection title={activeCourse.name} />
-      <LessonsSection lessons={LESSONS} />
+      <CourseSummarySection
+        title={activeCourse.name}
+        getLessons={() => getLessons(courseId!)}
+        courseId={courseId ?? ''}
+      />
+      <LessonsSection lessons={lessonsList} />
       <Box sx={sxStyles.actionsWrapper}>
         <Box sx={sxStyles.actionsRow}>
           <Button sx={sxStyles.editButton} onClick={openEditModal}>

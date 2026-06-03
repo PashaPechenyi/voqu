@@ -7,7 +7,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Typography } from '@mui/material';
 import { useForm } from 'react-hook-form';
-import { Lesson } from '../types/lesson.type';
+import { LessonListItem } from '../types/lesson.type';
 import { LessonFormValues } from '../types/lessonForm.type';
 import LessonModalForm from './LessonModalForm';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
@@ -15,13 +15,15 @@ import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.h
 type LessonEditModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  lesson: Lesson;
+  lesson: LessonListItem;
   onSubmit: (values: LessonFormValues) => void;
 };
 
-const getDefaultValues = (lesson: Lesson): LessonFormValues => ({
+const getDefaultValues = (lesson: LessonListItem): LessonFormValues => ({
   title: lesson.title,
-  type: lesson.type,
+  subtitle: lesson.subtitle,
+  description: lesson.description,
+  //type: lesson.type,
 });
 
 const LessonEditModal: FC<LessonEditModalProps> = ({ isOpen, onClose, lesson, onSubmit }) => {
