@@ -19,6 +19,9 @@ export class Lesson extends BaseSecuredEntity {
   @Column({ length: 20, default: 'draft' })
   status?: string;
 
+  @Column({ type: 'int', nullable: true })
+  duration?: number | null;
+
   // Relations
   @ManyToOne(() => Course, (course) => course.Lessons)
   @JoinColumn({ name: 'CourseId' })

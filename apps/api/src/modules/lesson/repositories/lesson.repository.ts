@@ -24,6 +24,7 @@ export class LessonRepository extends BaseRepository<Lesson> {
         'Lesson.description',
         'Lesson.order',
         'Lesson.status',
+        'Lesson.duration',
         'Lesson.createdAt',
         'Lesson.updatedAt',
       ])
@@ -40,6 +41,20 @@ export class LessonRepository extends BaseRepository<Lesson> {
       .setPagination({ page, limit })
       .mapToClass(LessonListItem)
       .getManyAndCount();
+  }
+
+  /**
+   * Returns the id + order of every lesson in a course, ordered by `order`.
+   * Used to validate reorder requests and to append lessons missing from the
+   * requested order.
+   */
+  async findIdsByCourse(CourseId: string): Promise<Pick<Lesson, 'id' | 'order'>[]> {
+    return this.createQueryBuilder('Lesson')
+      .select(['Lesson.id', 'Lesson.order'])
+      .where('Lesson.CourseId = :CourseId', { CourseId })
+      .orderBy('Lesson.order', 'ASC')
+      .addOrderBy('Lesson.createdAt', 'ASC')
+      .getMany();
   }
 
   /**
