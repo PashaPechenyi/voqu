@@ -18,6 +18,7 @@ type CourseLessonsAreaSectionProps = {
   course: Course;
   onSuccess: (course: Course) => void;
   setLessonsList: React.Dispatch<React.SetStateAction<LessonListItem[]>>;
+  refetchLessons: (courseId: Course['id']) => void;
 };
 
 function CourseLessonsAreaSection({
@@ -25,6 +26,7 @@ function CourseLessonsAreaSection({
   onSuccess,
   lessonsList,
   setLessonsList,
+  refetchLessons,
 }: CourseLessonsAreaSectionProps) {
   const [open, setOpen] = useState<'edit' | 'delete' | null>(null);
 
@@ -53,7 +55,14 @@ function CourseLessonsAreaSection({
       >
         {lessonsList.map((lesson, index) => {
           return (
-            <LessonCard key={lesson.id} lessonId={lesson.id} lessonIndex={index} lesson={lesson} />
+            <LessonCard
+              courseId={course.id}
+              refetchLessons={refetchLessons}
+              key={lesson.id}
+              lessonId={lesson.id}
+              lessonIndex={index}
+              lesson={lesson}
+            />
           );
         })}
       </DragDropProvider>

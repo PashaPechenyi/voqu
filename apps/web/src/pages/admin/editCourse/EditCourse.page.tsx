@@ -35,6 +35,7 @@ function EditCoursePage() {
         lessonsList={lessonsList}
         course={course}
         onSuccess={handleCourseUpdated}
+        refetchLessons={fetchLessons}
       />
     </Box>
   );

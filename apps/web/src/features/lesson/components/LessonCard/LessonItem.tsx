@@ -12,23 +12,35 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useSortable } from '@dnd-kit/react/sortable';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import { LessonListItem } from '@/features/lesson/types/lessonListItem.type';
+import { DeleteLessonModal } from '../deleteLessonModal/DeleteLessonModal';
+import { Course } from '@/features/courses/types/course.type';
 
 type LessonCardProps = {
   lesson: LessonListItem;
   lessonId: string;
   lessonIndex: number;
+  courseId: Course['id'];
+  refetchLessons: (courseId: Course['id']) => void;
 };
 
-function LessonItem({ lesson, lessonId, lessonIndex }: LessonCardProps) {
+function LessonItem({ lesson, courseId, lessonId, lessonIndex, refetchLessons }: LessonCardProps) {
   // const SegmentIcon = LESSON_SEGMENT_ICONS[lesson.status];
   // const segmentColor = LESSON_SEGMENT_COLORS[lesson.status];
   const SegmentIcon = MenuBookIcon;
   const segmentColor = '#71677C';
+
+  const [open, setOpen] = useState<'edit' | 'delete' | null>(null);
+  const handleClose = () => setOpen(null);
+  const onDeleted = () => {
+    handleClose();
+    refetchLessons(courseId);
+  };
+
   const dragButtonRef = useRef<HTMLButtonElement | null>(null);
   const listItemRef = useRef<HTMLLIElement | null>(null);
   const { isDragging } = useSortable({
@@ -76,9 +88,15 @@ function LessonItem({ lesson, lessonId, lessonIndex }: LessonCardProps) {
         <IconButton color="warning" aria-label="edit">
           <EditOutlinedIcon />
         </IconButton>
-        <IconButton color="error" aria-label="delete">
+        <IconButton color="error" aria-label="delete" onClick={() => setOpen('delete')}>
           <DeleteIcon />
         </IconButton>
+        <DeleteLessonModal
+          onDeleted={onDeleted}
+          lesson={lesson}
+          open={open === 'delete'}
+          handleClose={handleClose}
+        />
       </CardActions>
     </ListItem>
   );
