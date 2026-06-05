@@ -32,7 +32,7 @@ function AddNewLessonModal({ open, handleClose, onCreated, courseId }: AddNewLes
   const { createLesson, isLoading } = useCreateLesson({ onSuccess: onCreated });
 
   const onSubmit = (formValues: LessonFormValues) => {
-    createLesson(lessonFormToReqBody(formValues, courseId));
+    createLesson(courseId, lessonFormToReqBody(formValues));
   };
   const requiredRule = { required: { value: true, message: VALIDATION_ERRORS.REQUIRED } };
 
@@ -112,6 +112,7 @@ function AddNewLessonModal({ open, handleClose, onCreated, courseId }: AddNewLes
                     {...field}
                     fullWidth
                     color="primary"
+                    type="number"
                     required
                     variant="filled"
                     label="Duration"

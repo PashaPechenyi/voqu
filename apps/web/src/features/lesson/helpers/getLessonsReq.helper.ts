@@ -6,7 +6,7 @@ export type GetLessonsResponse = {
 };
 
 export const getLessonsReq = async (courseId: Course['id']): Promise<GetLessonsResponse> => {
-  const response = await fetch(`/api/lesson/?CourseId=${courseId}`, {
+  const response = await fetch(`/api/course/lesson/${courseId}/list`, {
     method: 'GET',
   });
   if (!response.ok) {

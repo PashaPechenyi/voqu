@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Course } from '@/features/courses/types/course.type';
 import { LessonListItem } from '../types/lessonListItem.type';
 import { LessonReqBody } from '../types/lessonReqBody.type';
 import { createLessonReq } from '../helpers/createLessonReq.helper';
@@ -12,11 +13,11 @@ export const useCreateLesson = ({ onSuccess, onError }: UseCreateLessonProps = {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<unknown>(null);
 
-  const createLesson = async (body: LessonReqBody) => {
+  const createLesson = async (courseId: Course['id'], body: LessonReqBody) => {
     setIsLoading(true);
     setError(null);
     try {
-      const result = await createLessonReq(body);
+      const result = await createLessonReq(courseId, body);
       onSuccess?.(result.lesson);
     } catch (err) {
       setError(err);
