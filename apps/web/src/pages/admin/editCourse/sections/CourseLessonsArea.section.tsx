@@ -2,7 +2,6 @@ import { Box, Button, Typography } from '@mui/material';
 import { useState } from 'react';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
-import { INITIAL_LESSONS } from '@/features/lesson/constants/initialLessons.const';
 import DeleteCourseModal from '@/features/courses/components/DeleteCourseModal';
 import EditCourseModal from '@/features/courses/components/EditCourseModal';
 import { Course } from '@/features/courses/types/course.type';
@@ -12,6 +11,7 @@ import { ADMIN_COURSES_URL } from '@/shared/constants/urls.const';
 import { move } from '@dnd-kit/helpers';
 import { DragDropProvider } from '@dnd-kit/react';
 import { LessonListItem } from '@/features/lesson/types/lessonListItem.type';
+import { useReorderLesson } from '@/features/lesson/hooks/useReorderLessons';
 
 type CourseLessonsAreaSectionProps = {
   lessonsList: LessonListItem[];
@@ -27,7 +27,8 @@ function CourseLessonsAreaSection({
   setLessonsList,
 }: CourseLessonsAreaSectionProps) {
   const [open, setOpen] = useState<'edit' | 'delete' | null>(null);
-  const [items, setItems] = useState(createRange(lessonsList.length));
+
+  const { reorderLessons } = useReorderLesson();
 
   const navigate = useNavigate();
   const handleClose = () => setOpen(null);
@@ -35,9 +36,6 @@ function CourseLessonsAreaSection({
     handleClose();
     navigate(ADMIN_COURSES_URL);
   };
-  function createRange(length: number) {
-    return Array.from({ length }, (_, i) => i + 1);
-  }
 
   return (
     <Box sx={sxStyles.root}>
@@ -48,12 +46,16 @@ function CourseLessonsAreaSection({
       </Box>
       <DragDropProvider
         onDragEnd={(event) => {
-          setLessonsList((prev) => move(prev, event));
+          const orderedList = move(lessonsList, event);
+          setLessonsList(orderedList);
+          reorderLessons(orderedList, course);
         }}
       >
-        {lessonsList.map((lesson, index) => (
-          <LessonCard key={lesson.id} lessonId={lesson.id} lessonIndex={index} lesson={lesson} />
-        ))}
+        {lessonsList.map((lesson, index) => {
+          return (
+            <LessonCard key={lesson.id} lessonId={lesson.id} lessonIndex={index} lesson={lesson} />
+          );
+        })}
       </DragDropProvider>
 
       <Box sx={sxStyles.controls}>

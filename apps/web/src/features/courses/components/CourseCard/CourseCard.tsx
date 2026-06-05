@@ -23,7 +23,6 @@ type CourseCardProps = {
 };
 
 function CourseCard({ course, onSuccess }: CourseCardProps) {
-  const { fetchLevels } = useLevelsList();
   const { editCourse, isLoading } = useEditCourse({ onSuccess });
 
   const fromCourseToReqData = (coursedata: Course) => {
@@ -50,9 +49,6 @@ function CourseCard({ course, onSuccess }: CourseCardProps) {
     );
   };
 
-  useEffect(() => {
-    fetchLevels();
-  }, [fetchLevels]);
   return (
     <Card sx={sxStyles.card}>
       <CardMedia
