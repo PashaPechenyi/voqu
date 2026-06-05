@@ -7,4 +7,5 @@ export interface ICreateLessonParams {
   description?: string;
   order?: number;
   status?: LessonStatus;
+  duration?: number;
 }
