@@ -10,6 +10,7 @@ export class LessonListItem {
     this.description = data.description ?? null;
     this.order = data.order!;
     this.status = data.status as LessonStatus;
+    this.duration = data.duration ?? null;
     this.createdAt = data.createdAt!;
     this.updatedAt = data.updatedAt!;
   }
@@ -27,6 +28,8 @@ export class LessonListItem {
   order: number;
 
   status: LessonStatus;
+
+  duration: number | null;
 
   createdAt: string;
 

@@ -1,8 +1,7 @@
-import { IsOptional, IsUUID } from 'class-validator';
 import { PaginationDto } from '../../../../common/http/dto/pagination.dto';
 
-export class ListLessonsQueryDto extends PaginationDto {
-  @IsOptional()
-  @IsUUID()
-  CourseId?: string;
-}
+/**
+ * Query for listing lessons. `CourseId` is taken from the route param,
+ * not the query.
+ */
+export class ListLessonsQueryDto extends PaginationDto {}
