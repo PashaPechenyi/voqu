@@ -10,12 +10,11 @@ export const useCreateLesson = ({ onError, onSuccess }: useCreateLessonProps) =>
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   const createLesson = useCallback(
-    async (body: CreateLessonReqBody) => {
+    async (courseId: string, body: CreateLessonReqBody) => {
       setIsLoading(true);
       setError(null);
       try {
-        await createLessonReq(body);
-        console.log(1111);
+        await createLessonReq(courseId, body);
         onSuccess?.();
       } catch (err) {
         const e = err instanceof Error ? err : new Error('Unknown error');

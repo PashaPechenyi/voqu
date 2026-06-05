@@ -18,6 +18,7 @@ export type LessonListItem = {
   description: string;
   order: number;
   status: LessonStatus;
+  duration: number | null;
   createdAt: string;
   updatedAt: string;
 };

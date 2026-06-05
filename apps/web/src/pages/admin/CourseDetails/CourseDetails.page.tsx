@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Box, Button } from '@mui/material';
 import CourseEditModal from '@/features/courses/components/CourseEditModal';
@@ -12,26 +12,8 @@ import { CourseFormValues } from '@/features/courses/types/courseForm.type';
 import { courseFormToReqBody } from '@/features/courses/helpers/courseFormToReqBody.helper';
 import { ADMIN_COURSES_URL } from '@/shared/constants/urls.const';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
-import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
-import { LessonType } from '@/features/lessons/enums/lessonType.enum';
 import LessonsSection from './sections/Lessons.section';
-import { LessonStatus } from '@/features/lessons/types/lessonStatus.type';
-import { LessonListItem } from '@/features/lessons/types/lesson.type';
 import { useLessonsList } from '@/features/lessons/hooks/useLessonsList';
-import { useCreateLesson } from '@/features/lessons/hooks/useCreateLesson';
-const LESSONS: LessonListItem[] = [
-  {
-    id: '1',
-    CourseId: '2',
-    title: 'Present Simple',
-    subtitle: 'kjnl,lkjk',
-    description: 'lorem ipsum dolor sit',
-    order: 2,
-    status: LessonStatus.Draft,
-    createdAt: '2025-05-09',
-    updatedAt: '',
-  },
-];
 
 const CourseDetailsPage: FC = () => {
   const { courseId } = useParams<{ courseId: string }>();
@@ -56,13 +38,10 @@ const CourseDetailsPage: FC = () => {
   // so listing it as a dep would refire the request whenever those callbacks change.
   useEffect(() => {
     fetchCourses();
-    {
-      courseId && getLessons(courseId);
-    }
+    if (courseId) getLessons(courseId);
+  }, [courseId]);
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
+  // TODO: WHAT IS IT we have an endpoint to get couse details we don;t need to get all courses
   const activeCourse = coursesList.find((course) => course.id === courseId);
 
   const handleDelete = () => {

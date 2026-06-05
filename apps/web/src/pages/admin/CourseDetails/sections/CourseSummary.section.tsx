@@ -9,8 +9,6 @@ import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.h
 import { useCreateLesson } from '@/features/lessons/hooks/useCreateLesson';
 import { lessonFormValuesToReqBody } from '@/features/lessons/helpers/lessonFormValuesToReqBody.helper';
 import { LessonFormValues } from '@/features/lessons/types/lessonForm.type';
-import { getLessonReq } from '@/features/lessons/helpers/getLessonReq.helpers';
-import { useLessonsList } from '@/features/lessons/hooks/useLessonsList';
 
 type CourseSummarySectionProps = {
   title: string;
@@ -46,9 +44,9 @@ const CourseSummarySection: FC<CourseSummarySectionProps> = ({
     open: openAddLessonModal,
     close: closeAddLessonModal,
   } = useToggle();
+
   const { createLesson } = useCreateLesson({
     onSuccess: () => {
-      console.log(2222);
       getLessons();
       closeAddLessonModal();
     },
@@ -76,7 +74,7 @@ const CourseSummarySection: FC<CourseSummarySectionProps> = ({
         <LessonAddModal
           onClose={closeAddLessonModal}
           onSubmit={(values: LessonFormValues) =>
-            createLesson(lessonFormValuesToReqBody(values, courseId))
+            createLesson(courseId, lessonFormValuesToReqBody(values))
           }
           isOpen={isAddLessonModalOpen}
         />
