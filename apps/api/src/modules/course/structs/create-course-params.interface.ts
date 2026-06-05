@@ -4,5 +4,5 @@ export interface ICreateCourseParams {
   name: string;
   description?: string;
   status?: CourseStatus;
-  LevelId: string;
+  LevelId: number;
 }

@@ -4,5 +4,5 @@ export interface IUpdateCourseParams {
   name?: string;
   description?: string | null;
   status?: CourseStatus;
-  LevelId?: string;
+  LevelId?: number;
 }

@@ -1,5 +1,5 @@
 export interface IListLessonsParams {
-  CourseId?: string;
+  CourseId: string;
   page?: number;
   limit?: number;
 }
