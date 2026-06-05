@@ -22,7 +22,7 @@ export class Course extends BaseSecuredEntity {
   Level?: Level;
 
   @Column({ name: 'LevelId' })
-  LevelId?: string;
+  LevelId?: number;
 
   @ManyToOne(() => User, (user) => user.Courses)
   @JoinColumn({ name: 'OwnerId' })
