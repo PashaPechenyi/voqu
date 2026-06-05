@@ -6,14 +6,18 @@ import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.h
 import { useState } from 'react';
 import { DragDropProvider } from '@dnd-kit/react';
 import { move } from '@dnd-kit/helpers';
+import { useReorderLesson } from '@/features/lessons/hooks/useReorderLesson';
 
 type LessonsSectionProps = {
   lessons: TLessonListItem[];
+  getLessons: () => void;
 };
 
-const LessonsSection: FC<LessonsSectionProps> = ({ lessons }) => {
+const LessonsSection: FC<LessonsSectionProps> = ({ lessons, getLessons }) => {
   const [items, setItems] = useState(lessons);
+  const { reorderLesson } = useReorderLesson({});
   useEffect(() => {
+    console.log(lessons, 'lessons');
     setItems(lessons);
   }, [lessons]);
   return (
@@ -29,13 +33,20 @@ const LessonsSection: FC<LessonsSectionProps> = ({ lessons }) => {
       <CardContent>
         <DragDropProvider
           onDragEnd={(event) => {
-            setItems((items) => move(items, event));
+            const orderList = move(items, event);
+            setItems(orderList);
+            reorderLesson(orderList, items[0].CourseId);
           }}
         >
           <ul>
             {items.map((lesson, index) => (
               <Fragment key={lesson.id}>
-                <LessonListItem id={lesson.id} lesson={lesson} index={index} />
+                <LessonListItem
+                  getLessons={getLessons}
+                  id={lesson.id}
+                  lesson={lesson}
+                  index={index}
+                />
                 <Divider />
               </Fragment>
             ))}

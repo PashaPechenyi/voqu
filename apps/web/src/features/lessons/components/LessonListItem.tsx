@@ -11,6 +11,8 @@ import LessonEditModal from './LessonEditModal';
 import { useToggle } from '@/shared/hooks/useToggle';
 import { useSortable } from '@dnd-kit/react/sortable';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
+import { useDeleteLesson } from '../hooks/useDeleteLesson';
+import { useLessonsList } from '../hooks/useLessonsList';
 
 type LessonListItemProps = {
   lesson: TLessonListItem;
@@ -19,6 +21,7 @@ type LessonListItemProps = {
   onEdit?: (lesson: TLessonListItem, values: LessonFormValues) => void;
   onToggleLock?: (lesson: TLessonListItem) => void;
   id: string;
+  getLessons: () => void;
 };
 
 const LessonListItem: FC<LessonListItemProps> = ({
@@ -28,6 +31,7 @@ const LessonListItem: FC<LessonListItemProps> = ({
   onEdit,
   onToggleLock,
   id,
+  getLessons,
 }) => {
   //const Icon = lesson.icon;
   const [pendingDelete, setPendingDelete] = useState(false);
@@ -36,12 +40,18 @@ const LessonListItem: FC<LessonListItemProps> = ({
   const listItemRef = useRef<HTMLLIElement | null>(null);
   const dragButtonRef = useRef<HTMLButtonElement | null>(null);
   const { isDragging } = useSortable({ id, index, element: listItemRef, handle: dragButtonRef });
+  const { deleteLesson } = useDeleteLesson({
+    onSuccess: () => {
+      getLessons();
+    },
+  });
 
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = async () => {
     setPendingDelete(true);
     onDelete?.(lesson);
     closeDelete();
     setPendingDelete(false);
+    await deleteLesson(lesson.id);
   };
 
   const handleEditSubmit = (values: LessonFormValues) => {

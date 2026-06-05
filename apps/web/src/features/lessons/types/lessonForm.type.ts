@@ -4,4 +4,5 @@ export type LessonFormValues = {
   title: string;
   subtitle: string;
   description: string;
+  status: string;
 };

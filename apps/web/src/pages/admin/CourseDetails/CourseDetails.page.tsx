@@ -65,7 +65,7 @@ const CourseDetailsPage: FC = () => {
         getLessons={() => getLessons(courseId!)}
         courseId={courseId ?? ''}
       />
-      <LessonsSection lessons={lessonsList} />
+      <LessonsSection lessons={lessonsList} getLessons={() => getLessons(courseId!)} />
       <Box sx={sxStyles.actionsWrapper}>
         <Box sx={sxStyles.actionsRow}>
           <Button sx={sxStyles.editButton} onClick={openEditModal}>

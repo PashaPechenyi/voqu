@@ -23,6 +23,7 @@ const getDefaultValues = (lesson: LessonListItem): LessonFormValues => ({
   title: lesson.title,
   subtitle: lesson.subtitle,
   description: lesson.description,
+  status: lesson.status,
   //type: lesson.type,
 });
 

@@ -3,4 +3,5 @@ export type CreateLessonReqBody = {
   subtitle: string;
   description: string;
   duration?: number;
+  status: string;
 };

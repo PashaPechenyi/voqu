@@ -1,7 +1,8 @@
 import { useCallback, useState } from 'react';
 import { LessonListItem } from '../types/lesson.type';
-import { getLessonReq } from '../helpers/getLessonReq.helpers';
+// import { getLessonReq } from '../helpers/getLessonReq.helpers';
 import { Course } from '@/features/courses/types/course.type';
+import { getLessonReq } from '../helpers/getLessonReq.helpers';
 
 type useLessonsListProps = {
   onSuccess?: (lessonsList: LessonListItem[]) => void;

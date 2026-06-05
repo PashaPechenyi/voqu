@@ -6,5 +6,6 @@ export const lessonFormValuesToReqBody = (values: LessonFormValues): CreateLesso
     title: values.title,
     description: values.description,
     subtitle: values.subtitle,
+    status: values.status,
   };
 };
