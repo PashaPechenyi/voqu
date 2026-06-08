@@ -17,8 +17,8 @@ import { useSortable } from '@dnd-kit/react/sortable';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import { LessonListItem } from '@/features/lesson/types/lessonListItem.type';
-import DeleteLessonModal from '../DeleteLessonModal/DeleteLessonModal';
 import { Course } from '@/features/courses/types/course.type';
+import DeleteLessonModal from '../deleteLessonModal/DeleteLessonModal';
 
 // RENAME: LessonCardProps -> LessonItemProps - match the component (it renders a ListItem row, not a card)
 type LessonItemProps = {
