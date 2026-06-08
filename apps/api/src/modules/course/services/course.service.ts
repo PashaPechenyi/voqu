@@ -24,7 +24,7 @@ export class CourseService {
       throw new EntityNotFoundException({ entity: User, ctx: { roleSlug: RoleSlug.SuperAdmin } });
     }
 
-    return this.courseRepository.create({ ...params, OwnerId: owner.id });
+    return this.courseRepository.create(new Course({ ...params, OwnerId: owner.id }));
   }
 
   async updateCourse(id: string, params: IUpdateCourseParams): Promise<Course> {

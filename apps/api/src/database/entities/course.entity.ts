@@ -7,6 +7,11 @@ import { User } from './user.entity';
 
 @Entity('Course')
 export class Course extends BaseSecuredEntity {
+  constructor(data: Partial<Course> = {}) {
+    super();
+    Object.assign(this, data);
+  }
+
   @Column({ length: 255 })
   name?: string;
 

@@ -4,6 +4,11 @@ import { Course } from './course.entity';
 
 @Entity('Level')
 export class Level extends BaseEntity {
+  constructor(data: Partial<Level> = {}) {
+    super();
+    Object.assign(this, data);
+  }
+
   @Column({ length: 255 })
   name?: string;
 

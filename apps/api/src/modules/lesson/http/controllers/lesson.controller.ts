@@ -1,10 +1,9 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { BaseResponseDto } from 'src/common/http/dto/base-response.dto';
 import { LessonService } from '../../services/lesson.service';
 import { CreateLessonDto } from '../dto/create-lesson.dto';
 import { CreateLessonResponseDto } from '../dto/create-lesson-response.dto';
 import { LessonListResponseDto } from '../dto/lesson-list-response.dto';
-import { ListLessonsQueryDto } from '../dto/list-lessons-query.dto';
 import { ReorderLessonsDto } from '../dto/reorder-lessons.dto';
 import { UpdateLessonStatusDto } from '../dto/update-lesson-status.dto';
 import { UpdateLessonStatusResponseDto } from '../dto/update-lesson-status-response.dto';
@@ -14,12 +13,9 @@ export class LessonController {
   constructor(private readonly lessonService: LessonService) {}
 
   @Get(':CourseId/list')
-  async list(
-    @Param('CourseId') CourseId: string,
-    @Query() query: ListLessonsQueryDto,
-  ): Promise<LessonListResponseDto> {
-    const paginatedList = await this.lessonService.listLessons({ ...query, CourseId });
-    return new LessonListResponseDto(paginatedList);
+  async list(@Param('CourseId') CourseId: string): Promise<LessonListResponseDto> {
+    const items = await this.lessonService.listLessons(CourseId);
+    return new LessonListResponseDto(items);
   }
 
   @Post(':CourseId')
