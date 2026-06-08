@@ -3,7 +3,6 @@ import { DataSource } from 'typeorm';
 import { Lesson } from '../../../database/entities/lesson.entity';
 import { BaseRepository } from '../../../database/repositories/base.repository';
 import { LessonListItem } from '../structs/lesson-list-item.constructor';
-import { IFindLessonListParams } from '../structs/find-lesson-list-params.interface';
 import { IReorderLessonItem } from '../structs/reorder-lessons-params.interface';
 
 @Injectable()
@@ -12,35 +11,17 @@ export class LessonRepository extends BaseRepository<Lesson> {
     super(dataSource, Lesson);
   }
 
-  async findListPaginated(params: IFindLessonListParams): Promise<[LessonListItem[], number]> {
-    const { CourseId, page, limit, sorts, search } = params;
-
+  /**
+   * Returns every lesson of a course, ordered by `order`. Lessons are not
+   * paginated — a course's full lesson list is always returned.
+   */
+  async getListByCourseId(CourseId: string): Promise<LessonListItem[]> {
     const queryBuilder = this.createQueryBuilder('Lesson')
-      .select([
-        'Lesson.id',
-        'Lesson.CourseId',
-        'Lesson.title',
-        'Lesson.subtitle',
-        'Lesson.description',
-        'Lesson.order',
-        'Lesson.status',
-        'Lesson.duration',
-        'Lesson.createdAt',
-        'Lesson.updatedAt',
-      ])
+      .where('Lesson.CourseId = :CourseId', { CourseId })
       .orderBy('Lesson.order', 'ASC')
       .addOrderBy('Lesson.createdAt', 'ASC');
 
-    if (CourseId) {
-      queryBuilder.andWhere('Lesson.CourseId = :CourseId', { CourseId });
-    }
-
-    return this.createListQueryBuilder(queryBuilder, this.listFieldsMap)
-      .setSearch(search)
-      .setSorts(sorts)
-      .setPagination({ page, limit })
-      .mapToClass(LessonListItem)
-      .getManyAndCount();
+    return this.createListQueryBuilder(queryBuilder).mapToClass(LessonListItem).getMany();
   }
 
   /**
@@ -58,6 +39,19 @@ export class LessonRepository extends BaseRepository<Lesson> {
   }
 
   /**
+   * Returns the highest `order` among a course's lessons, or `null` if the
+   * course has no lessons yet.
+   */
+  async getMaxOrderByCourse(CourseId: string): Promise<number | null> {
+    const result = await this.createQueryBuilder('Lesson')
+      .select('MAX(Lesson.order)', 'max')
+      .where('Lesson.CourseId = :CourseId', { CourseId })
+      .getRawOne<{ max: string | null }>();
+
+    return result?.max !== null && result?.max !== undefined ? Number(result.max) : null;
+  }
+
+  /**
    * Rewrites the `order` of multiple lessons in a single transaction.
    */
   async reorder(items: IReorderLessonItem[]): Promise<void> {
@@ -67,14 +61,4 @@ export class LessonRepository extends BaseRepository<Lesson> {
       }
     });
   }
-
-  private readonly listFieldsMap = Object.freeze({
-    id: 'Lesson.id',
-    CourseId: 'Lesson.CourseId',
-    title: 'Lesson.title',
-    status: 'Lesson.status',
-    order: 'Lesson.order',
-    createdAt: 'Lesson.createdAt',
-    updatedAt: 'Lesson.updatedAt',
-  });
 }

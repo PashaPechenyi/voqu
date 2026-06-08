@@ -4,6 +4,11 @@ import { Course } from './course.entity';
 
 @Entity('Lesson')
 export class Lesson extends BaseSecuredEntity {
+  constructor(data: Partial<Lesson> = {}) {
+    super();
+    Object.assign(this, data);
+  }
+
   @Column({ length: 255 })
   title?: string;
 
