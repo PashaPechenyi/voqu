@@ -3,7 +3,7 @@ import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.h
 import { LessonSegmentType } from '../types/lessonSegmentType.type';
 import { useCreateLesson } from '../hooks/useCreateLesson';
 import { LessonFormValues } from '../types/lessonFormValues.type';
-import { lessonFormToReqBody } from '../helpers/lessonFormToReqBody.helper';
+import { convertLessonFormToApiFormat } from '../helpers/convertLessonFormToApiFormat.helper';
 import { LessonListItem } from '../types/lessonListItem.type';
 import { Course } from '@/features/courses/types/course.type';
 import { Controller, useForm } from 'react-hook-form';
@@ -11,14 +11,15 @@ import { VALIDATION_ERRORS } from '@/shared/constants/validationErrors.const';
 
 const LESSON_SEGMENT_TYPES = Object.values(LessonSegmentType);
 
-type AddNewLessonModalProps = {
+type CreateLessonModalProps = {
   open: boolean;
-  handleClose: () => void;
-  onCreated?: (lesson: LessonListItem) => void;
+  onClose: () => void; // RENAME: handleClose -> onClose - event-emitting prop must start with 'on'
+  onCreateSuccess?: (lesson: LessonListItem) => void; // RENAME: onCreated -> onCreateSuccess - present-tense on<Verb>Success
   courseId: Course['id'];
 };
 
-function AddNewLessonModal({ open, handleClose, onCreated, courseId }: AddNewLessonModalProps) {
+// RENAME: AddNewLessonModal -> CreateLessonModal - 'create' is the canonical create verb (dropped redundant 'New')
+function CreateLessonModal({ open, onClose, onCreateSuccess, courseId }: CreateLessonModalProps) {
   const { handleSubmit, control, reset } = useForm<LessonFormValues>({
     defaultValues: {
       title: '',
@@ -29,18 +30,19 @@ function AddNewLessonModal({ open, handleClose, onCreated, courseId }: AddNewLes
     },
   });
 
-  const { createLesson, isLoading } = useCreateLesson({ onSuccess: onCreated });
+  const { createLesson, isLoading } = useCreateLesson({ onSuccess: onCreateSuccess });
 
   const onSubmit = (formValues: LessonFormValues) => {
-    createLesson(courseId, lessonFormToReqBody(formValues));
+    createLesson(courseId, convertLessonFormToApiFormat(formValues));
   };
+
   const requiredRule = { required: { value: true, message: VALIDATION_ERRORS.REQUIRED } };
 
   return (
-    <Modal open={open} onClose={handleClose}>
+    <Modal open={open} onClose={onClose}>
       <Box sx={sxStyles.modal}>
         <Typography variant="h4" fontWeight={700}>
-          Add New Lesson
+          Create Lesson
         </Typography>
 
         <Typography color="primary" sx={{ mt: 1, mb: 4 }}>
@@ -156,7 +158,7 @@ function AddNewLessonModal({ open, handleClose, onCreated, courseId }: AddNewLes
                   variant="outlined"
                   onClick={() => {
                     reset();
-                    handleClose();
+                    onClose();
                   }}
                 >
                   Cancel
@@ -196,4 +198,4 @@ const sxStyles = createSxStylesList({
   },
 });
 
-export default AddNewLessonModal;
+export default CreateLessonModal;

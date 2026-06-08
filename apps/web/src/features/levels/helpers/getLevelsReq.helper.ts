@@ -1,6 +1,12 @@
 import { Level } from '@/features/levels/types/level.type';
 
-export const getLevelsReq = async (): Promise<{ items: Level[]; success: boolean }> => {
+// RENAME: extracted inline response shape -> named GetLevelsDTO - API-response types end with DTO
+type GetLevelsDTO = {
+  items: Level[];
+  success: boolean;
+};
+
+export const getLevelsReq = async (): Promise<GetLevelsDTO> => {
   const response = await fetch('/api/level', {
     method: 'GET',
   });

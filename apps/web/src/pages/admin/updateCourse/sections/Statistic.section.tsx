@@ -1,15 +1,17 @@
 import { Box, Card, CardContent, Typography } from '@mui/material';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 import { LessonListItem } from '@/features/lesson/types/lessonListItem.type';
+
+// TODO: lessonsList is used only to get its length. SO just use lessonsAmount OR lessonsLength instead of lessonsList
 type StatisticSectionProps = {
   lessonsList: LessonListItem[];
 };
+
+// LATER:  remove hardcoded values once
 function StatisticSection({ lessonsList }: StatisticSectionProps) {
   const duration = 0;
-  //lessons.reduce((acc, item) => acc + item.duration, 0);
   const totalLessons = lessonsList.length;
   const lockedLessons = 0;
-  //lessonsList.reduce((acc, item) => (item.locked ? acc + 1 : acc), 0);
 
   const statisticsList = [
     { id: 'duration', value: duration, label: 'Total Duration' },

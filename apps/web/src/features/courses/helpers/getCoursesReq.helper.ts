@@ -1,11 +1,11 @@
 import { Course } from '@/features/courses/types/course.type';
-import { responsiveProperty } from '@mui/material/styles/cssUtils';
 
-export type GetCoursesResponse = {
+// RENAME: GetCoursesResponse -> GetCoursesDTO - API-response types end with DTO
+export type GetCoursesDTO = {
   items: Course[];
 };
 
-export const getCoursesReq = async (): Promise<GetCoursesResponse> => {
+export const getCoursesReq = async (): Promise<GetCoursesDTO> => {
   const response = await fetch('/api/course', {
     method: 'GET',
   });
@@ -14,13 +14,3 @@ export const getCoursesReq = async (): Promise<GetCoursesResponse> => {
   }
   return response.json();
 };
-
-// function handleResponse(route1: string, obj: any) {
-//   const response = fetch(route1, obj);
-//   if (!response.ok) {
-//     throw new Error('Something went wrong...');
-//   }
-//   return response.json();
-// }
-
-// handleResponce('', { method: 'GET' });

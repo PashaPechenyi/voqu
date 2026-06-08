@@ -1,23 +1,20 @@
-import { LessonListItem } from './../../../../../api/src/modules/lesson/structs/lesson-list-item.constructor';
-import { getLessonsReq } from './../helpers/getLessonsReq.helper';
 import { useCallback, useState } from 'react';
 import { Course } from '@/features/courses/types/course.type';
+import { LessonListItem } from '../types/lessonListItem.type';
+import { getLessonsReq } from '../helpers/getLessonsReq.helper';
 
 export const useLessonsList = () => {
   const [lessonsList, setLessonsList] = useState<LessonListItem[]>([]);
 
-  const fetchLessons = useCallback(async (courseId: Course['id']) => {
+  // RENAME: fetchLessons -> getLessons -> getLessonsList - no 'fetch' in names; matches the lessonsList state it loads
+  const getLessonsList = useCallback(async (courseId: Course['id']) => {
     const result = await getLessonsReq(courseId);
     setLessonsList(result.items);
   }, []);
-
-  //   const updateLessonInList = (lesson: Lesson) => {
-  //     setLessonsList((prev) => prev.map((item) => (item.id === lesson.id ? lesson : item)));
-  //   };
 
   const addLessonToList = (lesson: LessonListItem) => {
     setLessonsList((prev) => [lesson, ...prev]);
   };
 
-  return { lessonsList, setLessonsList, fetchLessons, addLessonToList };
+  return { lessonsList, setLessonsList, getLessonsList, addLessonToList };
 };

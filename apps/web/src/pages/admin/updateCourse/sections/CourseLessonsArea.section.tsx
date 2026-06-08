@@ -3,38 +3,39 @@ import { useState } from 'react';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 import DeleteCourseModal from '@/features/courses/components/DeleteCourseModal';
-import EditCourseModal from '@/features/courses/components/EditCourseModal';
+import UpdateCourseModal from '@/features/courses/components/UpdateCourseModal';
 import { Course } from '@/features/courses/types/course.type';
-import LessonCard from '@/features/lesson/components/LessonCard/LessonItem';
+import LessonItem from '@/features/lesson/components/LessonItem/LessonItem';
 import { useNavigate } from 'react-router-dom';
 import { ADMIN_COURSES_URL } from '@/shared/constants/urls.const';
 import { move } from '@dnd-kit/helpers';
 import { DragDropProvider } from '@dnd-kit/react';
 import { LessonListItem } from '@/features/lesson/types/lessonListItem.type';
-import { useReorderLesson } from '@/features/lesson/hooks/useReorderLessons';
+import { useReorderLessons } from '@/features/lesson/hooks/useReorderLessons';
 
 type CourseLessonsAreaSectionProps = {
   lessonsList: LessonListItem[];
   course: Course;
-  onSuccess: (course: Course) => void;
+  onUpdateSuccess: (course: Course) => void; // RENAME: onSuccess -> onUpdateSuccess - present-tense on<Verb>Success; 'onSuccess' is hook-only vocabulary
   setLessonsList: React.Dispatch<React.SetStateAction<LessonListItem[]>>;
-  refetchLessons: (courseId: Course['id']) => void;
+  reloadLessons: (courseId: Course['id']) => void; // RENAME: refetchLessons -> reloadLessons - no 'fetch' in names; refresh callback uses 'reload'
 };
 
 function CourseLessonsAreaSection({
   course,
-  onSuccess,
+  onUpdateSuccess,
   lessonsList,
   setLessonsList,
-  refetchLessons,
+  reloadLessons,
 }: CourseLessonsAreaSectionProps) {
-  const [open, setOpen] = useState<'edit' | 'delete' | null>(null);
+  const [open, setOpen] = useState<'update' | 'delete' | null>(null);
 
-  const { reorderLessons } = useReorderLesson();
+  const { reorderLessons } = useReorderLessons();
 
   const navigate = useNavigate();
   const handleClose = () => setOpen(null);
-  const handleDeleted = () => {
+  // RENAME: handleDeleted -> handleDeleteSuccess - align local handler with the on<Verb>Success it feeds
+  const handleDeleteSuccess = () => {
     handleClose();
     navigate(ADMIN_COURSES_URL);
   };
@@ -53,30 +54,28 @@ function CourseLessonsAreaSection({
           reorderLessons(orderedList, course);
         }}
       >
-        {lessonsList.map((lesson, index) => {
-          return (
-            <LessonCard
-              courseId={course.id}
-              refetchLessons={refetchLessons}
-              key={lesson.id}
-              lessonId={lesson.id}
-              lessonIndex={index}
-              lesson={lesson}
-            />
-          );
-        })}
+        {lessonsList.map((lesson, index) => (
+          <LessonItem
+            courseId={course.id}
+            reloadLessons={reloadLessons}
+            key={lesson.id}
+            lessonId={lesson.id}
+            lessonIndex={index}
+            lesson={lesson}
+          />
+        ))}
       </DragDropProvider>
 
       <Box sx={sxStyles.controls}>
-        <Button sx={sxStyles.btn} variant="contained" onClick={() => setOpen('edit')}>
+        <Button sx={sxStyles.btn} variant="contained" onClick={() => setOpen('update')}>
           <EditOutlinedIcon />
-          Edit Course
+          Update Course
         </Button>
-        <EditCourseModal
-          onSuccess={onSuccess}
+        <UpdateCourseModal
+          onUpdateSuccess={onUpdateSuccess}
           course={course}
-          open={open === 'edit'}
-          handleClose={handleClose}
+          open={open === 'update'}
+          onClose={handleClose}
         />
         <Button
           sx={sxStyles.btn}
@@ -87,10 +86,10 @@ function CourseLessonsAreaSection({
           Delete Course
         </Button>
         <DeleteCourseModal
-          onDeleted={handleDeleted}
+          onDeleteSuccess={handleDeleteSuccess}
           courseName={course.name}
           open={open === 'delete'}
-          handleClose={handleClose}
+          onClose={handleClose}
         />
       </Box>
     </Box>

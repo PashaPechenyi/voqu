@@ -6,20 +6,20 @@ import HeroSection from './sections/Hero.section';
 import SearchSection from './sections/Search.section';
 
 function AdminCoursesPage() {
-  const { coursesList, fetchCourses } = useCoursesList();
+  const { coursesList, getCoursesList } = useCoursesList();
   const handleCourseUpdated = () => {
-    fetchCourses();
+    getCoursesList();
   };
 
   useEffect(() => {
-    fetchCourses();
-  }, [fetchCourses]);
+    getCoursesList();
+  }, []);
 
   return (
     <Box>
-      <HeroSection refetchCourses={fetchCourses} />
+      <HeroSection reloadCourses={getCoursesList} />
       <SearchSection />
-      <CoursesSection onSuccess={handleCourseUpdated} coursesList={coursesList} />
+      <CoursesSection onUpdateSuccess={handleCourseUpdated} coursesList={coursesList} />
     </Box>
   );
 }

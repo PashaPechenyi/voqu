@@ -5,7 +5,7 @@ export type Course = {
   name: string;
   status: CourseStatusKey;
   Level: {
-    id: string;
+    id: number;
     name: string;
     cefrLevel: string;
   };

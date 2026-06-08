@@ -1,11 +1,12 @@
 import { Course } from '@/features/courses/types/course.type';
 import { CourseReqBody } from '../types/courseReqBody.type';
 
-export type CreateCourseResponse = {
+// RENAME: CreateCourseResponse -> CreateCourseDTO - API-response types end with DTO
+type CreateCourseDTO = {
   course: Course;
 };
 
-export const createCourseReq = async (body: CourseReqBody): Promise<CreateCourseResponse> => {
+export const createCourseReq = async (body: CourseReqBody): Promise<CreateCourseDTO> => {
   const response = await fetch('/api/course', {
     method: 'POST',
     headers: {

@@ -2,18 +2,22 @@ import { Box, Button, Typography } from '@mui/material';
 import { useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
-import AddCourseModal from '@/features/courses/components/AddCourseModal';
+import CreateCourseModal from '@/features/courses/components/CreateCourseModal';
+
 type HeroSectionProps = {
-  refetchCourses: () => void;
+  reloadCourses: () => void; // RENAME: refetchCourses -> reloadCourses - no 'fetch' in names; refresh callback uses 'reload'
 };
-function HeroSection({ refetchCourses }: HeroSectionProps) {
+
+function HeroSection({ reloadCourses }: HeroSectionProps) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const onCreated = () => {
-    refetchCourses();
+  // RENAME: onCreated -> handleCreateSuccess - local handler must start with 'handle' (on* is for props)
+  const handleCreateSuccess = () => {
+    reloadCourses();
     handleClose();
   };
+
   return (
     <Box sx={sxStyles.root}>
       <Box>
@@ -24,9 +28,9 @@ function HeroSection({ refetchCourses }: HeroSectionProps) {
       </Box>
       <Button sx={sxStyles.btn} variant="contained" onClick={handleOpen}>
         <AddIcon />
-        Add New Course
+        Create Course
       </Button>
-      <AddCourseModal open={open} handleClose={handleClose} onCreated={onCreated} />
+      <CreateCourseModal open={open} onClose={handleClose} onCreateSuccess={handleCreateSuccess} />
     </Box>
   );
 }

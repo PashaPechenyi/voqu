@@ -1,14 +1,16 @@
 import { Course } from '@/features/courses/types/course.type';
 import { CourseReqBody } from '../types/courseReqBody.type';
 
-export type EditCourseResponse = {
+// RENAME: EditCourseResponse -> UpdateCourseDTO - 'update' is the canonical mutation verb; API-response types end with DTO
+export type UpdateCourseDTO = {
   course: Course;
 };
 
-export const editCourseReq = async (
+// RENAME: editCourseReq -> updateCourseReq - 'update' is the canonical mutation verb
+export const updateCourseReq = async (
   courseId: Course['id'],
   body: CourseReqBody,
-): Promise<EditCourseResponse> => {
+): Promise<UpdateCourseDTO> => {
   const response = await fetch(`/api/course/${courseId}`, {
     method: 'PATCH',
     headers: {

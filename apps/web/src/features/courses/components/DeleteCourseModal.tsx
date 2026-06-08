@@ -5,14 +5,14 @@ import { useDeleteCourse } from '../hooks/useDeleteCourse';
 
 type DeleteCourseModalProps = {
   open: boolean;
-  handleClose: () => void;
+  onClose: () => void; // RENAME: handleClose -> onClose - event-emitting prop must start with 'on'
   courseName?: string;
-  onDeleted?: () => void;
+  onDeleteSuccess?: () => void; // RENAME: onDeleted -> onDeleteSuccess - present-tense on<Verb>Success
 };
 
-function DeleteCourseModal({ open, handleClose, courseName, onDeleted }: DeleteCourseModalProps) {
+function DeleteCourseModal({ open, onClose, courseName, onDeleteSuccess }: DeleteCourseModalProps) {
   const { courseId } = useParams();
-  const { deleteCourse, isLoading } = useDeleteCourse({ onSuccess: onDeleted });
+  const { deleteCourse, isLoading } = useDeleteCourse({ onSuccess: onDeleteSuccess });
 
   const onSubmit = () => {
     if (!courseId) return;
@@ -20,7 +20,7 @@ function DeleteCourseModal({ open, handleClose, courseName, onDeleted }: DeleteC
   };
 
   return (
-    <Dialog open={open} onClose={handleClose}>
+    <Dialog open={open} onClose={onClose}>
       <Box sx={sxStyles.modal}>
         <Typography variant="h6" component="h2">
           Delete Course
@@ -33,7 +33,7 @@ function DeleteCourseModal({ open, handleClose, courseName, onDeleted }: DeleteC
           <Button loading={isLoading} variant="contained" color="error" onClick={onSubmit}>
             Delete
           </Button>
-          <Button variant="outlined" onClick={handleClose}>
+          <Button variant="outlined" onClick={onClose}>
             Close
           </Button>
         </Box>

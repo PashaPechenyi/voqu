@@ -7,51 +7,50 @@ import CourseForm from './CourseForm';
 import { Course } from '../types/course.type';
 import { CourseFormValues } from '../types/courseFormValues.type';
 import { CourseStatusKey } from '../types/courseStatus.type';
-import { courseFormToReqBody } from '../helpers/courseFormToReqBody.helper';
-import { useEditCourse } from '../hooks/useEditCourse';
+import { convertCourseFormToApiFormat } from '../helpers/convertCourseFormToApiFormat.helper';
+import { useCreateCourse } from '../hooks/useCreateCourse';
 
-type EditCourseModalProps = {
+type CreateCourseModalProps = {
   open: boolean;
-  handleClose: () => void;
-  course: Course;
-  onSuccess: (course: Course) => void;
+  onClose: () => void; // RENAME: handleClose -> onClose - event-emitting prop must start with 'on'
+  onCreateSuccess?: (course: Course) => void; // RENAME: onCreated -> onCreateSuccess - present-tense on<Verb>Success
 };
 
 const COURSE_STATUSES = Object.values(CourseStatusKey);
 
-function EditCourseModal({ open, handleClose, course, onSuccess }: EditCourseModalProps) {
-  console.log(course, 'course');
+// RENAME: AddCourseModal -> CreateCourseModal - 'create' is the canonical create verb
+function CreateCourseModal({ open, onClose, onCreateSuccess }: CreateCourseModalProps) {
   const { handleSubmit, control } = useForm<CourseFormValues>({
     defaultValues: {
-      title: course.name,
-      description: course.createdAt,
+      title: '',
+      description: '',
       level: null,
-      status: course.status,
-      image: course.updatedAt,
+      status: null,
+      image: '',
     },
   });
-  const { levelsList, fetchLevels } = useLevelsList();
-  const { editCourse, isLoading } = useEditCourse({ onSuccess });
+  const { levelsList, getLevelsList } = useLevelsList();
+  const { createCourse, isLoading } = useCreateCourse({ onSuccess: onCreateSuccess });
 
   const onSubmit = (formValues: CourseFormValues) => {
-    editCourse(course.id, courseFormToReqBody(formValues));
-    handleClose();
+    createCourse(convertCourseFormToApiFormat(formValues));
   };
 
+  // TODO: this fetches levels on mount regardless of `open`. A modal should request its data only
+  // when opened. Gate on the open prop: `useEffect(() => { if (!open) return; getLevelsList(); }, [open]);`
   useEffect(() => {
-    fetchLevels();
-  }, [fetchLevels]);
+    getLevelsList();
+  }, [getLevelsList]);
 
   return (
-    <Dialog open={open} onClose={handleClose}>
+    <Dialog open={open} onClose={onClose}>
       <Box sx={sxStyles.modal}>
-        <Typography variant="h3">Edit Course</Typography>
+        <Typography variant="h3">Create Course</Typography>
         <Typography color="primary" sx={{ mt: 2, mb: 2 }}>
-          Edit course. You can edit lessons later.
+          Create a new course. You can add lessons after creating the course.
         </Typography>
 
         <CourseForm
-          edit
           isLoading={isLoading}
           control={control}
           onSubmit={handleSubmit(onSubmit)}
@@ -74,4 +73,4 @@ const sxStyles = createSxStylesList({
   },
 });
 
-export default EditCourseModal;
+export default CreateCourseModal;

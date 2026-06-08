@@ -11,7 +11,7 @@ type CourseFormProps = {
   onSubmit: () => void;
   levelsOptions: Level[];
   statusesOptions: CourseStatusKey[];
-  edit?: boolean;
+  update?: boolean; // RENAME: edit -> update - 'update' is the canonical mutation verb (see TODO below: this prop should be removed)
   isLoading: boolean;
 };
 
@@ -21,9 +21,14 @@ function CourseForm({
   onSubmit,
   statusesOptions,
   levelsOptions,
-  edit,
+  update,
 }: CourseFormProps) {
-  const requiredRule = edit
+  // TODO: anti-pattern — CourseForm should not branch its validation on a caller-context flag like
+  // `update`. A reusable form must not know where it is used.
+  // However this condition should not exist at all:
+  // the required rule should always apply (required fields are required regardless of create/update).
+  // Drop the `update` prop and make `requiredRule` unconditional.
+  const requiredRule = update
     ? {}
     : { required: { value: true, message: VALIDATION_ERRORS.REQUIRED } };
 
@@ -143,12 +148,7 @@ function CourseForm({
         </Grid>
 
         <Grid size={{ xs: 12 }}>
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'flex-end',
-            }}
-          >
+          <Box sx={sxStyles.actions}>
             <Button loading={isLoading} type="submit" variant="contained">
               Save
             </Button>
@@ -162,6 +162,10 @@ function CourseForm({
 const sxStyles = createSxStylesList({
   form: {
     mb: 2,
+  },
+  actions: {
+    display: 'flex',
+    justifyContent: 'flex-end',
   },
 });
 

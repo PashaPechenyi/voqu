@@ -2,27 +2,31 @@ import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.h
 import { Box, Button, Dialog, Typography } from '@mui/material';
 import { useDeleteLesson } from '../../hooks/useDeleteLesson';
 import { LessonListItem } from '../../types/lessonListItem.type';
+import { FC } from 'react';
 
 type DeleteLessonModalProps = {
   open: boolean;
-  handleClose: () => void;
+  onClose: () => void; // RENAME: handleClose -> onClose - event-emitting prop must start with 'on'
   lesson: LessonListItem;
-  onDeleted?: () => void;
+  onDeleteSuccess?: () => void; // RENAME: onDeleted -> onDeleteSuccess - present-tense on<Verb>Success
 };
-export const DeleteLessonModal = ({
+
+// RENAME: export style - named `export const DeleteLessonModal` -> `export default` to match the one-component-per-file rule
+const DeleteLessonModal: FC<DeleteLessonModalProps> = ({
   open,
-  handleClose,
+  onClose,
   lesson,
-  onDeleted,
-}: DeleteLessonModalProps) => {
-  const { deleteLesson, isLoading } = useDeleteLesson({ onSuccess: onDeleted });
+  onDeleteSuccess,
+}) => {
+  const { deleteLesson, isLoading } = useDeleteLesson({ onSuccess: onDeleteSuccess });
+
   const onSubmit = () => {
     if (!lesson.id) return;
     deleteLesson(lesson.id);
   };
 
   return (
-    <Dialog open={open} onClose={handleClose}>
+    <Dialog open={open} onClose={onClose}>
       <Box sx={sxStyles.modal}>
         <Typography variant="h6" component="h2">
           Delete Lesson
@@ -32,10 +36,10 @@ export const DeleteLessonModal = ({
         </Typography>
 
         <Box sx={sxStyles.actions}>
-          <Button loading={isLoading} onClick={() => onSubmit()} variant="contained" color="error">
+          <Button loading={isLoading} onClick={onSubmit} variant="contained" color="error">
             Delete
           </Button>
-          <Button variant="outlined" onClick={handleClose}>
+          <Button variant="outlined" onClick={onClose}>
             Close
           </Button>
         </Box>
@@ -43,6 +47,7 @@ export const DeleteLessonModal = ({
     </Dialog>
   );
 };
+
 const sxStyles = createSxStylesList({
   modal: {
     width: 400,
@@ -59,3 +64,5 @@ const sxStyles = createSxStylesList({
     gap: 2,
   },
 });
+
+export default DeleteLessonModal;

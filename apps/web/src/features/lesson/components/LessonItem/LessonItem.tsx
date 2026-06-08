@@ -17,28 +17,31 @@ import { useSortable } from '@dnd-kit/react/sortable';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import { LessonListItem } from '@/features/lesson/types/lessonListItem.type';
-import { DeleteLessonModal } from '../deleteLessonModal/DeleteLessonModal';
+import DeleteLessonModal from '../DeleteLessonModal/DeleteLessonModal';
 import { Course } from '@/features/courses/types/course.type';
 
-type LessonCardProps = {
+// RENAME: LessonCardProps -> LessonItemProps - match the component (it renders a ListItem row, not a card)
+type LessonItemProps = {
   lesson: LessonListItem;
-  lessonId: string;
+  lessonId: LessonListItem['id']; // RENAME: type string -> LessonListItem['id'] - reference the entity id type, like courseId
   lessonIndex: number;
   courseId: Course['id'];
-  refetchLessons: (courseId: Course['id']) => void;
+  reloadLessons: (courseId: Course['id']) => void; // RENAME: refetchLessons -> reloadLessons - no 'fetch' in names; refresh callback uses 'reload'
 };
 
-function LessonItem({ lesson, courseId, lessonId, lessonIndex, refetchLessons }: LessonCardProps) {
-  // const SegmentIcon = LESSON_SEGMENT_ICONS[lesson.status];
-  // const segmentColor = LESSON_SEGMENT_COLORS[lesson.status];
+// RENAME: component LessonCard -> LessonItem (+ folder LessonCard/ -> LessonItem/) - it's a list row, and folder must match the component
+function LessonItem({ lesson, courseId, lessonId, lessonIndex, reloadLessons }: LessonItemProps) {
+  // FIXME: segment icon and color should be derived from the lesson's segment, not hardcoded
+  // For know the backend doesn't support segments BUT once it is implemented - we need to fix it
   const SegmentIcon = MenuBookIcon;
   const segmentColor = '#71677C';
 
-  const [open, setOpen] = useState<'edit' | 'delete' | null>(null);
+  const [open, setOpen] = useState<'update' | 'delete' | null>(null);
   const handleClose = () => setOpen(null);
-  const onDeleted = () => {
+  // RENAME: onDeleted -> handleDeleteSuccess - local handler must start with 'handle' (on* is for props)
+  const handleDeleteSuccess = () => {
     handleClose();
-    refetchLessons(courseId);
+    reloadLessons(courseId);
   };
 
   const dragButtonRef = useRef<HTMLButtonElement | null>(null);
@@ -75,6 +78,10 @@ function LessonItem({ lesson, courseId, lessonId, lessonIndex, refetchLessons }:
         <Box>
           <Typography>{lesson.title}</Typography>
           <Box sx={sxStyles.lessonInfo}>
+            {/* 
+              TODO: shows subtitle as duration; should render lesson.duration, and the chip label is hardcoded to "reading" 
+              Also add a condition. We need to show duration only when it exists
+            */}
             <Typography variant="body2">{lesson.subtitle} min</Typography>
             <Chip label="reading" color="primary" variant="outlined" size="small" />
           </Box>
@@ -85,17 +92,17 @@ function LessonItem({ lesson, courseId, lessonId, lessonIndex, refetchLessons }:
         <IconButton aria-label="lock">
           <LockOutlinedIcon />
         </IconButton>
-        <IconButton color="warning" aria-label="edit">
+        <IconButton color="warning" aria-label="update">
           <EditOutlinedIcon />
         </IconButton>
         <IconButton color="error" aria-label="delete" onClick={() => setOpen('delete')}>
           <DeleteIcon />
         </IconButton>
         <DeleteLessonModal
-          onDeleted={onDeleted}
+          onDeleteSuccess={handleDeleteSuccess}
           lesson={lesson}
           open={open === 'delete'}
-          handleClose={handleClose}
+          onClose={handleClose}
         />
       </CardActions>
     </ListItem>

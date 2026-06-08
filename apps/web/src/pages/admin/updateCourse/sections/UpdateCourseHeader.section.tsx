@@ -2,26 +2,30 @@ import { Box, Button, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useState } from 'react';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
-import AddNewLessonModal from '@/features/lesson/components/AddNewLessonModal';
+import CreateLessonModal from '@/features/lesson/components/CreateLessonModal';
 import { Course } from '@/features/courses/types/course.type';
 
-type EditCourseHeaderSectionProps = {
+type UpdateCourseHeaderSectionProps = {
   course: Course;
-  refetchLessons: (courseId: Course['id']) => void;
+  reloadLessons: (courseId: Course['id']) => void; // RENAME: refetchLessons -> reloadLessons - no 'fetch' in names; refresh callback uses 'reload'
 };
 
-function EditCourseHeaderSection({ course, refetchLessons }: EditCourseHeaderSectionProps) {
+// RENAME: EditCourseHeaderSection -> UpdateCourseHeaderSection (+ file EditCourseHeader.section -> UpdateCourseHeader.section) - 'update' is the canonical mutation verb
+function UpdateCourseHeaderSection({ course, reloadLessons }: UpdateCourseHeaderSectionProps) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const onCreated = () => {
-    refetchLessons(course.id);
+  // RENAME: onCreated -> handleCreateSuccess - local handler must start with 'handle' (on* is for props)
+  const handleCreateSuccess = () => {
+    reloadLessons(course.id);
     handleClose();
   };
+
   return (
     <Box sx={sxStyles.root}>
       <Box>
         <Typography variant="h3">{course.name}</Typography>
+        {/* TODO: renders the literal text "description"; should show  the data from course */}
         <Typography variant="h6" color={'adminSecondary'}>
           description
         </Typography>
@@ -29,13 +33,13 @@ function EditCourseHeaderSection({ course, refetchLessons }: EditCourseHeaderSec
       <Box sx={{ flex: 1 }} />
       <Button sx={sxStyles.btn} variant="contained" onClick={handleOpen}>
         <AddIcon />
-        Add lesson
+        Create lesson
       </Button>
-      <AddNewLessonModal
-        onCreated={onCreated}
+      <CreateLessonModal
+        onCreateSuccess={handleCreateSuccess}
         courseId={course.id}
         open={open}
-        handleClose={handleClose}
+        onClose={handleClose}
       />
     </Box>
   );
@@ -51,4 +55,4 @@ const sxStyles = createSxStylesList({
   },
 });
 
-export default EditCourseHeaderSection;
+export default UpdateCourseHeaderSection;

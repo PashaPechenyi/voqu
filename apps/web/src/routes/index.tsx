@@ -5,12 +5,12 @@ import LandingPage from '@/pages/public/landing/Landing.page';
 import AboutUsPage from '@/pages/public/aboutUs/AboutUs.page';
 import AdminDashboardPage from '@/pages/admin/adminDashboard/AdminDashboard.page';
 import AdminCoursesPage from '@/pages/admin/adminCourses/AdminCourses.page';
-import EditCoursePage from '@/pages/admin/editCourse/EditCourse.page';
+import UpdateCoursePage from '@/pages/admin/updateCourse/UpdateCourse.page';
 import {
   ABOUT_URL,
   ADMIN_URL,
   ADMIN_COURSES_URL,
-  ADMIN_COURSES_EDIT_URL,
+  ADMIN_COURSES_UPDATE_URL,
   HOME_URL,
 } from '@/shared/constants/urls.const';
 
@@ -26,7 +26,7 @@ export function AppRoutes() {
       <Route path={ADMIN_URL} element={<AdminLayout />}>
         <Route index element={<AdminDashboardPage />} />
         <Route path={ADMIN_COURSES_URL} element={<AdminCoursesPage />} />
-        <Route path={ADMIN_COURSES_EDIT_URL(':courseId')} element={<EditCoursePage />} />
+        <Route path={ADMIN_COURSES_UPDATE_URL(':courseId')} element={<UpdateCoursePage />} />
       </Route>
     </Routes>
   );

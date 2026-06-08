@@ -3,12 +3,13 @@ import { useState } from 'react';
 import { reorderLessonReq } from '../helpers/reorderLessonReq.helper';
 import { LessonListItem } from '../types/lessonListItem.type';
 
-type UseReorderLessonProps = {
-  onSuccess?: (updatedlesson: LessonListItem) => void;
+type UseReorderLessonsProps = {
+  onSuccess?: (updatedLesson: LessonListItem) => void;
   onError?: (error: unknown) => void;
 };
 
-export const useReorderLesson = ({ onSuccess, onError }: UseReorderLessonProps = {}) => {
+// RENAME: useReorderLesson -> useReorderLessons - file/symbol must agree; the hook reorders the whole list
+export const useReorderLessons = ({ onSuccess, onError }: UseReorderLessonsProps = {}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<unknown>(null);
 

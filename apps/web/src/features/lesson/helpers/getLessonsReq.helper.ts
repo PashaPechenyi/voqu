@@ -1,11 +1,12 @@
 import { Course } from '@/features/courses/types/course.type';
-import { LessonListItem } from './../../../../../api/src/modules/lesson/structs/lesson-list-item.constructor';
+import { LessonListItem } from '../types/lessonListItem.type';
 
-export type GetLessonsResponse = {
+// RENAME: GetLessonsResponse -> GetLessonsDTO - API-response types end with DTO
+export type GetLessonsDTO = {
   items: LessonListItem[];
 };
 
-export const getLessonsReq = async (courseId: Course['id']): Promise<GetLessonsResponse> => {
+export const getLessonsReq = async (courseId: Course['id']): Promise<GetLessonsDTO> => {
   const response = await fetch(`/api/course/lesson/${courseId}/list`, {
     method: 'GET',
   });
