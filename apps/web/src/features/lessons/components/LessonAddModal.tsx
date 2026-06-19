@@ -8,7 +8,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { Typography } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { LessonFormValues } from '../types/lessonForm.type';
-import LessonModalForm from './LessonForm';
+import LessonForm from './LessonForm';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 
 type LessonAddModalProps = {
@@ -36,7 +36,7 @@ const LessonAddModal: FC<LessonAddModalProps> = ({ isOpen, onClose, onSubmit }) 
       </DialogTitle>
       <DialogContent>
         <DialogContentText>Create a new lesson. You can change it after adding.</DialogContentText>
-        <LessonModalForm control={control} />
+        <LessonForm control={control} />
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} sx={sxStyles.cancelButton}>

@@ -1,18 +1,19 @@
 import { FC, Fragment, useEffect, useState } from 'react';
 import { Card, CardContent, CardMedia, Divider, Typography } from '@mui/material';
-import LessonListItem from '@/features/lessons/components/LessonListItem';
-import { LessonListItem as TLessonListItem } from '@/features/lessons/types/lesson.type';
+import LessonItem from '@/features/lessons/components/LessonItem';
+import { LessonListItem } from '@/features/lessons/types/lesson.type';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 import { DragDropProvider } from '@dnd-kit/react';
 import { move } from '@dnd-kit/helpers';
 import { useReorderLessons } from '@/features/lessons/hooks/useReorderLessons';
 
 type LessonsSectionProps = {
-  lessons: TLessonListItem[];
-  getLessons: () => void;
+  lessons: LessonListItem[];
+  // RENAME: getLessons -> reloadLessons - a refresh callback uses the reload* prefix
+  reloadLessons: () => void;
 };
 
-const LessonsSection: FC<LessonsSectionProps> = ({ lessons, getLessons }) => {
+const LessonsSection: FC<LessonsSectionProps> = ({ lessons, reloadLessons }) => {
   // TODO: we don't need this state
   const [items, setItems] = useState(lessons);
   const { reorderLessons } = useReorderLessons({});
@@ -43,8 +44,8 @@ const LessonsSection: FC<LessonsSectionProps> = ({ lessons, getLessons }) => {
           <ul>
             {items.map((lesson, index) => (
               <Fragment key={lesson.id}>
-                <LessonListItem
-                  getLessons={getLessons}
+                <LessonItem
+                  reloadLessons={reloadLessons}
                   id={lesson.id}
                   lesson={lesson}
                   index={index}

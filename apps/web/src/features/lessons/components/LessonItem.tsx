@@ -4,7 +4,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import LockIcon from '@mui/icons-material/Lock';
 import EditIcon from '@mui/icons-material/Edit';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
-import { LessonListItem as TLessonListItem } from '../types/lesson.type';
+import { LessonListItem } from '../types/lesson.type';
 import { LessonFormValues } from '../types/lessonForm.type';
 import ConfirmModal from '@/shared/components/ConfirmModal/ConfirmModal';
 import LessonEditModal from './LessonEditModal';
@@ -13,24 +13,28 @@ import { useSortable } from '@dnd-kit/react/sortable';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import { useDeleteLesson } from '../hooks/useDeleteLesson';
 
-type LessonListItemProps = {
-  lesson: TLessonListItem;
+type LessonItemProps = {
+  lesson: LessonListItem;
   index: number;
-  onDelete?: (lesson: TLessonListItem) => void;
-  onEdit?: (lesson: TLessonListItem, values: LessonFormValues) => void;
-  onToggleLock?: (lesson: TLessonListItem) => void;
+  onDelete?: (lesson: LessonListItem) => void;
+  // RENAME: onEdit -> onUpdate - vocabulary is "update", never "edit"
+  onUpdate?: (lesson: LessonListItem, values: LessonFormValues) => void;
+  onToggleLock?: (lesson: LessonListItem) => void;
   id: string;
-  getLessons: () => void;
+  // RENAME: getLessons -> reloadLessons - a refresh callback uses the reload* prefix
+  reloadLessons: () => void;
 };
 
-const LessonListItem: FC<LessonListItemProps> = ({
+// RENAME: LessonListItem -> LessonItem - matches the documented entity list-item name and frees the
+// LessonListItem type name (no more TLessonListItem alias)
+const LessonItem: FC<LessonItemProps> = ({
   lesson,
   index,
   onDelete,
-  onEdit,
+  onUpdate,
   onToggleLock,
   id,
-  getLessons,
+  reloadLessons,
 }) => {
   // TODO:  we don't need pendingDelete. We have isLoading state from the hook.
   const [pendingDelete, setPendingDelete] = useState(false);
@@ -41,7 +45,7 @@ const LessonListItem: FC<LessonListItemProps> = ({
   const { isDragging } = useSortable({ id, index, element: listItemRef, handle: dragButtonRef });
   const { deleteLesson } = useDeleteLesson({
     onSuccess: () => {
-      getLessons();
+      reloadLessons();
     },
   });
 
@@ -56,8 +60,8 @@ const LessonListItem: FC<LessonListItemProps> = ({
   };
 
   // TODO: There is no API integration for lesson edit.
-  const handleEditSubmit = (values: LessonFormValues) => {
-    onEdit?.(lesson, values);
+  const handleUpdateSubmit = (values: LessonFormValues) => {
+    onUpdate?.(lesson, values);
     closeEdit();
   };
 
@@ -97,7 +101,7 @@ const LessonListItem: FC<LessonListItemProps> = ({
         isOpen={isEditOpen}
         onClose={closeEdit}
         lesson={lesson}
-        onSubmit={handleEditSubmit}
+        onSubmit={handleUpdateSubmit}
       />
       <ConfirmModal
         subtitle={`Are you sure you want to delete "${lesson.title}"? This action cannot be undone.`}
@@ -139,4 +143,4 @@ const sxStyles = createSxStylesList({
   }),
 });
 
-export default LessonListItem;
+export default LessonItem;

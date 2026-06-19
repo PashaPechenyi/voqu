@@ -14,7 +14,8 @@ type CourseSummarySectionProps = {
   title: string;
   lessons?: LessonListItem[];
   courseId: string;
-  getLessons: () => void;
+  // RENAME: getLessons -> reloadLessons - a refresh callback uses the reload* prefix
+  reloadLessons: () => void;
 };
 
 type CourseTotal = {
@@ -34,7 +35,7 @@ const buildTotals = (lessons: LessonListItem[]): CourseTotal[] => {
 
 const CourseSummarySection: FC<CourseSummarySectionProps> = ({
   courseId,
-  getLessons,
+  reloadLessons,
   title,
   lessons = [],
 }) => {
@@ -46,7 +47,7 @@ const CourseSummarySection: FC<CourseSummarySectionProps> = ({
 
   const { createLesson } = useCreateLesson({
     onSuccess: () => {
-      getLessons();
+      reloadLessons();
       closeAddLessonModal();
     },
   });

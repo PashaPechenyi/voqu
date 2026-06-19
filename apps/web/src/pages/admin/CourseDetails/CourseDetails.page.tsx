@@ -64,10 +64,10 @@ const CourseDetailsPage: FC = () => {
     <>
       <CourseSummarySection
         title={activeCourse.name}
-        getLessons={() => getLessons(courseId!)}
+        reloadLessons={() => getLessons(courseId!)}
         courseId={courseId ?? ''}
       />
-      <LessonsSection lessons={lessonsList} getLessons={() => getLessons(courseId!)} />
+      <LessonsSection lessons={lessonsList} reloadLessons={() => getLessons(courseId!)} />
       <Box sx={sxStyles.actionsWrapper}>
         <Box sx={sxStyles.actionsRow}>
           <Button sx={sxStyles.editButton} onClick={openEditModal}>

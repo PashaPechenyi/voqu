@@ -9,7 +9,7 @@ import { Typography } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { LessonListItem } from '../types/lesson.type';
 import { LessonFormValues } from '../types/lessonForm.type';
-import LessonModalForm from './LessonForm';
+import LessonForm from './LessonForm';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 
 type LessonEditModalProps = {
@@ -38,7 +38,7 @@ const LessonEditModal: FC<LessonEditModalProps> = ({ isOpen, onClose, lesson, on
       </DialogTitle>
       <DialogContent>
         <DialogContentText>Edit a lesson</DialogContentText>
-        <LessonModalForm control={control} />
+        <LessonForm control={control} />
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} sx={sxStyles.cancelButton}>
