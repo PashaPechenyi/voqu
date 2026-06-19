@@ -5,6 +5,11 @@ import { Course } from './course.entity';
 
 @Entity('User')
 export class User extends BaseSecuredEntity {
+  constructor(data: Partial<User> = {}) {
+    super();
+    Object.assign(this, data);
+  }
+
   @Index('idx_user_email')
   @Column({ length: 255, unique: true })
   email?: string;

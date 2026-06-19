@@ -66,5 +66,5 @@ Roughly, one frontend feature folder maps to one backend module of the same name
 
 ## Related memories
 
-- [[frontend-architecture]] — where to put files, naming, folder layout (web).
-- [[frontend-patterns]] — code conventions and patterns for components, hooks, types, MUI.
+- `mem:frontend/index` — map of all frontend (web) rule files; start here, then read the topic file
+  matching your task (architecture · conventions · data-fetching · state-forms · styling · routing).

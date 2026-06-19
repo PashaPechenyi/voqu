@@ -21,11 +21,6 @@ export class CreateLessonDto {
   description?: string;
 
   @IsOptional()
-  @IsInt()
-  @Min(0)
-  order?: number;
-
-  @IsOptional()
   @IsEnum(LessonStatus)
   status?: LessonStatus;
 
