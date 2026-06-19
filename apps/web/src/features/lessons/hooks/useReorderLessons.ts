@@ -1,27 +1,29 @@
 import { useCallback, useState } from 'react';
-import { CreateLessonReqBody } from '../types/createLessonReqBodo.type';
-import { createLessonReq } from '../helpers/createLesson.helpers';
-import { changeLessonOrder } from '../helpers/changeLessonOrder.helpers';
+import { reorderLessonsReq } from '../helpers/reorderLessonsReq.helper';
 import { LessonListItem } from '../types/lesson.type';
 import { Course } from '@/features/courses/types/course.type';
 
-type useReorderLessonProps = {
+// RENAME: useReorderLessonProps -> UseReorderLessonsProps - type names are PascalCase; reorder acts on the whole list (plural)
+type UseReorderLessonsProps = {
   onSuccess?: () => void;
   onError?: (error: Error) => void;
 };
-export const useReorderLesson = ({ onError, onSuccess }: useReorderLessonProps) => {
+
+// RENAME: useReorderLesson -> useReorderLessons - the hook reorders the whole lessons list
+export const useReorderLessons = ({ onError, onSuccess }: UseReorderLessonsProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-  const reorderLesson = useCallback(
+  // RENAME: reorderLesson -> reorderLessons - operates on the whole list
+  const reorderLessons = useCallback(
     async (lessons: LessonListItem[], courseId: Course['id']) => {
       setIsLoading(true);
       setError(null);
       try {
-        const orderedLessonsList = lessons.map((lesson, ind) => ({
+        const orderedLessonsList = lessons.map((lesson, index) => ({
           LessonId: lesson.id,
-          order: ind,
+          order: index,
         }));
-        await changeLessonOrder({ items: orderedLessonsList }, courseId);
+        await reorderLessonsReq({ items: orderedLessonsList }, courseId);
         onSuccess?.();
       } catch (err) {
         const e = err instanceof Error ? err : new Error('Unknown error');
@@ -33,5 +35,5 @@ export const useReorderLesson = ({ onError, onSuccess }: useReorderLessonProps) 
     },
     [onSuccess, onError],
   );
-  return { reorderLesson, isLoading, error };
+  return { reorderLessons, isLoading, error };
 };

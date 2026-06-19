@@ -1,26 +1,24 @@
 import { useCallback, useState } from 'react';
 import { LessonListItem } from '../types/lesson.type';
-// import { getLessonReq } from '../helpers/getLessonReq.helpers';
 import { Course } from '@/features/courses/types/course.type';
-import { getLessonReq } from '../helpers/getLessonReq.helpers';
+import { getLessonsReq } from '../helpers/getLessonsReq.helper';
 
-type useLessonsListProps = {
+// RENAME: useLessonsListProps -> UseLessonsListProps - type names are PascalCase
+type UseLessonsListProps = {
   onSuccess?: (lessonsList: LessonListItem[]) => void;
   onError?: (error: Error) => void;
 };
-export const useLessonsList = ({ onError, onSuccess }: useLessonsListProps = {}) => {
+
+export const useLessonsList = ({ onError, onSuccess }: UseLessonsListProps = {}) => {
   const [lessonsList, setLessonsList] = useState<LessonListItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-  console.log(lessonsList, '555');
   const getLessons = useCallback(
     async (courseId: Course['id']) => {
-      console.log(333);
       setIsLoading(true);
       setError(null);
       try {
-        const result = await getLessonReq(courseId);
-        console.log(result, 4444);
+        const result = await getLessonsReq(courseId);
         setLessonsList(result.items);
         onSuccess?.(result.items);
       } catch (err) {
@@ -33,5 +31,5 @@ export const useLessonsList = ({ onError, onSuccess }: useLessonsListProps = {})
     },
     [onSuccess, onError],
   );
-  return { getLessons, lessonsList, isLoading, error, setLessonsList };
+  return { getLessons, lessonsList, isLoading, error };
 };

@@ -3,16 +3,15 @@ import { Autocomplete, Grid, TextField } from '@mui/material';
 import { Control, Controller } from 'react-hook-form';
 import { FORM_VALIDATION_ERRORS } from '@/shared/constants/formValidationErrors.const';
 import { capitalizeWords } from '@/shared/helpers/string.helper';
-import { LESSON_TYPE_LIST } from '../constants/lessonTypeList.const';
 import { LessonFormValues } from '../types/lessonForm.type';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 import { LESSON_STATUSES_LIST } from '../constants/lessonStatusesList.const';
 
-type LessonModalFormProps = {
+type LessonFormProps = {
   control: Control<LessonFormValues>;
 };
 
-const LessonModalForm: FC<LessonModalFormProps> = ({ control }) => {
+const LessonForm: FC<LessonFormProps> = ({ control }) => {
   return (
     <Grid container spacing={2}>
       <Grid size={12}>
@@ -33,24 +32,6 @@ const LessonModalForm: FC<LessonModalFormProps> = ({ control }) => {
           )}
         />
       </Grid>
-      {/* <Grid size={6}>
-        <Controller
-          control={control}
-          name="type"
-          rules={{ required: { value: true, message: FORM_VALIDATION_ERRORS.requiredField } }}
-          render={({ field: { onChange, value }, formState: { errors } }) => (
-            <Autocomplete
-              options={LESSON_TYPE_LIST}
-              sx={sxStyles.fullWidth}
-              size="small"
-              onChange={(_, newValue) => onChange(newValue)}
-              value={value}
-              getOptionLabel={(option) => capitalizeWords(option)}
-              renderInput={(params) => <TextField {...params} label="Type" error={!!errors.type} />}
-            />
-          )}
-        />
-      </Grid> */}
       <Grid size={12}>
         <Controller
           control={control}
@@ -121,4 +102,4 @@ const sxStyles = createSxStylesList({
   fullWidth: { width: 1 },
 });
 
-export default LessonModalForm;
+export default LessonForm;

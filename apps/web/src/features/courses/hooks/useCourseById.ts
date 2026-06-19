@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { Course } from '../types/course.type';
-import { getCourseByIdReq } from '../helpers/getCourseById.helper';
+import { getCourseByIdReq } from '../helpers/getCourseByIdReq.helper';
 
 type UseCourseByIdOptions = {
   onSuccess?: (course: Course) => void;

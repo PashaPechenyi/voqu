@@ -1,26 +1,22 @@
-import { FC, useEffect } from 'react';
-import { Box, Grid, Typography } from '@mui/material';
+import { FC } from 'react';
+import { Box, Grid } from '@mui/material';
 import CourseCard from '@/features/courses/components/CourseCard';
-import { useCoursesList } from '@/features/courses/hooks/useCoursesList';
-import { CourseStatusFilterValue } from '@/features/search/constants/courseStatusFilterOptions.const';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 import { Course } from '@/features/courses/types/course.type';
 
 type CoursesSectionProps = {
   coursesList: Course[];
-  refetchCourses: () => void;
+  // RENAME: refetchCourses -> reloadCourses - refresh callbacks use the reload* prefix, never refetch*
+  reloadCourses: () => void;
 };
 
-const CoursesSection: FC<CoursesSectionProps> = ({ coursesList, refetchCourses }) => {
-  // TODO: fetch once on mount; fetchCourses' identity depends on onSuccess/onError,
-  // so listing it as a dep would refire the request whenever those callbacks change.
-
+const CoursesSection: FC<CoursesSectionProps> = ({ coursesList, reloadCourses }) => {
   return (
     <Box sx={sxStyles.root}>
       <Grid container spacing={2}>
         {coursesList.map((course) => (
           <Grid key={course.id} size={4} sx={sxStyles.gridItem}>
-            <CourseCard course={course} onStatusChanged={refetchCourses} />
+            <CourseCard course={course} onStatusChanged={reloadCourses} />
           </Grid>
         ))}
       </Grid>

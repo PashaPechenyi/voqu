@@ -45,7 +45,7 @@ const CoursesPage: FC = () => {
         <Typography color="primary">No courses found.</Typography>
       )}
       {!!visibleCoursesList.length && (
-        <CoursesSection refetchCourses={fetchCourses} coursesList={visibleCoursesList} />
+        <CoursesSection reloadCourses={fetchCourses} coursesList={visibleCoursesList} />
       )}
     </>
   );

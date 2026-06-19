@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { Course } from '../types/course.type';
 import { EditCourseReqBody } from '../types/courseRequest.type';
-import { editCourseReq } from '../helpers/editCourse.helper';
+import { editCourseReq } from '../helpers/editCourseReq.helper';
 
 type UseEditCourseOptions = {
   onSuccess?: () => void;

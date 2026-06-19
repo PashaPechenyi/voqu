@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { Course } from '../types/course.type';
-import { deleteCourseReq } from '../helpers/deleteCourse.helper';
+import { deleteCourseReq } from '../helpers/deleteCourseReq.helper';
 
 type UseDeleteCourseOptions = {
   onSuccess?: () => void;

@@ -12,7 +12,6 @@ import { useToggle } from '@/shared/hooks/useToggle';
 import { useSortable } from '@dnd-kit/react/sortable';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import { useDeleteLesson } from '../hooks/useDeleteLesson';
-import { useLessonsList } from '../hooks/useLessonsList';
 
 type LessonListItemProps = {
   lesson: TLessonListItem;
@@ -33,7 +32,7 @@ const LessonListItem: FC<LessonListItemProps> = ({
   id,
   getLessons,
 }) => {
-  //const Icon = lesson.icon;
+  // TODO:  we don't need pendingDelete. We have isLoading state from the hook.
   const [pendingDelete, setPendingDelete] = useState(false);
   const { isOpen: isDeleteOpen, open: openDelete, close: closeDelete } = useToggle();
   const { isOpen: isEditOpen, open: openEdit, close: closeEdit } = useToggle();
@@ -48,12 +47,15 @@ const LessonListItem: FC<LessonListItemProps> = ({
 
   const handleConfirmDelete = async () => {
     setPendingDelete(true);
+    // TODO: when onDelete should be called?
     onDelete?.(lesson);
+    // TODO: when closeDelete should be called?
     closeDelete();
     setPendingDelete(false);
     await deleteLesson(lesson.id);
   };
 
+  // TODO: There is no API integration for lesson edit.
   const handleEditSubmit = (values: LessonFormValues) => {
     onEdit?.(lesson, values);
     closeEdit();
@@ -67,18 +69,11 @@ const LessonListItem: FC<LessonListItemProps> = ({
             <DragIndicatorIcon />
           </Button>
           <Box sx={sxStyles.index}>{index + 1}</Box>
-          <Box sx={sxStyles.iconCon}>{/* <Icon sx={sxStyles.lessonIcon} /> */}</Box>
           <ListItemText>
             <Typography variant="h6" color="secondary">
               {lesson.title}
             </Typography>
             <Box sx={sxStyles.metaRow}>
-              <Typography variant="body1" color="tertiary">
-                {/* {lesson.duration} min */}
-              </Typography>
-              {/* <Typography sx={sxStyles.lessonType} color="tertiary">
-                {lesson.type}
-              </Typography> */}
               <Typography variant="body2" color="secondary">
                 {lesson.description}
               </Typography>
@@ -106,7 +101,7 @@ const LessonListItem: FC<LessonListItemProps> = ({
       />
       <ConfirmModal
         subtitle={`Are you sure you want to delete "${lesson.title}"? This action cannot be undone.`}
-        title="Delete TLessonListItem"
+        title="Delete Lesson"
         isOpen={isDeleteOpen}
         buttonText="Delete lesson"
         onClose={closeDelete}
@@ -131,11 +126,6 @@ const sxStyles = createSxStylesList({
   actionButton: (theme) => ({ border: `2px solid ${theme.palette.divider}` }),
   deleteButton: (theme) => ({ border: `2px solid ${theme.palette.error.main}` }),
   deleteIcon: (theme) => ({ fill: theme.palette.error.main }),
-  lessonIcon: (theme) => ({
-    fill: theme.palette.divider,
-    width: '20px',
-    height: '20px',
-  }),
   index: (theme) => ({
     width: '45px',
     height: '45px',
@@ -146,22 +136,6 @@ const sxStyles = createSxStylesList({
     alignItems: 'center',
     m: '0 0 20px 15px',
     backgroundColor: theme.palette.secondary.main,
-  }),
-  iconCon: (theme) => ({
-    width: '45px',
-    height: '45px',
-    borderRadius: '100%',
-    border: `2.5px solid ${theme.palette.divider}`,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    m: '0 0 20px 15px',
-  }),
-  lessonType: (theme) => ({
-    border: `1px solid ${theme.palette.divider}`,
-    borderRadius: '20px',
-    p: '3px 15px',
-    fontSize: '13px',
   }),
 });
 

@@ -30,7 +30,7 @@ const CourseCard: FC<CourseCardProps> = ({ course, onStatusChanged }) => {
   });
 
   const handleStatusToggle = () => updateCourseStatus(course);
-  console.log(course, 'Course');
+
   return (
     <Card sx={sxStyles.card}>
       <CardMedia sx={sxStyles.media} image={courseImage}>
@@ -129,14 +129,14 @@ const sxStyles = createSxStylesList({
   content: {
     flex: 1,
   },
-  courseLevel: {
+  courseLevel: (theme) => ({
     p: '5px 10px',
     borderRadius: '30px',
     fontSize: '12px',
     lineHeight: '20px',
-    border: '1px solid black',
-    backgroundColor: 'white',
-  },
+    border: `1px solid ${theme.palette.common.black}`,
+    backgroundColor: theme.palette.common.white,
+  }),
 });
 
 export default CourseCard;

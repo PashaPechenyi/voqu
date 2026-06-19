@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { Course } from '../types/course.type';
-import { getCoursesReq } from '../helpers/getCourses.helper';
+import { getCoursesReq } from '../helpers/getCoursesReq.helper';
 
 type UseCoursesListOptions = {
   onSuccess?: (coursesList: Course[]) => void;

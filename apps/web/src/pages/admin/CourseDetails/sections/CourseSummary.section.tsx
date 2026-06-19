@@ -7,7 +7,7 @@ import { LessonListItem } from '@/features/lessons/types/lesson.type';
 import { useToggle } from '@/shared/hooks/useToggle';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 import { useCreateLesson } from '@/features/lessons/hooks/useCreateLesson';
-import { lessonFormValuesToReqBody } from '@/features/lessons/helpers/lessonFormValuesToReqBody.helper';
+import { convertLessonFormToApiFormat } from '@/features/lessons/helpers/convertLessonFormToApiFormat.helper';
 import { LessonFormValues } from '@/features/lessons/types/lessonForm.type';
 
 type CourseSummarySectionProps = {
@@ -23,8 +23,8 @@ type CourseTotal = {
 };
 
 const buildTotals = (lessons: LessonListItem[]): CourseTotal[] => {
-  // const totalTime = lessons.reduce((acc, lesson) => acc + lesson.duration, 0);
-  // const lockedLessons = lessons.filter((lesson) => lesson.isLocked);
+  // TODO: Total Duration and Locked Lessons are hardcoded to 0 — derive them from the lessons
+  // once the LessonListItem model exposes duration / locked state.
   return [
     { value: lessons.length, label: 'Total Lessons' },
     { value: 0, label: 'Total Duration' },
@@ -38,7 +38,6 @@ const CourseSummarySection: FC<CourseSummarySectionProps> = ({
   title,
   lessons = [],
 }) => {
-  // const { getLessons } = useLessonsList();
   const {
     isOpen: isAddLessonModalOpen,
     open: openAddLessonModal,
@@ -74,7 +73,7 @@ const CourseSummarySection: FC<CourseSummarySectionProps> = ({
         <LessonAddModal
           onClose={closeAddLessonModal}
           onSubmit={(values: LessonFormValues) =>
-            createLesson(courseId, lessonFormValuesToReqBody(values))
+            createLesson(courseId, convertLessonFormToApiFormat(values))
           }
           isOpen={isAddLessonModalOpen}
         />

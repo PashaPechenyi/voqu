@@ -1,12 +1,14 @@
 import { useCallback, useState } from 'react';
-import { CreateLessonReqBody } from '../types/createLessonReqBodo.type';
-import { createLessonReq } from '../helpers/createLesson.helpers';
+import { CreateLessonReqBody } from '../types/createLessonReqBody.type';
+import { createLessonReq } from '../helpers/createLessonReq.helper';
 
-type useCreateLessonProps = {
+// RENAME: useCreateLessonProps -> UseCreateLessonProps - type names are PascalCase
+type UseCreateLessonProps = {
   onSuccess?: () => void;
   onError?: (error: Error) => void;
 };
-export const useCreateLesson = ({ onError, onSuccess }: useCreateLessonProps) => {
+
+export const useCreateLesson = ({ onError, onSuccess }: UseCreateLessonProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   const createLesson = useCallback(

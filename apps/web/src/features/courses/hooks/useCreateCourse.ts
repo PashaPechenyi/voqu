@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { CreateCourseReqBody } from '../types/courseRequest.type';
-import { createCourseReq } from '../helpers/createCourse.helper';
+import { createCourseReq } from '../helpers/createCourseReq.helper';
 
 type UseCreateCourseOptions = {
   onSuccess?: () => void;
@@ -26,7 +26,6 @@ export const useCreateCourse = ({ onSuccess, onError }: UseCreateCourseOptions =
         setIsLoading(false);
       }
     },
-
     [onSuccess, onError],
   );
 

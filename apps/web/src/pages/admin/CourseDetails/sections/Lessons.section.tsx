@@ -1,12 +1,11 @@
-import { FC, Fragment, useEffect } from 'react';
+import { FC, Fragment, useEffect, useState } from 'react';
 import { Card, CardContent, CardMedia, Divider, Typography } from '@mui/material';
 import LessonListItem from '@/features/lessons/components/LessonListItem';
 import { LessonListItem as TLessonListItem } from '@/features/lessons/types/lesson.type';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
-import { useState } from 'react';
 import { DragDropProvider } from '@dnd-kit/react';
 import { move } from '@dnd-kit/helpers';
-import { useReorderLesson } from '@/features/lessons/hooks/useReorderLesson';
+import { useReorderLessons } from '@/features/lessons/hooks/useReorderLessons';
 
 type LessonsSectionProps = {
   lessons: TLessonListItem[];
@@ -14,12 +13,14 @@ type LessonsSectionProps = {
 };
 
 const LessonsSection: FC<LessonsSectionProps> = ({ lessons, getLessons }) => {
+  // TODO: we don't need this state
   const [items, setItems] = useState(lessons);
-  const { reorderLesson } = useReorderLesson({});
+  const { reorderLessons } = useReorderLessons({});
+
   useEffect(() => {
-    console.log(lessons, 'lessons');
     setItems(lessons);
   }, [lessons]);
+
   return (
     <Card sx={sxStyles.card}>
       <CardMedia sx={sxStyles.header}>
@@ -35,7 +36,8 @@ const LessonsSection: FC<LessonsSectionProps> = ({ lessons, getLessons }) => {
           onDragEnd={(event) => {
             const orderList = move(items, event);
             setItems(orderList);
-            reorderLesson(orderList, items[0].CourseId);
+            // TODO: items[0].CourseId throws when the list is empty; guard before reordering
+            reorderLessons(orderList, items[0].CourseId);
           }}
         >
           <ul>

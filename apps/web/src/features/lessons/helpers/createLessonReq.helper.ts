@@ -1,4 +1,4 @@
-import { CreateLessonReqBody } from '../types/createLessonReqBodo.type';
+import { CreateLessonReqBody } from '../types/createLessonReqBody.type';
 
 export const createLessonReq = async (
   courseId: string,

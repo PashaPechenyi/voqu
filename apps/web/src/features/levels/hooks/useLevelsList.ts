@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { Level } from '../types/level.type';
-import { getLevelsReq } from '../helpers/getLevels.helper';
+import { getLevelsReq } from '../helpers/getLevelsReq.helper';
 
 type UseLevelsListOptions = {
   onSuccess?: (levelsList: Level[]) => void;

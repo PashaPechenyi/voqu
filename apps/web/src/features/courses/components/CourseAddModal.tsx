@@ -52,7 +52,8 @@ const CourseAddModal: FC<CourseAddModalProps> = ({ isOpen, onClose, onSubmit }) 
       <DialogActions>
         <Button
           onClick={() => {
-            (onClose(), reset());
+            onClose();
+            reset();
           }}
           sx={sxStyles.cancelButton}
         >

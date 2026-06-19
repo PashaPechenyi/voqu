@@ -1,11 +1,13 @@
 import { useCallback, useState } from 'react';
-import { deleteLessonReq } from '../helpers/deleteLesson.helpers';
+import { deleteLessonReq } from '../helpers/deleteLessonReq.helper';
 
-type useDeleteLessonProps = {
+// RENAME: useDeleteLessonProps -> UseDeleteLessonProps - type names are PascalCase
+type UseDeleteLessonProps = {
   onSuccess?: () => void;
   onError?: (error: Error) => void;
 };
-export const useDeleteLesson = ({ onError, onSuccess }: useDeleteLessonProps) => {
+
+export const useDeleteLesson = ({ onError, onSuccess }: UseDeleteLessonProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   const deleteLesson = useCallback(

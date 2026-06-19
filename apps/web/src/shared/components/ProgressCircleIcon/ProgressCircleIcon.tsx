@@ -38,6 +38,8 @@ const ProgressCircleIcon: FC<ProgressCircleIconProps> = ({
   const offset = circumference - (clampedPercentage / 100) * circumference;
   const fullOffset = circumference;
 
+  // TODO: the fill animation was commented out on this branch, disabling the `animate`/`animationDuration`
+  // props. Decide whether to restore the keyframes animation or drop the props entirely (behavioral change — left as-is).
   // const fillKeyframes = keyframes`
   //   from { stroke-dashoffset: ${fullOffset}; }
   //   to { stroke-dashoffset: ${offset}; }

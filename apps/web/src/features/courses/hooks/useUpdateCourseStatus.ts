@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { Course } from '../types/course.type';
-import { updateCourseStatusReq } from '../helpers/updateCourseStatus.helper';
+import { updateCourseStatusReq } from '../helpers/updateCourseStatusReq.helper';
 
 type UseUpdateCourseStatusOptions = {
   onSuccess?: () => void;

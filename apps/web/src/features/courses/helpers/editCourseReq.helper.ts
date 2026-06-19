@@ -1,10 +1,7 @@
 import { Course } from '../types/course.type';
 import { EditCourseReqBody } from '../types/courseRequest.type';
 
-export const editCourseReq = async (
-  id: Course['id'],
-  body: EditCourseReqBody,
-): Promise<void> => {
+export const editCourseReq = async (id: Course['id'], body: EditCourseReqBody): Promise<void> => {
   const response = await fetch(`/api/course/${id}`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },

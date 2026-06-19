@@ -8,7 +8,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { Typography } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { LessonFormValues } from '../types/lessonForm.type';
-import LessonModalForm from './LessonModalForm';
+import LessonModalForm from './LessonForm';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 
 type LessonAddModalProps = {
@@ -44,7 +44,7 @@ const LessonAddModal: FC<LessonAddModalProps> = ({ isOpen, onClose, onSubmit }) 
         </Button>
         <Button
           onClick={handleSubmit((values) => {
-            onSubmit ? onSubmit(values) : undefined;
+            onSubmit?.(values);
             reset();
           })}
           sx={sxStyles.submitButton}

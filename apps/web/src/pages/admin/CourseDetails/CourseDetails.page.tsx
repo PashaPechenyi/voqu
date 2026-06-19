@@ -34,14 +34,16 @@ const CourseDetailsPage: FC = () => {
     },
   });
 
-  // TODO: fetch once on mount; fetchCourses' identity depends on onSuccess/onError,
-  // so listing it as a dep would refire the request whenever those callbacks change.
   useEffect(() => {
     fetchCourses();
+  }, []);
+
+  useEffect(() => {
     if (courseId) getLessons(courseId);
   }, [courseId]);
 
-  // TODO: WHAT IS IT we have an endpoint to get couse details we don;t need to get all courses
+  // TODO: this page fetches the whole courses list and finds the active course client-side.
+  // There is an endpoint to fetch a single course by id — use it instead of loading all courses.
   const activeCourse = coursesList.find((course) => course.id === courseId);
 
   const handleDelete = () => {

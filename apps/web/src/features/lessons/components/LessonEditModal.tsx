@@ -9,7 +9,7 @@ import { Typography } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { LessonListItem } from '../types/lesson.type';
 import { LessonFormValues } from '../types/lessonForm.type';
-import LessonModalForm from './LessonModalForm';
+import LessonModalForm from './LessonForm';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 
 type LessonEditModalProps = {
@@ -24,7 +24,6 @@ const getDefaultValues = (lesson: LessonListItem): LessonFormValues => ({
   subtitle: lesson.subtitle,
   description: lesson.description,
   status: lesson.status,
-  //type: lesson.type,
 });
 
 const LessonEditModal: FC<LessonEditModalProps> = ({ isOpen, onClose, lesson, onSubmit }) => {
