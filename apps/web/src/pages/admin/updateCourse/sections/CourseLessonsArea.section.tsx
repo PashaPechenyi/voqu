@@ -16,9 +16,9 @@ import { useReorderLessons } from '@/features/lesson/hooks/useReorderLessons';
 type CourseLessonsAreaSectionProps = {
   lessonsList: LessonListItem[];
   course: Course;
-  onUpdateSuccess: (course: Course) => void; // RENAME: onSuccess -> onUpdateSuccess - present-tense on<Verb>Success; 'onSuccess' is hook-only vocabulary
+  onUpdateSuccess: (course: Course) => void;
   setLessonsList: React.Dispatch<React.SetStateAction<LessonListItem[]>>;
-  reloadLessons: (courseId: Course['id']) => void; // RENAME: refetchLessons -> reloadLessons - no 'fetch' in names; refresh callback uses 'reload'
+  reloadLessons: (courseId: Course['id']) => void;
 };
 
 function CourseLessonsAreaSection({
@@ -34,7 +34,7 @@ function CourseLessonsAreaSection({
 
   const navigate = useNavigate();
   const handleClose = () => setOpen(null);
-  // RENAME: handleDeleted -> handleDeleteSuccess - align local handler with the on<Verb>Success it feeds
+
   const handleDeleteSuccess = () => {
     handleClose();
     navigate(ADMIN_COURSES_URL);

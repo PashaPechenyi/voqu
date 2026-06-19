@@ -20,16 +20,14 @@ import { LessonListItem } from '@/features/lesson/types/lessonListItem.type';
 import { Course } from '@/features/courses/types/course.type';
 import DeleteLessonModal from '../deleteLessonModal/DeleteLessonModal';
 
-// RENAME: LessonCardProps -> LessonItemProps - match the component (it renders a ListItem row, not a card)
 type LessonItemProps = {
   lesson: LessonListItem;
-  lessonId: LessonListItem['id']; // RENAME: type string -> LessonListItem['id'] - reference the entity id type, like courseId
+  lessonId: LessonListItem['id'];
   lessonIndex: number;
   courseId: Course['id'];
-  reloadLessons: (courseId: Course['id']) => void; // RENAME: refetchLessons -> reloadLessons - no 'fetch' in names; refresh callback uses 'reload'
+  reloadLessons: (courseId: Course['id']) => void;
 };
 
-// RENAME: component LessonCard -> LessonItem (+ folder LessonCard/ -> LessonItem/) - it's a list row, and folder must match the component
 function LessonItem({ lesson, courseId, lessonId, lessonIndex, reloadLessons }: LessonItemProps) {
   // FIXME: segment icon and color should be derived from the lesson's segment, not hardcoded
   // For know the backend doesn't support segments BUT once it is implemented - we need to fix it
@@ -38,7 +36,7 @@ function LessonItem({ lesson, courseId, lessonId, lessonIndex, reloadLessons }: 
 
   const [open, setOpen] = useState<'update' | 'delete' | null>(null);
   const handleClose = () => setOpen(null);
-  // RENAME: onDeleted -> handleDeleteSuccess - local handler must start with 'handle' (on* is for props)
+
   const handleDeleteSuccess = () => {
     handleClose();
     reloadLessons(courseId);
@@ -82,8 +80,8 @@ function LessonItem({ lesson, courseId, lessonId, lessonIndex, reloadLessons }: 
               TODO: shows subtitle as duration; should render lesson.duration, and the chip label is hardcoded to "reading" 
               Also add a condition. We need to show duration only when it exists
             */}
-            <Typography variant="body2">{lesson.subtitle} min</Typography>
-            <Chip label="reading" color="primary" variant="outlined" size="small" />
+            {lesson.duration && <Typography variant="body2">{lesson.duration} min</Typography>}
+            <Chip label={lesson.status} color="primary" variant="outlined" size="small" />
           </Box>
         </Box>
       </CardContent>

@@ -9,7 +9,6 @@ import UpdateCourseHeaderSection from './sections/UpdateCourseHeader.section';
 import StatisticSection from './sections/Statistic.section';
 import { useLessonsList } from '@/features/lesson/hooks/useLessonsList';
 
-// RENAME: EditCoursePage -> UpdateCoursePage (+ folder editCourse/ -> updateCourse/, file EditCourse.page -> UpdateCourse.page) - 'update' is the canonical mutation verb
 function UpdateCoursePage() {
   const { courseId } = useParams();
   const { courseDetails, setCourseDetails, getCourseDetails } = useCourseDetails();

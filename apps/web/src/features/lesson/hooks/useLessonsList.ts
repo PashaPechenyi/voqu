@@ -6,7 +6,6 @@ import { getLessonsReq } from '../helpers/getLessonsReq.helper';
 export const useLessonsList = () => {
   const [lessonsList, setLessonsList] = useState<LessonListItem[]>([]);
 
-  // RENAME: fetchLessons -> getLessons -> getLessonsList - no 'fetch' in names; matches the lessonsList state it loads
   const getLessonsList = useCallback(async (courseId: Course['id']) => {
     const result = await getLessonsReq(courseId);
     setLessonsList(result.items);

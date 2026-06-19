@@ -13,12 +13,11 @@ const LESSON_SEGMENT_TYPES = Object.values(LessonSegmentType);
 
 type CreateLessonModalProps = {
   open: boolean;
-  onClose: () => void; // RENAME: handleClose -> onClose - event-emitting prop must start with 'on'
-  onCreateSuccess?: (lesson: LessonListItem) => void; // RENAME: onCreated -> onCreateSuccess - present-tense on<Verb>Success
+  onClose: () => void;
+  onCreateSuccess?: (lesson: LessonListItem) => void;
   courseId: Course['id'];
 };
 
-// RENAME: AddNewLessonModal -> CreateLessonModal - 'create' is the canonical create verb (dropped redundant 'New')
 function CreateLessonModal({ open, onClose, onCreateSuccess, courseId }: CreateLessonModalProps) {
   const { handleSubmit, control, reset } = useForm<LessonFormValues>({
     defaultValues: {

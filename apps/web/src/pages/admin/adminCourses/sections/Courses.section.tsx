@@ -5,7 +5,7 @@ import { Course } from '@/features/courses/types/course.type';
 
 type CoursesSectionProps = {
   coursesList: Course[];
-  onUpdateSuccess: () => void; // RENAME: onSuccess -> onUpdateSuccess - present-tense on<Verb>Success; 'onSuccess' is hook-only vocabulary
+  onUpdateSuccess: () => void;
 };
 
 function CoursesSection({ coursesList, onUpdateSuccess }: CoursesSectionProps) {

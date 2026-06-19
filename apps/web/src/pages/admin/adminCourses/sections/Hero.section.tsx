@@ -5,14 +5,13 @@ import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.h
 import CreateCourseModal from '@/features/courses/components/CreateCourseModal';
 
 type HeroSectionProps = {
-  reloadCourses: () => void; // RENAME: refetchCourses -> reloadCourses - no 'fetch' in names; refresh callback uses 'reload'
+  reloadCourses: () => void;
 };
 
 function HeroSection({ reloadCourses }: HeroSectionProps) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  // RENAME: onCreated -> handleCreateSuccess - local handler must start with 'handle' (on* is for props)
   const handleCreateSuccess = () => {
     reloadCourses();
     handleClose();

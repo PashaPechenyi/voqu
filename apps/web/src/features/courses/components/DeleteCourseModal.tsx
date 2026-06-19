@@ -5,9 +5,9 @@ import { useDeleteCourse } from '../hooks/useDeleteCourse';
 
 type DeleteCourseModalProps = {
   open: boolean;
-  onClose: () => void; // RENAME: handleClose -> onClose - event-emitting prop must start with 'on'
+  onClose: () => void;
   courseName?: string;
-  onDeleteSuccess?: () => void; // RENAME: onDeleted -> onDeleteSuccess - present-tense on<Verb>Success
+  onDeleteSuccess?: () => void;
 };
 
 function DeleteCourseModal({ open, onClose, courseName, onDeleteSuccess }: DeleteCourseModalProps) {

@@ -1,6 +1,5 @@
 import { Course } from '@/features/courses/types/course.type';
 
-// RENAME: GetCoursesResponse -> GetCoursesDTO - API-response types end with DTO
 export type GetCoursesDTO = {
   items: Course[];
 };

@@ -1,6 +1,5 @@
 import { Level } from '@/features/levels/types/level.type';
 
-// RENAME: extracted inline response shape -> named GetLevelsDTO - API-response types end with DTO
 type GetLevelsDTO = {
   items: Level[];
   success: boolean;

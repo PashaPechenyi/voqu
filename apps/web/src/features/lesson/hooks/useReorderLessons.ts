@@ -8,7 +8,6 @@ type UseReorderLessonsProps = {
   onError?: (error: unknown) => void;
 };
 
-// RENAME: useReorderLesson -> useReorderLessons - file/symbol must agree; the hook reorders the whole list
 export const useReorderLessons = ({ onSuccess, onError }: UseReorderLessonsProps = {}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<unknown>(null);

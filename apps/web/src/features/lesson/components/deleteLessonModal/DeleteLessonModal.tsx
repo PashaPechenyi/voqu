@@ -6,12 +6,11 @@ import { FC } from 'react';
 
 type DeleteLessonModalProps = {
   open: boolean;
-  onClose: () => void; // RENAME: handleClose -> onClose - event-emitting prop must start with 'on'
+  onClose: () => void;
   lesson: LessonListItem;
-  onDeleteSuccess?: () => void; // RENAME: onDeleted -> onDeleteSuccess - present-tense on<Verb>Success
+  onDeleteSuccess?: () => void;
 };
 
-// RENAME: export style - named `export const DeleteLessonModal` -> `export default` to match the one-component-per-file rule
 const DeleteLessonModal: FC<DeleteLessonModalProps> = ({
   open,
   onClose,

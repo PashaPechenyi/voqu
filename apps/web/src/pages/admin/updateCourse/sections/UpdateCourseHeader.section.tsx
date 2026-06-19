@@ -7,15 +7,13 @@ import { Course } from '@/features/courses/types/course.type';
 
 type UpdateCourseHeaderSectionProps = {
   course: Course;
-  reloadLessons: (courseId: Course['id']) => void; // RENAME: refetchLessons -> reloadLessons - no 'fetch' in names; refresh callback uses 'reload'
+  reloadLessons: (courseId: Course['id']) => void;
 };
 
-// RENAME: EditCourseHeaderSection -> UpdateCourseHeaderSection (+ file EditCourseHeader.section -> UpdateCourseHeader.section) - 'update' is the canonical mutation verb
 function UpdateCourseHeaderSection({ course, reloadLessons }: UpdateCourseHeaderSectionProps) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  // RENAME: onCreated -> handleCreateSuccess - local handler must start with 'handle' (on* is for props)
   const handleCreateSuccess = () => {
     reloadLessons(course.id);
     handleClose();

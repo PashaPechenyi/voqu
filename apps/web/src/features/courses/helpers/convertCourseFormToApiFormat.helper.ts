@@ -1,7 +1,6 @@
 import { CourseFormValues } from '../types/courseFormValues.type';
 import { CourseReqBody } from '../types/courseReqBody.type';
 
-// RENAME: courseFormToReqBody -> convertCourseFormToApiFormat - data-conversion fns follow convert{X}To{Y}Format
 export const convertCourseFormToApiFormat = (form: CourseFormValues): CourseReqBody => {
   // TODO: throw new Error will crush the whole page if it is not wrapped in try-catch section
   if (!form.level) throw new Error('Course form is missing a level');

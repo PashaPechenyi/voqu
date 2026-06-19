@@ -18,7 +18,7 @@ import { convertCourseToApiFormat } from '../../helpers/convertCourseToApiFormat
 
 type CourseCardProps = {
   course: Course;
-  onUpdateSuccess: () => void; // RENAME: onSuccess -> onUpdateSuccess - present-tense on<Verb>Success; status toggle updates the course
+  onUpdateSuccess: () => void;
 };
 
 function CourseCard({ course, onUpdateSuccess }: CourseCardProps) {

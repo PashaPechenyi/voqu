@@ -2,7 +2,6 @@ import { Course } from '@/features/courses/types/course.type';
 import { LessonListItem } from '../types/lessonListItem.type';
 import { LessonReqBody } from '../types/lessonReqBody.type';
 
-// RENAME: CreateLessonResponse -> CreateLessonDTO - API-response types end with DTO
 export type CreateLessonDTO = {
   lesson: LessonListItem;
 };

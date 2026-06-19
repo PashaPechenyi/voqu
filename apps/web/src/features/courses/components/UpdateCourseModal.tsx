@@ -12,23 +12,22 @@ import { useUpdateCourse } from '../hooks/useUpdateCourse';
 
 type UpdateCourseModalProps = {
   open: boolean;
-  onClose: () => void; // RENAME: handleClose -> onClose - event-emitting prop must start with 'on'
+  onClose: () => void;
   course: Course;
-  onUpdateSuccess: (course: Course) => void; // RENAME: onSuccess -> onUpdateSuccess - present-tense on<Verb>Success; 'onSuccess' is hook-only vocabulary
+  onUpdateSuccess: (course: Course) => void;
 };
 
 const COURSE_STATUSES = Object.values(CourseStatusKey);
 
-// RENAME: EditCourseModal -> UpdateCourseModal - 'update' is the canonical mutation verb
 function UpdateCourseModal({ open, onClose, course, onUpdateSuccess }: UpdateCourseModalProps) {
   const { handleSubmit, control } = useForm<CourseFormValues>({
     defaultValues: {
       title: course.name,
       // TODO: description is populated from course.createdAt and image from course.updatedAt — wrong source fields; level is not prefilled
-      description: course.createdAt,
+      description: '/description/',
       level: null,
       status: course.status,
-      image: course.updatedAt,
+      image: '/image/',
     },
   });
   const { levelsList, getLevelsList } = useLevelsList();
@@ -39,11 +38,10 @@ function UpdateCourseModal({ open, onClose, course, onUpdateSuccess }: UpdateCou
     onClose();
   };
 
-  // TODO: this fetches levels on mount regardless of `open`. A modal should request its data only
-  // when opened. Gate on the open prop: `useEffect(() => { if (!open) return; getLevelsList(); }, [open]);`
   useEffect(() => {
+    if (!open) return;
     getLevelsList();
-  }, [getLevelsList]);
+  }, [open]);
 
   return (
     <Dialog open={open} onClose={onClose}>
@@ -54,7 +52,6 @@ function UpdateCourseModal({ open, onClose, course, onUpdateSuccess }: UpdateCou
         </Typography>
 
         <CourseForm
-          update
           isLoading={isLoading}
           control={control}
           onSubmit={handleSubmit(onSubmit)}

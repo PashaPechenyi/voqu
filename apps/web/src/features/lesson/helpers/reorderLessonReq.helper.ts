@@ -1,7 +1,6 @@
 import { Course } from '@/features/courses/types/course.type';
 import { LessonListItem } from '../types/lessonListItem.type';
 
-// RENAME: ReorderLessonResponse -> ReorderLessonDTO - API-response types end with DTO
 export type ReorderLessonDTO = {
   lesson: LessonListItem;
 };

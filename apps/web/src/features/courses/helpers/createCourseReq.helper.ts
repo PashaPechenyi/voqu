@@ -1,7 +1,6 @@
 import { Course } from '@/features/courses/types/course.type';
 import { CourseReqBody } from '../types/courseReqBody.type';
 
-// RENAME: CreateCourseResponse -> CreateCourseDTO - API-response types end with DTO
 type CreateCourseDTO = {
   course: Course;
 };

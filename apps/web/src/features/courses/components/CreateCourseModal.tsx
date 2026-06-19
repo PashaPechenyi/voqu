@@ -12,13 +12,12 @@ import { useCreateCourse } from '../hooks/useCreateCourse';
 
 type CreateCourseModalProps = {
   open: boolean;
-  onClose: () => void; // RENAME: handleClose -> onClose - event-emitting prop must start with 'on'
-  onCreateSuccess?: (course: Course) => void; // RENAME: onCreated -> onCreateSuccess - present-tense on<Verb>Success
+  onClose: () => void;
+  onCreateSuccess?: (course: Course) => void;
 };
 
 const COURSE_STATUSES = Object.values(CourseStatusKey);
 
-// RENAME: AddCourseModal -> CreateCourseModal - 'create' is the canonical create verb
 function CreateCourseModal({ open, onClose, onCreateSuccess }: CreateCourseModalProps) {
   const { handleSubmit, control } = useForm<CourseFormValues>({
     defaultValues: {
@@ -36,11 +35,10 @@ function CreateCourseModal({ open, onClose, onCreateSuccess }: CreateCourseModal
     createCourse(convertCourseFormToApiFormat(formValues));
   };
 
-  // TODO: this fetches levels on mount regardless of `open`. A modal should request its data only
-  // when opened. Gate on the open prop: `useEffect(() => { if (!open) return; getLevelsList(); }, [open]);`
   useEffect(() => {
+    if (!open) return;
     getLevelsList();
-  }, [getLevelsList]);
+  }, [open]);
 
   return (
     <Dialog open={open} onClose={onClose}>

@@ -5,7 +5,6 @@ import { Course } from '@/features/courses/types/course.type';
 export const useCoursesList = () => {
   const [coursesList, setCoursesList] = useState<Course[]>([]);
 
-  // RENAME: fetchCourses -> getCourses -> getCoursesList - no 'fetch' in names; matches the coursesList state it loads
   const getCoursesList = useCallback(async () => {
     const result = await getCoursesReq();
     setCoursesList(result.items);
