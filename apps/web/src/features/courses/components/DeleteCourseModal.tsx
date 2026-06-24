@@ -1,7 +1,8 @@
 import { Box, Button, Dialog, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
-import { useDeleteCourse } from '../hooks/useDeleteCourse';
+import { useMutation } from '@/shared/api';
+import { deleteCourseReq } from '../helpers/deleteCourseReq.helper';
 
 type DeleteCourseModalProps = {
   open: boolean;
@@ -12,8 +13,10 @@ type DeleteCourseModalProps = {
 
 function DeleteCourseModal({ open, onClose, courseName, onDeleteSuccess }: DeleteCourseModalProps) {
   const { courseId } = useParams();
-  const { deleteCourse, isLoading } = useDeleteCourse({ onSuccess: onDeleteSuccess });
-
+  const { isLoading, mutate: deleteCourse } = useMutation({
+    mutationFn: deleteCourseReq,
+    onSuccess: onDeleteSuccess,
+  });
   const onSubmit = () => {
     if (!courseId) return;
     deleteCourse(courseId);

@@ -1,13 +1,14 @@
 import { Box, Button, Grid, MenuItem, Modal, TextField, Typography } from '@mui/material';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 import { LessonSegmentType } from '../types/lessonSegmentType.type';
-import { useCreateLesson } from '../hooks/useCreateLesson';
 import { LessonFormValues } from '../types/lessonFormValues.type';
 import { convertLessonFormToApiFormat } from '../helpers/convertLessonFormToApiFormat.helper';
 import { LessonListItem } from '../types/lessonListItem.type';
 import { Course } from '@/features/courses/types/course.type';
 import { Controller, useForm } from 'react-hook-form';
 import { VALIDATION_ERRORS } from '@/shared/constants/validationErrors.const';
+import { createLessonReq } from '../helpers/createLessonReq.helper';
+import { useMutation } from '@/shared/api';
 
 const LESSON_SEGMENT_TYPES = Object.values(LessonSegmentType);
 
@@ -19,6 +20,13 @@ type CreateLessonModalProps = {
 };
 
 function CreateLessonModal({ open, onClose, onCreateSuccess, courseId }: CreateLessonModalProps) {
+  const { isLoading, mutate: createLesson } = useMutation({
+    mutationFn: createLessonReq,
+    onSuccess: (response) => {
+      onCreateSuccess(response.lesson);
+    },
+  });
+
   const { handleSubmit, control, reset } = useForm<LessonFormValues>({
     defaultValues: {
       title: '',
@@ -29,10 +37,9 @@ function CreateLessonModal({ open, onClose, onCreateSuccess, courseId }: CreateL
     },
   });
 
-  const { createLesson, isLoading } = useCreateLesson({ onSuccess: onCreateSuccess });
-
   const onSubmit = (formValues: LessonFormValues) => {
     createLesson(courseId, convertLessonFormToApiFormat(formValues));
+    console.log(convertLessonFormToApiFormat(formValues));
   };
 
   const requiredRule = { required: { value: true, message: VALIDATION_ERRORS.REQUIRED } };

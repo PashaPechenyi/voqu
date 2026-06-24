@@ -1,8 +1,10 @@
+import { httpClient } from './../../../shared/api/httpClient';
 import { Course } from '@/features/courses/types/course.type';
 import { LessonListItem } from '../types/lessonListItem.type';
 
 export type ReorderLessonDTO = {
   lesson: LessonListItem;
+  success?: true;
 };
 export type ReorderLessonReqBody = {
   items: {
@@ -11,19 +13,9 @@ export type ReorderLessonReqBody = {
   }[];
 };
 
-export const reorderLessonReq = async (
-  courseId: Course['id'],
-  body: ReorderLessonReqBody,
-): Promise<ReorderLessonDTO> => {
-  const response = await fetch(`/api/course/lesson/${courseId}/reorder`, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(body),
-  });
-  if (!response.ok) {
-    throw new Error('Something went wrong...');
-  }
-  return response.json();
+export const reorderLessonReq = async (courseId: Course['id'], body: ReorderLessonReqBody) => {
+  return httpClient.patch<ReorderLessonDTO>(
+    `/course/lesson/${courseId}/reorder`,
+    JSON.stringify(body),
+  );
 };

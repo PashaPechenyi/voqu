@@ -1,20 +1,12 @@
+import { httpClient } from './../../../shared/api/httpClient';
 import { Course } from '@/features/courses/types/course.type';
 import { CourseReqBody } from '../types/courseReqBody.type';
 
 type CreateCourseDTO = {
   course: Course;
+  success?: true;
 };
 
-export const createCourseReq = async (body: CourseReqBody): Promise<CreateCourseDTO> => {
-  const response = await fetch('/api/course', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(body),
-  });
-  if (!response.ok) {
-    throw new Error('Something went wrong...');
-  }
-  return response.json();
+export const createCourseReq = async (body: CourseReqBody) => {
+  return httpClient.post<CreateCourseDTO>('/course', JSON.stringify(body));
 };

@@ -1,15 +1,11 @@
+import { httpClient } from './../../../shared/api/httpClient';
 import { Course } from '@/features/courses/types/course.type';
 
 export type GetCourseDetailsDTO = {
   course: Course;
+  success?: true;
 };
 
-export const getCourseDetailsReq = async (courseId: Course['id']): Promise<GetCourseDetailsDTO> => {
-  const response = await fetch(`/api/course/${courseId}`, {
-    method: 'GET',
-  });
-  if (!response.ok) {
-    throw new Error('Something went wrong...');
-  }
-  return response.json();
+export const getCourseDetailsReq = async (courseId: Course['id']) => {
+  return httpClient.get<GetCourseDetailsDTO>(`/course/${courseId}`);
 };

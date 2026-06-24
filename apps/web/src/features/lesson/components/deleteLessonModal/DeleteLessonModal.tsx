@@ -1,8 +1,9 @@
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 import { Box, Button, Dialog, Typography } from '@mui/material';
-import { useDeleteLesson } from '../../hooks/useDeleteLesson';
 import { LessonListItem } from '../../types/lessonListItem.type';
 import { FC } from 'react';
+import { deleteLessonReq } from '../../helpers/deleteLessonReq.helper';
+import { useMutation } from '@/shared/api';
 
 type DeleteLessonModalProps = {
   open: boolean;
@@ -17,7 +18,10 @@ const DeleteLessonModal: FC<DeleteLessonModalProps> = ({
   lesson,
   onDeleteSuccess,
 }) => {
-  const { deleteLesson, isLoading } = useDeleteLesson({ onSuccess: onDeleteSuccess });
+  const { isLoading, mutate: deleteLesson } = useMutation({
+    mutationFn: deleteLessonReq,
+    onSuccess: onDeleteSuccess,
+  });
 
   const onSubmit = () => {
     if (!lesson.id) return;

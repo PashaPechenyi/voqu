@@ -11,7 +11,9 @@ import { ADMIN_COURSES_URL } from '@/shared/constants/urls.const';
 import { move } from '@dnd-kit/helpers';
 import { DragDropProvider } from '@dnd-kit/react';
 import { LessonListItem } from '@/features/lesson/types/lessonListItem.type';
-import { useReorderLessons } from '@/features/lesson/hooks/useReorderLessons';
+import { useMutation } from '@/shared/api';
+import { reorderLessonReq } from '@/features/lesson/helpers/reorderLessonReq.helper';
+import { convertLessonsListToApiFormat } from '@/features/lesson/helpers/convertLessonsListToApiFormat.helper';
 
 type CourseLessonsAreaSectionProps = {
   lessonsList: LessonListItem[];
@@ -30,7 +32,9 @@ function CourseLessonsAreaSection({
 }: CourseLessonsAreaSectionProps) {
   const [open, setOpen] = useState<'update' | 'delete' | null>(null);
 
-  const { reorderLessons } = useReorderLessons();
+  const { mutate: reorderLessons } = useMutation({
+    mutationFn: reorderLessonReq,
+  });
 
   const navigate = useNavigate();
   const handleClose = () => setOpen(null);
@@ -51,7 +55,7 @@ function CourseLessonsAreaSection({
         onDragEnd={(event) => {
           const orderedList = move(lessonsList, event);
           setLessonsList(orderedList);
-          reorderLessons(orderedList, course);
+          reorderLessons(course.id, convertLessonsListToApiFormat(orderedList));
         }}
       >
         {lessonsList.map((lesson, index) => (

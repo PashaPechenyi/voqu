@@ -8,13 +8,14 @@ import { Course } from '../types/course.type';
 import { CourseFormValues } from '../types/courseFormValues.type';
 import { CourseStatusKey } from '../types/courseStatus.type';
 import { convertCourseFormToApiFormat } from '../helpers/convertCourseFormToApiFormat.helper';
-import { useUpdateCourse } from '../hooks/useUpdateCourse';
+import { useMutation } from '@/shared/api';
+import { updateCourseReq } from '../helpers/updateCourseReq.helper';
 
 type UpdateCourseModalProps = {
   open: boolean;
   onClose: () => void;
   course: Course;
-  onUpdateSuccess: (course: Course) => void;
+  onUpdateSuccess: (data: Course) => void;
 };
 
 const COURSE_STATUSES = Object.values(CourseStatusKey);
@@ -31,7 +32,12 @@ function UpdateCourseModal({ open, onClose, course, onUpdateSuccess }: UpdateCou
     },
   });
   const { levelsList, getLevelsList } = useLevelsList();
-  const { updateCourse, isLoading } = useUpdateCourse({ onSuccess: onUpdateSuccess });
+  const { isLoading, mutate: updateCourse } = useMutation({
+    mutationFn: updateCourseReq,
+    onSuccess(data) {
+      onUpdateSuccess(data.course);
+    },
+  });
 
   const onSubmit = (formValues: CourseFormValues) => {
     updateCourse(course.id, convertCourseFormToApiFormat(formValues));

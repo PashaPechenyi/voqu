@@ -8,7 +8,8 @@ import { Course } from '../types/course.type';
 import { CourseFormValues } from '../types/courseFormValues.type';
 import { CourseStatusKey } from '../types/courseStatus.type';
 import { convertCourseFormToApiFormat } from '../helpers/convertCourseFormToApiFormat.helper';
-import { useCreateCourse } from '../hooks/useCreateCourse';
+import { useMutation } from '@/shared/api';
+import { createCourseReq } from '../helpers/createCourseReq.helper';
 
 type CreateCourseModalProps = {
   open: boolean;
@@ -29,8 +30,12 @@ function CreateCourseModal({ open, onClose, onCreateSuccess }: CreateCourseModal
     },
   });
   const { levelsList, getLevelsList } = useLevelsList();
-  const { createCourse, isLoading } = useCreateCourse({ onSuccess: onCreateSuccess });
-
+  const { isLoading, mutate: createCourse } = useMutation({
+    mutationFn: createCourseReq,
+    onSuccess(response) {
+      onCreateSuccess(response.course);
+    },
+  });
   const onSubmit = (formValues: CourseFormValues) => {
     createCourse(convertCourseFormToApiFormat(formValues));
   };
