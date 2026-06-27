@@ -1,21 +1,23 @@
 import { useCallback, useState } from 'react';
-import { deleteLessonReq } from '../helpers/deleteLessonReq.helper';
+import { LessonListItem } from '../types/lesson.type';
+import { LessonFormValues } from '../types/lessonForm.type';
+import { editLessonReq } from '../helpers/editLessonReq.helpers';
 
-// RENAME: useDeleteLessonProps -> UseDeleteLessonProps - type names are PascalCase
-type UseDeleteLessonProps = {
+type UseUpdateLessonOptions = {
   onSuccess?: () => void;
   onError?: (error: Error) => void;
 };
 
-export const useDeleteLesson = ({ onError, onSuccess }: UseDeleteLessonProps) => {
+export const UseUpdateLesson = ({ onSuccess, onError }: UseUpdateLessonOptions = {}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-  const deleteLesson = useCallback(
-    async (lessonId: string) => {
+
+  const updateLesson = useCallback(
+    async (id: LessonListItem['id'], body: LessonFormValues) => {
       setIsLoading(true);
       setError(null);
       try {
-        await deleteLessonReq(lessonId);
+        await editLessonReq(id, body);
         onSuccess?.();
       } catch (err) {
         const e = err instanceof Error ? err : new Error('Unknown error');
@@ -27,5 +29,6 @@ export const useDeleteLesson = ({ onError, onSuccess }: UseDeleteLessonProps) =>
     },
     [onSuccess, onError],
   );
-  return { deleteLesson, isLoading, error };
+
+  return { updateLesson, isLoading, error };
 };

@@ -1,4 +1,4 @@
-import { FC, useRef, useState } from 'react';
+import { FC, useRef } from 'react';
 import { Box, Button, ListItem, Typography, ListItemText } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import LockIcon from '@mui/icons-material/Lock';
@@ -11,22 +11,20 @@ import LessonEditModal from './LessonEditModal';
 import { useToggle } from '@/shared/hooks/useToggle';
 import { useSortable } from '@dnd-kit/react/sortable';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
-import { useDeleteLesson } from '../hooks/useDeleteLesson';
+import { UseUpdateLesson } from '../hooks/useUpdateLesson';
+import { deleteLessonReq } from '../helpers/deleteLessonReq.helper';
+import { useMutation } from '@/shared/api';
 
 type LessonItemProps = {
   lesson: LessonListItem;
   index: number;
   onDelete?: (lesson: LessonListItem) => void;
-  // RENAME: onEdit -> onUpdate - vocabulary is "update", never "edit"
   onUpdate?: (lesson: LessonListItem, values: LessonFormValues) => void;
   onToggleLock?: (lesson: LessonListItem) => void;
   id: string;
-  // RENAME: getLessons -> reloadLessons - a refresh callback uses the reload* prefix
+
   reloadLessons: () => void;
 };
-
-// RENAME: LessonListItem -> LessonItem - matches the documented entity list-item name and frees the
-// LessonListItem type name (no more TLessonListItem alias)
 const LessonItem: FC<LessonItemProps> = ({
   lesson,
   index,
@@ -36,31 +34,44 @@ const LessonItem: FC<LessonItemProps> = ({
   id,
   reloadLessons,
 }) => {
-  // TODO:  we don't need pendingDelete. We have isLoading state from the hook.
-  const [pendingDelete, setPendingDelete] = useState(false);
   const { isOpen: isDeleteOpen, open: openDelete, close: closeDelete } = useToggle();
   const { isOpen: isEditOpen, open: openEdit, close: closeEdit } = useToggle();
   const listItemRef = useRef<HTMLLIElement | null>(null);
   const dragButtonRef = useRef<HTMLButtonElement | null>(null);
   const { isDragging } = useSortable({ id, index, element: listItemRef, handle: dragButtonRef });
-  const { deleteLesson } = useDeleteLesson({
+
+  const { isLoading, mutate: deleteLesson } = useMutation({
+    // mutationFn: (lessonId: LessonListItem['id']) => deleteLessonReq(lessonId),
+    mutationFn: deleteLessonReq,
     onSuccess: () => {
       reloadLessons();
     },
   });
 
+  // const { deleteLesson, isLoading } = useDeleteLesson({
+  //   onSuccess: () => {
+  //     reloadLessons();
+  //   },
+  // });
+  const { updateLesson } = UseUpdateLesson({
+    onSuccess: () => {
+      reloadLessons();
+      closeEdit();
+    },
+  });
+
   const handleConfirmDelete = async () => {
-    setPendingDelete(true);
-    // TODO: when onDelete should be called?
-    onDelete?.(lesson);
-    // TODO: when closeDelete should be called?
-    closeDelete();
-    setPendingDelete(false);
+    // setIsLoading(true);
+    isLoading && onDelete?.(lesson);
+    isLoading && closeDelete();
+    //setIsLoading(false);
     await deleteLesson(lesson.id);
+    closeDelete();
   };
 
   // TODO: There is no API integration for lesson edit.
-  const handleUpdateSubmit = (values: LessonFormValues) => {
+  const handleUpdateSubmit = async (values: LessonFormValues) => {
+    await updateLesson(lesson.id, values);
     onUpdate?.(lesson, values);
     closeEdit();
   };
@@ -91,7 +102,7 @@ const LessonItem: FC<LessonItemProps> = ({
           <Button sx={sxStyles.actionButton} onClick={() => onToggleLock?.(lesson)}>
             <LockIcon />
           </Button>
-          <Button sx={sxStyles.deleteButton} onClick={openDelete} disabled={pendingDelete}>
+          <Button sx={sxStyles.deleteButton} onClick={openDelete} disabled={isLoading}>
             <DeleteIcon sx={sxStyles.deleteIcon} />
           </Button>
         </Box>

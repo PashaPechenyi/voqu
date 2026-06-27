@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { SvgIcon, SvgIconProps } from '@mui/material';
+import { keyframes, SvgIcon, SvgIconProps } from '@mui/material';
 // import { keyframes } from '@mui/system';
 import { SxStyleProps, MuiColor } from '@/shared/types/sx.type';
 import { combineSxStyles } from '@/shared/helpers/styles/combineSxStyles.helper';
@@ -40,10 +40,10 @@ const ProgressCircleIcon: FC<ProgressCircleIconProps> = ({
 
   // TODO: the fill animation was commented out on this branch, disabling the `animate`/`animationDuration`
   // props. Decide whether to restore the keyframes animation or drop the props entirely (behavioral change — left as-is).
-  // const fillKeyframes = keyframes`
-  //   from { stroke-dashoffset: ${fullOffset}; }
-  //   to { stroke-dashoffset: ${offset}; }
-  // `;
+  const fillKeyframes = keyframes`
+    from { stroke-dashoffset: ${fullOffset}; }
+    to { stroke-dashoffset: ${offset}; }
+  `;
 
   return (
     <SvgIcon
@@ -69,12 +69,10 @@ const ProgressCircleIcon: FC<ProgressCircleIconProps> = ({
         strokeDasharray={circumference}
         strokeLinecap="round"
         transform={`rotate(-90 ${diameter / 2} ${diameter / 2})`}
-        // style={{
-        //   animation: animate
-        //     ? `${fillKeyframes} ${animationDuration}s ease-out forwards`
-        //     : 'none',
-        //   strokeDashoffset: animate ? fullOffset : offset,
-        // }}
+        style={{
+          animation: animate ? `${fillKeyframes} ${animationDuration}s ease-out forwards` : 'none',
+          strokeDashoffset: animate ? fullOffset : offset,
+        }}
       />
     </SvgIcon>
   );

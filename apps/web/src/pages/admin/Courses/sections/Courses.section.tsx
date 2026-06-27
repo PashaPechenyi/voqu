@@ -6,7 +6,6 @@ import { Course } from '@/features/courses/types/course.type';
 
 type CoursesSectionProps = {
   coursesList: Course[];
-  // RENAME: refetchCourses -> reloadCourses - refresh callbacks use the reload* prefix, never refetch*
   reloadCourses: () => void;
 };
 

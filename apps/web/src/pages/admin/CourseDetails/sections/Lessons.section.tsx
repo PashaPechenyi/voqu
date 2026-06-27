@@ -5,21 +5,37 @@ import { LessonListItem } from '@/features/lessons/types/lesson.type';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 import { DragDropProvider } from '@dnd-kit/react';
 import { move } from '@dnd-kit/helpers';
-import { useReorderLessons } from '@/features/lessons/hooks/useReorderLessons';
+import { useMutation } from '@/shared/api';
+import {
+  reorderLessonsReq,
+  ReorderLessonsReqBody,
+} from '@/features/lessons/helpers/reorderLessonsReq.helper';
+import { Course } from '@/features/courses/types/course.type';
+import { converReorderLessonToApiFormat } from '@/features/lessons/helpers/convertReorderLessomToApiFormat.helpers';
 
 type LessonsSectionProps = {
   lessons: LessonListItem[];
-  // RENAME: getLessons -> reloadLessons - a refresh callback uses the reload* prefix
   reloadLessons: () => void;
+  setLessons: React.Dispatch<React.SetStateAction<LessonListItem[]>>;
+  courseId: string;
+};
+type UseReorderLessonsProps = {
+  onSuccess?: (data: any, body: ReorderLessonsReqBody, courseId: Course['id']) => void;
+  onError?: (error: Error) => void;
 };
 
-const LessonsSection: FC<LessonsSectionProps> = ({ lessons, reloadLessons }) => {
-  // TODO: we don't need this state
-  const [items, setItems] = useState(lessons);
-  const { reorderLessons } = useReorderLessons({});
+const LessonsSection: FC<LessonsSectionProps> = ({
+  lessons,
+  reloadLessons,
+  setLessons,
+  courseId,
+}) => {
+  const { mutate: reorderLessons } = useMutation({
+    mutationFn: reorderLessonsReq,
+  });
 
   useEffect(() => {
-    setItems(lessons);
+    setLessons(lessons);
   }, [lessons]);
 
   return (
@@ -35,14 +51,13 @@ const LessonsSection: FC<LessonsSectionProps> = ({ lessons, reloadLessons }) => 
       <CardContent>
         <DragDropProvider
           onDragEnd={(event) => {
-            const orderList = move(items, event);
-            setItems(orderList);
-            // TODO: items[0].CourseId throws when the list is empty; guard before reordering
-            reorderLessons(orderList, items[0].CourseId);
+            const orderList = move(lessons, event);
+            setLessons(orderList);
+            reorderLessons(converReorderLessonToApiFormat(orderList), courseId);
           }}
         >
           <ul>
-            {items.map((lesson, index) => (
+            {lessons.map((lesson, index) => (
               <Fragment key={lesson.id}>
                 <LessonItem
                   reloadLessons={reloadLessons}

@@ -21,7 +21,7 @@ const DEFAULT_VALUES: LessonFormValues = {
   title: '',
   subtitle: '',
   description: '',
-  status: '',
+  status: null,
 };
 
 const LessonAddModal: FC<LessonAddModalProps> = ({ isOpen, onClose, onSubmit }) => {

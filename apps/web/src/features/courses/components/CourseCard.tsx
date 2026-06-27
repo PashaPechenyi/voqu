@@ -17,6 +17,8 @@ import { CourseStatus } from '../enums/courseStatus.enum';
 import { ADMIN_COURSE_DETAILS_URL } from '@/shared/constants/urls.const';
 import { useUpdateCourseStatus } from '../hooks/useUpdateCourseStatus';
 import courseImage from '@/assets/images/EnglishGrammarEssentials.jpg';
+import { updateCourseStatusReq } from '../helpers/updateCourseStatusReq.helper';
+import { useMutation } from '@/shared/api';
 
 type CourseCardProps = {
   course: Course;
@@ -25,8 +27,12 @@ type CourseCardProps = {
 
 const CourseCard: FC<CourseCardProps> = ({ course, onStatusChanged }) => {
   const isPublished = course.status === CourseStatus.Published;
-  const { updateCourseStatus } = useUpdateCourseStatus({
-    onSuccess: () => onStatusChanged?.(),
+  // const { updateCourseStatus } = useUpdateCourseStatus({
+  //   onSuccess: () => onStatusChanged?.(),
+  // });
+  const { mutate: updateCourseStatus } = useMutation({
+    mutationFn: updateCourseStatusReq,
+    //onSuccess: onStatusChanged?.(),
   });
 
   const handleStatusToggle = () => updateCourseStatus(course);

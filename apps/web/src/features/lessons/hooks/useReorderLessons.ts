@@ -1,39 +1,21 @@
 import { useCallback, useState } from 'react';
-import { reorderLessonsReq } from '../helpers/reorderLessonsReq.helper';
+import { reorderLessonsReq, ReorderLessonsReqBody } from '../helpers/reorderLessonsReq.helper';
 import { LessonListItem } from '../types/lesson.type';
 import { Course } from '@/features/courses/types/course.type';
-
-// RENAME: useReorderLessonProps -> UseReorderLessonsProps - type names are PascalCase; reorder acts on the whole list (plural)
+import { useMutation } from '@/shared/api';
 type UseReorderLessonsProps = {
-  onSuccess?: () => void;
+  onSuccess?: (data: any, body: ReorderLessonsReqBody, courseId: Course['id']) => void;
   onError?: (error: Error) => void;
 };
 
-// RENAME: useReorderLesson -> useReorderLessons - the hook reorders the whole lessons list
-export const useReorderLessons = ({ onError, onSuccess }: UseReorderLessonsProps) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
-  // RENAME: reorderLesson -> reorderLessons - operates on the whole list
-  const reorderLessons = useCallback(
-    async (lessons: LessonListItem[], courseId: Course['id']) => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        const orderedLessonsList = lessons.map((lesson, index) => ({
-          LessonId: lesson.id,
-          order: index,
-        }));
-        await reorderLessonsReq({ items: orderedLessonsList }, courseId);
-        onSuccess?.();
-      } catch (err) {
-        const e = err instanceof Error ? err : new Error('Unknown error');
-        setError(e);
-        onError?.(e);
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    [onSuccess, onError],
-  );
+export const useReorderLessons = ({ onSuccess }: UseReorderLessonsProps) => {
+  const {
+    isLoading,
+    error,
+    mutate: reorderLessons,
+  } = useMutation({
+    mutationFn: reorderLessonsReq,
+    onSuccess: onSuccess,
+  });
   return { reorderLessons, isLoading, error };
 };

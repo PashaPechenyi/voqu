@@ -5,46 +5,52 @@ import CourseEditModal from '@/features/courses/components/CourseEditModal';
 import CourseSummarySection from './sections/CourseSummary.section';
 import ConfirmModal from '@/shared/components/ConfirmModal/ConfirmModal';
 import { useToggle } from '@/shared/hooks/useToggle';
-import { useCoursesList } from '@/features/courses/hooks/useCoursesList';
-import { useDeleteCourse } from '@/features/courses/hooks/useDeleteCourse';
-import { useEditCourse } from '@/features/courses/hooks/useEditCourse';
 import { CourseFormValues } from '@/features/courses/types/courseForm.type';
 import { courseFormToReqBody } from '@/features/courses/helpers/courseFormToReqBody.helper';
 import { ADMIN_COURSES_URL } from '@/shared/constants/urls.const';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 import LessonsSection from './sections/Lessons.section';
 import { useLessonsList } from '@/features/lessons/hooks/useLessonsList';
+import { useCourseById } from '@/features/courses/hooks/useCourseById';
+import { useMutation } from '@/shared/api';
+import { deleteCourseReq } from '@/features/courses/helpers/deleteCourseReq.helper';
+import { editCourseReq } from '@/features/courses/helpers/editCourseReq.helper';
 
 const CourseDetailsPage: FC = () => {
   const { courseId } = useParams<{ courseId: string }>();
-
-  const { lessonsList, getLessons } = useLessonsList();
+  const { course, fetchCourseById } = useCourseById();
+  const { lessonsList, getLessons, isLoading, error, setLessonsList } = useLessonsList();
   const navigate = useNavigate();
-  const { coursesList, fetchCourses, isLoading, error } = useCoursesList();
+  //const { coursesList, fetchCourses, isLoading, error } = useCoursesList();
   const { isOpen: isDeleteModalOpen, open: openDeleteModal, close: closeDeleteModal } = useToggle();
   const { isOpen: isEditModalOpen, open: openEditModal, close: closeEditModal } = useToggle();
 
-  const { deleteCourse } = useDeleteCourse({
+  // const { deleteCourse } = useDeleteCourse({
+  //   onSuccess: () => navigate(ADMIN_COURSES_URL),
+  // });
+  const { mutate: deleteCourse } = useMutation({
+    mutationFn: deleteCourseReq,
     onSuccess: () => navigate(ADMIN_COURSES_URL),
   });
-  const { editCourse } = useEditCourse({
+  // const { editCourse } = useEditCourse({
+  //   onSuccess: () => {
+  //     fetchCourseById(courseId!);
+  //     closeEditModal();
+  //   },
+  // });
+  const { mutate: editCourse } = useMutation({
+    mutationFn: editCourseReq,
     onSuccess: () => {
-      fetchCourses();
+      fetchCourseById(courseId!);
       closeEditModal();
     },
   });
-
   useEffect(() => {
-    fetchCourses();
-  }, []);
-
+    fetchCourseById(courseId!);
+  }, [courseId]);
   useEffect(() => {
     if (courseId) getLessons(courseId);
   }, [courseId]);
-
-  // TODO: this page fetches the whole courses list and finds the active course client-side.
-  // There is an endpoint to fetch a single course by id — use it instead of loading all courses.
-  const activeCourse = coursesList.find((course) => course.id === courseId);
 
   const handleDelete = () => {
     if (!courseId) return;
@@ -58,16 +64,24 @@ const CourseDetailsPage: FC = () => {
 
   if (isLoading) return <Box>Loading…</Box>;
   if (error) return <Box>Failed to load course.</Box>;
-  if (!activeCourse) return <Box>Course not found.</Box>;
+  if (!course) return <Box>Course not found.</Box>;
 
   return (
     <>
       <CourseSummarySection
-        title={activeCourse.name}
+        title={course.name}
         reloadLessons={() => getLessons(courseId!)}
         courseId={courseId ?? ''}
+        lessons={lessonsList}
       />
-      <LessonsSection lessons={lessonsList} reloadLessons={() => getLessons(courseId!)} />
+      {courseId && (
+        <LessonsSection
+          lessons={lessonsList}
+          reloadLessons={() => getLessons(courseId!)}
+          setLessons={setLessonsList}
+          courseId={courseId}
+        />
+      )}
       <Box sx={sxStyles.actionsWrapper}>
         <Box sx={sxStyles.actionsRow}>
           <Button sx={sxStyles.editButton} onClick={openEditModal}>
@@ -80,7 +94,7 @@ const CourseDetailsPage: FC = () => {
 
         <ConfirmModal
           title="Delete Course"
-          subtitle={`Are you sure you want to delete "${activeCourse.name}"? This action cannot be undone.`}
+          subtitle={`Are you sure you want to delete "${course.name}"? This action cannot be undone.`}
           isOpen={isDeleteModalOpen}
           buttonText="Delete Course"
           onClose={closeDeleteModal}
@@ -90,7 +104,7 @@ const CourseDetailsPage: FC = () => {
       <CourseEditModal
         isOpen={isEditModalOpen}
         onClose={closeEditModal}
-        course={activeCourse}
+        course={course}
         onEdit={handleEdit}
       />
     </>

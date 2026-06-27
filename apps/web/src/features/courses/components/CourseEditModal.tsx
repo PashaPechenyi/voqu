@@ -34,8 +34,6 @@ const CourseEditModal: FC<CourseEditModalProps> = ({ isOpen, onClose, course, on
     defaultValues: getDefaultValues(course),
   });
 
-  // TODO: fetch once on mount; fetchLevels' identity depends on onSuccess/onError,
-  // so listing it as a dep would refire the request whenever those callbacks change.
   useEffect(() => {
     fetchLevels();
     // eslint-disable-next-line react-hooks/exhaustive-deps

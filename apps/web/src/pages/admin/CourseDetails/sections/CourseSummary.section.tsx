@@ -6,15 +6,16 @@ import LessonAddModal from '@/features/lessons/components/LessonAddModal';
 import { LessonListItem } from '@/features/lessons/types/lesson.type';
 import { useToggle } from '@/shared/hooks/useToggle';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
-import { useCreateLesson } from '@/features/lessons/hooks/useCreateLesson';
 import { convertLessonFormToApiFormat } from '@/features/lessons/helpers/convertLessonFormToApiFormat.helper';
 import { LessonFormValues } from '@/features/lessons/types/lessonForm.type';
+import { LessonStatus } from '@/features/lessons/enums/lessonStatus.enum';
+import { createLessonReq } from '@/features/lessons/helpers/createLessonReq.helper';
+import { useMutation } from '@/shared/api';
 
 type CourseSummarySectionProps = {
   title: string;
   lessons?: LessonListItem[];
   courseId: string;
-  // RENAME: getLessons -> reloadLessons - a refresh callback uses the reload* prefix
   reloadLessons: () => void;
 };
 
@@ -24,12 +25,16 @@ type CourseTotal = {
 };
 
 const buildTotals = (lessons: LessonListItem[]): CourseTotal[] => {
-  // TODO: Total Duration and Locked Lessons are hardcoded to 0 — derive them from the lessons
-  // once the LessonListItem model exposes duration / locked state.
+  const lessonDuration = lessons.reduce((acc, el) => {
+    return el.duration != null ? (acc += el.duration) : 0;
+  }, 0);
+  const LockedLessons = lessons.filter((el) => {
+    return el.status == LessonStatus.Draft;
+  });
   return [
     { value: lessons.length, label: 'Total Lessons' },
-    { value: 0, label: 'Total Duration' },
-    { value: 0, label: 'Locked Lessons' },
+    { value: lessonDuration, label: 'Total Duration' },
+    { value: LockedLessons.length, label: 'Locked Lessons' },
   ];
 };
 
@@ -45,12 +50,20 @@ const CourseSummarySection: FC<CourseSummarySectionProps> = ({
     close: closeAddLessonModal,
   } = useToggle();
 
-  const { createLesson } = useCreateLesson({
+  const { mutate: createLesson } = useMutation({
+    mutationFn: createLessonReq,
     onSuccess: () => {
       reloadLessons();
       closeAddLessonModal();
     },
   });
+
+  // const { createLesson } = useCreateLesson({
+  //   onSuccess: () => {
+  //     reloadLessons();
+  //     closeAddLessonModal();
+  //   },
+  // });
 
   const totals = buildTotals(lessons);
 
