@@ -4,7 +4,7 @@ import { LessonListItem } from '@/features/lesson/types/lessonListItem.type';
 
 // TODO: lessonsList is used only to get its length. SO just use lessonsAmount OR lessonsLength instead of lessonsList
 type StatisticSectionProps = {
-  lessonsList: LessonListItem[];
+  lessonsList: LessonListItem[]; // no because i have duration and locked
 };
 
 // LATER:  remove hardcoded values once

@@ -12,9 +12,10 @@ import {
 import { ADMIN_COURSES_UPDATE_URL } from '@/shared/constants/urls.const';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 import { Course } from '@/features/courses/types/course.type';
-import { useUpdateCourse } from '../../hooks/useUpdateCourse';
 import { CourseStatusKey } from '../../types/courseStatus.type';
 import { convertCourseToApiFormat } from '../../helpers/convertCourseToApiFormat.helper';
+import { useMutation } from '@/shared/api';
+import { updateCourseReq } from '../../helpers/updateCourseReq.helper';
 
 type CourseCardProps = {
   course: Course;
@@ -25,7 +26,10 @@ function CourseCard({ course, onUpdateSuccess }: CourseCardProps) {
   // TODO: separation of concerns — CourseCard is presentational UI but owns the update mutation, the
   // request-body mapping, and the status-toggle logic. It should emit an event (e.g. onToggleStatus(course))
   // and let the parent section/page own useUpdateCourse and the request shaping.
-  const { updateCourse, isLoading } = useUpdateCourse({ onSuccess: onUpdateSuccess });
+  const { mutate: updateCourse, isLoading } = useMutation({
+    mutationFn: updateCourseReq,
+    onSuccess: onUpdateSuccess,
+  });
 
   const onChangeStatus = (sourceCourse: Course) => {
     updateCourse(
@@ -58,8 +62,8 @@ function CourseCard({ course, onUpdateSuccess }: CourseCardProps) {
           >
             {course.status}
           </Button>
-          {/* TODO: level chip label is hardcoded to 'lvl'; should show course Level */}
-          <Chip color="info" label={'lvl'} />
+
+          <Chip color="info" label={course.Level.cefrLevel} />
         </Box>
       </CardMedia>
       <CardContent sx={sxStyles.content}>

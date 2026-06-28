@@ -23,7 +23,8 @@ function UpdateCourseHeaderSection({ course, reloadLessons }: UpdateCourseHeader
     <Box sx={sxStyles.root}>
       <Box>
         <Typography variant="h3">{course.name}</Typography>
-        {/* TODO: renders the literal text "description"; should show  the data from course */}
+        {/* TODO: renders the literal text "description"; should show  the data from course 
+        we havent such property!*/}
         <Typography variant="h6" color={'adminSecondary'}>
           description
         </Typography>

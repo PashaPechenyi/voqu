@@ -76,11 +76,11 @@ function LessonItem({ lesson, courseId, lessonId, lessonIndex, reloadLessons }: 
         <Box>
           <Typography>{lesson.title}</Typography>
           <Box sx={sxStyles.lessonInfo}>
-            {/* 
-              TODO: shows subtitle as duration; should render lesson.duration, and the chip label is hardcoded to "reading" 
-              Also add a condition. We need to show duration only when it exists
-            */}
-            {lesson.duration && <Typography variant="body2">{lesson.duration} min</Typography>}
+            {lesson.duration && (
+              <Typography variant="body2">
+                {lesson.duration ? `${lesson.duration} min` : ''}
+              </Typography>
+            )}
             <Chip label={lesson.status} color="primary" variant="outlined" size="small" />
           </Box>
         </Box>
