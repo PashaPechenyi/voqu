@@ -25,11 +25,13 @@ type CourseCardProps = {
   onStatusChanged?: () => void;
 };
 
+// TODO: After the status changes, the UI doesn't update to reflect the change.
 const CourseCard: FC<CourseCardProps> = ({ course, onStatusChanged }) => {
   const isPublished = course.status === CourseStatus.Published;
   // const { updateCourseStatus } = useUpdateCourseStatus({
   //   onSuccess: () => onStatusChanged?.(),
   // });
+  // TODO: NO business logic in UI components
   const { mutate: updateCourseStatus } = useMutation({
     mutationFn: updateCourseStatusReq,
     //onSuccess: onStatusChanged?.(),

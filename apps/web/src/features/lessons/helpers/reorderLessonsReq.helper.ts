@@ -19,5 +19,5 @@ export type ReorderLessonsReqBody = {
 //   if (!response.ok) throw new Error("Failed to change lesson's order");
 // };
 export const reorderLessonsReq = async (body: ReorderLessonsReqBody, courseId: Course['id']) => {
-  return httpClient.patch(`/course/lesson/${courseId}/reorder`, JSON.stringify(body));
+  return httpClient.patch(`/course/lesson/${courseId}/reorder`, body);
 };

@@ -14,5 +14,5 @@ import { CreateLessonReqBody } from '../types/createLessonReqBody.type';
 // };
 
 export const createLessonReq = async (courseId: string, body: CreateLessonReqBody) => {
-  return httpClient.post(`/course/lesson/${courseId}`, JSON.stringify(body));
+  return httpClient.post(`/course/lesson/${courseId}`, body);
 };

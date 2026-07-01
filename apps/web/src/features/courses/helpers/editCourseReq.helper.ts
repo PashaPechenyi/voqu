@@ -12,5 +12,5 @@ import { EditCourseReqBody } from '../types/courseRequest.type';
 // };
 
 export const editCourseReq = async (id: Course['id'], body: EditCourseReqBody) => {
-  return httpClient.patch(`/course/${id}`, JSON.stringify(body));
+  return httpClient.patch(`/course/${id}`, body);
 };

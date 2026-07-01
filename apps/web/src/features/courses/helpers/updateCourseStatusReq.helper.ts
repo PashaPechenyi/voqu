@@ -31,5 +31,5 @@ export const updateCourseStatusReq = async (course: Course) => {
     status: nextStatus,
     description: course.description,
   };
-  return httpClient.patch(`/course/${course.id}`, JSON.stringify(body));
+  return httpClient.patch(`/course/${course.id}`, body);
 };
