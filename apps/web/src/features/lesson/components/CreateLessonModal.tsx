@@ -23,7 +23,7 @@ function CreateLessonModal({ open, onClose, onCreateSuccess, courseId }: CreateL
   const { isLoading, mutate: createLesson } = useMutation({
     mutationFn: createLessonReq,
     onSuccess: (response) => {
-      onCreateSuccess(response.lesson);
+      onCreateSuccess?.(response.lesson);
     },
   });
 

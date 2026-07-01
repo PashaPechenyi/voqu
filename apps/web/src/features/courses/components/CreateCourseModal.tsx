@@ -33,7 +33,7 @@ function CreateCourseModal({ open, onClose, onCreateSuccess }: CreateCourseModal
   const { isLoading, mutate: createCourse } = useMutation({
     mutationFn: createCourseReq,
     onSuccess(response) {
-      onCreateSuccess(response.course);
+      onCreateSuccess?.(response.course);
     },
   });
   const onSubmit = (formValues: CourseFormValues) => {
