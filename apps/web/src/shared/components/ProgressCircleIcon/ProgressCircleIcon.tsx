@@ -1,6 +1,5 @@
 import { FC } from 'react';
 import { keyframes, SvgIcon, SvgIconProps } from '@mui/material';
-// import { keyframes } from '@mui/system';
 import { SxStyleProps, MuiColor } from '@/shared/types/sx.type';
 import { combineSxStyles } from '@/shared/helpers/styles/combineSxStyles.helper';
 import { useResolveColor } from '@/shared/hooks/useResolveColor';
@@ -38,8 +37,6 @@ const ProgressCircleIcon: FC<ProgressCircleIconProps> = ({
   const offset = circumference - (clampedPercentage / 100) * circumference;
   const fullOffset = circumference;
 
-  // TODO: the fill animation was commented out on this branch, disabling the `animate`/`animationDuration`
-  // props. Decide whether to restore the keyframes animation or drop the props entirely (behavioral change — left as-is).
   const fillKeyframes = keyframes`
     from { stroke-dashoffset: ${fullOffset}; }
     to { stroke-dashoffset: ${offset}; }
@@ -48,7 +45,22 @@ const ProgressCircleIcon: FC<ProgressCircleIconProps> = ({
   return (
     <SvgIcon
       viewBox={`0 0 ${diameter} ${diameter}`}
-      sx={combineSxStyles({ height: 'auto', position: 'relative' }, sx)}
+      sx={combineSxStyles(
+        {
+          height: 'auto',
+          position: 'relative',
+          // The keyframes rule must be injected by emotion via `sx`; a plain
+          // inline `style` would reference an @keyframes that was never inserted,
+          // so the animation would silently not run.
+          '& .ProgressCircleIcon-progress': {
+            strokeDashoffset: offset,
+            ...(animate && {
+              animation: `${fillKeyframes} ${animationDuration}s ease-out forwards`,
+            }),
+          },
+        },
+        sx,
+      )}
       {...props}
     >
       <circle
@@ -60,6 +72,7 @@ const ProgressCircleIcon: FC<ProgressCircleIconProps> = ({
         strokeWidth={borderWidth}
       />
       <circle
+        className="ProgressCircleIcon-progress"
         cx={diameter / 2}
         cy={diameter / 2}
         r={radius}
@@ -69,10 +82,6 @@ const ProgressCircleIcon: FC<ProgressCircleIconProps> = ({
         strokeDasharray={circumference}
         strokeLinecap="round"
         transform={`rotate(-90 ${diameter / 2} ${diameter / 2})`}
-        style={{
-          animation: animate ? `${fillKeyframes} ${animationDuration}s ease-out forwards` : 'none',
-          strokeDashoffset: animate ? fullOffset : offset,
-        }}
       />
     </SvgIcon>
   );
