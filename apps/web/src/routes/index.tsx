@@ -12,7 +12,9 @@ import {
   ADMIN_COURSES_URL,
   ADMIN_COURSES_UPDATE_URL,
   HOME_URL,
+  ADMIN_LESSON_UPDATE_URL,
 } from '@/shared/constants/urls.const';
+import { UpdateLessonPage } from '@/pages/admin/updateLesson/UpdateLesson.page';
 
 export function AppRoutes() {
   return (
@@ -27,6 +29,7 @@ export function AppRoutes() {
         <Route index element={<AdminDashboardPage />} />
         <Route path={ADMIN_COURSES_URL} element={<AdminCoursesPage />} />
         <Route path={ADMIN_COURSES_UPDATE_URL(':courseId')} element={<UpdateCoursePage />} />
+        <Route path={ADMIN_LESSON_UPDATE_URL(':lessonId')} element={<UpdateLessonPage />} />
       </Route>
     </Routes>
   );

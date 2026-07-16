@@ -1,10 +1,11 @@
 import { Button, Typography } from '@mui/material';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
-import { ADMIN_COURSES_URL } from '@/shared/constants/urls.const';
-
-function GoBackSection() {
+type GoBackSectionProps = {
+  url: string;
+};
+function GoBackSection({ url }: GoBackSectionProps) {
   return (
-    <Button sx={{ marginBottom: 5 }} href={ADMIN_COURSES_URL}>
+    <Button sx={{ marginBottom: 5 }} href={url}>
       <KeyboardBackspaceIcon />
       <Typography ml={2}>Back to Courses</Typography>
     </Button>
