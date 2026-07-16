@@ -13,7 +13,9 @@ import {
   ADMIN_URL,
   ADMIN_COURSES_URL,
   ADMIN_COURSE_DETAILS_URL,
+  ADMIN_LESSON_DETAILS_URL,
 } from '@/shared/constants/urls.const';
+import LessonDetailsPage from '@/pages/admin/LessonDetails/LessonDetails.page';
 
 const AppRoutes: FC = () => {
   return (
@@ -26,6 +28,7 @@ const AppRoutes: FC = () => {
         <Route index element={<DashboardPage />} />
         <Route path={ADMIN_COURSES_URL} element={<CoursesPage />} />
         <Route path={`${ADMIN_COURSE_DETAILS_URL(':courseId')}`} element={<CourseDetailsPage />} />
+        <Route path={`${ADMIN_LESSON_DETAILS_URL(':lessonId')}`} element={<LessonDetailsPage />} />
       </Route>
 
       <Route path="*" element={<NotFoundPage />} />

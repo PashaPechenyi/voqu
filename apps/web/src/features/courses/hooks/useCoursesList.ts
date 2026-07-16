@@ -11,9 +11,13 @@ type UseCoursesListOptions = {
 export const useCoursesList = ({}: UseCoursesListOptions = {}) => {
   const [coursesList, setCoursesList] = useState<Course[]>([]);
 
-  const { mutate: fetchCourses } = useMutation({
+  const {
+    isLoading,
+    error,
+    mutate: fetchCourses,
+  } = useMutation({
     mutationFn: getCoursesReq,
     onSuccess: (result) => setCoursesList(result.items),
   });
-  return { coursesList, fetchCourses, setCoursesList };
+  return { coursesList, fetchCourses, setCoursesList, isLoading, error };
 };

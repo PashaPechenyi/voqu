@@ -14,6 +14,8 @@ import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import { UseUpdateLesson } from '../hooks/useUpdateLesson';
 import { deleteLessonReq } from '../helpers/deleteLessonReq.helper';
 import { useMutation } from '@/shared/api';
+import { Link } from 'react-router-dom';
+import { ADMIN_LESSON_DETAILS_URL } from '@/shared/constants/urls.const';
 
 type LessonItemProps = {
   lesson: LessonListItem;
@@ -96,7 +98,12 @@ const LessonItem: FC<LessonItemProps> = ({
           </ListItemText>
         </Box>
         <Box sx={sxStyles.actionsRow}>
-          <Button sx={sxStyles.actionButton} onClick={openEdit}>
+          <Button
+            sx={sxStyles.actionButton}
+            component={Link}
+            to={ADMIN_LESSON_DETAILS_URL(lesson.id)}
+          >
+            {/* onClick={openEdit} */}
             <EditIcon />
           </Button>
           <Button sx={sxStyles.actionButton} onClick={() => onToggleLock?.(lesson)}>
