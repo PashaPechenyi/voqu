@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { LessonListItem } from '../types/lesson.type';
 import { Course } from '@/features/courses/types/course.type';
 import { getLessonsReq } from '../helpers/getLessonsReq.helper';
@@ -9,7 +9,8 @@ type UseLessonsListProps = {
   onError?: (error: Error) => void;
 };
 
-export const useLessonsList = ({ onSuccess }: UseLessonsListProps = {}) => {
+// TODO: onSuccess and onError are not used in the hook
+export const useLessonsList = ({ onSuccess, onError }: UseLessonsListProps = {}) => {
   const [lessonsList, setLessonsList] = useState<LessonListItem[]>([]);
   const {
     isLoading,
@@ -18,7 +19,6 @@ export const useLessonsList = ({ onSuccess }: UseLessonsListProps = {}) => {
   } = useMutation({
     mutationFn: (courseId: Course['id']) => getLessonsReq(courseId),
     onSuccess: (result) => {
-      console.log(result, 'result vvvv');
       setLessonsList(result.items);
     },
   });

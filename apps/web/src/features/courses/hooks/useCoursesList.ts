@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { Course } from '../types/course.type';
 import { getCoursesReq } from '../helpers/getCoursesReq.helper';
 import { useMutation } from '@/shared/api';
@@ -8,7 +8,8 @@ type UseCoursesListOptions = {
   onError?: (error: Error) => void;
 };
 
-export const useCoursesList = ({}: UseCoursesListOptions = {}) => {
+// TODO: onSuccess and onError are not used in the hook
+export const useCoursesList = ({ onSuccess, onError }: UseCoursesListOptions = {}) => {
   const [coursesList, setCoursesList] = useState<Course[]>([]);
 
   const {

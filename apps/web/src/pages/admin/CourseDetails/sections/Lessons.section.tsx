@@ -1,4 +1,4 @@
-import { FC, Fragment, useEffect, useState } from 'react';
+import { FC, Fragment } from 'react';
 import { Card, CardContent, CardMedia, Divider, Typography } from '@mui/material';
 import LessonItem from '@/features/lessons/components/LessonItem';
 import { LessonListItem } from '@/features/lessons/types/lesson.type';
@@ -6,22 +6,15 @@ import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.h
 import { DragDropProvider } from '@dnd-kit/react';
 import { move } from '@dnd-kit/helpers';
 import { useMutation } from '@/shared/api';
-import {
-  reorderLessonsReq,
-  ReorderLessonsReqBody,
-} from '@/features/lessons/helpers/reorderLessonsReq.helper';
-import { Course } from '@/features/courses/types/course.type';
-import { converReorderLessonToApiFormat } from '@/features/lessons/helpers/convertReorderLessomToApiFormat.helpers';
+import { reorderLessonsReq } from '@/features/lessons/helpers/reorderLessonsReq.helper';
+import { convertReorderLessonToApiFormat } from '@/features/lessons/helpers/convertReorderLessonToApiFormat.helper';
 
+// TODO: `setLessons` drills a raw setState setter through props and the section mirrors the `lessons` prop into local state — the lessons list should have a single owner (this section owns it, or the hook exposes an intent-named reorder method), not be duplicated across parent and child.
 type LessonsSectionProps = {
   lessons: LessonListItem[];
   reloadLessons: () => void;
   setLessons: React.Dispatch<React.SetStateAction<LessonListItem[]>>;
   courseId: string;
-};
-type UseReorderLessonsProps = {
-  onSuccess?: (data: any, body: ReorderLessonsReqBody, courseId: Course['id']) => void;
-  onError?: (error: Error) => void;
 };
 
 const LessonsSection: FC<LessonsSectionProps> = ({
@@ -33,10 +26,6 @@ const LessonsSection: FC<LessonsSectionProps> = ({
   const { mutate: reorderLessons } = useMutation({
     mutationFn: reorderLessonsReq,
   });
-
-  useEffect(() => {
-    setLessons(lessons);
-  }, [lessons]);
 
   return (
     <Card sx={sxStyles.card}>
@@ -53,7 +42,7 @@ const LessonsSection: FC<LessonsSectionProps> = ({
           onDragEnd={(event) => {
             const orderList = move(lessons, event);
             setLessons(orderList);
-            reorderLessons(converReorderLessonToApiFormat(orderList), courseId);
+            reorderLessons(convertReorderLessonToApiFormat(orderList), courseId);
           }}
         >
           <ul>

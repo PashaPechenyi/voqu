@@ -21,6 +21,7 @@ const filterCourses = (
 const CoursesPage: FC = () => {
   const [enteredValue, setEnteredValue] = useState<string>('');
   const [statusFilter, setStatusFilter] = useState<CourseStatusFilterValue>('all');
+  // TODO: useCoursesList no longer returns isLoading/error, so these are always undefined and the loading/error branches below never render (type error). Surface loading/error via useMutation state in the hook.
   const { coursesList, fetchCourses, isLoading, error } = useCoursesList();
   const visibleCoursesList = filterCourses(coursesList, enteredValue, statusFilter);
 

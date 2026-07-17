@@ -11,7 +11,7 @@ import LessonEditModal from './LessonEditModal';
 import { useToggle } from '@/shared/hooks/useToggle';
 import { useSortable } from '@dnd-kit/react/sortable';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
-import { UseUpdateLesson } from '../hooks/useUpdateLesson';
+import { useUpdateLesson } from '../hooks/useUpdateLesson';
 import { deleteLessonReq } from '../helpers/deleteLessonReq.helper';
 import { useMutation } from '@/shared/api';
 import { Link } from 'react-router-dom';
@@ -20,13 +20,13 @@ import { ADMIN_LESSON_DETAILS_URL } from '@/shared/constants/urls.const';
 type LessonItemProps = {
   lesson: LessonListItem;
   index: number;
+  id: string;
   onDelete?: (lesson: LessonListItem) => void;
   onUpdate?: (lesson: LessonListItem, values: LessonFormValues) => void;
   onToggleLock?: (lesson: LessonListItem) => void;
-  id: string;
-
   reloadLessons: () => void;
 };
+
 const LessonItem: FC<LessonItemProps> = ({
   lesson,
   index,
@@ -43,35 +43,29 @@ const LessonItem: FC<LessonItemProps> = ({
   const { isDragging } = useSortable({ id, index, element: listItemRef, handle: dragButtonRef });
 
   const { isLoading, mutate: deleteLesson } = useMutation({
-    // mutationFn: (lessonId: LessonListItem['id']) => deleteLessonReq(lessonId),
     mutationFn: deleteLessonReq,
     onSuccess: () => {
       reloadLessons();
     },
   });
 
-  // const { deleteLesson, isLoading } = useDeleteLesson({
-  //   onSuccess: () => {
-  //     reloadLessons();
-  //   },
-  // });
-  const { updateLesson } = UseUpdateLesson({
+  const { updateLesson } = useUpdateLesson({
     onSuccess: () => {
       reloadLessons();
       closeEdit();
     },
   });
 
+  // TODO: onDelete/closeDelete are gated on `isLoading`, which is false before the request starts, so they never run; the delete flow should not branch on isLoading here.
   const handleConfirmDelete = async () => {
-    // setIsLoading(true);
+    // TODO: all logic that is related to handle the success scenario of the request should be in useMutation -> onSuccess
     isLoading && onDelete?.(lesson);
     isLoading && closeDelete();
-    //setIsLoading(false);
     await deleteLesson(lesson.id);
+
     closeDelete();
   };
 
-  // TODO: There is no API integration for lesson edit.
   const handleUpdateSubmit = async (values: LessonFormValues) => {
     await updateLesson(lesson.id, values);
     onUpdate?.(lesson, values);

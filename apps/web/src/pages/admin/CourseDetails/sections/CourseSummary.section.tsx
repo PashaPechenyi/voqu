@@ -25,16 +25,16 @@ type CourseTotal = {
 };
 
 const buildTotals = (lessons: LessonListItem[]): CourseTotal[] => {
-  const lessonDuration = lessons.reduce((acc, el) => {
-    return el.duration != null ? (acc += el.duration) : 0;
+  const lessonDuration = lessons.reduce((acc, lesson) => {
+    return lesson.duration != null ? (acc += lesson.duration) : 0;
   }, 0);
-  const LockedLessons = lessons.filter((el) => {
-    return el.status == LessonStatus.Draft;
+  const lockedLessons = lessons.filter((lesson) => {
+    return lesson.status === LessonStatus.Draft;
   });
   return [
     { value: lessons.length, label: 'Total Lessons' },
     { value: lessonDuration, label: 'Total Duration' },
-    { value: LockedLessons.length, label: 'Locked Lessons' },
+    { value: lockedLessons.length, label: 'Locked Lessons' },
   ];
 };
 
@@ -57,13 +57,6 @@ const CourseSummarySection: FC<CourseSummarySectionProps> = ({
       closeAddLessonModal();
     },
   });
-
-  // const { createLesson } = useCreateLesson({
-  //   onSuccess: () => {
-  //     reloadLessons();
-  //     closeAddLessonModal();
-  //   },
-  // });
 
   const totals = buildTotals(lessons);
 

@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { Course } from '../types/course.type';
 import { getCourseByIdReq } from '../helpers/getCourseByIdReq.helper';
 import { useMutation } from '@/shared/api';
@@ -8,7 +8,8 @@ type UseCourseByIdOptions = {
   onError?: (error: Error) => void;
 };
 
-export const useCourseById = ({}: UseCourseByIdOptions = {}) => {
+// TODO: onSuccess and onError are not used in the hook
+export const useCourseById = ({ onSuccess, onError }: UseCourseByIdOptions = {}) => {
   const [course, setCourse] = useState<Course | null>(null);
   const { mutate: fetchCourseById } = useMutation({
     mutationFn: getCourseByIdReq,

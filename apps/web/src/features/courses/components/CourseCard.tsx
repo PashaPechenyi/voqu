@@ -15,7 +15,6 @@ import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.h
 import { Course } from '@/features/courses/types/course.type';
 import { CourseStatus } from '../enums/courseStatus.enum';
 import { ADMIN_COURSE_DETAILS_URL } from '@/shared/constants/urls.const';
-import { useUpdateCourseStatus } from '../hooks/useUpdateCourseStatus';
 import courseImage from '@/assets/images/EnglishGrammarEssentials.jpg';
 import { updateCourseStatusReq } from '../helpers/updateCourseStatusReq.helper';
 import { useMutation } from '@/shared/api';
@@ -26,15 +25,12 @@ type CourseCardProps = {
 };
 
 // TODO: After the status changes, the UI doesn't update to reflect the change.
+// TODO: A presentational card must not own a mutation — lift the status-toggle mutation to the parent section and emit an event (e.g. onToggleStatus) instead of calling useMutation here.
 const CourseCard: FC<CourseCardProps> = ({ course, onStatusChanged }) => {
   const isPublished = course.status === CourseStatus.Published;
-  // const { updateCourseStatus } = useUpdateCourseStatus({
-  //   onSuccess: () => onStatusChanged?.(),
-  // });
-  // TODO: NO business logic in UI components
+  // TODO: onSuccess is not wired up, so onStatusChanged never fires after a status toggle.
   const { mutate: updateCourseStatus } = useMutation({
     mutationFn: updateCourseStatusReq,
-    //onSuccess: onStatusChanged?.(),
   });
 
   const handleStatusToggle = () => updateCourseStatus(course);

@@ -36,12 +36,6 @@ const IntroSection: FC<IntroSectionProps> = ({
       onCourseCreated?.();
     },
   });
-  // const { createCourse } = useCreateCourse({
-  //   onSuccess: () => {
-  //     closeAddCourseModal();
-  //     onCourseCreated?.();
-  //   },
-  // });
 
   const handleSubmit = (values: CourseFormValues) => createCourse(courseFormToReqBody(values));
 

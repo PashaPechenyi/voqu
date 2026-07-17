@@ -21,23 +21,13 @@ const CourseDetailsPage: FC = () => {
   const { course, fetchCourseById } = useCourseById();
   const { lessonsList, getLessons, isLoading, error, setLessonsList } = useLessonsList();
   const navigate = useNavigate();
-  //const { coursesList, fetchCourses, isLoading, error } = useCoursesList();
   const { isOpen: isDeleteModalOpen, open: openDeleteModal, close: closeDeleteModal } = useToggle();
   const { isOpen: isEditModalOpen, open: openEditModal, close: closeEditModal } = useToggle();
 
-  // const { deleteCourse } = useDeleteCourse({
-  //   onSuccess: () => navigate(ADMIN_COURSES_URL),
-  // });
   const { mutate: deleteCourse } = useMutation({
     mutationFn: deleteCourseReq,
     onSuccess: () => navigate(ADMIN_COURSES_URL),
   });
-  // const { editCourse } = useEditCourse({
-  //   onSuccess: () => {
-  //     fetchCourseById(courseId!);
-  //     closeEditModal();
-  //   },
-  // });
   const { mutate: editCourse } = useMutation({
     mutationFn: editCourseReq,
     onSuccess: () => {
