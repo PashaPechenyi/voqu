@@ -1,5 +1,4 @@
-import { WordFormValues } from './AddWordForm';
-import { Word } from './CreateVocabularySectionModal';
+import { FC, useState } from 'react';
 import { capitalizeWords } from '@/shared/helpers/string.helper';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 import {
@@ -14,40 +13,45 @@ import {
   Button,
   Autocomplete,
 } from '@mui/material';
-import React, { useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { WordType } from '../enums/lessonWordType.enum';
 import { FORM_VALIDATION_ERRORS } from '@/shared/constants/formValidationErrors.const';
-import { WORD_TYPE_LIST } from '../constants/lessonWortTypeList.const';
+import { WORD_TYPE_LIST } from '../constants/lessonWordTypeList.const';
+import { Word } from '../types/word.type';
+import { WordFormValues } from '../types/wordForm.type';
+
+// RENAME: ind (prop) -> wordIndex - descriptive camelCase prop name
 type EditWordFormProps = {
   word: Word;
   close: () => void;
-  ind: number;
+  wordIndex: number;
 };
 
-function EditWordForm({ word, close, ind }: EditWordFormProps) {
-  const getDefaultValues = (word: Word, ind: number): WordFormValues => ({
-    word: word.word,
-    translation: word.translation,
-    transcription: word.transcription,
-    type: word.type,
-    partOfSpeech: word.partOfSpeech,
-    secondTense: word?.secondTense,
-    thirdTense: word?.thirdTense,
-    examples: [{ value: word.examples[ind].value, translation: word.examples[ind].translation }],
+const getDefaultValues = (word: Word, wordIndex: number): WordFormValues => ({
+  word: word.word,
+  translation: word.translation,
+  transcription: word.transcription,
+  type: word.type,
+  partOfSpeech: word.partOfSpeech,
+  secondTense: word?.secondTense,
+  thirdTense: word?.thirdTense,
+  examples: [
+    { value: word.examples[wordIndex].value, translation: word.examples[wordIndex].translation },
+  ],
+});
+
+const EditWordForm: FC<EditWordFormProps> = ({ word, close, wordIndex }) => {
+  const { control } = useForm<WordFormValues>({
+    defaultValues: getDefaultValues(word, wordIndex),
   });
-  const id = React.useId();
-  const { handleSubmit, control, reset } = useForm<WordFormValues>({
-    defaultValues: getDefaultValues(word, ind),
-  });
-  const { fields, update } = useFieldArray({
+  const { fields } = useFieldArray({
     control,
     name: 'examples',
   });
   const [autoCompleteValue, setAutoCompleteValue] = useState<WordType | null>(null);
   return (
-    <Box sx={{}}>
-      <Typography variant="h4" sx={{ textAlign: 'center', margin: '10px 0' }}>
+    <Box>
+      <Typography variant="h4" sx={sxStyles.heading}>
         Edit Word
       </Typography>
       <Grid container spacing={2}>
@@ -74,7 +78,7 @@ function EditWordForm({ word, close, ind }: EditWordFormProps) {
             control={control}
             name="type"
             rules={{ required: { value: true, message: FORM_VALIDATION_ERRORS.requiredField } }}
-            render={({ field, formState: { errors } }) => (
+            render={({ field }) => (
               <FormControl>
                 <RadioGroup row {...field}>
                   <FormControlLabel value="word" control={<Radio />} label="Word" />
@@ -95,7 +99,8 @@ function EditWordForm({ word, close, ind }: EditWordFormProps) {
                 sx={sxStyles.field}
                 size="small"
                 onChange={(_, newValue) => {
-                  (onChange(newValue), setAutoCompleteValue(newValue));
+                  onChange(newValue);
+                  setAutoCompleteValue(newValue);
                 }}
                 value={value}
                 getOptionLabel={(option) => capitalizeWords(option)}
@@ -111,7 +116,7 @@ function EditWordForm({ word, close, ind }: EditWordFormProps) {
             )}
           />
         </Grid>
-        {autoCompleteValue == 'verb' ? (
+        {autoCompleteValue === WordType.Verb && (
           <Grid size={6}>
             <Controller
               control={control}
@@ -130,10 +135,8 @@ function EditWordForm({ word, close, ind }: EditWordFormProps) {
               )}
             />
           </Grid>
-        ) : (
-          <></>
         )}
-        {autoCompleteValue == 'verb' ? (
+        {autoCompleteValue === WordType.Verb && (
           <Grid size={6}>
             <Controller
               control={control}
@@ -152,8 +155,6 @@ function EditWordForm({ word, close, ind }: EditWordFormProps) {
               )}
             />
           </Grid>
-        ) : (
-          <></>
         )}
         <Grid size={6}>
           <Controller
@@ -207,8 +208,6 @@ function EditWordForm({ word, close, ind }: EditWordFormProps) {
                       size="small"
                       variant="outlined"
                       sx={sxStyles.fullWidth}
-                      // error={!!errors.examples[index].value}
-                      // helperText={errors.thirdTense?.message}
                     />
                   )}
                   name={`examples.${index}.value`}
@@ -237,17 +236,16 @@ function EditWordForm({ word, close, ind }: EditWordFormProps) {
           ))}
         </Grid>
       </Grid>
-      <Button
-        // onClick={handleSubmit(onSubmit)}
-        sx={sxStyles.submitButton}
-        onClick={close}
-      >
+      {/* TODO: Save button only calls close() and never submits — word edits are not persisted. */}
+      <Button sx={sxStyles.submitButton} onClick={close}>
         Save changes
       </Button>
     </Box>
   );
-}
+};
+
 const sxStyles = createSxStylesList({
+  heading: { textAlign: 'center', margin: '10px 0' },
   field: { width: '40%', borderRadius: '30px' },
   fullWidth: { width: 1 },
   submitButton: (theme) => ({

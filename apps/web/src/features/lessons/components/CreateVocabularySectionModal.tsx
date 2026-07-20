@@ -1,46 +1,24 @@
-import React, { useState } from 'react';
-import { Button, Menu, MenuItem, Box, TextField, Typography } from '@mui/material';
+import { FC } from 'react';
+import { Box } from '@mui/material';
 import WordItem from './WordItem';
 import AddWordForm from './AddWordForm';
-import { WordType } from '../enums/lessonWordType.enum';
 import { EditableField } from '@/shared/components/EditableField/EditableField';
+import { Word } from '../types/word.type';
+import { Segment } from '../types/lessonDetails.type';
+import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 
-export type Word = {
-  id: string;
-  word: string;
-  transcription: string;
-  partOfSpeech: WordType;
-  translation: string;
-  type: 'phrase' | 'word'; // phrase/verb
-  secondTense: string;
-  thirdTense: string;
-  examples: {
-    value: string;
-    translation: string;
-  }[];
-};
 type CreateVocabularySectionModalProps = {
-  segmentDetails: { id: string; title: string; description: string; wordsList: Word[] };
+  segmentDetails: Segment;
 };
 
-function CreateVocabularySectionModal({ segmentDetails }: CreateVocabularySectionModalProps) {
+const CreateVocabularySectionModal: FC<CreateVocabularySectionModalProps> = ({
+  segmentDetails,
+}) => {
   return (
-    <Box
-      sx={{
-        width: 600,
-        display: 'flex',
-        flexDirection: 'column',
-        //justifyContent: 'space-around',
-        //alignItems: 'center',
-        gap: '10px',
-        // border: '1px solid black',
-        backgroundColor: 'white',
-        borderRadius: 7,
-        padding: 5,
-      }}
-    >
+    <Box sx={sxStyles.root}>
       <EditableField
         defaultValue={segmentDetails.title}
+        // TODO: mutating the prop directly won't trigger a re-render; lift state up and pass an updater callback.
         onSave={(newValue) => {
           segmentDetails.title = newValue;
         }}
@@ -57,6 +35,7 @@ function CreateVocabularySectionModal({ segmentDetails }: CreateVocabularySectio
       />
       <EditableField
         defaultValue={''}
+        // TODO: mutating the prop directly won't trigger a re-render; lift state up and pass an updater callback.
         onSave={(newValue) => {
           segmentDetails.description = newValue;
         }}
@@ -71,15 +50,24 @@ function CreateVocabularySectionModal({ segmentDetails }: CreateVocabularySectio
           },
         }}
       />
-      {/* {segmentDetails[0].wordsList.map((word: any) => (
-        <WordItem word={word} key={word.id} />
-      ))} */}
       {segmentDetails.wordsList.map((word: Word, index: number) => (
-        <WordItem word={word} WordIndex={index} key={word.id} />
+        <WordItem word={word} wordIndex={index} key={word.id} />
       ))}
       <AddWordForm />
     </Box>
   );
-}
+};
+
+const sxStyles = createSxStylesList({
+  root: (theme) => ({
+    width: 600,
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '10px',
+    backgroundColor: theme.palette.common.white,
+    borderRadius: 7,
+    padding: 5,
+  }),
+});
 
 export default CreateVocabularySectionModal;

@@ -92,12 +92,12 @@ const LessonItem: FC<LessonItemProps> = ({
           </ListItemText>
         </Box>
         <Box sx={sxStyles.actionsRow}>
+          {/* TODO: the edit button now navigates to the lesson-details page, so openEdit is never called and LessonEditModal (with useUpdateLesson/handleUpdateSubmit) is now dead/unreachable — decide whether to remove the modal or restore an edit affordance. */}
           <Button
             sx={sxStyles.actionButton}
             component={Link}
             to={ADMIN_LESSON_DETAILS_URL(lesson.id)}
           >
-            {/* onClick={openEdit} */}
             <EditIcon />
           </Button>
           <Button sx={sxStyles.actionButton} onClick={() => onToggleLock?.(lesson)}>

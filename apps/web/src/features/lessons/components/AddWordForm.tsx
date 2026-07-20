@@ -1,3 +1,4 @@
+import { FC, useState } from 'react';
 import { FORM_VALIDATION_ERRORS } from '@/shared/constants/formValidationErrors.const';
 import { capitalizeWords } from '@/shared/helpers/string.helper';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
@@ -13,28 +14,16 @@ import {
   Button,
   Autocomplete,
 } from '@mui/material';
-import React, { useState } from 'react';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
-import { WORD_TYPE_LIST } from '../constants/lessonWortTypeList.const';
+import { WORD_TYPE_LIST } from '../constants/lessonWordTypeList.const';
 import { WordType } from '../enums/lessonWordType.enum';
+import { WordFormValues } from '../types/wordForm.type';
+
 type AddWordFormProps = {
   onSubmit?: (values: WordFormValues) => void;
 };
 
-export type WordFormValues = {
-  word: string;
-  transcription: string;
-  partOfSpeech: WordType | null;
-  translation: string;
-  type: 'phrase' | 'word' | null;
-  secondTense: string;
-  thirdTense: string;
-  examples: {
-    value: string;
-    translation: string;
-  }[];
-};
-const DEFAULT_VALUES = {
+const DEFAULT_VALUES: WordFormValues = {
   word: '',
   translation: '',
   transcription: '',
@@ -50,20 +39,19 @@ const DEFAULT_VALUES = {
   ],
 };
 
-function AddWordForm({ onSubmit }: AddWordFormProps) {
-  const id = React.useId();
+const AddWordForm: FC<AddWordFormProps> = ({ onSubmit }) => {
   const { handleSubmit, control, reset } = useForm<WordFormValues>({
     defaultValues: DEFAULT_VALUES,
   });
 
-  const { fields, append, remove, prepend } = useFieldArray({
+  const { fields, prepend } = useFieldArray({
     control,
     name: 'examples',
   });
   const [autoCompleteValue, setAutoCompleteValue] = useState<WordType | null>(null);
   return (
-    <Box sx={{}}>
-      <Typography variant="h4" sx={{ textAlign: 'center', margin: '10px 0' }}>
+    <Box>
+      <Typography variant="h4" sx={sxStyles.heading}>
         Add Word
       </Typography>
       <Grid container spacing={2}>
@@ -90,7 +78,7 @@ function AddWordForm({ onSubmit }: AddWordFormProps) {
             control={control}
             name="type"
             rules={{ required: { value: true, message: FORM_VALIDATION_ERRORS.requiredField } }}
-            render={({ field, formState: { errors } }) => (
+            render={({ field }) => (
               <FormControl>
                 <RadioGroup row {...field}>
                   <FormControlLabel value="word" control={<Radio />} label="Word" />
@@ -111,7 +99,8 @@ function AddWordForm({ onSubmit }: AddWordFormProps) {
                 sx={sxStyles.field}
                 size="small"
                 onChange={(_, newValue) => {
-                  (onChange(newValue), setAutoCompleteValue(newValue));
+                  onChange(newValue);
+                  setAutoCompleteValue(newValue);
                 }}
                 value={value}
                 getOptionLabel={(option) => capitalizeWords(option)}
@@ -127,7 +116,7 @@ function AddWordForm({ onSubmit }: AddWordFormProps) {
             )}
           />
         </Grid>
-        {autoCompleteValue == 'verb' ? (
+        {autoCompleteValue === WordType.Verb && (
           <Grid size={6}>
             <Controller
               control={control}
@@ -146,10 +135,8 @@ function AddWordForm({ onSubmit }: AddWordFormProps) {
               )}
             />
           </Grid>
-        ) : (
-          <></>
         )}
-        {autoCompleteValue == 'verb' ? (
+        {autoCompleteValue === WordType.Verb && (
           <Grid size={6}>
             <Controller
               control={control}
@@ -168,8 +155,6 @@ function AddWordForm({ onSubmit }: AddWordFormProps) {
               )}
             />
           </Grid>
-        ) : (
-          <></>
         )}
         <Grid size={6}>
           <Controller
@@ -209,7 +194,7 @@ function AddWordForm({ onSubmit }: AddWordFormProps) {
         </Grid>
         <Grid size={12}>
           {fields.map((item, index) => (
-            <Grid sx={{ mb: '20px' }} container spacing={2} key={item.id}>
+            <Grid sx={sxStyles.exampleRow} container spacing={2} key={item.id}>
               <Grid size={12}>
                 <Controller
                   rules={{
@@ -222,8 +207,6 @@ function AddWordForm({ onSubmit }: AddWordFormProps) {
                       size="small"
                       variant="outlined"
                       sx={sxStyles.fullWidth}
-                      // error={!!errors.examples[index].value}
-                      // helperText={errors.thirdTense?.message}
                     />
                   )}
                   name={`examples.${index}.value`}
@@ -264,8 +247,11 @@ function AddWordForm({ onSubmit }: AddWordFormProps) {
       </Button>
     </Box>
   );
-}
+};
+
 const sxStyles = createSxStylesList({
+  heading: { textAlign: 'center', margin: '10px 0' },
+  exampleRow: { mb: '20px' },
   field: { width: '40%', borderRadius: '30px' },
   fullWidth: { width: 1 },
   submitButton: (theme) => ({
