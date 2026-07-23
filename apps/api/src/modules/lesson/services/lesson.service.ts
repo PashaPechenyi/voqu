@@ -29,6 +29,49 @@ export class LessonService {
     return this.lessonRepository.getListByCourseId(CourseId);
   }
 
+  async getLessonById(LessonId: string): Promise<Lesson> {
+    return this.lessonRepository.getOneByIdOrFail(LessonId);
+  }
+
+  /**
+   * Resolves everything the lesson-details read needs for localization:
+   * loads the lesson + its course, and validates the requested translation
+   * language against the course's `translationLanguageCodes`.
+   *
+   * - The course's `sourceLanguageCode` is the language the content is
+   *   authored in (untranslated fields fall back to it).
+   * - `lang` (from `?lang=`) is optional. When provided it must be one of the
+   *   course's translation languages (or the source language); a value outside
+   *   that set is rejected with 400.
+   * - When `lang` is omitted, it defaults to the course's first translation
+   *   language (`translationLanguageCodes[0]`). If the course has no
+   *   translation languages, it falls back to source text.
+   */
+  async resolveLessonForDetails(
+    LessonId: string,
+    lang?: string,
+  ): Promise<{ lesson: Lesson; lang?: string; sourceLanguage: string }> {
+    const lesson = await this.lessonRepository.getOneByIdOrFail(LessonId);
+    const course = await this.courseService.getCourseById(lesson.CourseId!);
+
+    const sourceLanguage = course.sourceLanguageCode!;
+    const translationLanguages = course.translationLanguageCodes ?? [];
+
+    if (lang !== undefined && lang !== sourceLanguage && !translationLanguages.includes(lang)) {
+      throw new BadRequestException(
+        `Language "${lang}" is not available for this course. Available: ${[
+          sourceLanguage,
+          ...translationLanguages,
+        ].join(', ')}`,
+      );
+    }
+
+    // Default to the course's first translation language when none requested.
+    const resolvedLang = lang ?? translationLanguages[0];
+
+    return { lesson, lang: resolvedLang, sourceLanguage };
+  }
+
   async updateLessonStatus(LessonId: string, params: IUpdateLessonStatusParams): Promise<Lesson> {
     await this.lessonRepository.getOneByIdOrFail(LessonId);
     return this.lessonRepository.update(LessonId, { status: params.status });

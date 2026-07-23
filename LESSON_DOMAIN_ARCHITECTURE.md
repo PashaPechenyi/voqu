@@ -27,9 +27,9 @@ Course
  └── Lesson (ordered)
       └── LessonSegment (ordered; SegmentKind picks the content shape)
            └── exactly one content row per segment, in the table chosen by the kind
-                 ├── Wordlist        (kind: vocabulary.wordlist)
+                 ├── Wordlist        (kind: wordlist)
                  │     └── WordlistEntry ─< WordlistEntryExample / WordlistEntryCollocation
-                 └── GrammarTopic    (kind: grammar.topic)
+                 └── GrammarTopic    (kind: topic)
                        │  ↑ holds title + tense directly (0..1 each, unordered)
                        └── GrammarBlock (ordered; blockType = 'text' | 'pattern')
                              ├── GrammarBlockText    (textRole = 'description' | 'example')
@@ -40,11 +40,11 @@ A **Lesson** is a thin container: id, title, description, order, status, FK to C
 
 A **LessonSegment** is the content block. It carries:
 
-- `SegmentKindId` — FK to `SegmentKind`, the catalog row that defines both the segment type and the concrete content shape (e.g. `vocabulary.wordlist`, `grammar.topic`)
+- `SegmentKindId` — FK to `SegmentKind`, the catalog row that defines both the segment type and the concrete content shape (e.g. `wordlist`, `topic`)
 - `SegmentContentRowId` — UUID of the concrete row in the template-specific table (e.g. a `Wordlist.id`)
 - `order` within the lesson, optional `title`/`description`
 
-`SegmentKind` is a small lookup table seeded from code on app startup. The runtime **template handler registry** maps each `SegmentKind.code` (e.g. `'vocabulary.wordlist'`) to its repository and response-constructor. Adding a new template = new entity + migration + seed one `SegmentKind` row + register one handler. No changes to LessonSegment.
+`SegmentKind` is a small lookup table seeded from code on app startup. The runtime **template handler registry** maps each `SegmentKind.code` (e.g. `'wordlist'`) to its repository and response-constructor. Adding a new template = new entity + migration + seed one `SegmentKind` row + register one handler. No changes to LessonSegment.
 
 This makes the DB the source of truth for what segment types and templates exist — the admin UI populates its dropdowns from `GET /segment-kind` rather than hardcoding the list.
 
@@ -76,7 +76,7 @@ An entry can be **a single word** (`entryType='word'`, e.g. `plan`) **or a multi
 
 ### 1.4 Grammar: one flexible kind, two-layer block typing
 
-There is exactly one grammar kind: `grammar.topic`. Its content row is a `GrammarTopic` that carries the two fixed topic-level attributes:
+There is exactly one grammar kind: `topic`. Its content row is a `GrammarTopic` that carries the two fixed topic-level attributes:
 
 - **`title`** — 0..1, the topic's heading (e.g. "want + object + to V1").
 - **`tense`** — 0..1, free-string metadata (e.g. "Present Simple").
@@ -191,7 +191,7 @@ export enum PartOfSpeech {
 What lives **in the DB** (extensible without a code change, surfaced to admin UI):
 
 - `SegmentType` — `vocabulary`, `grammar`, … (one row per type)
-- `SegmentKind` — `vocabulary.wordlist`, `grammar.topic`, … (one row per concrete content shape, FK to `SegmentType`)
+- `SegmentKind` — `wordlist`, `topic`, … (one row per concrete content shape, FK to `SegmentType`)
 - `GrammarBlock.blockType` — structural discriminator; CHECK constraint on `('text', 'pattern')`. Add a new structural type by adding the value + creating a payload table.
 - `GrammarBlockText.textRole` — semantic label; CHECK constraint on `('description', 'example')`. Add a new role with a one-line CHECK migration.
 - `WordlistEntry.entryType` — `'word'` \| `'phrase'`; CHECK constraint. Drives admin-UI affordances and supports queries like "list all phrases".
@@ -200,7 +200,7 @@ What lives **in the DB** (extensible without a code change, surfaced to admin UI
 What's **dropped** from the previous draft:
 
 - ~~`TranslationSource`~~ — translations are admin-written/approved by definition; provenance column is noise.
-- ~~`grammar.sentence_pattern` kind, `grammar.small_word` kind~~ — replaced by the single, flexible `grammar.topic` kind whose content is an ordered list of typed blocks.
+- ~~`grammar.sentence_pattern` kind, `grammar.small_word` kind~~ — replaced by the single, flexible `topic` kind whose content is an ordered list of typed blocks.
 - ~~`GrammarSentencePattern`, `SentencePatternVariant`, `GrammarSmallWord`, `SmallWordEntry`, `SmallWordVariant`, `GrammarExample`~~ tables — replaced by `GrammarTopic`, `GrammarBlock`, `GrammarBlockText`, `GrammarBlockPattern`.
 - ~~Global `Word` table~~ — collapsed into `WordlistEntry`. Each wordlist owns its entries directly; no shared lexicon, no `findOrCreate`, no cross-list dedup. Trade-off: simpler authoring at the cost of duplicated translations across courses that teach the same word. `WordExample` and `WordCollocation` likewise renamed to `WordlistEntryExample` and `WordlistEntryCollocation` and re-keyed to the entry.
 
@@ -237,7 +237,7 @@ Index: `(CourseId, order)`.
 | --------------------- | --------------------- | ---------------------------------------------------------------------------------------------------- |
 | id                    | uuid pk               |                                                                                                      |
 | SegmentTypeId         | uuid fk → SegmentType | CASCADE                                                                                              |
-| code                  | varchar(64) unique    | `'vocabulary.wordlist'`, `'grammar.topic'`, …                                                        |
+| code                  | varchar(64) unique    | `'wordlist'`, `'topic'`, …                                                                           |
 | name                  | varchar(64)           | display label — translatable                                                                         |
 | tableName             | varchar(64)           | which template-specific table holds the row (e.g. `'Wordlist'`) — used by audit/orphan-check tooling |
 | isActive              | boolean default true  |                                                                                                      |
@@ -264,7 +264,7 @@ Indexes: `(LessonId, order)`, `(SegmentKindId, SegmentContentRowId)` for reverse
 
 > Note on `SegmentContentRowId`: Postgres doesn't support polymorphic FKs, so this column is FK-by-convention, not by constraint. Integrity is enforced by `LessonSegmentService.create()` which inserts the template row and segment row in one transaction, and by a periodic orphan-check job that joins on `SegmentKind.tableName`.
 
-**Wordlist** — content row for a `vocabulary.wordlist` segment, **or** a user's personal saved-words list.
+**Wordlist** — content row for a `wordlist` segment, **or** a user's personal saved-words list.
 
 | column                | type                    | notes                                                                                                                                                                                                                               |
 | --------------------- | ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -322,11 +322,11 @@ Index: `(WordlistEntryId, order)`.
 
 Index: `(WordlistEntryId, order)`.
 
-**GrammarTopic** — the content row for a `grammar.topic` segment. Carries the two fixed topic-level attributes; everything else lives in `GrammarBlock` rows beneath it.
+**GrammarTopic** — the content row for a `topic` segment. Carries the two fixed topic-level attributes; everything else lives in `GrammarBlock` rows beneath it.
 
 | column                | type                  | notes                                                                                                                                 |
 | --------------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| id                    | uuid pk               | referenced by `LessonSegment.SegmentContentRowId` when the segment's kind is `grammar.topic`                                          |
+| id                    | uuid pk               | referenced by `LessonSegment.SegmentContentRowId` when the segment's kind is `topic`                                                  |
 | title                 | varchar(255) nullable | source language; translatable via `('grammar_topic', id, 'title', lang)`                                                              |
 | tense                 | varchar(64) nullable  | free string, e.g. 'Present Simple'; usually not translated but translatable via `('grammar_topic', id, 'tense', lang)` if ever needed |
 | createdAt / updatedAt | timestamptz           |                                                                                                                                       |
@@ -486,7 +486,7 @@ INSERT INTO "Translation" (entityType, "EntityId", field, "languageCode", value)
 | Segment → template row binding  | **`LessonSegment.SegmentContentRowId` is FK-by-convention to the table named in `SegmentKind.tableName`**      | Postgres can't do polymorphic FKs. Integrity enforced by service transactions + reverse-lookup index + periodic orphan-check job.                                                                                                                                                                                                    |
 | Vocabulary entries              | **Self-contained `WordlistEntry`; no global `Word` table; `entryType` distinguishes `'word'` from `'phrase'`** | Each entry owns its lemma, POS, verb forms, transcription, examples, collocations, and translations. Two admins teaching `plan` get two independent rows — no shared lexicon, no dedup, no cross-list authoring conflicts. Trade-off accepted: simpler authoring at the cost of duplicated translations across courses.              |
 | User saved-words                | **A `Wordlist` with `OwnerUserId` set**                                                                        | User-owned wordlists reuse the entire wordlist infrastructure: same table, same renderer, same translations, same examples. No parallel `UserSavedWord` table. Saving from a lesson copies the entry into the user's wordlist; user-typed words become fresh entries.                                                                |
-| Grammar segment shape           | **One `grammar.topic` kind: fixed `title`/`tense` on the topic + ordered, typed `GrammarBlock` children**      | Real grammar lessons mix descriptions, patterns, and examples in author-defined order and counts; `title` and `tense` are unordered metadata, not interleaved content. Two fixed kinds (sentence-pattern / small-word) forced the wrong taxonomy. One flexible kind absorbs both and any future grammar shape.                       |
+| Grammar segment shape           | **One `topic` kind: fixed `title`/`tense` on the topic + ordered, typed `GrammarBlock` children**              | Real grammar lessons mix descriptions, patterns, and examples in author-defined order and counts; `title` and `tense` are unordered metadata, not interleaved content. Two fixed kinds (sentence-pattern / small-word) forced the wrong taxonomy. One flexible kind absorbs both and any future grammar shape.                       |
 | Block typing                    | **Two-layer: structural `blockType` on `GrammarBlock`, semantic `textRole` on `GrammarBlockText`**             | `blockType` (`'text'`/`'pattern'`) tells you which payload table to join — it's a structural concern and belongs on the row everyone joins to first. `textRole` (`'description'`/`'example'`) labels the _kind_ of text and belongs next to the text itself. Patterns don't carry a role; their `form` plays the analogous part.     |
 | Block payloads                  | **Two 1:1 payload tables (`GrammarBlockText`, `GrammarBlockPattern`)**                                         | Cleanly separates simple-text blocks from markup-bearing pattern blocks. New structural types add a new payload table. Beats a JSONB blob (no FK, no translation hooks, no index) and beats wide nullable rows (messy with more types).                                                                                              |
 | Rich text                       | **`GrammarBlockText.text` is always sanitized HTML, no discriminator column**                                  | Plain prose is valid HTML and passes through untouched; descriptions can mix in bold / italics / lists using a small allowlist. One rendering path, one sanitizer running on every write. No format column to misinterpret. If Markdown is ever wanted as an _input_ format, it converts to HTML on write — storage shape unchanged. |
@@ -624,7 +624,7 @@ A single `GET /lesson/:LessonId` returns the full content tree so the lesson pag
         "id": "…",
         "segmentType": { "code": "vocabulary", "name": { "value": "Vocabulary", "lang": "en" } },
         "segmentKind": {
-          "code": "vocabulary.wordlist",
+          "code": "wordlist",
           "name": { "value": "Wordlist", "lang": "en" },
         },
         "order": 0,
@@ -676,7 +676,7 @@ A single `GET /lesson/:LessonId` returns the full content tree so the lesson pag
         "id": "…",
         "segmentType": { "code": "grammar", "name": { "value": "Grammar", "lang": "en" } },
         "segmentKind": {
-          "code": "grammar.topic",
+          "code": "topic",
           "name": { "value": "Grammar Topic", "lang": "en" },
         },
         "order": 1,
@@ -775,8 +775,8 @@ INSERT INTO "SegmentType" (id, code, name) VALUES
  ('st-gram', 'grammar',    'Grammar');
 
 INSERT INTO "SegmentKind" (id, "SegmentTypeId", code, name, "tableName") VALUES
- ('sk-wl', 'st-voc',  'vocabulary.wordlist', 'Wordlist',      'Wordlist'),
- ('sk-gt', 'st-gram', 'grammar.topic',       'Grammar Topic', 'GrammarTopic');
+ ('sk-wl', 'st-voc',  'wordlist', 'Wordlist',      'Wordlist'),
+ ('sk-gt', 'st-gram', 'topic',    'Grammar Topic', 'GrammarTopic');
 
 -- A lesson with one vocabulary segment + one grammar segment
 INSERT INTO "Lesson" (id, "CourseId", title, "order", status)
@@ -860,7 +860,7 @@ The service:
 **Template architecture**
 
 - One folder per template under `modules/<segment-type>/templates/<template-name>/` with its entity, repository, service, response constructor, and `register.ts` that hooks it into the registry.
-- The registry is a single `Map<code, KindHandler>` (keyed by `SegmentKind.code`, e.g. `'vocabulary.wordlist'`) populated in `LessonSegmentModule`.
+- The registry is a single `Map<code, KindHandler>` (keyed by `SegmentKind.code`, e.g. `'wordlist'`) populated in `LessonSegmentModule`.
 - Adding a template is: new entity + migration + seed one `SegmentKind` row + one `register()` call. The `SegmentKind` seed is co-located with the handler so they stay in sync.
 
 **Migrations**
@@ -1008,7 +1008,7 @@ End-to-end, the design is verified when:
 2. **Author flow works** via the API:
    - `POST /course` (existing) → `POST /lesson` → `POST /lesson/:LessonId/segment` with a wordlist payload → `GET /lesson/:LessonId` returns the lesson with the wordlist segment expanded.
    - `POST /translation` adds a Ukrainian translation for a word; `GET /lesson/:LessonId?lang=uk` returns the localized value with `lang: 'uk'`; `GET /lesson/:LessonId?lang=pl` (Polish — not seeded yet) returns the source value with `lang: 'en'` (fallback).
-3. **Same flow for grammar:** `POST /lesson/:LessonId/segment` with a `grammar.topic` kind and an empty topic (optionally with `title`/`tense`), then `POST /grammar-topic/:TopicId/block` to add `text` blocks (with `textRole` of `description` or `example`) and `pattern` blocks (with `form`) in any order. `GET /lesson/:LessonId` returns the segment with the topic's `title`/`tense` plus all blocks in author order; each `pattern` block carries `parsedMarkup` (the token array).
+3. **Same flow for grammar:** `POST /lesson/:LessonId/segment` with a `topic` kind and an empty topic (optionally with `title`/`tense`), then `POST /grammar-topic/:TopicId/block` to add `text` blocks (with `textRole` of `description` or `example`) and `pattern` blocks (with `form`) in any order. `GET /lesson/:LessonId` returns the segment with the topic's `title`/`tense` plus all blocks in author order; each `pattern` block carries `parsedMarkup` (the token array).
 4. **Adding a new template is local:** the diff for adding a hypothetical `flashcard` template touches only one new folder under `modules/vocabulary/templates/flashcard/` + one migration + one entry in the catalog seeder + one `register()` call. No edits to LessonSegment, no changes to existing templates. After deploy, `GET /segment-kind` lists the new row and the admin UI dropdown picks it up with no code change.
 5. **Adding a new language is data-only:** `INSERT INTO "Language" ('pt-BR', ...)` is sufficient; no schema migration; translations into `pt-BR` go through the same `POST /translation` path.
 6. **Catalog is the source of truth:** `LessonSegment` cannot be created with a `SegmentKindId` that doesn't exist (FK constraint). Deactivating a `SegmentKind` (`isActive=false`) hides it from new authoring but leaves existing segments readable.
@@ -1026,14 +1026,14 @@ A concrete walk-through of which rows exist in every table when one realistic le
 ```
 Course: "English A2 — Daily Life"   (id: crs-1)
 └── Lesson 3: "Making plans"        (id: lsn-3)
-    ├── Segment 0 → vocabulary.wordlist — "Plans & invitations"
+    ├── Segment 0 → wordlist — "Plans & invitations"
     │     ├── plan                  (word,   noun)  →  план
     │     ├── invite                (word,   verb)  →  запрошувати
     │     ├── picnic                (word,   noun)  →  пікнік   [collocation: "have a picnic"]
     │     ├── get confused about    (phrase, verb)  →  заплутатися (в чомусь)
     │     └── a round trip ticket   (phrase, noun)  →  квиток в обидва кінці
     │
-    └── Segment 1 → grammar.topic
+    └── Segment 1 → topic
           Topic attributes (fixed slots, not blocks):
             title:  "want + object + to V1"
             tense:  "Present Simple"
@@ -1068,10 +1068,10 @@ Course: "English A2 — Daily Life"   (id: crs-1)
 
 **`SegmentKind`**
 
-| id    | SegmentTypeId | code                | name          | tableName    | isActive |
-| ----- | ------------- | ------------------- | ------------- | ------------ | -------- |
-| sk-wl | sty-v         | vocabulary.wordlist | Wordlist      | Wordlist     | true     |
-| sk-gt | sty-g         | grammar.topic       | Grammar Topic | GrammarTopic | true     |
+| id    | SegmentTypeId | code     | name          | tableName    | isActive |
+| ----- | ------------- | -------- | ------------- | ------------ | -------- |
+| sk-wl | sty-v         | wordlist | Wordlist      | Wordlist     | true     |
+| sk-gt | sty-g         | topic    | Grammar Topic | GrammarTopic | true     |
 
 ---
 
