@@ -1,10 +1,12 @@
-import { FC, Fragment } from 'react';
-import { Button, Menu, MenuItem, Box } from '@mui/material';
+import { Button, Menu, MenuItem, Box, Drawer } from '@mui/material';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { PopupState as PopupStateType } from 'material-ui-popup-state/hooks';
 import AddIcon from '@mui/icons-material/Add';
-import CreateVocabularySectionModal from '@/features/lessons/components/CreateVocabularySectionModal';
-import { LessonDetailsStructure, Segment } from '@/features/lessons/types/lessonDetails.type';
+import React, { Fragment, useState } from 'react';
+import CreateVocabularySectionModal from '@/features/lessons/components/CreateVocabularySectionDrawer';
+import { LessonDetailsStructure, Segment } from '../LessonDetails.page';
+import { WordType } from '@/features/lessons/enums/lessonWordType.enum';
+import CreateVocabularySectionDrawer from '@/features/lessons/components/CreateVocabularySectionDrawer';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 
 // RENAME: setLesonDetails -> setLessonDetails - fix typo
@@ -14,12 +16,25 @@ type LessonSectionsProps = {
   handleSegment: (segment: Segment) => void;
 };
 
-const LessonSections: FC<LessonSectionsProps> = ({ lessonDetails, handleSegment }) => {
+function LessonSections({ lessonDetails, setLessonDetails, handleSegment }: LessonSectionsProps) {
+  const [option, setOption] = useState<'vocabulary' | 'grammar' | 'listening' | null>(null);
+  const [open, setOpen] = useState(false);
+  const [defaultSegment, setDefaultSegment] = useState<Segment>({
+    id: '',
+    title: '',
+    description: '',
+    wordsList: [],
+  });
+  const toggleDrawer = (newOpen: boolean) => () => {
+    setOpen(newOpen);
+  };
+
   return (
     <Box sx={sxStyles.root}>
       {lessonDetails.segments.map((segment) => (
-        <CreateVocabularySectionModal key={segment.id} segmentDetails={segment} />
+        <CreateVocabularySectionDrawer segmentDetails={segment} />
       ))}
+
       <PopupState variant="popover" popupId="demo-popup-menu">
         {(popupState: PopupStateType) => (
           <Fragment>
@@ -43,13 +58,8 @@ const LessonSections: FC<LessonSectionsProps> = ({ lessonDetails, handleSegment 
               <MenuItem
                 onClick={() => {
                   popupState.close();
-                  // TODO: segment is created with a hardcoded id 'segment' and title 'Title' — generate a unique id and use real input.
-                  handleSegment({
-                    id: 'segment',
-                    title: 'Title',
-                    description: 'Description',
-                    wordsList: [],
-                  });
+                  setOpen(true);
+                  // handleSegment();
                 }}
               >
                 Vocabulary
@@ -72,9 +82,42 @@ const LessonSections: FC<LessonSectionsProps> = ({ lessonDetails, handleSegment 
           </Fragment>
         )}
       </PopupState>
+      {open ? (
+        <Drawer
+          sx={{
+            '& .MuiDrawer-paper': {
+              width: '60%',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              py: '10px',
+            },
+          }}
+          open={open}
+          onClose={toggleDrawer(false)}
+          anchor="right"
+        >
+          <CreateVocabularySectionDrawer
+            segmentDetails={defaultSegment}
+            setSegmentDetails={setDefaultSegment}
+          />
+          <Button
+            sx={{ width: '70%', my: '10px' }}
+            onClick={() => {
+              setOpen(false);
+              handleSegment(defaultSegment);
+            }}
+          >
+            Save
+          </Button>
+        </Drawer>
+      ) : (
+        ''
+      )}
     </Box>
   );
-};
+}
 
 const sxStyles = createSxStylesList({
   root: {

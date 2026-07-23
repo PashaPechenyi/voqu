@@ -1,26 +1,30 @@
-import { FC } from 'react';
-import { Box } from '@mui/material';
+import React, { useState } from 'react';
+import { Button, Menu, MenuItem, Box, TextField, Typography, Drawer } from '@mui/material';
 import WordItem from './WordItem';
 import AddWordForm from './AddWordForm';
 import { EditableField } from '@/shared/components/EditableField/EditableField';
-import { Word } from '../types/word.type';
-import { Segment } from '../types/lessonDetails.type';
+import { Segment } from '@/pages/admin/LessonDetails/LessonDetails.page';
+
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
+import { Word } from '../types/word.type';
 
 type CreateVocabularySectionModalProps = {
-  segmentDetails: Segment;
+  segmentDetails: { id: string; title: string; description: string; wordsList: Word[] };
+  setSegmentDetails?: React.Dispatch<React.SetStateAction<Segment>>;
 };
 
-const CreateVocabularySectionModal: FC<CreateVocabularySectionModalProps> = ({
+function CreateVocabularySectionDrawer({
   segmentDetails,
-}) => {
+  setSegmentDetails,
+}: CreateVocabularySectionModalProps) {
   return (
     <Box sx={sxStyles.root}>
       <EditableField
         defaultValue={segmentDetails.title}
         // TODO: mutating the prop directly won't trigger a re-render; lift state up and pass an updater callback.
         onSave={(newValue) => {
-          segmentDetails.title = newValue;
+          // segmentDetails.title = newValue;
+          setSegmentDetails ? setSegmentDetails({ ...segmentDetails, title: newValue }) : '';
         }}
         slotProps={{
           typography: {
@@ -34,10 +38,10 @@ const CreateVocabularySectionModal: FC<CreateVocabularySectionModalProps> = ({
         }}
       />
       <EditableField
-        defaultValue={''}
-        // TODO: mutating the prop directly won't trigger a re-render; lift state up and pass an updater callback.
+        defaultValue={segmentDetails.description}
         onSave={(newValue) => {
-          segmentDetails.description = newValue;
+          //segmentDetails.description = newValue;
+          setSegmentDetails ? setSegmentDetails({ ...segmentDetails, description: newValue }) : '';
         }}
         slotProps={{
           typography: {
@@ -47,16 +51,21 @@ const CreateVocabularySectionModal: FC<CreateVocabularySectionModalProps> = ({
           textfield: {
             placeholder: 'Add description',
             variant: 'standard',
+            multiline: true,
+            fullWidth: true,
           },
         }}
       />
-      {segmentDetails.wordsList.map((word: Word, index: number) => (
-        <WordItem word={word} wordIndex={index} key={word.id} />
-      ))}
+
+      {segmentDetails
+        ? segmentDetails.wordsList.map((word: Word, index: number) => (
+            <WordItem word={word} wordIndex={index} key={word.id} />
+          ))
+        : ''}
       <AddWordForm />
     </Box>
   );
-};
+}
 
 const sxStyles = createSxStylesList({
   root: (theme) => ({
@@ -70,4 +79,4 @@ const sxStyles = createSxStylesList({
   }),
 });
 
-export default CreateVocabularySectionModal;
+export default CreateVocabularySectionDrawer;

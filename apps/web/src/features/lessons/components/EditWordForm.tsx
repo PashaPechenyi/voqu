@@ -1,4 +1,3 @@
-import { FC, useState } from 'react';
 import { capitalizeWords } from '@/shared/helpers/string.helper';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 import {
@@ -19,15 +18,15 @@ import { FORM_VALIDATION_ERRORS } from '@/shared/constants/formValidationErrors.
 import { WORD_TYPE_LIST } from '../constants/lessonWordTypeList.const';
 import { Word } from '../types/word.type';
 import { WordFormValues } from '../types/wordForm.type';
+import { FC, useState } from 'react';
 
 // RENAME: ind (prop) -> wordIndex - descriptive camelCase prop name
 type EditWordFormProps = {
   word: Word;
   close: () => void;
-  wordIndex: number;
 };
 
-const getDefaultValues = (word: Word, wordIndex: number): WordFormValues => ({
+const getDefaultValues = (word: Word): WordFormValues => ({
   word: word.word,
   translation: word.translation,
   transcription: word.transcription,
@@ -35,14 +34,11 @@ const getDefaultValues = (word: Word, wordIndex: number): WordFormValues => ({
   partOfSpeech: word.partOfSpeech,
   secondTense: word?.secondTense,
   thirdTense: word?.thirdTense,
-  examples: [
-    { value: word.examples[wordIndex].value, translation: word.examples[wordIndex].translation },
-  ],
+  examples: word.examples,
 });
-
-const EditWordForm: FC<EditWordFormProps> = ({ word, close, wordIndex }) => {
+const EditWordForm: FC<EditWordFormProps> = ({ word, close }: EditWordFormProps) => {
   const { control } = useForm<WordFormValues>({
-    defaultValues: getDefaultValues(word, wordIndex),
+    defaultValues: getDefaultValues(word),
   });
   const { fields } = useFieldArray({
     control,
@@ -107,7 +103,7 @@ const EditWordForm: FC<EditWordFormProps> = ({ word, close, wordIndex }) => {
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    label="partOfSpeech"
+                    label="Part of speech"
                     error={!!errors.partOfSpeech}
                     helperText={errors.partOfSpeech?.message}
                   />
@@ -195,7 +191,7 @@ const EditWordForm: FC<EditWordFormProps> = ({ word, close, wordIndex }) => {
         </Grid>
         <Grid size={12}>
           {fields.map((item, index) => (
-            <Grid container spacing={2} key={item.id}>
+            <Grid container spacing={2} key={item.id} sx={{ mb: '20px' }}>
               <Grid size={12}>
                 <Controller
                   rules={{

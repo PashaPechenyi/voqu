@@ -11,21 +11,30 @@ type WordItemProps = {
   wordIndex: number;
 };
 
-const WordItem: FC<WordItemProps> = ({ word, wordIndex }) => {
+const WordItem: FC<WordItemProps> = ({ word }) => {
   const { isOpen: isOpenEdit, open: openEdit, close: closeEdit } = useToggle();
   return (
     <>
       <Box sx={sxStyles.root}>
-        <Typography>{word.word}</Typography>
-        <Typography>{word.translation}</Typography>
-        <Box sx={sxStyles.actions}>
-          <Button variant="contained" onClick={openEdit}>
-            edit
-          </Button>
-          <Button variant="outlined">Delete</Button>
+        <Box
+          sx={{
+            width: 1,
+            display: 'flex',
+            justifyContent: 'space-around',
+            alignItems: 'center',
+          }}
+        >
+          <Typography>{word.word}</Typography>
+          <Typography>{word.translation}</Typography>
+          <Box sx={sxStyles.actions}>
+            <Button variant="contained" onClick={openEdit}>
+              edit
+            </Button>
+            <Button variant="outlined">Delete</Button>
+          </Box>
         </Box>
+        {isOpenEdit ? <EditWordForm word={word} close={closeEdit} /> : ''}
       </Box>
-      {isOpenEdit && <EditWordForm word={word} close={closeEdit} wordIndex={wordIndex} />}
     </>
   );
 };

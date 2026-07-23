@@ -49,7 +49,7 @@ export const EditableField = ({ defaultValue, slotProps, onSave }: EditableField
             size="small"
             sx={sxStyles.iconButton}
             onClick={() => {
-              handleSave(fieldValue);
+              if (fieldValue) handleSave(fieldValue);
             }}
           >
             <DoneIcon fontSize="small" />

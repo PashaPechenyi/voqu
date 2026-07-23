@@ -2,6 +2,7 @@ import { FC, useState } from 'react';
 import { FORM_VALIDATION_ERRORS } from '@/shared/constants/formValidationErrors.const';
 import { capitalizeWords } from '@/shared/helpers/string.helper';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
+import BackspaceIcon from '@mui/icons-material/Backspace';
 import {
   Box,
   Grid,
@@ -13,10 +14,12 @@ import {
   Typography,
   Button,
   Autocomplete,
+  IconButton,
 } from '@mui/material';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { WORD_TYPE_LIST } from '../constants/lessonWordTypeList.const';
 import { WordType } from '../enums/lessonWordType.enum';
+import ClearIcon from '@mui/icons-material/Clear';
 import { WordFormValues } from '../types/wordForm.type';
 
 type AddWordFormProps = {
@@ -44,7 +47,7 @@ const AddWordForm: FC<AddWordFormProps> = ({ onSubmit }) => {
     defaultValues: DEFAULT_VALUES,
   });
 
-  const { fields, prepend } = useFieldArray({
+  const { fields, prepend, remove } = useFieldArray({
     control,
     name: 'examples',
   });
@@ -88,7 +91,7 @@ const AddWordForm: FC<AddWordFormProps> = ({ onSubmit }) => {
             )}
           />
         </Grid>
-        <Grid size={12}>
+        <Grid size={6}>
           <Controller
             control={control}
             name="partOfSpeech"
@@ -96,7 +99,7 @@ const AddWordForm: FC<AddWordFormProps> = ({ onSubmit }) => {
             render={({ field: { onChange, value }, formState: { errors } }) => (
               <Autocomplete
                 options={WORD_TYPE_LIST}
-                sx={sxStyles.field}
+                // sx={sxStyles.fullWidth}
                 size="small"
                 onChange={(_, newValue) => {
                   onChange(newValue);
@@ -107,7 +110,7 @@ const AddWordForm: FC<AddWordFormProps> = ({ onSubmit }) => {
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    label="PartOfSpeech"
+                    label="Part of speech"
                     error={!!errors.partOfSpeech}
                     helperText={errors.partOfSpeech?.message}
                   />
@@ -116,6 +119,7 @@ const AddWordForm: FC<AddWordFormProps> = ({ onSubmit }) => {
             )}
           />
         </Grid>
+        <br />
         {autoCompleteValue === WordType.Verb && (
           <Grid size={6}>
             <Controller
@@ -194,8 +198,8 @@ const AddWordForm: FC<AddWordFormProps> = ({ onSubmit }) => {
         </Grid>
         <Grid size={12}>
           {fields.map((item, index) => (
-            <Grid sx={sxStyles.exampleRow} container spacing={2} key={item.id}>
-              <Grid size={12}>
+            <Grid sx={{ mb: '20px' }} container spacing={1} key={item.id}>
+              <Grid size={12} sx={{ display: 'flex', gap: '20px' }}>
                 <Controller
                   rules={{
                     required: { value: true, message: FORM_VALIDATION_ERRORS.requiredField },
@@ -206,12 +210,22 @@ const AddWordForm: FC<AddWordFormProps> = ({ onSubmit }) => {
                       label="Example"
                       size="small"
                       variant="outlined"
-                      sx={sxStyles.fullWidth}
+                      fullWidth
+                      //error={!!errors.examples}
+                      // helperText={errors.thirdTense?.message}
                     />
                   )}
                   name={`examples.${index}.value`}
                   control={control}
                 />
+                <IconButton
+                  sx={{ height: 30, width: 30 }}
+                  onClick={() => {
+                    remove(index);
+                  }}
+                >
+                  <ClearIcon />
+                </IconButton>
               </Grid>
               <Grid size={12}>
                 <Controller
@@ -224,7 +238,7 @@ const AddWordForm: FC<AddWordFormProps> = ({ onSubmit }) => {
                       label="Example translation"
                       size="small"
                       variant="outlined"
-                      sx={sxStyles.fullWidth}
+                      fullWidth
                     />
                   )}
                   name={`examples.${index}.translation`}
@@ -234,8 +248,11 @@ const AddWordForm: FC<AddWordFormProps> = ({ onSubmit }) => {
             </Grid>
           ))}
         </Grid>
-        <Button onClick={() => prepend({ value: '', translation: '' })}>Add example</Button>
       </Grid>
+      <Button variant="outlined" onClick={() => prepend({ value: '', translation: '' })}>
+        Add example
+      </Button>
+      <br />
       <Button
         onClick={handleSubmit((values) => {
           onSubmit?.(values);
