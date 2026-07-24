@@ -4,8 +4,11 @@ import GoBackSection from '@/shared/components/goBackSection/GoBack.section';
 import SectionDivider from '@/shared/components/SectionDivider/SectionDivider';
 import { ADMIN_COURSES_URL } from '@/shared/constants/urls.const';
 import { Box } from '@mui/material';
-import { AddTaskSection } from './sections/AddTaskSection.section';
+import { useState } from 'react';
+import { AddSegment } from './sections/AddSegment.section';
 import { UpdateLessonHeaderSection } from './sections/UpdateLessonHeader.section';
+import { VocabularyFormSection, Word } from './sections/VocabularyForm.section';
+import { WordlistSegment } from './sections/WordlistSegment';
 
 const lessonEx: LessonListItem = {
   id: ' 28cd4c25-94af-4687-8c07-64f939bd38a2',
@@ -19,14 +22,26 @@ const lessonEx: LessonListItem = {
   createdAt: '2026-05-29 19:34:41.034465+00',
   updatedAt: '2026-05-29 19:34:41.034465+00',
 };
+type WordListItemType = 'phrase' | 'word';
 
+export type Segment = {
+  id: string;
+  title: string;
+  description: string;
+  wordsList: Word[];
+};
 export const UpdateLessonPage = () => {
+  const [segments, setSegments] = useState<Segment[]>([]);
+
   return (
     <Box>
       <GoBackSection url={ADMIN_COURSES_URL} />
       <UpdateLessonHeaderSection lesson={lessonEx} />
       <SectionDivider />
-      <AddTaskSection />
+      {segments.map((segment) => (
+        <WordlistSegment key={segment.id} segment={segment} />
+      ))}
+      <AddSegment setSegments={setSegments} />
     </Box>
   );
 };

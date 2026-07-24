@@ -1,6 +1,7 @@
 import { VALIDATION_ERRORS } from '@/shared/constants/validationErrors.const';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 import {
+  Autocomplete,
   Box,
   Button,
   FormControlLabel,
@@ -13,6 +14,8 @@ import {
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { Word } from './VocabularyForm.section';
 import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { useState } from 'react';
 export type WordFormValues = {
   word: string;
   transcription: string;
@@ -26,10 +29,21 @@ export type WordFormValues = {
     translation: string;
   }[];
 };
+const partsOfSpeechOptions: string[] = [
+  'Noun',
+  'Pronoun',
+  'Verb',
+  'Adjective',
+  'Adverb',
+  'Preposition',
+  'Conjunction',
+  'Interjection',
+];
 type AddWordSectionProps = {
   setWordlist: React.Dispatch<React.SetStateAction<Word[]>>;
 };
 export const AddWordSection = ({ setWordlist }: AddWordSectionProps) => {
+  const [isVerb, setIsVerb] = useState(false);
   const { handleSubmit, control, reset } = useForm<WordFormValues>({
     defaultValues: {
       word: '',
@@ -47,7 +61,7 @@ export const AddWordSection = ({ setWordlist }: AddWordSectionProps) => {
       ],
     },
   });
-  const { fields, append } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     control,
     name: 'examples',
   });
@@ -81,7 +95,7 @@ export const AddWordSection = ({ setWordlist }: AddWordSectionProps) => {
                   error={!!errors.word}
                   helperText={errors.word?.message}
                   color="primary"
-                  variant="filled"
+                  variant="standard"
                   placeholder="Word"
                   {...field}
                 />
@@ -96,27 +110,40 @@ export const AddWordSection = ({ setWordlist }: AddWordSectionProps) => {
                   error={!!errors.transcription}
                   helperText={errors.transcription?.message}
                   color="primary"
-                  variant="filled"
+                  variant="standard"
                   placeholder="Transcription"
                   {...field}
                 />
               )}
             />
+          </Box>
+          <Box sx={sxStyles.constrollersGroup}>
             <Controller
-              rules={requiredRule}
               name="partOfSpeech"
               control={control}
-              render={({ field, formState: { errors } }) => (
-                <TextField
-                  error={!!errors.partOfSpeech}
-                  helperText={errors.partOfSpeech?.message}
-                  color="primary"
-                  variant="filled"
-                  placeholder="Part of speech"
-                  {...field}
+              rules={requiredRule}
+              render={({ field: { onChange, value }, formState: { errors } }) => (
+                <Autocomplete
+                  options={partsOfSpeechOptions}
+                  value={value}
+                  onChange={(_, newValue) => {
+                    onChange(newValue);
+                    newValue === 'Verb' ? setIsVerb((prev) => !prev) : setIsVerb(false);
+                  }}
+                  getOptionLabel={(option) => option}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      variant="standard"
+                      placeholder="Part of speech"
+                      error={!!errors.partOfSpeech}
+                      helperText={errors.partOfSpeech?.message}
+                    />
+                  )}
                 />
               )}
             />
+
             <Controller
               rules={requiredRule}
               name="translation"
@@ -126,76 +153,78 @@ export const AddWordSection = ({ setWordlist }: AddWordSectionProps) => {
                   error={!!errors.translation}
                   helperText={errors.translation?.message}
                   color="primary"
-                  variant="filled"
+                  variant="standard"
                   placeholder="Translation"
                   {...field}
                 />
               )}
             />
-            <Controller
-              rules={requiredRule}
-              name="type"
-              control={control}
-              render={({ field }) => (
-                <RadioGroup {...field} defaultValue="word">
-                  <FormControlLabel value="phrase" control={<Radio />} label="Phrase" />
-                  <FormControlLabel value="word" control={<Radio />} label="Word" />
-                </RadioGroup>
-              )}
-            />
           </Box>
-
-          <Box sx={sxStyles.constrollersGroup}>
-            <Controller
-              rules={requiredRule}
-              name="secondTense"
-              control={control}
-              render={({ field, formState: { errors } }) => (
-                <TextField
-                  error={!!errors.secondTense}
-                  helperText={errors.secondTense?.message}
-                  color="primary"
-                  variant="filled"
-                  placeholder="Second tense"
-                  {...field}
-                />
-              )}
-            />
-            <Controller
-              rules={requiredRule}
-              name="thirdTense"
-              control={control}
-              render={({ field, formState: { errors } }) => (
-                <TextField
-                  error={!!errors.thirdTense}
-                  helperText={errors.thirdTense?.message}
-                  color="primary"
-                  variant="filled"
-                  placeholder="Third tense"
-                  {...field}
-                />
-              )}
-            />
-          </Box>
-          <Box sx={sxStyles.constrollersGroup}>
-            <Box sx={sxStyles.row}>
-              <Typography variant="body1">Examples</Typography>
-              <IconButton onClick={() => append({ value: '', translation: '' })}>
-                <AddIcon fontSize="small" color="primary" />
-              </IconButton>
+          {isVerb && (
+            <Box sx={sxStyles.constrollersGroup}>
+              <Controller
+                rules={requiredRule}
+                name="secondTense"
+                control={control}
+                render={({ field, formState: { errors } }) => (
+                  <TextField
+                    error={!!errors.secondTense}
+                    helperText={errors.secondTense?.message}
+                    color="primary"
+                    variant="standard"
+                    placeholder="Second tense"
+                    {...field}
+                  />
+                )}
+              />
+              <Controller
+                rules={requiredRule}
+                name="thirdTense"
+                control={control}
+                render={({ field, formState: { errors } }) => (
+                  <TextField
+                    error={!!errors.thirdTense}
+                    helperText={errors.thirdTense?.message}
+                    color="primary"
+                    variant="standard"
+                    placeholder="Third tense"
+                    {...field}
+                  />
+                )}
+              />
             </Box>
+          )}
 
-            {fields.map((field, index) => (
-              <Box
-                sx={sxStyles.constrollersGroup}
-                key={field.id} // important to include key with field's id
-              >
+          <Controller
+            rules={requiredRule}
+            name="type"
+            control={control}
+            render={({ field }) => (
+              <RadioGroup {...field} defaultValue="word">
+                <FormControlLabel value="phrase" control={<Radio />} label="Phrase" />
+                <FormControlLabel value="word" control={<Radio />} label="Word" />
+              </RadioGroup>
+            )}
+          />
+        </Box>
+        <Box sx={sxStyles.constrollersGroup}>
+          <Box sx={sxStyles.row}>
+            <Typography variant="body1">Examples</Typography>
+            <IconButton onClick={() => append({ value: '', translation: '' })}>
+              <AddIcon fontSize="small" color="primary" />
+            </IconButton>
+          </Box>
+
+          {fields.map((field, index) => (
+            <Box sx={sxStyles.constrollersGroup} key={field.id}>
+              <Box sx={{ ...sxStyles.row, alignItems: 'start' }}>
                 <Controller
                   rules={requiredRule}
                   render={({ field }) => (
                     <TextField
+                      sx={{ width: '100%' }}
                       color="primary"
-                      variant="filled"
+                      variant="standard"
                       placeholder={`${index + 1} example`}
                       {...field}
                     />
@@ -203,22 +232,25 @@ export const AddWordSection = ({ setWordlist }: AddWordSectionProps) => {
                   name={`examples.${index}.value`}
                   control={control}
                 />
-                <Controller
-                  rules={requiredRule}
-                  render={({ field }) => (
-                    <TextField
-                      color="primary"
-                      variant="filled"
-                      placeholder="ex. translation"
-                      {...field}
-                    />
-                  )}
-                  name={`examples.${index}.translation`}
-                  control={control}
-                />
+                <IconButton onClick={() => remove(index)}>
+                  <DeleteIcon />
+                </IconButton>
               </Box>
-            ))}
-          </Box>
+              <Controller
+                rules={requiredRule}
+                render={({ field }) => (
+                  <TextField
+                    color="primary"
+                    variant="standard"
+                    placeholder="ex. translation"
+                    {...field}
+                  />
+                )}
+                name={`examples.${index}.translation`}
+                control={control}
+              />
+            </Box>
+          ))}
         </Box>
         <Button sx={{ width: '100%', mt: 2 }} type="submit" variant="contained" size="large">
           Save
@@ -229,7 +261,7 @@ export const AddWordSection = ({ setWordlist }: AddWordSectionProps) => {
 };
 const sxStyles = createSxStylesList({
   root: {
-    width: '80%',
+    width: '100%',
     border: '1px solid',
     borderRadius: 2,
     borderColor: 'primary.main',
@@ -239,13 +271,14 @@ const sxStyles = createSxStylesList({
   controllersRoot: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center',
+    alignContent: 'center',
     gap: 3,
   },
   constrollersGroup: {
     display: 'flex',
     flexDirection: 'column',
     gap: 1,
+    width: '60%',
   },
   row: {
     display: 'flex',

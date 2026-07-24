@@ -1,8 +1,8 @@
 import { EditableField } from '@/shared/components/EditableField/EditableField';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
-import { Box, Divider } from '@mui/material';
+import { Box, Button, Divider } from '@mui/material';
 import { useState } from 'react';
-import { Segment } from './AddTaskSection.section';
+import { Segment } from '../UpdateLesson.page';
 import { AddWordSection } from './AddWord.section';
 import { WordItem } from './WordItem';
 export type Word = {
@@ -21,10 +21,15 @@ export type Word = {
 };
 
 type VocabularyFormSectionProps = {
-  segment: Segment;
+  segment?: Segment;
+  setSegments: React.Dispatch<React.SetStateAction<Segment[]>>;
 };
-export const VocabularyFormSection = ({ segment }: VocabularyFormSectionProps) => {
-  const [wordlist, setWordlist] = useState<Word[]>(segment.wordsList);
+export const VocabularyFormSection = ({ segment, setSegments }: VocabularyFormSectionProps) => {
+  const [wordlist, setWordlist] = useState<Word[]>(segment?.wordsList || []);
+  const [segmentData, setSegmentData] = useState({
+    title: '',
+    description: '',
+  });
 
   return (
     <Box sx={sxStyles.root}>
@@ -32,14 +37,15 @@ export const VocabularyFormSection = ({ segment }: VocabularyFormSectionProps) =
         <EditableField
           defaultValue="wordlist topic"
           onSave={(value) => {
-            console.log(value, 'onsave');
+            setSegmentData((prev) => ({ ...prev, title: value }));
           }}
           slotProps={{ typography: { mr: 2, variant: 'h6', color: 'adminSecondary' } }}
+          required
         />
         <EditableField
           defaultValue="wordlist description"
           onSave={(value) => {
-            console.log(value, 'onsave');
+            setSegmentData((prev) => ({ ...prev, description: value }));
           }}
           slotProps={{ typography: { mr: 2, variant: 'h6', color: 'adminSecondary' } }}
         />
@@ -53,6 +59,26 @@ export const VocabularyFormSection = ({ segment }: VocabularyFormSectionProps) =
       <Box sx={sxStyles.toCenter}>
         <AddWordSection setWordlist={setWordlist} />
       </Box>
+
+      <Button
+        type="submit"
+        onClick={() => {
+          setSegments((prev) => {
+            return [
+              ...prev,
+              {
+                id: 'segm12',
+                title: segmentData.title,
+                description: segmentData.description,
+                wordsList: wordlist,
+              },
+            ];
+          });
+          console.log(segmentData, 'drover');
+        }}
+      >
+        Add Segment
+      </Button>
     </Box>
   );
 };
@@ -63,6 +89,7 @@ const sxStyles = createSxStylesList({
     borderColor: 'primary.main',
     p: 2,
     borderRadius: 3,
+    m: 2,
   },
   row: {
     display: 'flex',

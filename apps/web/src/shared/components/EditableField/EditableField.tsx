@@ -10,15 +10,23 @@ type EditableFieldProps = {
   };
   defaultValue: string;
   onSave: (value: string) => void;
+  required?: boolean;
 };
 
-export const EditableField = ({ defaultValue, slotProps, onSave }: EditableFieldProps) => {
+export const EditableField = ({
+  defaultValue,
+  slotProps,
+  onSave,
+  required,
+}: EditableFieldProps) => {
   const [isEdit, setIsEdit] = useState(true);
-  const [value, setValue] = useState(defaultValue);
+  const [value, setValue] = useState('');
   const handleSave = () => {
+    console.log(value);
     onSave(value);
     setIsEdit((prev) => !prev);
   };
+  const handleDisabled = value === '';
   return (
     <>
       {isEdit ? (
@@ -26,14 +34,14 @@ export const EditableField = ({ defaultValue, slotProps, onSave }: EditableField
           <TextField
             variant="standard"
             sx={{ mr: 2, width: '30%' }}
-            defaultValue={defaultValue}
+            placeholder={defaultValue}
             onChange={(e) => {
               setValue(e.target.value);
             }}
             value={value}
           />
 
-          <IconButton size="medium" onClick={handleSave}>
+          <IconButton disabled={handleDisabled} size="medium" onClick={handleSave}>
             <CheckIcon fontSize="small" />
           </IconButton>
         </Box>

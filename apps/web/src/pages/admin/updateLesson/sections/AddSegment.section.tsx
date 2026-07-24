@@ -1,58 +1,16 @@
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
-import { Box, Button, Menu, MenuItem } from '@mui/material';
+import { Box, Button, Drawer, Menu, MenuItem, Typography } from '@mui/material';
 import { MouseEvent, useId, useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
+import { Segment } from '../UpdateLesson.page';
 import { VocabularyFormSection } from './VocabularyForm.section';
-type TaskType = 'vocabulary' | 'reading' | 'grammar' | null;
-type WordListItemType = 'phrase' | 'word';
-export type Segment = {
-  id: string;
-  title: string;
-  description: string;
-  wordsList: {
-    id: string;
-    word: string;
-    transcription: string;
-    partOfSpeech: string;
-    translation: string;
-    type: WordListItemType; // phrase/verb
-    secondTense: string;
-    thirdTense: string;
-    examples: {
-      value: string;
-      translation: string;
-    }[];
-  }[];
+
+type AddSegmentProps = {
+  setSegments: React.Dispatch<React.SetStateAction<Segment[]>>;
 };
-const segmentsData: Segment[] = [
-  // Wordlist Segment
-  {
-    id: 'segment_id',
-    title: 'segment_title',
-    description: 'segment_description',
-    wordsList: [
-      {
-        id: 'word_id',
-        word: 'invite',
-        transcription: 'ɪnˈvaɪt',
-        partOfSpeech: 'verb',
-        translation: 'запрошувати',
-        type: 'phrase', // phrase/verb
-        secondTense: 'invited',
-        thirdTense: 'invited',
-        examples: [
-          {
-            value: '',
-            translation: '',
-          },
-        ],
-      },
-    ],
-  },
-];
-export const AddTaskSection = () => {
-  const [segments, setSegments] = useState<Segment[]>([]);
-  const [taskType, setTaskType] = useState<TaskType>(null);
+export const AddSegment = ({ setSegments }: AddSegmentProps) => {
+  const [openDrawer, setOpenDrawer] = useState(false);
+
   const id = useId();
   const buttonId = `${id}-button`;
   const menuId = `${id}-menu`;
@@ -66,9 +24,14 @@ export const AddTaskSection = () => {
   };
   return (
     <Box sx={sxStyles.root}>
-      {segments.map((segment) => (
-        <VocabularyFormSection key={segment.id} segment={segment} />
-      ))}
+      {openDrawer && (
+        <Drawer open={openDrawer} onClose={() => setOpenDrawer(false)}>
+          <Typography variant="h3" color={'primary'} textAlign={'center'} m="2">
+            Vocabulary segment
+          </Typography>
+          <VocabularyFormSection setSegments={setSegments} />
+        </Drawer>
+      )}
       <Box sx={sxStyles.addContainer}>
         <Button
           id={buttonId}
@@ -80,7 +43,7 @@ export const AddTaskSection = () => {
           variant="outlined"
         >
           <AddIcon sx={{ mr: 2 }} />
-          Add new Task
+          Add new Section
         </Button>
         <Menu
           id={menuId}
@@ -95,16 +58,16 @@ export const AddTaskSection = () => {
         >
           <MenuItem
             onClick={() => {
-              setTaskType('vocabulary');
-              setSegments((prev) => [
-                ...prev,
-                {
-                  id: 'segment' + id,
-                  title: '',
-                  description: '',
-                  wordsList: [],
-                },
-              ]);
+              // setSegments((prev) => [
+              //   ...prev,
+              //   {
+              //     id: 'segment' + id,
+              //     title: '',
+              //     description: '',
+              //     wordsList: [],
+              //   },
+              // ]);
+              setOpenDrawer(true);
               handleClose();
             }}
           >
