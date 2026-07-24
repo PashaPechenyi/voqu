@@ -6,3 +6,4 @@ export const ADMIN_URL = '/admin';
 export const ADMIN_COURSES_URL = `${ADMIN_URL}/courses`;
 export const ADMIN_USERS_URL = `${ADMIN_URL}/users`;
 export const ADMIN_COURSES_UPDATE_URL = (id: string) => `${ADMIN_COURSES_URL}/update/${id}`;
+export const ADMIN_LESSON_UPDATE_URL = (id: string) => `${ADMIN_URL}/lesson/${id}`;

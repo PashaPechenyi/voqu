@@ -4,10 +4,11 @@ import { Box, Typography } from '@mui/material';
 import { Course } from '@/features/courses/types/course.type';
 import { useCourseDetails } from '@/features/courses/hooks/useCourseDetails';
 import CourseLessonsAreaSection from './sections/CourseLessonsArea.section';
-import GoBackSection from './sections/GoBack.section';
+import GoBackSection from '../../../shared/components/goBackSection/GoBack.section';
 import UpdateCourseHeaderSection from './sections/UpdateCourseHeader.section';
 import StatisticSection from './sections/Statistic.section';
 import { useLessonsList } from '@/features/lesson/hooks/useLessonsList';
+import { ADMIN_COURSES_URL } from '@/shared/constants/urls.const';
 
 function UpdateCoursePage() {
   const { courseId } = useParams();
@@ -32,7 +33,7 @@ function UpdateCoursePage() {
 
   return (
     <Box>
-      <GoBackSection />
+      <GoBackSection url={ADMIN_COURSES_URL} />
       <UpdateCourseHeaderSection reloadLessons={getLessonsList} course={courseDetails} />
       <StatisticSection lessonsList={lessonsList} />
       <CourseLessonsAreaSection
