@@ -21,6 +21,20 @@ export class Course extends BaseSecuredEntity {
   @Column({ length: 20, default: CourseStatus.Draft })
   status?: CourseStatus;
 
+  /** The language the course teaches; source text on entity columns is in this language. */
+  @Column({ name: 'sourceLanguageCode', length: 10, default: 'en' })
+  sourceLanguageCode?: string;
+
+  /** Languages this course may be translated into; the details `?lang=` must be one of these. */
+  @Column({
+    name: 'translationLanguageCodes',
+    type: 'varchar',
+    length: 10,
+    array: true,
+    default: () => "'{}'",
+  })
+  translationLanguageCodes?: string[];
+
   // Relations
   @ManyToOne(() => Level, (level) => level.Courses)
   @JoinColumn({ name: 'LevelId' })

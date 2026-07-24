@@ -7,6 +7,8 @@ export class CourseListItem {
     this.name = data.name!;
     this.description = data.description ?? null;
     this.status = data.status!;
+    this.sourceLanguageCode = data.sourceLanguageCode!;
+    this.translationLanguageCodes = data.translationLanguageCodes ?? [];
     this.Level = {
       id: data.Level!.id!,
       name: data.Level!.name!,
@@ -29,6 +31,10 @@ export class CourseListItem {
   description: string | null;
 
   status: CourseStatus;
+
+  sourceLanguageCode: string;
+
+  translationLanguageCodes: string[];
 
   Level: {
     id: string;

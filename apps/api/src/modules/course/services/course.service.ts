@@ -24,7 +24,17 @@ export class CourseService {
       throw new EntityNotFoundException({ entity: User, ctx: { roleSlug: RoleSlug.SuperAdmin } });
     }
 
-    return this.courseRepository.create(new Course({ ...params, OwnerId: owner.id }));
+    // Language fields are mocked for now: every new course teaches English and
+    // is translatable into Ukrainian. Replace with values from the request
+    // (CreateCourseDto) once the admin UI exposes language selection.
+    return this.courseRepository.create(
+      new Course({
+        ...params,
+        OwnerId: owner.id,
+        sourceLanguageCode: 'en',
+        translationLanguageCodes: ['uk'],
+      }),
+    );
   }
 
   async updateCourse(id: string, params: IUpdateCourseParams): Promise<Course> {

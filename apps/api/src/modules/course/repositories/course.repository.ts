@@ -47,6 +47,8 @@ export class CourseRepository extends BaseRepository<Course> {
         'Course.name',
         'Course.description',
         'Course.status',
+        'Course.sourceLanguageCode',
+        'Course.translationLanguageCodes',
         'Course.createdAt',
         'Course.updatedAt',
         'Level.id',
