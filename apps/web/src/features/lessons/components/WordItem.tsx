@@ -24,8 +24,8 @@ const WordItem: FC<WordItemProps> = ({ word }) => {
             alignItems: 'center',
           }}
         >
-          <Typography>{word.word}</Typography>
-          <Typography>{word.translation}</Typography>
+          <Typography>{word.definition.value}</Typography>
+          <Typography>{word.definition.translation}</Typography>
           <Box sx={sxStyles.actions}>
             <Button variant="contained" onClick={openEdit}>
               edit

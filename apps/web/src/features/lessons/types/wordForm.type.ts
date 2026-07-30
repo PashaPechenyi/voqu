@@ -1,4 +1,5 @@
 import { WordType } from '../enums/lessonWordType.enum';
+import { Translation } from './lessonDetails.type';
 
 export type WordFormValues = {
   word: string;
@@ -8,8 +9,5 @@ export type WordFormValues = {
   type: 'phrase' | 'word' | null;
   secondTense: string;
   thirdTense: string;
-  examples: {
-    value: string;
-    translation: string;
-  }[];
+  examples: { id: string; order: number | null; text: Translation }[];
 };

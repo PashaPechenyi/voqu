@@ -4,25 +4,32 @@ import { PopupState as PopupStateType } from 'material-ui-popup-state/hooks';
 import AddIcon from '@mui/icons-material/Add';
 import React, { Fragment, useState } from 'react';
 import CreateVocabularySectionModal from '@/features/lessons/components/CreateVocabularySectionDrawer';
-import { LessonDetailsStructure, Segment } from '../LessonDetails.page';
+import { LessonDetailsStructure } from '../LessonDetails.page';
 import { WordType } from '@/features/lessons/enums/lessonWordType.enum';
 import CreateVocabularySectionDrawer from '@/features/lessons/components/CreateVocabularySectionDrawer';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
+import { LessonDetails, Segment } from '@/features/lessons/types/lessonDetails.type';
 
 // RENAME: setLesonDetails -> setLessonDetails - fix typo
 type LessonSectionsProps = {
-  lessonDetails: LessonDetailsStructure;
-  setLessonDetails: React.Dispatch<React.SetStateAction<LessonDetailsStructure>>;
+  lessonDetails: LessonDetails;
+
   handleSegment: (segment: Segment) => void;
 };
 
-function LessonSections({ lessonDetails, setLessonDetails, handleSegment }: LessonSectionsProps) {
+function LessonSections({ lessonDetails, handleSegment }: LessonSectionsProps) {
   const [option, setOption] = useState<'vocabulary' | 'grammar' | 'listening' | null>(null);
   const [open, setOpen] = useState(false);
   const [defaultSegment, setDefaultSegment] = useState<Segment>({
     id: '',
-    title: '',
-    description: '',
+    lessonId: '',
+    segmentKindId: '',
+    segmentContentRowId: '',
+    title: { value: '', translation: '' },
+    description: { value: '', translation: '' },
+    order: 0,
+    createdAt: '',
+    updatedAt: '',
     wordsList: [],
   });
   const toggleDrawer = (newOpen: boolean) => () => {
@@ -31,9 +38,10 @@ function LessonSections({ lessonDetails, setLessonDetails, handleSegment }: Less
 
   return (
     <Box sx={sxStyles.root}>
-      {lessonDetails.segments.map((segment) => (
-        <CreateVocabularySectionDrawer segmentDetails={segment} />
-      ))}
+      {lessonDetails.segments.map((segment) => {
+        console.log(segment, 'segment');
+        return <CreateVocabularySectionDrawer segmentDetails={segment} />;
+      })}
 
       <PopupState variant="popover" popupId="demo-popup-menu">
         {(popupState: PopupStateType) => (

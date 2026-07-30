@@ -1,22 +1,22 @@
 import { FC } from 'react';
 import { EditableField } from '@/shared/components/EditableField/EditableField';
 import { Box } from '@mui/material';
-import { LessonDetailsStructure } from '@/features/lessons/types/lessonDetails.type';
+import { LessonDetails, LessonDetailsStructure } from '@/features/lessons/types/lessonDetails.type';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 
 // RENAME: LessonDetails (prop) -> lessonDetails - props are camelCase
 type LessonIntroProps = {
-  lessonDetails: LessonDetailsStructure;
+  lessonDetails: LessonDetails;
 };
 
 const LessonIntro: FC<LessonIntroProps> = ({ lessonDetails }) => {
   return (
     <Box sx={sxStyles.root}>
       <EditableField
-        defaultValue={lessonDetails.title}
+        defaultValue={lessonDetails.title.value}
         // TODO: mutating the prop directly won't trigger a re-render; lift state up and pass an updater callback.
         onSave={(newValue) => {
-          lessonDetails.title = newValue;
+          lessonDetails.title.value = newValue;
         }}
         slotProps={{
           typography: {
@@ -26,10 +26,10 @@ const LessonIntro: FC<LessonIntroProps> = ({ lessonDetails }) => {
         }}
       />
       <EditableField
-        defaultValue={lessonDetails.subtitle}
+        defaultValue={lessonDetails.subtitle.value}
         // TODO: mutating the prop directly won't trigger a re-render; lift state up and pass an updater callback.
         onSave={(newValue) => {
-          lessonDetails.subtitle = newValue;
+          lessonDetails.subtitle.value = newValue;
         }}
         slotProps={{
           typography: {
@@ -39,10 +39,10 @@ const LessonIntro: FC<LessonIntroProps> = ({ lessonDetails }) => {
         }}
       />
       <EditableField
-        defaultValue={lessonDetails.description}
+        defaultValue={lessonDetails.description.value}
         // TODO: mutating the prop directly won't trigger a re-render; lift state up and pass an updater callback.
         onSave={(newValue) => {
-          lessonDetails.description = newValue;
+          lessonDetails.description.value = newValue;
         }}
         slotProps={{
           typography: {

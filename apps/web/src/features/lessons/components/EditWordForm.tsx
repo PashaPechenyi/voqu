@@ -27,13 +27,13 @@ type EditWordFormProps = {
 };
 
 const getDefaultValues = (word: Word): WordFormValues => ({
-  word: word.word,
-  translation: word.translation,
+  word: word.definition.value,
+  translation: word.definition.translation!,
   transcription: word.transcription,
-  type: word.type,
+  type: word.entryType,
   partOfSpeech: word.partOfSpeech,
-  secondTense: word?.secondTense,
-  thirdTense: word?.thirdTense,
+  secondTense: word?.v2!,
+  thirdTense: word?.v3!,
   examples: word.examples,
 });
 const EditWordForm: FC<EditWordFormProps> = ({ word, close }: EditWordFormProps) => {
@@ -206,7 +206,7 @@ const EditWordForm: FC<EditWordFormProps> = ({ word, close }: EditWordFormProps)
                       sx={sxStyles.fullWidth}
                     />
                   )}
-                  name={`examples.${index}.value`}
+                  name={`examples.${index}.text.value`}
                   control={control}
                 />
               </Grid>
@@ -224,7 +224,7 @@ const EditWordForm: FC<EditWordFormProps> = ({ word, close }: EditWordFormProps)
                       sx={sxStyles.fullWidth}
                     />
                   )}
-                  name={`examples.${index}.translation`}
+                  name={`examples.${index}.text.translation`}
                   control={control}
                 />
               </Grid>

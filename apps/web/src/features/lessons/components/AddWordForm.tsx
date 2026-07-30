@@ -36,8 +36,12 @@ const DEFAULT_VALUES: WordFormValues = {
   thirdTense: '',
   examples: [
     {
-      value: '',
-      translation: '',
+      id: '',
+      order: null,
+      text: {
+        value: '',
+        translation: '',
+      },
     },
   ],
 };
@@ -215,7 +219,7 @@ const AddWordForm: FC<AddWordFormProps> = ({ onSubmit }) => {
                       // helperText={errors.thirdTense?.message}
                     />
                   )}
-                  name={`examples.${index}.value`}
+                  name={`examples.${index}.text.value`}
                   control={control}
                 />
                 <IconButton
@@ -241,7 +245,7 @@ const AddWordForm: FC<AddWordFormProps> = ({ onSubmit }) => {
                       fullWidth
                     />
                   )}
-                  name={`examples.${index}.translation`}
+                  name={`examples.${index}.text.translation`}
                   control={control}
                 />
               </Grid>
@@ -249,7 +253,10 @@ const AddWordForm: FC<AddWordFormProps> = ({ onSubmit }) => {
           ))}
         </Grid>
       </Grid>
-      <Button variant="outlined" onClick={() => prepend({ value: '', translation: '' })}>
+      <Button
+        variant="outlined"
+        onClick={() => prepend({ id: '', order: 1, text: { value: '', translation: '' } })}
+      >
         Add example
       </Button>
       <br />
