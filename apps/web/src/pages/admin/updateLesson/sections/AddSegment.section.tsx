@@ -2,26 +2,42 @@ import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.h
 import { Box, Button, Drawer, Menu, MenuItem, Typography } from '@mui/material';
 import { MouseEvent, useId, useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
-import { Segment } from '../UpdateLesson.page';
 import { VocabularyFormSection } from './VocabularyForm.section';
+import { useMutation } from '@/shared/api';
+import {
+  createLessonSegmentReq,
+  LessonSegmentReqBody,
+} from '@/features/lesson/helpers/createLessonSegmentReq.helper';
+import { LessonListItem } from '@/features/lesson/types/lessonListItem.type';
 
 type AddSegmentProps = {
   setSegments: React.Dispatch<React.SetStateAction<Segment[]>>;
+  lessonId: LessonListItem['id'];
 };
-export const AddSegment = ({ setSegments }: AddSegmentProps) => {
+export const AddSegment = ({ lessonId, setSegments }: AddSegmentProps) => {
   const [openDrawer, setOpenDrawer] = useState(false);
-
   const id = useId();
   const buttonId = `${id}-button`;
   const menuId = `${id}-menu`;
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+
+  const { isLoading, mutate: createLessonSegment } = useMutation({
+    mutationFn: createLessonSegmentReq,
+    onSuccess(response) {
+      console.log(response, 'create');
+    },
+  });
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const onSave = (body: LessonSegmentReqBody) => {
+    createLessonSegment(lessonId, body);
+  };
+  if (isLoading) return <>Segment Loading...</>;
   return (
     <Box sx={sxStyles.root}>
       {openDrawer && (
@@ -29,7 +45,7 @@ export const AddSegment = ({ setSegments }: AddSegmentProps) => {
           <Typography variant="h3" color={'primary'} textAlign={'center'} m="2">
             Vocabulary segment
           </Typography>
-          <VocabularyFormSection setSegments={setSegments} />
+          <VocabularyFormSection onSave={onSave} setSegments={setSegments} />
         </Drawer>
       )}
       <Box sx={sxStyles.addContainer}>

@@ -1,28 +1,28 @@
+import { Word } from '@/features/lesson/types/wordListItem.type';
+import { WordlistSegment } from '@/features/lesson/types/wordlistSegment.type';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 import { Box, Typography } from '@mui/material';
-import { Segment } from '../UpdateLesson.page';
 import { AddWordSection } from './AddWord.section';
-import { Word } from './VocabularyForm.section';
 import { WordItem } from './WordItem';
 type WordlistSegmentProps = {
-  segment: Segment;
+  segment: WordlistSegment;
   setWordlist?: React.Dispatch<React.SetStateAction<Word[]>>;
 };
-export const WordlistSegment = ({ segment, setWordlist }: WordlistSegmentProps) => {
-  const wordlist = segment?.wordsList;
+export const WordlistSegmentItem = ({ segment, setWordlist }: WordlistSegmentProps) => {
+  const wordlist = segment?.wordlist;
   return (
     <Box sx={sxStyles.root}>
       <Box sx={{ mb: 2 }}>
         <Typography variant="h5" color="adminPrimary">
-          {segment?.title}
+          {segment?.title.value}
         </Typography>
         <Typography variant="h6" color="adminSecondary">
-          {segment?.description}
+          {segment?.description.value}
         </Typography>
       </Box>
 
-      {wordlist.map((word) => (
-        <WordItem word={word} setWordlist={() => {}} />
+      {wordlist.entries.map((word) => (
+        <WordItem key={word.id} word={word} setWordlist={() => {}} />
       ))}
 
       <Box sx={sxStyles.toCenter}>

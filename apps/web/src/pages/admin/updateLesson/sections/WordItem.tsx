@@ -4,7 +4,7 @@ import { useState } from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { UpdateWordSection } from './UpdateWord.section';
-import { Word } from './VocabularyForm.section';
+import { Word } from '@/features/lesson/types/wordListItem.type';
 type WordItemProps = {
   word: Word;
   setWordlist: React.Dispatch<React.SetStateAction<Word[]>>;
@@ -14,8 +14,8 @@ export const WordItem = ({ word, setWordlist }: WordItemProps) => {
   return (
     <Box sx={sxStyles.toCenter} flexDirection="column">
       <Box sx={sxStyles.wordItem}>
-        <Typography>{word.word}</Typography>
-        <Typography>{word.translation}</Typography>
+        <Typography>{word.lemma}</Typography>
+        <Typography>{word.definition.translation}</Typography>
         <Box>
           <IconButton onClick={() => setIsEdit((prev) => !prev)}>
             <EditIcon />

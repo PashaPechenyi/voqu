@@ -1,12 +1,11 @@
-import { LessonListItem } from '@/features/lesson/types/lessonListItem.type';
 import { Box } from '@mui/material';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
-
 import { EditableField } from '@/shared/components/EditableField/EditableField';
+import { LessonDetails } from '@/features/lesson/types/lessonDetails.type';
 type UpdateLessonHeaderSectionProps = {
-  lesson: LessonListItem;
+  lessonDetails: LessonDetails;
 };
-export const UpdateLessonHeaderSection = ({ lesson }: UpdateLessonHeaderSectionProps) => {
+export const UpdateLessonHeaderSection = ({ lessonDetails }: UpdateLessonHeaderSectionProps) => {
   return (
     <Box sx={sxStyles.root}>
       <EditableField

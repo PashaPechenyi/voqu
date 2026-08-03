@@ -1,31 +1,24 @@
+import { Word } from '@/features/lesson/types/wordListItem.type';
 import { EditableField } from '@/shared/components/EditableField/EditableField';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 import { Box, Button, Divider } from '@mui/material';
 import { useState } from 'react';
-import { Segment } from '../UpdateLesson.page';
 import { AddWordSection } from './AddWord.section';
 import { WordItem } from './WordItem';
-export type Word = {
-  id: string;
-  word: string;
-  transcription: string;
-  partOfSpeech: string;
-  translation: string;
-  type: string;
-  secondTense: string;
-  thirdTense: string;
-  examples: {
-    value: string;
-    translation: string;
-  }[];
-};
+import { LessonSegmentReqBody } from '@/features/lesson/helpers/createLessonSegmentReq.helper';
+import { WordlistSegment } from '@/features/lesson/types/wordlistSegment.type';
 
 type VocabularyFormSectionProps = {
-  segment?: Segment;
-  setSegments: React.Dispatch<React.SetStateAction<Segment[]>>;
+  segment?: WordlistSegment;
+  setSegments: React.Dispatch<React.SetStateAction<WordlistSegment[]>>;
+  onSave: (body: LessonSegmentReqBody) => void;
 };
-export const VocabularyFormSection = ({ segment, setSegments }: VocabularyFormSectionProps) => {
-  const [wordlist, setWordlist] = useState<Word[]>(segment?.wordsList || []);
+export const VocabularyFormSection = ({
+  onSave,
+  segment,
+  setSegments,
+}: VocabularyFormSectionProps) => {
+  const [wordlist, setWordlist] = useState<Word[]>(segment?.wordlist.entries || []);
   const [segmentData, setSegmentData] = useState({
     title: '',
     description: '',
@@ -63,17 +56,23 @@ export const VocabularyFormSection = ({ segment, setSegments }: VocabularyFormSe
       <Button
         type="submit"
         onClick={() => {
-          setSegments((prev) => {
-            return [
-              ...prev,
-              {
-                id: 'segm12',
-                title: segmentData.title,
-                description: segmentData.description,
-                wordsList: wordlist,
-              },
-            ];
+          onSave({
+            SegmentKindKey: 'wordlist',
+            title: segmentData.title,
+            description: segmentData.description,
+            content: {},
           });
+          // setSegments((prev) => {
+          //   return [
+          //     ...prev,
+          //     {
+          //       id: 'segm12',
+          //       title: segmentData.title,
+          //       description: segmentData.description,
+          //       wordsList: wordlist,
+          //     },
+          //   ];
+          // });
           console.log(segmentData, 'drover');
         }}
       >
