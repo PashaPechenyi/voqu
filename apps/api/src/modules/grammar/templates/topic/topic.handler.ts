@@ -38,7 +38,7 @@ export class TopicHandler implements IKindHandler {
     manager: EntityManager,
     ctx: ISegmentContentContext,
   ): Promise<string> {
-    const content = validateContent(CreateGrammarContentDto, input ?? {});
+    const content = validateContent(CreateGrammarContentDto, input ?? {}, this.code);
 
     const topic = await manager.save(
       manager.create(GrammarTopic, {
