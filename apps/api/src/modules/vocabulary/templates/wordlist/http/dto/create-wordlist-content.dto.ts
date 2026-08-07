@@ -1,6 +1,7 @@
 import { Type } from 'class-transformer';
 import {
   IsArray,
+  IsDefined,
   IsEnum,
   IsInt,
   IsOptional,
@@ -30,6 +31,7 @@ import {
  * `?lang=`.
  */
 export class CreateWordlistExampleDto implements IWordlistEntryExampleInput {
+  @IsDefined()
   @ValidateNested()
   @Type(() => LocalizedInputDto)
   text: LocalizedInputDto;
@@ -57,6 +59,7 @@ export class CreateWordlistCollocationDto implements IWordlistEntryCollocationIn
 }
 
 export class CreateWordlistEntryDto implements IWordlistEntryInput {
+  @IsDefined()
   @ValidateNested()
   @Type(() => LocalizedInputDto)
   lemma: LocalizedInputDto;
@@ -113,6 +116,7 @@ export class CreateWordlistEntryDto implements IWordlistEntryInput {
 }
 
 export class CreateWordlistContentDto implements IWordlistContentInput {
+  @IsDefined()
   @ValidateNested()
   @Type(() => LocalizedInputDto)
   title: LocalizedInputDto;
