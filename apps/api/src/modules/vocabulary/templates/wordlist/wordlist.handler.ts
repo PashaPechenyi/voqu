@@ -35,7 +35,7 @@ export class WordlistHandler implements IKindHandler {
     manager: EntityManager,
     ctx: ISegmentContentContext,
   ): Promise<string> {
-    const content = validateContent(CreateWordlistContentDto, input);
+    const content = validateContent(CreateWordlistContentDto, input, this.code);
 
     const wordlist = await manager.save(
       manager.create(Wordlist, {
