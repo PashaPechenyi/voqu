@@ -4,11 +4,13 @@ import { EntityNotFoundException } from '../../../common/exceptions/entity-not-f
 import { Lesson } from '../../../database/entities/lesson.entity';
 import { LessonSegment } from '../../../database/entities/lesson-segment.entity';
 import { CourseService } from '../../course/services/course.service';
+import { IEntityRef } from '../../localization/repositories/translation.repository';
 import { TranslationService } from '../../localization/services/translation.service';
+import { TranslatableEntityType } from '../../localization/structs/translatable-entity-type.enum';
 import { SegmentCatalogService } from '../../segment-catalog/services/segment-catalog.service';
 import { LessonSegmentRepository } from '../repositories/lesson-segment.repository';
 import { ICreateSegmentParams } from '../structs/create-segment-params.interface';
-import { ISegmentContentContext } from '../structs/kind-handler.interface';
+import { ILoadedContent, ISegmentContentContext } from '../structs/kind-handler.interface';
 import { IReorderSegmentsParams } from '../structs/reorder-segments-params.interface';
 import { IUpdateSegmentParams } from '../structs/update-segment-params.interface';
 import { KindHandlerRegistryService } from './kind-handler-registry.service';
@@ -138,8 +140,12 @@ export class LessonSegmentService {
    * The kind is fixed — the body carries no `SegmentKindKey`; it's taken from
    * the existing segment. In one transaction:
    *   1. Validate `?lang=` against the lesson's course.
-   *   2. Delete the old content subtree's translations (polymorphic — no FK
-   *      cascade), then the old content rows (children cascade at the DB level).
+   *   2. Delete the old content subtree's translations AND the segment's own
+   *      title/description translations (polymorphic — no FK cascade), then the
+   *      old content rows (children cascade at the DB level). The segment's
+   *      translations go too: its source title/description are being replaced
+   *      wholesale, so a translation of the *old* text would otherwise survive
+   *      and keep being served against the new source string.
    *   3. Recreate the content (+ translations) from the body via the handler.
    *   4. Repoint the segment at the new content row and update its
    *      title/description/order.
@@ -158,7 +164,10 @@ export class LessonSegmentService {
     const oldLoaded = await handler.loadContent(segment.SegmentContentRowId!);
 
     return this.dataSource.transaction(async (manager) => {
-      await this.translationService.deleteForRefsInTransaction(manager, oldLoaded.refs);
+      await this.translationService.deleteForRefsInTransaction(
+        manager,
+        this.collectSegmentRefs(SegmentId, oldLoaded),
+      );
       await handler.deleteContent(segment.SegmentContentRowId!, manager);
 
       const ctx = this.buildContentContext(manager, lang);
@@ -180,9 +189,12 @@ export class LessonSegmentService {
   }
 
   /**
-   * Deletes a segment and its template content in one transaction. The handler
-   * removes the content row (children cascade at the DB level); then the
-   * segment row is removed.
+   * Deletes a segment and its template content in one transaction:
+   *   1. Delete every translation keyed to the segment and to its content
+   *      subtree — Translation rows are polymorphic (no FK), so nothing else
+   *      would ever reclaim them once the rows they describe are gone.
+   *   2. Handler removes the content row (children cascade at the DB level).
+   *   3. Remove the segment row.
    */
   async deleteSegment(SegmentId: string): Promise<void> {
     const segment = await this.lessonSegmentRepository.findByIdWithKind(SegmentId);
@@ -192,10 +204,31 @@ export class LessonSegmentService {
 
     const handler = this.kindHandlerRegistry.get(segment.SegmentKind!.key!);
 
+    // Enumerate the content's translatable refs before the transaction — the
+    // rows must still exist for the handler to walk them.
+    const loaded = await handler.loadContent(segment.SegmentContentRowId!);
+
     await this.dataSource.transaction(async (manager) => {
+      await this.translationService.deleteForRefsInTransaction(
+        manager,
+        this.collectSegmentRefs(SegmentId, loaded),
+      );
       await handler.deleteContent(segment.SegmentContentRowId!, manager);
       await manager.delete(LessonSegment, { id: SegmentId });
     });
+  }
+
+  /**
+   * Every translatable ref owned by one segment: its own title/description
+   * slots plus everything its content handler reported. Used by both the
+   * replace and delete paths — the two places where those rows stop being
+   * reachable and must be swept explicitly.
+   */
+  private collectSegmentRefs(SegmentId: string, loaded: ILoadedContent): IEntityRef[] {
+    return [
+      { entityType: TranslatableEntityType.LessonSegment, EntityId: SegmentId },
+      ...loaded.refs,
+    ];
   }
 
   async reorderSegments(params: IReorderSegmentsParams): Promise<void> {
