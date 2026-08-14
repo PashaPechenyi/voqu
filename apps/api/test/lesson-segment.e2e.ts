@@ -313,7 +313,8 @@ async function main(): Promise<void> {
     console.log('\n[4] PUT replace wordlist segment ?lang=uk');
     const oldEntryIds = entryRows.map((r: any) => r.id);
     const putBody = {
-      title: 'Vocabulary (edited)',
+      title: { value: 'Vocabulary (edited)', translation: 'Лексика (змінено)' },
+      description: { value: null },
       order: 0,
       content: {
         title: {
@@ -353,6 +354,11 @@ async function main(): Promise<void> {
       segRow[0],
     );
     check(segRow[0].title === 'Vocabulary (edited)', 'segment title updated', segRow[0].title);
+    check(
+      (await getTranslation('lesson_segment', wlSegmentId, 'title', 'uk')) === 'Лексика (змінено)',
+      'segment own title translation written on PUT',
+      await getTranslation('lesson_segment', wlSegmentId, 'title', 'uk'),
+    );
 
     // old content rows gone
     check(

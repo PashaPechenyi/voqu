@@ -1,6 +1,18 @@
+import {
+  ILocalizedInput,
+  INullableLocalizedInput,
+} from '../../localization/structs/localized-input.interface';
+
 export interface IUpdateSegmentParams {
-  title?: string | null;
-  description?: string | null;
+  /**
+   * The segment's heading. Required on replace — a full replace states the
+   * title outright instead of inheriting the previous one. `value` goes on the
+   * segment column, `translation` (when given with `?lang=`) becomes a
+   * Translation row.
+   */
+  title: ILocalizedInput;
+  /** Same, but the source value may be null — the column is nullable. */
+  description: INullableLocalizedInput;
   order?: number;
   /**
    * The full content tree to replace the segment's existing content with (same
