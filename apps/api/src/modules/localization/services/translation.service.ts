@@ -65,17 +65,27 @@ export class TranslationService {
   }
 
   /**
-   * Deletes every translation row for a set of `(entityType, EntityId)` refs,
-   * inside a caller-supplied transaction. Used when content rows are removed
-   * (e.g. full-replace edit) — their translations are keyed polymorphically and
-   * would otherwise orphan (no FK cascade). No-op on an empty ref list.
+   * Deletes translation rows for a set of `(entityType, EntityId)` refs, inside
+   * a caller-supplied transaction. Used when content rows are removed (e.g.
+   * full-replace edit) — their translations are keyed polymorphically and would
+   * otherwise orphan (no FK cascade). No-op on an empty ref list.
+   *
+   * `languageCode` narrows the delete to one language. Pass it when the caller
+   * is rewriting that language only (a `?lang=`-scoped replace), so the other
+   * languages' rows survive; omit it to drop every language, which is right when
+   * the refs themselves are going away (delete) or the source text is being
+   * replaced with no translations at all.
    */
-  async deleteForRefsInTransaction(manager: EntityManager, refs: IEntityRef[]): Promise<void> {
+  async deleteForRefsInTransaction(
+    manager: EntityManager,
+    refs: IEntityRef[],
+    languageCode?: string,
+  ): Promise<void> {
     const unique = this.dedupeRefs(refs);
     if (!unique.length) {
       return;
     }
-    await manager
+    const qb = manager
       .createQueryBuilder()
       .delete()
       .from(Translation)
@@ -95,8 +105,13 @@ export class TranslationService {
             );
           });
         }),
-      )
-      .execute();
+      );
+
+    if (languageCode !== undefined) {
+      qb.andWhere('"languageCode" = :languageCode', { languageCode });
+    }
+
+    await qb.execute();
   }
 
   /**
