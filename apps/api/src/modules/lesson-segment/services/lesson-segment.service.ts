@@ -140,15 +140,21 @@ export class LessonSegmentService {
    * The kind is fixed — the body carries no `SegmentKindKey`; it's taken from
    * the existing segment. In one transaction:
    *   1. Validate `?lang=` against the lesson's course.
-   *   2. Delete the old content subtree's translations AND the segment's own
-   *      title/description translations (polymorphic — no FK cascade), then the
-   *      old content rows (children cascade at the DB level). The segment's
-   *      translations go too: its source title/description are being replaced
-   *      wholesale, so a translation of the *old* text would otherwise survive
-   *      and keep being served against the new source string.
+   *   2. Delete the old content subtree's translations in every language — the
+   *      content rows are about to be recreated with new ids, so those rows are
+   *      unreachable regardless of language (polymorphic keys, no FK cascade).
+   *      Then delete the old content rows (children cascade at the DB level).
+   *
+   *      The segment's own title/description translations are swept separately
+   *      and scoped to `?lang=`: its id survives the replace, so wiping every
+   *      language would destroy translations this request cannot restore — it
+   *      only carries replacements for the one language. Without `?lang=` the
+   *      body carries no translations at all, so every language's row is stale
+   *      against the new source text and all of them go.
    *   3. Recreate the content (+ translations) from the body via the handler.
    *   4. Repoint the segment at the new content row and update its
-   *      title/description/order.
+   *      title/description/order, writing the segment's own title/description
+   *      translations for `?lang=`.
    */
   async replaceSegment(SegmentId: string, params: IUpdateSegmentParams): Promise<LessonSegment> {
     const segment = await this.lessonSegmentRepository.findByIdWithKind(SegmentId);
@@ -164,10 +170,22 @@ export class LessonSegmentService {
     const oldLoaded = await handler.loadContent(segment.SegmentContentRowId!);
 
     return this.dataSource.transaction(async (manager) => {
+      // Two different cleanup rules, because the two ref groups have different
+      // lifetimes. The content rows are dropped and recreated with fresh ids,
+      // so every language's translation keyed to an old content id is
+      // unreachable the moment the row dies — all of them must go, scoping by
+      // language would strand the rest forever.
+      await this.translationService.deleteForRefsInTransaction(manager, oldLoaded.refs);
+
+      // The segment id survives the replace, so its own title/description
+      // translations stay reachable. Drop only the language this request
+      // rewrites; other languages keep their rows (see step 2 above).
       await this.translationService.deleteForRefsInTransaction(
         manager,
-        this.collectSegmentRefs(SegmentId, oldLoaded),
+        [{ entityType: TranslatableEntityType.LessonSegment, EntityId: SegmentId }],
+        lang,
       );
+
       await handler.deleteContent(segment.SegmentContentRowId!, manager);
 
       const ctx = this.buildContentContext(manager, lang);
@@ -178,10 +196,27 @@ export class LessonSegmentService {
         { id: SegmentId },
         {
           SegmentContentRowId: newContentRowId,
-          title: params.title ?? null,
-          description: params.description ?? null,
-          ...(params.order !== undefined ? { order: params.order } : {}),
+          title: params.title.value,
+          description: params.description.value ?? null,
+          // A full replace resets order when the body omits it — the same rule
+          // create uses, so PUT is not half replace / half patch.
+          order: params.order ?? 0,
         },
+      );
+
+      // The segment's own translatable slots — the handler only covers the
+      // content subtree, so these are written here.
+      await ctx.writeTranslation(
+        TranslatableEntityType.LessonSegment,
+        SegmentId,
+        'title',
+        params.title.translation,
+      );
+      await ctx.writeTranslation(
+        TranslatableEntityType.LessonSegment,
+        SegmentId,
+        'description',
+        params.description.translation,
       );
 
       return manager.findOneByOrFail(LessonSegment, { id: SegmentId });

@@ -1,4 +1,17 @@
-import { IsInt, IsNotEmpty, IsObject, IsOptional, IsString, MaxLength, Min } from 'class-validator';
+import { Type } from 'class-transformer';
+import {
+  IsDefined,
+  IsInt,
+  IsNotEmpty,
+  IsObject,
+  IsOptional,
+  Min,
+  ValidateNested,
+} from 'class-validator';
+import {
+  NullableLocalizedInputDto,
+  TitleLocalizedInputDto,
+} from '../../../localization/http/dto/localized-input.dto';
 import { IUpdateSegmentParams } from '../../structs/update-segment-params.interface';
 
 /**
@@ -6,16 +19,23 @@ import { IUpdateSegmentParams } from '../../structs/update-segment-params.interf
  * `CreateSegmentDto` minus `SegmentKindKey` — the kind is fixed by the existing
  * segment and cannot change on edit. `content` is validated by the handler (its
  * shape varies per kind). `lang` comes from `?lang=`.
+ *
+ * `title` and `description` are required: a full replace must state the
+ * segment's heading outright rather than inheriting whatever was there before.
+ * Both are localized (`{ value, translation? }`) like every other translatable
+ * field — the source string lands on the segment column, `translation` becomes
+ * a Translation row in the `?lang=` language.
  */
 export class UpdateSegmentDto implements Omit<IUpdateSegmentParams, 'lang'> {
-  @IsOptional()
-  @IsString()
-  @MaxLength(255)
-  title?: string | null;
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => TitleLocalizedInputDto)
+  title: TitleLocalizedInputDto;
 
-  @IsOptional()
-  @IsString()
-  description?: string | null;
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => NullableLocalizedInputDto)
+  description: NullableLocalizedInputDto;
 
   @IsOptional()
   @IsInt()
