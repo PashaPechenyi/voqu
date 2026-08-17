@@ -9,21 +9,21 @@ export const UpdateLessonHeaderSection = ({ lessonDetails }: UpdateLessonHeaderS
   return (
     <Box sx={sxStyles.root}>
       <EditableField
-        defaultValue="title"
+        placeholder="title"
         onSave={(value) => {
           console.log(value, 'onsave');
         }}
         slotProps={{ typography: { mr: 2, variant: 'h3', color: 'adminPrimary' } }}
       />
       <EditableField
-        defaultValue="subtitle"
+        placeholder="subtitle"
         onSave={(value) => {
           console.log(value, 'onsave');
         }}
         slotProps={{ typography: { mr: 2, variant: 'h6', color: 'adminSecondary' } }}
       />
       <EditableField
-        defaultValue="description"
+        placeholder="description"
         onSave={(value) => {
           console.log(value, 'onsave');
         }}

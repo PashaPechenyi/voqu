@@ -11,16 +11,21 @@ type WordItemProps = {
 };
 export const WordItem = ({ word, setWordlist }: WordItemProps) => {
   const [isEdit, setIsEdit] = useState(false);
+
   return (
     <Box sx={sxStyles.toCenter} flexDirection="column">
       <Box sx={sxStyles.wordItem}>
         <Typography>{word.lemma}</Typography>
-        <Typography>{word.definition.translation}</Typography>
+        <Typography>{word.definition.value}</Typography>
         <Box>
           <IconButton onClick={() => setIsEdit((prev) => !prev)}>
             <EditIcon />
           </IconButton>
-          <IconButton>
+          <IconButton
+            onClick={() => {
+              console.log(word, 'word');
+            }}
+          >
             <DeleteIcon />
           </IconButton>
         </Box>

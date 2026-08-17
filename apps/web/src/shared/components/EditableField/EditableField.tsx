@@ -8,19 +8,21 @@ type EditableFieldProps = {
   slotProps: {
     typography?: TypographyProps;
   };
-  defaultValue: string;
+  placeholder?: string;
   onSave: (value: string) => void;
   required?: boolean;
+  defaultValue?: string;
 };
 
 export const EditableField = ({
-  defaultValue,
+  placeholder,
   slotProps,
   onSave,
   required,
+  defaultValue,
 }: EditableFieldProps) => {
-  const [isEdit, setIsEdit] = useState(true);
-  const [value, setValue] = useState('');
+  const [isEdit, setIsEdit] = useState(!defaultValue);
+  const [value, setValue] = useState(defaultValue || '');
   const handleSave = () => {
     console.log(value);
     onSave(value);
@@ -34,7 +36,7 @@ export const EditableField = ({
           <TextField
             variant="standard"
             sx={{ mr: 2, width: '30%' }}
-            placeholder={defaultValue}
+            placeholder={placeholder}
             onChange={(e) => {
               setValue(e.target.value);
             }}

@@ -2,8 +2,8 @@ import { LocalizedValue } from './lessonDetails.type';
 import { WordExample } from './wordExample.type';
 
 export type Word = {
-  id: string;
-  order: number;
+  id?: string;
+  order?: number;
   lemma: string;
   entryType: EntryType;
   partOfSpeech: PartsOfSpeechOptions;
@@ -14,7 +14,7 @@ export type Word = {
   definition: LocalizedValue;
   note: LocalizedValue;
   examples: WordExample[];
-  collocations: [];
+  collocations?: [];
 };
 export enum PartsOfSpeechOptions {
   Noun = 'noun',

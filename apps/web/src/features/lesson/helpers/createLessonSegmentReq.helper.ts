@@ -14,9 +14,7 @@ export type LessonSegmentReqBody = {
 export const createLessonSegmentReq = (
   lessonId: LessonListItem['id'],
   body: LessonSegmentReqBody,
+  lang: string,
 ) => {
-  return httpClient.post<CreateLessonSegmentDTO>(
-    `/lesson/segment/${lessonId}`,
-    JSON.stringify(body),
-  );
+  return httpClient.post<CreateLessonSegmentDTO>(`/lesson/segment/${lessonId}?lang=${lang}`, body);
 };

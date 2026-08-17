@@ -7,28 +7,29 @@ import { AddWordSection } from './AddWord.section';
 import { WordItem } from './WordItem';
 import { LessonSegmentReqBody } from '@/features/lesson/helpers/createLessonSegmentReq.helper';
 import { WordlistSegment } from '@/features/lesson/types/wordlistSegment.type';
+import { convertLessonSegmentDetailsToApiFormat } from '@/features/lesson/helpers/convertLessonSegmentDetailsToApiFormat';
 
 type VocabularyFormSectionProps = {
   segment?: WordlistSegment;
-  setSegments: React.Dispatch<React.SetStateAction<WordlistSegment[]>>;
   onSave: (body: LessonSegmentReqBody) => void;
+  isLoading: boolean;
 };
-export const VocabularyFormSection = ({
+
+export const CreateWordlistSegment = ({
   onSave,
   segment,
-  setSegments,
+  isLoading,
 }: VocabularyFormSectionProps) => {
   const [wordlist, setWordlist] = useState<Word[]>(segment?.wordlist.entries || []);
   const [segmentData, setSegmentData] = useState({
     title: '',
     description: '',
   });
-
   return (
     <Box sx={sxStyles.root}>
       <Box>
         <EditableField
-          defaultValue="wordlist topic"
+          placeholder="wordlist topic"
           onSave={(value) => {
             setSegmentData((prev) => ({ ...prev, title: value }));
           }}
@@ -36,7 +37,7 @@ export const VocabularyFormSection = ({
           required
         />
         <EditableField
-          defaultValue="wordlist description"
+          placeholder="wordlist description"
           onSave={(value) => {
             setSegmentData((prev) => ({ ...prev, description: value }));
           }}
@@ -46,8 +47,8 @@ export const VocabularyFormSection = ({
 
       <Divider variant="middle" />
 
-      {wordlist.map((word) => (
-        <WordItem word={word} setWordlist={setWordlist} />
+      {wordlist.map((word, index) => (
+        <WordItem key={index} word={word} setWordlist={setWordlist} />
       ))}
       <Box sx={sxStyles.toCenter}>
         <AddWordSection setWordlist={setWordlist} />
@@ -55,24 +56,9 @@ export const VocabularyFormSection = ({
 
       <Button
         type="submit"
+        loading={isLoading}
         onClick={() => {
-          onSave({
-            SegmentKindKey: 'wordlist',
-            title: segmentData.title,
-            description: segmentData.description,
-            content: {},
-          });
-          // setSegments((prev) => {
-          //   return [
-          //     ...prev,
-          //     {
-          //       id: 'segm12',
-          //       title: segmentData.title,
-          //       description: segmentData.description,
-          //       wordsList: wordlist,
-          //     },
-          //   ];
-          // });
+          onSave(convertLessonSegmentDetailsToApiFormat(wordlist, segmentData));
           console.log(segmentData, 'drover');
         }}
       >

@@ -1,7 +1,7 @@
 import { LocalizedValue } from './lessonDetails.type';
 
 export type WordExample = {
-  id: string;
+  id?: string;
   order: number;
   text: LocalizedValue;
 };

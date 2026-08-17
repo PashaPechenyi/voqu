@@ -2,19 +2,22 @@ import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.h
 import { Box, Button, Drawer, Menu, MenuItem, Typography } from '@mui/material';
 import { MouseEvent, useId, useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
-import { VocabularyFormSection } from './VocabularyForm.section';
 import { useMutation } from '@/shared/api';
 import {
   createLessonSegmentReq,
   LessonSegmentReqBody,
 } from '@/features/lesson/helpers/createLessonSegmentReq.helper';
 import { LessonListItem } from '@/features/lesson/types/lessonListItem.type';
+import { MutateResult } from '@/shared/api/useMutation';
+import { GetLessonDetailsDTO } from '@/features/lesson/helpers/getLessonDetailsReq.helper';
+import { CreateWordlistSegment } from './CreateWordlistSegment.section';
 
 type AddSegmentProps = {
-  setSegments: React.Dispatch<React.SetStateAction<Segment[]>>;
+  reloadLessonDetails: (lessonId: string) => Promise<MutateResult<GetLessonDetailsDTO, unknown>>;
   lessonId: LessonListItem['id'];
+  lang: string;
 };
-export const AddSegment = ({ lessonId, setSegments }: AddSegmentProps) => {
+export const AddSegment = ({ lang, lessonId, reloadLessonDetails }: AddSegmentProps) => {
   const [openDrawer, setOpenDrawer] = useState(false);
   const id = useId();
   const buttonId = `${id}-button`;
@@ -26,6 +29,8 @@ export const AddSegment = ({ lessonId, setSegments }: AddSegmentProps) => {
     mutationFn: createLessonSegmentReq,
     onSuccess(response) {
       console.log(response, 'create');
+      reloadLessonDetails(lessonId);
+      setOpenDrawer(false);
     },
   });
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -35,9 +40,9 @@ export const AddSegment = ({ lessonId, setSegments }: AddSegmentProps) => {
     setAnchorEl(null);
   };
   const onSave = (body: LessonSegmentReqBody) => {
-    createLessonSegment(lessonId, body);
+    createLessonSegment(lessonId, body, lang);
   };
-  if (isLoading) return <>Segment Loading...</>;
+
   return (
     <Box sx={sxStyles.root}>
       {openDrawer && (
@@ -45,7 +50,7 @@ export const AddSegment = ({ lessonId, setSegments }: AddSegmentProps) => {
           <Typography variant="h3" color={'primary'} textAlign={'center'} m="2">
             Vocabulary segment
           </Typography>
-          <VocabularyFormSection onSave={onSave} setSegments={setSegments} />
+          <CreateWordlistSegment isLoading={isLoading} onSave={onSave} />
         </Drawer>
       )}
       <Box sx={sxStyles.addContainer}>
@@ -74,15 +79,6 @@ export const AddSegment = ({ lessonId, setSegments }: AddSegmentProps) => {
         >
           <MenuItem
             onClick={() => {
-              // setSegments((prev) => [
-              //   ...prev,
-              //   {
-              //     id: 'segment' + id,
-              //     title: '',
-              //     description: '',
-              //     wordsList: [],
-              //   },
-              // ]);
               setOpenDrawer(true);
               handleClose();
             }}

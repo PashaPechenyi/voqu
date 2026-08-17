@@ -37,10 +37,14 @@ export const UpdateLessonPage = () => {
       <GoBackSection url={ADMIN_COURSES_URL} />
       <UpdateLessonHeaderSection lessonDetails={lessonDetails} />
       <SectionDivider />
-      {lessonDetails?.segments.map((segment) => (
-        <WordlistSegmentItem key={segment.id} segment={segment} />
+      {lessonDetails?.segments.map((segment, index) => (
+        <WordlistSegmentItem key={segment.id} segmentOrder={index} segment={segment} />
       ))}
-      <AddSegment lessonId={lessonEx.id} setSegments={() => {}} />
+      <AddSegment
+        lang={lessonDetails.translationLanguage}
+        lessonId={lessonEx.id}
+        reloadLessonDetails={getLessonDetails}
+      />
     </Box>
   );
 };
