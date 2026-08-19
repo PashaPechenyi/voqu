@@ -2,7 +2,6 @@ import { FC, useState } from 'react';
 import { FORM_VALIDATION_ERRORS } from '@/shared/constants/formValidationErrors.const';
 import { capitalizeWords } from '@/shared/helpers/string.helper';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
-import BackspaceIcon from '@mui/icons-material/Backspace';
 import {
   Box,
   Grid,
@@ -55,6 +54,7 @@ const AddWordForm: FC<AddWordFormProps> = ({ onSubmit }) => {
     control,
     name: 'examples',
   });
+
   const [autoCompleteValue, setAutoCompleteValue] = useState<WordType | null>(null);
   return (
     <Box>
@@ -88,6 +88,7 @@ const AddWordForm: FC<AddWordFormProps> = ({ onSubmit }) => {
             render={({ field }) => (
               <FormControl>
                 <RadioGroup row {...field}>
+                  {/* TODO: it should be mapped array */}
                   <FormControlLabel value="word" control={<Radio />} label="Word" />
                   <FormControlLabel value="phrase" control={<Radio />} label="Phrase" />
                 </RadioGroup>
@@ -215,8 +216,6 @@ const AddWordForm: FC<AddWordFormProps> = ({ onSubmit }) => {
                       size="small"
                       variant="outlined"
                       fullWidth
-                      //error={!!errors.examples}
-                      // helperText={errors.thirdTense?.message}
                     />
                   )}
                   name={`examples.${index}.text.value`}

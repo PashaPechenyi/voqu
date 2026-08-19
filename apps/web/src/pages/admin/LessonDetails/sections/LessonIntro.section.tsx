@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { EditableField } from '@/shared/components/EditableField/EditableField';
 import { Box } from '@mui/material';
-import { LessonDetails, LessonDetailsStructure } from '@/features/lessons/types/lessonDetails.type';
+import { LessonDetails } from '@/features/lessons/types/lessonDetails.type';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 import { useUpdateLesson } from '@/features/lessons/hooks/useUpdateLesson';
 import { LessonFormValues } from '@/features/lessons/types/lessonForm.type';
@@ -14,26 +14,28 @@ const convertToLessonFormValues = (lessonDetails: LessonDetails): LessonFormValu
     title: lessonDetails.title.value,
     subtitle: lessonDetails.subtitle.value,
     description: lessonDetails.description.value,
-    status: null,
+    status: lessonDetails.status ?? null,
   };
 };
 
+// Reviewed
 const LessonIntro: FC<LessonIntroProps> = ({ lessonDetails }) => {
   const { updateLesson } = useUpdateLesson();
+
+  const handleUpdateLesson = (data: Partial<LessonDetails>) => {
+    const body = convertToLessonFormValues({
+      ...lessonDetails,
+      ...data,
+    });
+    updateLesson(lessonDetails.id, body);
+  };
+
   return (
     <Box sx={sxStyles.root}>
       <EditableField
         defaultValue={lessonDetails.title.value}
-        // TODO: mutating the prop directly won't trigger a re-render; lift state up and pass an updater callback.
         onSave={(newValue) => {
-          // lessonDetails.title.value = newValue;
-          updateLesson(
-            lessonDetails.id,
-            convertToLessonFormValues({
-              ...lessonDetails,
-              title: { value: newValue, translation: '' },
-            }),
-          );
+          handleUpdateLesson({ title: { value: newValue, translation: '' } });
         }}
         slotProps={{
           typography: {
@@ -44,16 +46,8 @@ const LessonIntro: FC<LessonIntroProps> = ({ lessonDetails }) => {
       />
       <EditableField
         defaultValue={lessonDetails.subtitle.value}
-        // TODO: mutating the prop directly won't trigger a re-render; lift state up and pass an updater callback.
         onSave={(newValue) => {
-          // lessonDetails.subtitle.value = newValue;
-          updateLesson(
-            lessonDetails.id,
-            convertToLessonFormValues({
-              ...lessonDetails,
-              title: { value: newValue, translation: '' },
-            }),
-          );
+          handleUpdateLesson({ subtitle: { value: newValue, translation: '' } });
         }}
         slotProps={{
           typography: {
@@ -64,9 +58,8 @@ const LessonIntro: FC<LessonIntroProps> = ({ lessonDetails }) => {
       />
       <EditableField
         defaultValue={lessonDetails.description.value}
-        // TODO: mutating the prop directly won't trigger a re-render; lift state up and pass an updater callback.
         onSave={(newValue) => {
-          lessonDetails.description.value = newValue;
+          handleUpdateLesson({ description: { value: newValue, translation: '' } });
         }}
         slotProps={{
           typography: {

@@ -4,45 +4,43 @@ import { useToggle } from '@/shared/hooks/useToggle';
 import EditWordForm from './EditWordForm';
 import { Word } from '../types/word.type';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
-import { CreateLessonSegmentReqBody } from '../types/createLessonSegmentReqBody.type';
 import { Segment } from '../types/lessonDetails.type';
 
 type WordItemProps = {
   word: Word;
   wordIndex: number;
-  handleEdit: (body: Segment) => void;
+  onUpdate: (body: Partial<Segment>) => void;
   segment: Segment;
 };
 
-const WordItem: FC<WordItemProps> = ({ word, handleEdit, segment }) => {
+const WordItem: FC<WordItemProps> = ({ word, onUpdate, segment }) => {
+  // TODO: Check in the browser does edit section close
   const { isOpen: isOpenEdit, open: openEdit, close: closeEdit } = useToggle();
   return (
-    <>
-      <Box sx={sxStyles.root}>
-        <Box
-          sx={{
-            width: 1,
-            display: 'flex',
-            justifyContent: 'space-around',
-            alignItems: 'center',
-          }}
-        >
-          <Typography>{word.definition.value}</Typography>
-          <Typography>{word.definition.translation}</Typography>
-          <Box sx={sxStyles.actions}>
-            <Button variant="contained" onClick={openEdit}>
-              edit
-            </Button>
-            <Button variant="outlined">Delete</Button>
-          </Box>
+    <Box sx={sxStyles.root}>
+      <Box
+        sx={{
+          width: 1,
+          display: 'flex',
+          justifyContent: 'space-around',
+          alignItems: 'center',
+        }}
+      >
+        <Typography>{word.definition.value}</Typography>
+        <Typography>{word.definition.translation}</Typography>
+        <Box sx={sxStyles.actions}>
+          <Button variant="contained" onClick={openEdit}>
+            edit
+          </Button>
+          <Button variant="outlined">Delete</Button>
         </Box>
-        {isOpenEdit ? (
-          <EditWordForm segment={segment} handleEdit={handleEdit} word={word} close={closeEdit} />
-        ) : (
-          ''
-        )}
       </Box>
-    </>
+      {isOpenEdit ? (
+        <EditWordForm wordlist={segment.wordlist} onUpdate={onUpdate} word={word} />
+      ) : (
+        ''
+      )}
+    </Box>
   );
 };
 

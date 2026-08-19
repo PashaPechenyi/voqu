@@ -19,17 +19,13 @@ import { WORD_TYPE_LIST } from '../constants/lessonWordTypeList.const';
 import { Word } from '../types/word.type';
 import { WordFormValues } from '../types/wordForm.type';
 import { FC, useState } from 'react';
-import { useUpdateLessonDetails } from '../hooks/useUpdateLessonDetails';
-import { CreateLessonReqBody } from '../types/createLessonReqBody.type';
-import { CreateLessonSegmentReqBody } from '../types/createLessonSegmentReqBody.type';
-import { Segment } from '../types/lessonDetails.type';
+import { Segment, Wordlist } from '../types/lessonDetails.type';
 import { convertFormWord } from './CreateVocabularySectionDrawer';
 
 type EditWordFormProps = {
   word: Word;
-  close: () => void;
-  handleEdit: (body: Segment) => void;
-  segment: Segment;
+  onUpdate: (body: Partial<Segment>) => void;
+  wordlist: Wordlist;
 };
 
 const getDefaultValues = (word: Word): WordFormValues => ({
@@ -38,16 +34,13 @@ const getDefaultValues = (word: Word): WordFormValues => ({
   transcription: word.transcription,
   type: word.entryType,
   partOfSpeech: word.partOfSpeech,
-  secondTense: word?.v2!,
-  thirdTense: word?.v3!,
+  secondTense: word?.v2 ?? '',
+  thirdTense: word?.v3 ?? '',
   examples: word.examples,
 });
-const EditWordForm: FC<EditWordFormProps> = ({
-  word,
-  close,
-  handleEdit,
-  segment,
-}: EditWordFormProps) => {
+
+// TODO: create a single component for WordForm - it should be used for Both create  and update word.
+const EditWordForm: FC<EditWordFormProps> = ({ word, onUpdate, wordlist }: EditWordFormProps) => {
   const { control, handleSubmit } = useForm<WordFormValues>({
     defaultValues: getDefaultValues(word),
   });
@@ -247,11 +240,10 @@ const EditWordForm: FC<EditWordFormProps> = ({
       <Button
         sx={sxStyles.submitButton}
         onClick={handleSubmit((formData) => {
-          handleEdit({
-            ...segment,
+          onUpdate({
             wordlist: {
-              ...segment.wordlist,
-              entries: segment.wordlist.entries.map((el) =>
+              ...wordlist,
+              entries: wordlist.entries.map((el) =>
                 el.definition.value === word.definition.value ? convertFormWord(formData) : el,
               ),
             },

@@ -18,17 +18,20 @@ type LessonSectionsProps = {
   lessonDetails: LessonDetails;
   getLessonDetails: (lessonId: string) => void;
 };
-export const convertWordToReq = (word: Word): WordDTO => {
+
+// TODO: move functions to their separate files
+export const convertWordToReqFormat = (word: Word): WordDTO => {
   return {
     entryType: word.entryType!,
-    examples: word.examples.map((el) => {
-      return {
-        order: el.order,
-        text: { value: el.text.value, translation: el.text.translation },
-      };
-    }),
+    // TODO: in terms of the fact that example entry possibly could not have order -> lets always use inder for order
+    examples: word.examples.map((el) => ({
+      order: el.order,
+      // TODO: use el.text as a value
+      text: { value: el.text.value, translation: el.text.translation },
+    })),
+    // TODO: use word.definition as a value
     lemma: { value: word.definition.value, translation: word.definition.translation },
-    partOfSpeech: word.partOfSpeech!,
+    partOfSpeech: word.partOfSpeech,
     transcription: word.transcription,
     v2: word.v2,
     v3: word.v3,
@@ -46,7 +49,7 @@ export function convertToSegment(lessonDetails: Segment): any {
         value: lessonDetails.wordlist.description.value,
         translation: lessonDetails.wordlist.description.translation,
       },
-      entries: lessonDetails.wordlist.entries.map(convertWordToReq),
+      entries: lessonDetails.wordlist.entries.map(convertWordToReqFormat),
 
       title: {
         value: lessonDetails.title.value,
@@ -66,7 +69,7 @@ export const convertToSegmentForUpdate = (segment: Segment): UpdateLessonSegment
         value: segment.wordlist.description.value,
         translation: segment.wordlist.description.translation,
       },
-      entries: segment.wordlist.entries.map(convertWordToReq),
+      entries: segment.wordlist.entries.map(convertWordToReqFormat),
 
       title: {
         value: segment.title.value,
@@ -76,7 +79,6 @@ export const convertToSegmentForUpdate = (segment: Segment): UpdateLessonSegment
   };
 };
 function LessonSections({ lessonDetails, getLessonDetails }: LessonSectionsProps) {
-  const [option, setOption] = useState<'vocabulary' | 'grammar' | 'listening' | null>(null);
   const [open, setOpen] = useState(false);
   const { updateLessonDetails } = useUpdateLessonDetails({
     onSuccess: () => {
