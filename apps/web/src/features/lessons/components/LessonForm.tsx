@@ -3,15 +3,15 @@ import { Autocomplete, Grid, TextField } from '@mui/material';
 import { Control, Controller } from 'react-hook-form';
 import { FORM_VALIDATION_ERRORS } from '@/shared/constants/formValidationErrors.const';
 import { capitalizeWords } from '@/shared/helpers/string.helper';
-import { LESSON_TYPE_LIST } from '../constants/lessonTypeList.const';
 import { LessonFormValues } from '../types/lessonForm.type';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
+import { LESSON_STATUSES_LIST } from '../constants/lessonStatusesList.const';
 
-type LessonModalFormProps = {
+type LessonFormProps = {
   control: Control<LessonFormValues>;
 };
 
-const LessonModalForm: FC<LessonModalFormProps> = ({ control }) => {
+const LessonForm: FC<LessonFormProps> = ({ control }) => {
   return (
     <Grid container spacing={2}>
       <Grid size={12}>
@@ -32,20 +32,63 @@ const LessonModalForm: FC<LessonModalFormProps> = ({ control }) => {
           )}
         />
       </Grid>
-      <Grid size={6}>
+      <Grid size={12}>
         <Controller
           control={control}
-          name="type"
+          name="subtitle"
+          rules={{ required: { value: true, message: FORM_VALIDATION_ERRORS.requiredField } }}
+          render={({ field, formState: { errors } }) => (
+            <TextField
+              label="Lesson subtitle"
+              size="small"
+              variant="outlined"
+              sx={sxStyles.field}
+              error={!!errors.subtitle}
+              helperText={errors.subtitle?.message}
+              {...field}
+            />
+          )}
+        />
+      </Grid>
+      <Grid size={12}>
+        <Controller
+          control={control}
+          name="description"
+          rules={{ required: { value: true, message: FORM_VALIDATION_ERRORS.requiredField } }}
+          render={({ field, formState: { errors } }) => (
+            <TextField
+              label="Lesson description"
+              size="small"
+              variant="outlined"
+              sx={sxStyles.field}
+              error={!!errors.description}
+              helperText={errors.description?.message}
+              {...field}
+            />
+          )}
+        />
+      </Grid>
+      <Grid size={12}>
+        <Controller
+          control={control}
+          name="status"
           rules={{ required: { value: true, message: FORM_VALIDATION_ERRORS.requiredField } }}
           render={({ field: { onChange, value }, formState: { errors } }) => (
             <Autocomplete
-              options={LESSON_TYPE_LIST}
+              options={LESSON_STATUSES_LIST}
               sx={sxStyles.fullWidth}
               size="small"
               onChange={(_, newValue) => onChange(newValue)}
               value={value}
               getOptionLabel={(option) => capitalizeWords(option)}
-              renderInput={(params) => <TextField {...params} label="Type" error={!!errors.type} />}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Status"
+                  error={!!errors.status}
+                  helperText={errors.status?.message}
+                />
+              )}
             />
           )}
         />
@@ -59,4 +102,4 @@ const sxStyles = createSxStylesList({
   fullWidth: { width: 1 },
 });
 
-export default LessonModalForm;
+export default LessonForm;

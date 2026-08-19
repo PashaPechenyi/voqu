@@ -1,6 +1,8 @@
-import { LessonType } from '../enums/lessonType.enum';
+import { LessonStatus } from '../enums/lessonStatus.enum';
 
 export type LessonFormValues = {
   title: string;
-  type: LessonType | null;
+  subtitle: string;
+  description: string;
+  status: LessonStatus | null;
 };

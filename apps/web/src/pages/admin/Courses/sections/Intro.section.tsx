@@ -5,10 +5,11 @@ import SearchControls from '@/features/search/components/SearchControls';
 import CourseAddModal from '@/features/courses/components/CourseAddModal';
 import { CourseFormValues } from '@/features/courses/types/courseForm.type';
 import { useToggle } from '@/shared/hooks/useToggle';
-import { useCreateCourse } from '@/features/courses/hooks/useCreateCourse';
 import { courseFormToReqBody } from '@/features/courses/helpers/courseFormToReqBody.helper';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 import { CourseStatusFilterValue } from '@/features/search/constants/courseStatusFilterOptions.const';
+import { useMutation } from '@/shared/api';
+import { createCourseReq } from '@/features/courses/helpers/createCourseReq.helper';
 
 type IntroSectionProps = {
   onSearchChange: (value: string) => void;
@@ -28,7 +29,8 @@ const IntroSection: FC<IntroSectionProps> = ({
     open: openAddCourseModal,
     close: closeAddCourseModal,
   } = useToggle();
-  const { createCourse } = useCreateCourse({
+  const { mutate: createCourse } = useMutation({
+    mutationFn: createCourseReq,
     onSuccess: () => {
       closeAddCourseModal();
       onCourseCreated?.();

@@ -22,16 +22,15 @@ const DEFAULT_VALUES: CourseFormValues = {
   name: '',
   level: null,
   status: null,
+  description: '',
 };
 
 const CourseAddModal: FC<CourseAddModalProps> = ({ isOpen, onClose, onSubmit }) => {
   const { fetchLevels, levelsList } = useLevelsList();
-  const { handleSubmit, control } = useForm<CourseFormValues>({
+  const { handleSubmit, control, reset } = useForm<CourseFormValues>({
     defaultValues: DEFAULT_VALUES,
   });
 
-  // TODO: fetch once on mount; fetchLevels' identity depends on onSuccess/onError,
-  // so listing it as a dep would refire the request whenever those callbacks change.
   useEffect(() => {
     fetchLevels();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -49,10 +48,22 @@ const CourseAddModal: FC<CourseAddModalProps> = ({ isOpen, onClose, onSubmit }) 
         <CourseModalForm control={control} levelsList={levelsList} />
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} sx={sxStyles.cancelButton}>
+        <Button
+          onClick={() => {
+            onClose();
+            reset();
+          }}
+          sx={sxStyles.cancelButton}
+        >
           Cancel
         </Button>
-        <Button onClick={handleSubmit(onSubmit)} sx={sxStyles.submitButton}>
+        <Button
+          onClick={handleSubmit((values) => {
+            onSubmit(values);
+            reset();
+          })}
+          sx={sxStyles.submitButton}
+        >
           Add course
         </Button>
       </DialogActions>

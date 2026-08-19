@@ -22,8 +22,9 @@ type CourseEditModalProps = {
 
 const getDefaultValues = (course?: Course): CourseFormValues => ({
   name: course?.name ?? '',
-  level: course?.level ?? null,
+  level: course?.Level ?? null,
   status: course?.status ?? null,
+  description: course?.description ?? '',
 });
 
 const CourseEditModal: FC<CourseEditModalProps> = ({ isOpen, onClose, course, onEdit }) => {
@@ -33,8 +34,6 @@ const CourseEditModal: FC<CourseEditModalProps> = ({ isOpen, onClose, course, on
     defaultValues: getDefaultValues(course),
   });
 
-  // TODO: fetch once on mount; fetchLevels' identity depends on onSuccess/onError,
-  // so listing it as a dep would refire the request whenever those callbacks change.
   useEffect(() => {
     fetchLevels();
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -3,13 +3,20 @@ import { Box, Button, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import CourseSummaryCard from '@/features/courses/components/CourseSummaryCard';
 import LessonAddModal from '@/features/lessons/components/LessonAddModal';
-import { Lesson } from '@/features/lessons/types/lesson.type';
+import { LessonListItem } from '@/features/lessons/types/lesson.type';
 import { useToggle } from '@/shared/hooks/useToggle';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
+import { convertLessonFormToApiFormat } from '@/features/lessons/helpers/convertLessonFormToApiFormat.helper';
+import { LessonFormValues } from '@/features/lessons/types/lessonForm.type';
+import { LessonStatus } from '@/features/lessons/enums/lessonStatus.enum';
+import { createLessonReq } from '@/features/lessons/helpers/createLessonReq.helper';
+import { useMutation } from '@/shared/api';
 
 type CourseSummarySectionProps = {
   title: string;
-  lessons?: Lesson[];
+  lessons?: LessonListItem[];
+  courseId: string;
+  reloadLessons: () => void;
 };
 
 type CourseTotal = {
@@ -17,22 +24,39 @@ type CourseTotal = {
   label: string;
 };
 
-const buildTotals = (lessons: Lesson[]): CourseTotal[] => {
-  const totalTime = lessons.reduce((acc, lesson) => acc + lesson.duration, 0);
-  const lockedLessons = lessons.filter((lesson) => lesson.isLocked);
+const buildTotals = (lessons: LessonListItem[]): CourseTotal[] => {
+  const lessonDuration = lessons.reduce((acc, lesson) => {
+    return lesson.duration != null ? (acc += lesson.duration) : 0;
+  }, 0);
+  const lockedLessons = lessons.filter((lesson) => {
+    return lesson.status === LessonStatus.Draft;
+  });
   return [
     { value: lessons.length, label: 'Total Lessons' },
-    { value: totalTime, label: 'Total Duration' },
+    { value: lessonDuration, label: 'Total Duration' },
     { value: lockedLessons.length, label: 'Locked Lessons' },
   ];
 };
 
-const CourseSummarySection: FC<CourseSummarySectionProps> = ({ title, lessons = [] }) => {
+const CourseSummarySection: FC<CourseSummarySectionProps> = ({
+  courseId,
+  reloadLessons,
+  title,
+  lessons = [],
+}) => {
   const {
     isOpen: isAddLessonModalOpen,
     open: openAddLessonModal,
     close: closeAddLessonModal,
   } = useToggle();
+
+  const { mutate: createLesson } = useMutation({
+    mutationFn: createLessonReq,
+    onSuccess: () => {
+      reloadLessons();
+      closeAddLessonModal();
+    },
+  });
 
   const totals = buildTotals(lessons);
 
@@ -53,7 +77,13 @@ const CourseSummarySection: FC<CourseSummarySectionProps> = ({ title, lessons = 
             Add Lesson
           </Typography>
         </Button>
-        <LessonAddModal onClose={closeAddLessonModal} isOpen={isAddLessonModalOpen} />
+        <LessonAddModal
+          onClose={closeAddLessonModal}
+          onSubmit={(values: LessonFormValues) =>
+            createLesson(courseId, convertLessonFormToApiFormat(values))
+          }
+          isOpen={isAddLessonModalOpen}
+        />
       </Box>
 
       <Box sx={sxStyles.totalsRow}>

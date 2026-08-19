@@ -8,7 +8,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { Typography } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { LessonFormValues } from '../types/lessonForm.type';
-import LessonModalForm from './LessonModalForm';
+import LessonForm from './LessonForm';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 
 type LessonAddModalProps = {
@@ -19,11 +19,13 @@ type LessonAddModalProps = {
 
 const DEFAULT_VALUES: LessonFormValues = {
   title: '',
-  type: null,
+  subtitle: '',
+  description: '',
+  status: null,
 };
 
 const LessonAddModal: FC<LessonAddModalProps> = ({ isOpen, onClose, onSubmit }) => {
-  const { handleSubmit, control } = useForm<LessonFormValues>({
+  const { handleSubmit, control, reset } = useForm<LessonFormValues>({
     defaultValues: DEFAULT_VALUES,
   });
 
@@ -33,17 +35,18 @@ const LessonAddModal: FC<LessonAddModalProps> = ({ isOpen, onClose, onSubmit }) 
         <Typography variant="h4">Add Lesson</Typography>
       </DialogTitle>
       <DialogContent>
-        <DialogContentText>
-          Create a new lesson. You can change it after adding.
-        </DialogContentText>
-        <LessonModalForm control={control} />
+        <DialogContentText>Create a new lesson. You can change it after adding.</DialogContentText>
+        <LessonForm control={control} />
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} sx={sxStyles.cancelButton}>
           Cancel
         </Button>
         <Button
-          onClick={onSubmit ? handleSubmit(onSubmit) : undefined}
+          onClick={handleSubmit((values) => {
+            onSubmit?.(values);
+            reset();
+          })}
           sx={sxStyles.submitButton}
         >
           Add lesson

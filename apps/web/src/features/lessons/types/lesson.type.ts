@@ -1,11 +1,14 @@
-import { SvgIconComponent } from '@mui/icons-material';
-import { LessonType } from '../enums/lessonType.enum';
+import { LessonStatus } from '../enums/lessonStatus.enum';
 
-export type Lesson = {
+export type LessonListItem = {
   id: string;
+  CourseId: string;
   title: string;
-  duration: number;
-  type: LessonType;
-  isLocked: boolean;
-  icon: SvgIconComponent;
+  subtitle: string;
+  description: string;
+  order: number;
+  status: LessonStatus;
+  duration: number | null;
+  createdAt: string;
+  updatedAt: string;
 };

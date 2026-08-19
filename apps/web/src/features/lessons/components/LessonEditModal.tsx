@@ -7,21 +7,23 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Typography } from '@mui/material';
 import { useForm } from 'react-hook-form';
-import { Lesson } from '../types/lesson.type';
+import { LessonListItem } from '../types/lesson.type';
 import { LessonFormValues } from '../types/lessonForm.type';
-import LessonModalForm from './LessonModalForm';
+import LessonForm from './LessonForm';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 
 type LessonEditModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  lesson: Lesson;
+  lesson: LessonListItem;
   onSubmit: (values: LessonFormValues) => void;
 };
 
-const getDefaultValues = (lesson: Lesson): LessonFormValues => ({
+const getDefaultValues = (lesson: LessonListItem): LessonFormValues => ({
   title: lesson.title,
-  type: lesson.type,
+  subtitle: lesson.subtitle,
+  description: lesson.description,
+  status: lesson.status,
 });
 
 const LessonEditModal: FC<LessonEditModalProps> = ({ isOpen, onClose, lesson, onSubmit }) => {
@@ -36,7 +38,7 @@ const LessonEditModal: FC<LessonEditModalProps> = ({ isOpen, onClose, lesson, on
       </DialogTitle>
       <DialogContent>
         <DialogContentText>Edit a lesson</DialogContentText>
-        <LessonModalForm control={control} />
+        <LessonForm control={control} />
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} sx={sxStyles.cancelButton}>
