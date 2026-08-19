@@ -9,8 +9,7 @@ type UseUpdateLessonOptions = {
   onError?: (error: Error) => void;
 };
 
-// TODO: onError is not used
-export const useUpdateLesson = ({ onSuccess, onError }: UseUpdateLessonOptions = {}) => {
+export const useUpdateLesson = ({ onSuccess }: UseUpdateLessonOptions = {}) => {
   const {
     isLoading,
     error,

@@ -4,20 +4,20 @@ import { Word } from './word.type';
 export type Segment = {
   id: string;
   lessonId: string;
-  segmentKindId: string;
-  segmentContentRowId: string;
+  segmentKindId?: string;
+  segmentContentRowId?: string;
   title: Translation;
   description: Translation;
   order: number;
-  createdAt: string;
-  updatedAt: string;
-  wordsList: Wordlist[] | [];
+  createdAt?: string;
+  updatedAt?: string;
+  wordlist: Wordlist;
 };
 export type Wordlist = {
-  description: { value: 'Core words and phrases for making plans'; translation: null };
-  entries: Word[] | [];
-  id: '441f049c-cd8d-4d2a-8d21-db06f189e798';
-  title: { value: 'Plans & invitations'; translation: null };
+  description: { value: string; translation: string | null };
+  entries: Word[];
+  id: string;
+  title: { value: string; translation: string | null };
 };
 
 export type LessonDetailsStructure = {

@@ -4,14 +4,17 @@ import { useToggle } from '@/shared/hooks/useToggle';
 import EditWordForm from './EditWordForm';
 import { Word } from '../types/word.type';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
+import { CreateLessonSegmentReqBody } from '../types/createLessonSegmentReqBody.type';
+import { Segment } from '../types/lessonDetails.type';
 
-// RENAME: WordIndex (prop) -> wordIndex - props are camelCase
 type WordItemProps = {
   word: Word;
   wordIndex: number;
+  handleEdit: (body: Segment) => void;
+  segment: Segment;
 };
 
-const WordItem: FC<WordItemProps> = ({ word }) => {
+const WordItem: FC<WordItemProps> = ({ word, handleEdit, segment }) => {
   const { isOpen: isOpenEdit, open: openEdit, close: closeEdit } = useToggle();
   return (
     <>
@@ -33,7 +36,11 @@ const WordItem: FC<WordItemProps> = ({ word }) => {
             <Button variant="outlined">Delete</Button>
           </Box>
         </Box>
-        {isOpenEdit ? <EditWordForm word={word} close={closeEdit} /> : ''}
+        {isOpenEdit ? (
+          <EditWordForm segment={segment} handleEdit={handleEdit} word={word} close={closeEdit} />
+        ) : (
+          ''
+        )}
       </Box>
     </>
   );
@@ -46,6 +53,7 @@ const sxStyles = createSxStylesList({
     display: 'flex',
     justifyContent: 'space-around',
     border: '1px solid #71677D',
+    flexDirection: 'column',
     alignItems: 'center',
     borderRadius: 5,
   },

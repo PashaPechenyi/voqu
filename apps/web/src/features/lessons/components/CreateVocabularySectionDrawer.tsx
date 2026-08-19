@@ -6,26 +6,52 @@ import { EditableField } from '@/shared/components/EditableField/EditableField';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 import { Word } from '../types/word.type';
 import { Segment } from '../types/lessonDetails.type';
+import { creaLessonSegmentReq } from '../helpers/createLessonSegmentReq.helper';
+import { useMutation } from '@/shared/api';
+import { WordFormValues } from '../types/wordForm.type';
+import { useUpdateLessonDetails } from '../hooks/useUpdateLessonDetails';
+import { CreateLessonSegmentReqBody } from '../types/createLessonSegmentReqBody.type';
+import { convertWordToReq } from '@/pages/admin/LessonDetails/sections/LessonSections.section';
+import { UpdateLessonSegmentReqBody } from '../types/updateLessonSegmentReqBody.type';
+import { useToggle } from '@/shared/hooks/useToggle';
+import { useGetLessonDetails } from '../hooks/useGetLessonDetails';
 
 type CreateVocabularySectionModalProps = {
   segmentDetails: Segment;
-  setSegmentDetails?: React.Dispatch<React.SetStateAction<Segment>>;
+  onUpdate: (segment: Segment) => void;
+  lang?: string;
+};
+export const convertFormWord = (formWord: WordFormValues) => {
+  return {
+    entryType: formWord.type!,
+    definition: { value: formWord.word, translation: formWord.translation },
+    examples: formWord.examples,
+    lemma: formWord.word,
+    partOfSpeech: formWord.partOfSpeech!,
+    transcription: formWord.transcription,
+    v2: formWord.secondTense,
+    v3: formWord.thirdTense,
+  };
 };
 
 function CreateVocabularySectionDrawer({
   segmentDetails,
-  setSegmentDetails,
+  onUpdate,
+  lang,
 }: CreateVocabularySectionModalProps) {
+  console.log(segmentDetails.wordlist.entries, 'entries');
+  const { close: closeEdit } = useToggle();
+
   return (
     <Box sx={sxStyles.root}>
       <EditableField
         defaultValue={segmentDetails.title.value}
-        // TODO: mutating the prop directly won't trigger a re-render; lift state up and pass an updater callback.
         onSave={(newValue) => {
-          // segmentDetails.title = newValue;
-          setSegmentDetails
-            ? setSegmentDetails({ ...segmentDetails, title: { value: newValue, translation: '' } })
-            : '';
+          // setSegmentDetails
+          //   ? setSegmentDetails({ ...segmentDetails, title: { value: newValue, translation: '' } })
+          //   : '';
+          //handleEdit({ ...segmentDetails, title: { value: newValue, translation: '' } });
+          onUpdate({ ...segmentDetails, title: { value: newValue, translation: '' } });
         }}
         slotProps={{
           typography: {
@@ -41,13 +67,14 @@ function CreateVocabularySectionDrawer({
       <EditableField
         defaultValue={segmentDetails.description.value}
         onSave={(newValue) => {
-          //segmentDetails.description = newValue;
-          setSegmentDetails
-            ? setSegmentDetails({
-                ...segmentDetails,
-                description: { value: newValue, translation: '' },
-              })
-            : '';
+          // setSegmentDetails
+          //   ? setSegmentDetails({
+          //       ...segmentDetails,
+          //       description: { value: newValue, translation: '' },
+          //     })
+          //   : '';
+          //handleEdit({ ...segmentDetails, description: { value: newValue, translation: '' } });
+          onUpdate({ ...segmentDetails, description: { value: newValue, translation: '' } });
         }}
         slotProps={{
           typography: {
@@ -63,12 +90,38 @@ function CreateVocabularySectionDrawer({
         }}
       />
 
-      {/* {segmentDetails
-        ? segmentDetails.wordsList.entries.map((word: Word, index: number) => (
-            <WordItem word={word} wordIndex={index} key={word.id} />
+      {segmentDetails
+        ? segmentDetails.wordlist.entries.map((word: Word, index: number) => (
+            <WordItem
+              segment={segmentDetails}
+              handleEdit={onUpdate}
+              word={word}
+              wordIndex={index}
+              key={word.id}
+            />
           ))
-        : ''} */}
-      <AddWordForm />
+        : ''}
+      <AddWordForm
+        onSubmit={(newWord) => {
+          const updatedEntries = [...segmentDetails.wordlist.entries, convertFormWord(newWord)];
+
+          onUpdate?.({
+            ...segmentDetails,
+            wordlist: {
+              ...segmentDetails.wordlist,
+              entries: updatedEntries,
+            },
+          });
+          console.log(segmentDetails, 'segment details yjfgv');
+          // handleEdit({
+          //   ...segmentDetails,
+          //   wordlist: {
+          //     ...segmentDetails.wordlist,
+          //     entries: updatedEntries,
+          //   },
+          // });
+        }}
+      />
     </Box>
   );
 }

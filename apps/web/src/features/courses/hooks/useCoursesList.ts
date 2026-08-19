@@ -8,8 +8,7 @@ type UseCoursesListOptions = {
   onError?: (error: Error) => void;
 };
 
-// TODO: onSuccess and onError are not used in the hook
-export const useCoursesList = ({ onSuccess, onError }: UseCoursesListOptions = {}) => {
+export const useCoursesList = ({}: UseCoursesListOptions = {}) => {
   const [coursesList, setCoursesList] = useState<Course[]>([]);
 
   const {

@@ -8,8 +8,7 @@ type UseLevelsListOptions = {
   onError?: (error: Error) => void;
 };
 
-// TODO: onSuccess and onError are not used in the hook
-export const useLevelsList = ({ onSuccess, onError }: UseLevelsListOptions = {}) => {
+export const useLevelsList = ({}: UseLevelsListOptions = {}) => {
   const [levelsList, setLevelsList] = useState<Level[]>([]);
   const {
     isLoading,

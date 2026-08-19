@@ -3,20 +3,37 @@ import { EditableField } from '@/shared/components/EditableField/EditableField';
 import { Box } from '@mui/material';
 import { LessonDetails, LessonDetailsStructure } from '@/features/lessons/types/lessonDetails.type';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
+import { useUpdateLesson } from '@/features/lessons/hooks/useUpdateLesson';
+import { LessonFormValues } from '@/features/lessons/types/lessonForm.type';
 
-// RENAME: LessonDetails (prop) -> lessonDetails - props are camelCase
 type LessonIntroProps = {
   lessonDetails: LessonDetails;
 };
+const convertToLessonFormValues = (lessonDetails: LessonDetails): LessonFormValues => {
+  return {
+    title: lessonDetails.title.value,
+    subtitle: lessonDetails.subtitle.value,
+    description: lessonDetails.description.value,
+    status: null,
+  };
+};
 
 const LessonIntro: FC<LessonIntroProps> = ({ lessonDetails }) => {
+  const { updateLesson } = useUpdateLesson();
   return (
     <Box sx={sxStyles.root}>
       <EditableField
         defaultValue={lessonDetails.title.value}
         // TODO: mutating the prop directly won't trigger a re-render; lift state up and pass an updater callback.
         onSave={(newValue) => {
-          lessonDetails.title.value = newValue;
+          // lessonDetails.title.value = newValue;
+          updateLesson(
+            lessonDetails.id,
+            convertToLessonFormValues({
+              ...lessonDetails,
+              title: { value: newValue, translation: '' },
+            }),
+          );
         }}
         slotProps={{
           typography: {
@@ -29,7 +46,14 @@ const LessonIntro: FC<LessonIntroProps> = ({ lessonDetails }) => {
         defaultValue={lessonDetails.subtitle.value}
         // TODO: mutating the prop directly won't trigger a re-render; lift state up and pass an updater callback.
         onSave={(newValue) => {
-          lessonDetails.subtitle.value = newValue;
+          // lessonDetails.subtitle.value = newValue;
+          updateLesson(
+            lessonDetails.id,
+            convertToLessonFormValues({
+              ...lessonDetails,
+              title: { value: newValue, translation: '' },
+            }),
+          );
         }}
         slotProps={{
           typography: {

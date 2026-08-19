@@ -19,11 +19,17 @@ import { WORD_TYPE_LIST } from '../constants/lessonWordTypeList.const';
 import { Word } from '../types/word.type';
 import { WordFormValues } from '../types/wordForm.type';
 import { FC, useState } from 'react';
+import { useUpdateLessonDetails } from '../hooks/useUpdateLessonDetails';
+import { CreateLessonReqBody } from '../types/createLessonReqBody.type';
+import { CreateLessonSegmentReqBody } from '../types/createLessonSegmentReqBody.type';
+import { Segment } from '../types/lessonDetails.type';
+import { convertFormWord } from './CreateVocabularySectionDrawer';
 
-// RENAME: ind (prop) -> wordIndex - descriptive camelCase prop name
 type EditWordFormProps = {
   word: Word;
   close: () => void;
+  handleEdit: (body: Segment) => void;
+  segment: Segment;
 };
 
 const getDefaultValues = (word: Word): WordFormValues => ({
@@ -36,8 +42,13 @@ const getDefaultValues = (word: Word): WordFormValues => ({
   thirdTense: word?.v3!,
   examples: word.examples,
 });
-const EditWordForm: FC<EditWordFormProps> = ({ word, close }: EditWordFormProps) => {
-  const { control } = useForm<WordFormValues>({
+const EditWordForm: FC<EditWordFormProps> = ({
+  word,
+  close,
+  handleEdit,
+  segment,
+}: EditWordFormProps) => {
+  const { control, handleSubmit } = useForm<WordFormValues>({
     defaultValues: getDefaultValues(word),
   });
   const { fields } = useFieldArray({
@@ -45,6 +56,7 @@ const EditWordForm: FC<EditWordFormProps> = ({ word, close }: EditWordFormProps)
     name: 'examples',
   });
   const [autoCompleteValue, setAutoCompleteValue] = useState<WordType | null>(null);
+
   return (
     <Box>
       <Typography variant="h4" sx={sxStyles.heading}>
@@ -232,8 +244,20 @@ const EditWordForm: FC<EditWordFormProps> = ({ word, close }: EditWordFormProps)
           ))}
         </Grid>
       </Grid>
-      {/* TODO: Save button only calls close() and never submits — word edits are not persisted. */}
-      <Button sx={sxStyles.submitButton} onClick={close}>
+      <Button
+        sx={sxStyles.submitButton}
+        onClick={handleSubmit((formData) => {
+          handleEdit({
+            ...segment,
+            wordlist: {
+              ...segment.wordlist,
+              entries: segment.wordlist.entries.map((el) =>
+                el.definition.value === word.definition.value ? convertFormWord(formData) : el,
+              ),
+            },
+          });
+        })}
+      >
         Save changes
       </Button>
     </Box>

@@ -9,7 +9,6 @@ type UseLessonsListProps = {
   onError?: (error: Error) => void;
 };
 
-// TODO: onSuccess and onError are not used in the hook
 export const useLessonsList = () => {
   const [lessonsList, setLessonsList] = useState<LessonListItem[]>([]);
   const {

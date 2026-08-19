@@ -15,18 +15,23 @@ import { Translation } from './lessonDetails.type';
 //     translation: string;
 //   }[];
 // };
+
 export type Word = {
-  audioUrl: string;
-  collocations: any;
+  audioUrl?: string;
+  collocations?: any;
   definition: Translation;
   entryType: 'phrase' | 'word';
-  examples: { id: string; order: number; text: Translation }[];
-  id: string;
-  lemma: string;
-  note: Translation;
-  order: number | null;
+  examples: { id: string; order: number | null; text: Translation }[];
+  id?: string;
+  lemma?: string;
+  note?: Translation;
+  order?: number | null;
   partOfSpeech: WordType;
   transcription: string;
-  v2: string | null;
-  v3: string | null;
+  v2?: string | null;
+  v3?: string | null;
+};
+export type WordDTO = Omit<Word, 'definition' | 'lemma' | 'id' | 'examples'> & {
+  examples: { order: number | null; text: Translation }[];
+  lemma?: Translation;
 };

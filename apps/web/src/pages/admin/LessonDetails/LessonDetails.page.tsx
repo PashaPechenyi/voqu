@@ -7,12 +7,8 @@ import {
   LessonDetails as LessonDetailsType,
   Segment,
 } from '@/features/lessons/types/lessonDetails.type';
-import { WordType } from '@/features/lessons/enums/lessonWordType.enum';
-import { Word } from '@/features/lessons/types/word.type';
-import { MOCK_LESSON_DETAILS } from '@/features/lessons/constants/mockLessonDetails.const';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 import { useGetLessonDetails } from '@/features/lessons/hooks/useGetLessonDetails';
-import { httpClient } from '@/shared/api';
 
 type LessonDetails = {};
 // export type Segment = {
@@ -29,51 +25,10 @@ export type LessonDetailsStructure = {
   description: string;
   segments: Segment[];
 };
-// const STRUCTURE_EXAMPLE: LessonDetailsStructure = {
-//   id: 'lesson_id',
-//   title: 'lesson_title',
-//   subtitle: 'lesson_subtitle',
-//   description: 'lesson_description',
-//   segments: [
-//     // Wordlist Segment
-//     {
-//       id: 'segment_id',
-//       title: 'segment_title',
-//       description: 'segment_description',
-//       wordsList: [
-//         {
-//           id: 'word_id',
-//           word: 'invite',
-//           transcription: 'ɪnˈvaɪt',
-//           partOfSpeech: WordType.Verb,
-//           translation: 'запрошувати',
-//           type: 'phrase', // phrase/verb
-//           secondTense: 'invited',
-//           thirdTense: 'invited',
-//           examples: [
-//             {
-//               value: 'aaab',
-//               translation: 'bbb1',
-//             },
-//             {
-//               value: 'aaa',
-//               translation: 'bbb',
-//             },
-//             {
-//               value: 'cccc',
-//               translation: 'dddd',
-//             },
-//           ],
-//         },
-//       ],
-//     },
-//   ],
-// };
 
 function LessonDetailsPage({}: LessonDetailsType) {
   const { lessonId } = useParams<{ lessonId: string }>();
   const { getLessonDetails, lessonDetails } = useGetLessonDetails();
-  //const [structure, setStructure] = useState<LessonDetailsType | null>(lessonDetails);
 
   // const addSegment = (segment: Segment) => {
   //   setStructure((prev) => ({
@@ -84,10 +39,7 @@ function LessonDetailsPage({}: LessonDetailsType) {
 
   useEffect(() => {
     if (lessonId) getLessonDetails(lessonId);
-    //httpClient.post(`/lesson/segment/${lessonId}/mock/wordlist`);
   }, [lessonId, getLessonDetails]);
-
-  // TODO: lesson details are never fetched; the page renders MOCK_LESSON_DETAILS instead of loading by lessonId.
 
   return (
     <>
@@ -98,7 +50,7 @@ function LessonDetailsPage({}: LessonDetailsType) {
         <LessonSections
           lessonDetails={lessonDetails!}
           //handleSegment={addSegment}
-          handleSegment={() => {}}
+          getLessonDetails={getLessonDetails}
         />
       ) : (
         ''

@@ -12,9 +12,7 @@ export const useGetLessonDetails = () => {
   } = useMutation({
     mutationFn: (lessonId: string) => getLessonsDetailsReq(lessonId),
     onSuccess: (result) => {
-      console.log(result, 'result 1');
       setLessonDetails(result.lesson);
-      console.log(result.lesson, '2');
     },
   });
   return { getLessonDetails, lessonDetails };
