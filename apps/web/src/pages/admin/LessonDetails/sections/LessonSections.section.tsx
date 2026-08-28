@@ -3,7 +3,7 @@ import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import { PopupState as PopupStateType } from 'material-ui-popup-state/hooks';
 import AddIcon from '@mui/icons-material/Add';
 import React, { Fragment, useState } from 'react';
-import CreateVocabularySectionDrawer from '@/features/lessons/components/CreateVocabularySectionDrawer';
+import WordlistSegmentForm from '@/features/lessons/components/WordlistSegmentForm';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 import { LessonDetails, Segment } from '@/features/lessons/types/lessonDetails.type';
 import { useMutation } from '@/shared/api';
@@ -13,71 +13,21 @@ import { useGetLessonDetails } from '@/features/lessons/hooks/useGetLessonDetail
 import { useUpdateLessonDetails } from '@/features/lessons/hooks/useUpdateLessonDetails';
 import { CreateLessonSegmentReqBody } from '@/features/lessons/types/createLessonSegmentReqBody.type';
 import { UpdateLessonSegmentReqBody } from '@/features/lessons/types/updateLessonSegmentReqBody.type';
+import { deleteLessonDetailsReq } from '@/features/lessons/helpers/deleteLessonDetailsReq';
+import { convertWordToReqFormat } from '@/features/lessons/helpers/convertWordToReqFormat.helper';
+import { convertToSegment } from '@/features/lessons/helpers/convertToSegment.helper';
+import { convertToSegmentForUpdate } from '@/features/lessons/helpers/convertToSegmentForUpdate.helper';
+import { DragDropProvider } from '@dnd-kit/react';
+import { move } from '@dnd-kit/helpers';
+import { reorderLessonSegment } from '@/features/lessons/helpers/reorderLessonSegment.helper';
+import { convertReorderSegmentToApiFormat } from '@/features/lessons/helpers/convertReorderSegmentToApiFormat.helper';
+import WordlistSegmentFormForDrawer from '@/features/lessons/components/WordlistSegmentFormForDrawer';
 
 type LessonSectionsProps = {
   lessonDetails: LessonDetails;
   getLessonDetails: (lessonId: string) => void;
 };
 
-// TODO: move functions to their separate files
-export const convertWordToReqFormat = (word: Word): WordDTO => {
-  return {
-    entryType: word.entryType!,
-    // TODO: in terms of the fact that example entry possibly could not have order -> lets always use inder for order
-    examples: word.examples.map((el) => ({
-      order: el.order,
-      // TODO: use el.text as a value
-      text: { value: el.text.value, translation: el.text.translation },
-    })),
-    // TODO: use word.definition as a value
-    lemma: { value: word.definition.value, translation: word.definition.translation },
-    partOfSpeech: word.partOfSpeech,
-    transcription: word.transcription,
-    v2: word.v2,
-    v3: word.v3,
-  };
-};
-
-export function convertToSegment(lessonDetails: Segment): any {
-  return {
-    order: 1,
-    SegmentKindKey: 'wordlist',
-    title: lessonDetails.title.value,
-    description: lessonDetails.description.value,
-    content: {
-      description: {
-        value: lessonDetails.wordlist.description.value,
-        translation: lessonDetails.wordlist.description.translation,
-      },
-      entries: lessonDetails.wordlist.entries.map(convertWordToReqFormat),
-
-      title: {
-        value: lessonDetails.title.value,
-        translation: lessonDetails.wordlist.title.translation,
-      },
-    },
-  };
-}
-export const convertToSegmentForUpdate = (segment: Segment): UpdateLessonSegmentReqBody => {
-  return {
-    order: 1,
-
-    title: segment.title.value,
-    description: segment.description.value,
-    content: {
-      description: {
-        value: segment.wordlist.description.value,
-        translation: segment.wordlist.description.translation,
-      },
-      entries: segment.wordlist.entries.map(convertWordToReqFormat),
-
-      title: {
-        value: segment.title.value,
-        translation: segment.wordlist.title.translation,
-      },
-    },
-  };
-};
 function LessonSections({ lessonDetails, getLessonDetails }: LessonSectionsProps) {
   const [open, setOpen] = useState(false);
   const { updateLessonDetails } = useUpdateLessonDetails({
@@ -102,6 +52,8 @@ function LessonSections({ lessonDetails, getLessonDetails }: LessonSectionsProps
       title: { value: '', translation: null },
     },
   });
+  const [isDragging, setIsDragging] = useState(false);
+
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
   };
@@ -112,7 +64,12 @@ function LessonSections({ lessonDetails, getLessonDetails }: LessonSectionsProps
       lessonDetails.translationLanguage,
     );
   };
-
+  const { mutate: deleteSegment } = useMutation({
+    mutationFn: deleteLessonDetailsReq,
+    onSuccess: () => {
+      getLessonDetails(lessonDetails.id);
+    },
+  });
   const { mutate: createLessonSegment } = useMutation({
     mutationFn: creaLessonSegmentReq,
     onSuccess: () => {
@@ -137,19 +94,41 @@ function LessonSections({ lessonDetails, getLessonDetails }: LessonSectionsProps
       });
     },
   });
+  const { mutate: reorderSegments } = useMutation({
+    mutationFn: reorderLessonSegment,
+  });
 
   return (
     <Box sx={sxStyles.root}>
-      {lessonDetails.segments.map((segment) => {
-        return (
-          <CreateVocabularySectionDrawer
-            segmentDetails={segment}
-            lang={lessonDetails.translationLanguage}
-            onUpdate={handleEdit}
-          />
-        );
-      })}
-
+      <DragDropProvider
+        onDragStart={() => {
+          setIsDragging(true);
+        }}
+        onDragEnd={(event) => {
+          const orderList = move(lessonDetails.segments, event);
+          reorderSegments(convertReorderSegmentToApiFormat(orderList), lessonDetails.id);
+          setIsDragging(false);
+        }}
+      >
+        <ul>
+          {lessonDetails.segments.map((segment, index) => {
+            return (
+              <Fragment key={segment.id}>
+                <WordlistSegmentForm
+                  segmentDetails={segment}
+                  onUpdate={handleEdit}
+                  onDelete={() => {
+                    deleteSegment(segment.id);
+                  }}
+                  index={index}
+                  id={segment.id}
+                  isCollapsable={!isDragging}
+                />
+              </Fragment>
+            );
+          })}
+        </ul>
+      </DragDropProvider>
       <PopupState variant="popover" popupId="demo-popup-menu">
         {(popupState: PopupStateType) => (
           <Fragment>
@@ -213,7 +192,7 @@ function LessonSections({ lessonDetails, getLessonDetails }: LessonSectionsProps
           onClose={toggleDrawer(false)}
           anchor="right"
         >
-          <CreateVocabularySectionDrawer
+          <WordlistSegmentFormForDrawer
             segmentDetails={defaultSegment}
             onUpdate={setDefaultSegment}
           />

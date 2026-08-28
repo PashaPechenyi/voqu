@@ -69,6 +69,6 @@ export const EditableField = ({ defaultValue, slotProps, onSave }: EditableField
 
 const sxStyles = createSxStylesList({
   root: { display: 'flex', flexDirection: 'column', gap: '10px' },
-  row: { display: 'flex', flexDirection: 'row', gap: 16, alignItems: 'center' },
+  row: { display: 'flex', flexDirection: 'row', gap: '16px', alignItems: 'center' },
   iconButton: { height: 30, width: 30 },
 });

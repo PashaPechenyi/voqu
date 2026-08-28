@@ -14,7 +14,6 @@ type WordItemProps = {
 };
 
 const WordItem: FC<WordItemProps> = ({ word, onUpdate, segment }) => {
-  // TODO: Check in the browser does edit section close
   const { isOpen: isOpenEdit, open: openEdit, close: closeEdit } = useToggle();
   return (
     <Box sx={sxStyles.root}>

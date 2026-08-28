@@ -45,6 +45,7 @@ const LessonItem: FC<LessonItemProps> = ({
   const { isLoading, mutate: deleteLesson } = useMutation({
     mutationFn: deleteLessonReq,
     onSuccess: () => {
+      closeDelete();
       reloadLessons();
     },
   });
@@ -56,14 +57,8 @@ const LessonItem: FC<LessonItemProps> = ({
     },
   });
 
-  // TODO: onDelete/closeDelete are gated on `isLoading`, which is false before the request starts, so they never run; the delete flow should not branch on isLoading here.
   const handleConfirmDelete = async () => {
-    // TODO: all logic that is related to handle the success scenario of the request should be in useMutation -> onSuccess
-    isLoading && onDelete?.(lesson);
-    isLoading && closeDelete();
     await deleteLesson(lesson.id);
-
-    closeDelete();
   };
 
   const handleUpdateSubmit = async (values: LessonFormValues) => {

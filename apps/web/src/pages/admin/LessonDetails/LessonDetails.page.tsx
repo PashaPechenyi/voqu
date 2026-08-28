@@ -17,15 +17,14 @@ export type LessonDetailsStructure = {
 
 function LessonDetailsPage() {
   const { lessonId } = useParams<{ lessonId: string }>();
-  const { getLessonDetails, lessonDetails } = useGetLessonDetails();
+  const { getLessonDetails, lessonDetails, isLoadingLessonDetails } = useGetLessonDetails();
 
   useEffect(() => {
     if (lessonId) getLessonDetails(lessonId);
   }, [lessonId, getLessonDetails]);
 
-  // TODO: add loading validation
+  if (isLoadingLessonDetails) return <Typography variant="h5">Wait a minute...</Typography>;
   if (!lessonDetails) return <Typography>No data was loaded</Typography>;
-
   return (
     <>
       <Box sx={sxStyles.spacer}></Box>
