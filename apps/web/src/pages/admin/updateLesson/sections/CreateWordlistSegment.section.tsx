@@ -4,7 +4,7 @@ import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.h
 import { Box, Button, Divider } from '@mui/material';
 import { useState } from 'react';
 import { AddWordSection } from './AddWord.section';
-import { WordItem } from './WordItem';
+import { WordItem } from '../../../../features/lesson/components/wordlistWordItem/WordItem';
 import { LessonSegmentReqBody } from '@/features/lesson/helpers/createLessonSegmentReq.helper';
 import { WordlistSegment } from '@/features/lesson/types/wordlistSegment.type';
 import { convertLessonSegmentDetailsToApiFormat } from '@/features/lesson/helpers/convertLessonSegmentDetailsToApiFormat';

@@ -2,7 +2,7 @@ import { Word } from '@/features/lesson/types/wordListItem.type';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 import { Box, Typography } from '@mui/material';
 import { formValuesToStateFormat } from './AddWord.section';
-import { WordForm, WordFormValues } from './WordForm';
+import { WordForm, WordFormValues } from '../../../../features/lesson/components/wordForm/WordForm';
 
 type UpdateWordSectionProps = {
   wordItem: Word;

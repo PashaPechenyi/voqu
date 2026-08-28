@@ -10,6 +10,7 @@ export const UpdateLessonHeaderSection = ({ lessonDetails }: UpdateLessonHeaderS
     <Box sx={sxStyles.root}>
       <EditableField
         placeholder="title"
+        defaultValue={lessonDetails.title.value}
         onSave={(value) => {
           console.log(value, 'onsave');
         }}
@@ -17,6 +18,7 @@ export const UpdateLessonHeaderSection = ({ lessonDetails }: UpdateLessonHeaderS
       />
       <EditableField
         placeholder="subtitle"
+        defaultValue={lessonDetails.subtitle.value}
         onSave={(value) => {
           console.log(value, 'onsave');
         }}
@@ -24,6 +26,7 @@ export const UpdateLessonHeaderSection = ({ lessonDetails }: UpdateLessonHeaderS
       />
       <EditableField
         placeholder="description"
+        defaultValue={lessonDetails.description.value}
         onSave={(value) => {
           console.log(value, 'onsave');
         }}

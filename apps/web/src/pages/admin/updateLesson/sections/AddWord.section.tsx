@@ -1,7 +1,7 @@
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 import { Box, Typography } from '@mui/material';
 import { Word } from '@/features/lesson/types/wordListItem.type';
-import { WordForm, WordFormValues } from './WordForm';
+import { WordForm, WordFormValues } from '../../../../features/lesson/components/wordForm/WordForm';
 
 type AddWordSectionProps = {
   setWordlist: React.Dispatch<React.SetStateAction<Word[]>>;
@@ -52,11 +52,12 @@ export const AddWordSection = ({ setWordlist }: AddWordSectionProps) => {
 };
 const sxStyles = createSxStylesList({
   root: {
-    width: '100%',
+    width: '95%',
     border: '1px solid',
     borderRadius: 2,
     borderColor: 'primary.main',
     p: 2,
     mt: 2,
+    mb: 2,
   },
 });

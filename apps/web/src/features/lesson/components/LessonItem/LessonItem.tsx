@@ -19,6 +19,7 @@ import MenuBookIcon from '@mui/icons-material/MenuBook';
 import { LessonListItem } from '@/features/lesson/types/lessonListItem.type';
 import { Course } from '@/features/courses/types/course.type';
 import DeleteLessonModal from '../deleteLessonModal/DeleteLessonModal';
+import { ADMIN_LESSON_UPDATE_URL } from '@/shared/constants/urls.const';
 
 type LessonItemProps = {
   lesson: LessonListItem;
@@ -90,7 +91,7 @@ function LessonItem({ lesson, courseId, lessonId, lessonIndex, reloadLessons }: 
         <IconButton aria-label="lock">
           <LockOutlinedIcon />
         </IconButton>
-        <IconButton color="warning" aria-label="update">
+        <IconButton color="warning" aria-label="update" href={ADMIN_LESSON_UPDATE_URL(lesson.id)}>
           <EditOutlinedIcon />
         </IconButton>
         <IconButton color="error" aria-label="delete" onClick={() => setOpen('delete')}>

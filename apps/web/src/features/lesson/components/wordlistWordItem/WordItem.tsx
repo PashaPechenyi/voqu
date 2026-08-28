@@ -3,7 +3,7 @@ import { Box, IconButton, Typography } from '@mui/material';
 import { useState } from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { UpdateWordSection } from './UpdateWord.section';
+import { UpdateWordSection } from '../../../../pages/admin/updateLesson/sections/UpdateWord.section';
 import { Word } from '@/features/lesson/types/wordListItem.type';
 type WordItemProps = {
   word: Word;
@@ -37,7 +37,7 @@ export const WordItem = ({ word, setWordlist }: WordItemProps) => {
 const sxStyles = createSxStylesList({
   wordItem: {
     p: 2,
-    width: '100%',
+    width: '95%',
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
