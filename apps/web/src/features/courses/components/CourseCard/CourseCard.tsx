@@ -9,21 +9,61 @@ import {
   Divider,
   Typography,
 } from '@mui/material';
-import { ADMIN_COURSES_EDIT_URL } from '@/shared/constants/urls.const';
+import { ADMIN_COURSES_UPDATE_URL } from '@/shared/constants/urls.const';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
 import { Course } from '@/features/courses/types/course.type';
+import { CourseStatusKey } from '../../types/courseStatus.type';
+import { convertCourseToApiFormat } from '../../helpers/convertCourseToApiFormat.helper';
+import { useMutation } from '@/shared/api';
+import { updateCourseReq } from '../../helpers/updateCourseReq.helper';
 
 type CourseCardProps = {
   course: Course;
+  onUpdateSuccess: () => void;
 };
 
-function CourseCard({ course }: CourseCardProps) {
+function CourseCard({ course, onUpdateSuccess }: CourseCardProps) {
+  // TODO: separation of concerns — CourseCard is presentational UI but owns the update mutation, the
+  // request-body mapping, and the status-toggle logic. It should emit an event (e.g. onToggleStatus(course))
+  // and let the parent section/page own useUpdateCourse and the request shaping.
+  const { mutate: updateCourse, isLoading } = useMutation({
+    mutationFn: updateCourseReq,
+    onSuccess: onUpdateSuccess,
+  });
+
+  const onChangeStatus = (sourceCourse: Course) => {
+    updateCourse(
+      course.id,
+      convertCourseToApiFormat({
+        ...sourceCourse,
+        status:
+          sourceCourse.status === CourseStatusKey.Draft
+            ? CourseStatusKey.Published
+            : CourseStatusKey.Draft,
+      }),
+    );
+  };
+
   return (
     <Card sx={sxStyles.card}>
-      <CardMedia sx={sxStyles.media} title={course.name}>
+      {/* FIXME: the media image is hardcoded to an external placeholder URL instead of the course image */}
+      <CardMedia
+        sx={sxStyles.media}
+        title={course.name}
+        image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTi-Ev7Uu_sqkQXYE0heikrzY2UAlsdqdeLg&s"
+      >
         <Box>
-          <Chip sx={{ mr: 1 }} color="success" label={course.status} />
-          <Chip color="info" label={course.LevelId} />
+          <Button
+            sx={{ mr: 1 }}
+            onClick={() => onChangeStatus(course)}
+            variant="contained"
+            color={course.status === CourseStatusKey.Published ? 'success' : 'inherit'}
+            loading={isLoading}
+          >
+            {course.status}
+          </Button>
+
+          <Chip color="info" label={course.Level.cefrLevel} />
         </Box>
       </CardMedia>
       <CardContent sx={sxStyles.content}>
@@ -35,8 +75,8 @@ function CourseCard({ course }: CourseCardProps) {
 
       <Divider variant="middle" />
       <CardActions sx={sxStyles.actions}>
-        <Button href={ADMIN_COURSES_EDIT_URL(course.id)} variant="contained" fullWidth>
-          Edit Course
+        <Button href={ADMIN_COURSES_UPDATE_URL(course.id)} variant="contained" fullWidth>
+          Update Course
         </Button>
       </CardActions>
     </Card>
@@ -54,7 +94,6 @@ const sxStyles = createSxStylesList({
     display: 'flex',
     flexDirection: 'column',
     minHeight: 500,
-    maxWidth: 345,
   },
   content: {
     display: 'flex',
@@ -62,7 +101,7 @@ const sxStyles = createSxStylesList({
     flex: 1,
   },
   media: {
-    height: 140,
+    height: 200,
     display: 'flex',
     justifyContent: 'end',
     p: 1,

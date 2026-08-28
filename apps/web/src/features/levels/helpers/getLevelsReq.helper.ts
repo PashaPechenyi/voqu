@@ -1,11 +1,7 @@
-import { Level } from '@/features/levels/types/level.type';
-
-export const getLevelsReq = async (): Promise<{ items: Level[]; success: boolean }> => {
-  const response = await fetch('/api/level', {
-    method: 'GET',
-  });
-  if (!response.ok) {
-    throw new Error('Something went wrong...');
-  }
-  return response.json();
+import { httpClient } from '@/shared/api';
+import { Level } from '../types/level.type';
+type LevelDTO = {
+  items: Level[];
+  success?: true;
 };
+export const getLevelsReq = () => httpClient.get<LevelDTO>('/level');

@@ -1,14 +1,17 @@
-import { useCallback, useState } from 'react';
+import { useMutation } from './../../../shared/api/useMutation';
+import { useState } from 'react';
 import { getCoursesReq } from '@/features/courses/helpers/getCoursesReq.helper';
 import { Course } from '@/features/courses/types/course.type';
 
 export const useCoursesList = () => {
   const [coursesList, setCoursesList] = useState<Course[]>([]);
 
-  const fetchCourses = useCallback(async () => {
-    const result = await getCoursesReq();
-    setCoursesList(result.items);
-  }, []);
+  const { mutate: getCoursesList } = useMutation({
+    mutationFn: getCoursesReq,
+    onSuccess(response) {
+      setCoursesList(response.items);
+    },
+  });
 
   const updateCourseInList = (course: Course) => {
     setCoursesList((prev) => prev.map((item) => (item.id === course.id ? course : item)));
@@ -18,5 +21,5 @@ export const useCoursesList = () => {
     setCoursesList((prev) => [course, ...prev]);
   };
 
-  return { coursesList, fetchCourses, updateCourseInList, addCourseToList };
+  return { coursesList, getCoursesList, updateCourseInList, addCourseToList };
 };

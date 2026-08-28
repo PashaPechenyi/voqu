@@ -43,5 +43,9 @@
     "*.{json,md,css,scss,html,yml,yaml}": [
       "prettier --write"
     ]
+  },
+  "dependencies": {
+    "@dnd-kit/helpers": "^0.4.0",
+    "@dnd-kit/react": "^0.4.0"
   }
 }

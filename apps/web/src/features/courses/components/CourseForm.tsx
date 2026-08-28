@@ -1,4 +1,4 @@
-import { Autocomplete, Box, Button, TextField } from '@mui/material';
+import { Autocomplete, Box, Button, Grid, TextField } from '@mui/material';
 import { Control, Controller } from 'react-hook-form';
 import { Level } from '@/features/levels/types/level.type';
 import { VALIDATION_ERRORS } from '@/shared/constants/validationErrors.const';
@@ -11,132 +11,157 @@ type CourseFormProps = {
   onSubmit: () => void;
   levelsOptions: Level[];
   statusesOptions: CourseStatusKey[];
-  edit?: boolean;
+  isLoading: boolean;
 };
 
 function CourseForm({
+  isLoading,
   control,
   onSubmit,
   statusesOptions,
   levelsOptions,
-  edit,
 }: CourseFormProps) {
-  const requiredRule = edit ? {} : { required: { value: true, message: VALIDATION_ERRORS.REQUIRED } };
+  // TODO: anti-pattern — CourseForm should not branch its validation on a caller-context flag like
+  // `update`. A reusable form must not know where it is used.
+  // However this condition should not exist at all:
+  // the required rule should always apply (required fields are required regardless of create/update).
+  // Drop the `update` prop and make `requiredRule` unconditional.
+  const requiredRule = { required: { value: true, message: VALIDATION_ERRORS.REQUIRED } };
 
   return (
     <Box component="form" onSubmit={onSubmit} sx={sxStyles.form}>
-      <Controller
-        name="title"
-        control={control}
-        rules={requiredRule}
-        render={({ field, formState: { errors } }) => (
-          <TextField
-            color="primary"
-            sx={sxStyles.textField}
-            variant="filled"
-            placeholder="Title"
-            error={!!errors.title}
-            helperText={errors.title?.message}
-            {...field}
-          />
-        )}
-      />
-      <Controller
-        name="description"
-        control={control}
-        rules={requiredRule}
-        render={({ field, formState: { errors } }) => (
-          <TextField
-            sx={sxStyles.textField}
-            variant="filled"
-            placeholder="Description"
-            error={!!errors.description}
-            helperText={errors.description?.message}
-            {...field}
-          />
-        )}
-      />
-      <Controller
-        name="level"
-        control={control}
-        rules={requiredRule}
-        render={({ field: { onChange, value }, formState: { errors } }) => (
-          <Autocomplete
-            sx={sxStyles.select}
-            options={levelsOptions}
-            value={value}
-            onChange={(_, newValue) => onChange(newValue)}
-            getOptionLabel={(option) => option.name}
-            renderInput={(params) => (
+      <Grid container spacing={3}>
+        <Grid size={{ xs: 12 }}>
+          <Controller
+            name="title"
+            control={control}
+            rules={requiredRule}
+            render={({ field, formState: { errors } }) => (
               <TextField
-                {...params}
-                sx={sxStyles.textField}
+                fullWidth
+                color="primary"
                 variant="filled"
-                label="Level"
-                error={!!errors.level}
-                helperText={errors.level?.message}
+                placeholder="Title"
+                error={!!errors.title}
+                helperText={errors.title?.message}
+                {...field}
               />
             )}
           />
-        )}
-      />
-      <Controller
-        name="status"
-        control={control}
-        rules={requiredRule}
-        render={({ field: { onChange, value }, formState: { errors } }) => (
-          <Autocomplete
-            sx={sxStyles.select}
-            options={statusesOptions}
-            value={value}
-            onChange={(_, newValue) => onChange(newValue)}
-            renderInput={(params) => (
+        </Grid>
+
+        <Grid size={{ xs: 12 }}>
+          <Controller
+            name="description"
+            control={control}
+            rules={requiredRule}
+            render={({ field, formState: { errors } }) => (
               <TextField
-                {...params}
-                sx={sxStyles.textField}
+                fullWidth
+                multiline
+                minRows={4}
                 variant="filled"
-                label="Status"
-                error={!!errors.status}
-                helperText={errors.status?.message}
+                placeholder="Description"
+                color="primary"
+                error={!!errors.description}
+                helperText={errors.description?.message}
+                {...field}
               />
             )}
           />
-        )}
-      />
-      <Controller
-        name="image"
-        control={control}
-        rules={requiredRule}
-        render={({ field, formState: { errors } }) => (
-          <TextField
-            sx={sxStyles.textField}
-            variant="filled"
-            placeholder="Image URL"
-            error={!!errors.image}
-            helperText={errors.image?.message}
-            {...field}
+        </Grid>
+
+        <Grid size={{ xs: 12, md: 6 }}>
+          <Controller
+            name="level"
+            control={control}
+            rules={requiredRule}
+            render={({ field: { onChange, value }, formState: { errors } }) => (
+              <Autocomplete
+                options={levelsOptions}
+                value={value}
+                color="primary"
+                onChange={(_, newValue) => onChange(newValue)}
+                getOptionLabel={(option) => option.name}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    fullWidth
+                    color="primary"
+                    variant="filled"
+                    label="Level"
+                    error={!!errors.level}
+                    helperText={errors.level?.message}
+                  />
+                )}
+              />
+            )}
           />
-        )}
-      />
-      <Button type="submit" variant="contained">
-        Save
-      </Button>
+        </Grid>
+
+        <Grid size={{ xs: 12, md: 6 }}>
+          <Controller
+            name="status"
+            control={control}
+            rules={requiredRule}
+            render={({ field: { onChange, value }, formState: { errors } }) => (
+              <Autocomplete
+                options={statusesOptions}
+                value={value}
+                onChange={(_, newValue) => onChange(newValue)}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    fullWidth
+                    variant="filled"
+                    label="Status"
+                    error={!!errors.status}
+                    helperText={errors.status?.message}
+                  />
+                )}
+              />
+            )}
+          />
+        </Grid>
+
+        <Grid size={{ xs: 12 }}>
+          <Controller
+            name="image"
+            control={control}
+            rules={requiredRule}
+            render={({ field, formState: { errors } }) => (
+              <TextField
+                fullWidth
+                variant="filled"
+                placeholder="Image URL"
+                color="primary"
+                error={!!errors.image}
+                helperText={errors.image?.message}
+                {...field}
+              />
+            )}
+          />
+        </Grid>
+
+        <Grid size={{ xs: 12 }}>
+          <Box sx={sxStyles.actions}>
+            <Button loading={isLoading} type="submit" variant="contained">
+              Save
+            </Button>
+          </Box>
+        </Grid>
+      </Grid>
     </Box>
   );
 }
 
 const sxStyles = createSxStylesList({
   form: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    gap: 2,
     mb: 2,
   },
-  textField: {
-    width: '100%',
-  },
-  select: {
-    width: '50%',
+  actions: {
+    display: 'flex',
+    justifyContent: 'flex-end',
   },
 });
 

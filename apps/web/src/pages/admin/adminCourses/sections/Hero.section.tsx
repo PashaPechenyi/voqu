@@ -2,12 +2,20 @@ import { Box, Button, Typography } from '@mui/material';
 import { useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
-import AddCourseModal from '@/features/courses/components/AddCourseModal';
+import CreateCourseModal from '@/features/courses/components/CreateCourseModal';
 
-function HeroSection() {
+type HeroSectionProps = {
+  reloadCourses: () => void;
+};
+
+function HeroSection({ reloadCourses }: HeroSectionProps) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const handleCreateSuccess = () => {
+    reloadCourses();
+    handleClose();
+  };
 
   return (
     <Box sx={sxStyles.root}>
@@ -19,9 +27,9 @@ function HeroSection() {
       </Box>
       <Button sx={sxStyles.btn} variant="contained" onClick={handleOpen}>
         <AddIcon />
-        Add New Course
+        Create Course
       </Button>
-      <AddCourseModal open={open} handleClose={handleClose} />
+      <CreateCourseModal open={open} onClose={handleClose} onCreateSuccess={handleCreateSuccess} />
     </Box>
   );
 }

@@ -1,26 +1,29 @@
 import { Box, Button, Dialog, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { createSxStylesList } from '@/shared/helpers/styles/createSxStylesList.helper';
-import { useDeleteCourse } from '../hooks/useDeleteCourse';
+import { useMutation } from '@/shared/api';
+import { deleteCourseReq } from '../helpers/deleteCourseReq.helper';
 
 type DeleteCourseModalProps = {
   open: boolean;
-  handleClose: () => void;
+  onClose: () => void;
   courseName?: string;
-  onDeleted?: () => void;
+  onDeleteSuccess?: () => void;
 };
 
-function DeleteCourseModal({ open, handleClose, courseName, onDeleted }: DeleteCourseModalProps) {
+function DeleteCourseModal({ open, onClose, courseName, onDeleteSuccess }: DeleteCourseModalProps) {
   const { courseId } = useParams();
-  const { deleteCourse } = useDeleteCourse({ onSuccess: onDeleted });
-
+  const { isLoading, mutate: deleteCourse } = useMutation({
+    mutationFn: deleteCourseReq,
+    onSuccess: onDeleteSuccess,
+  });
   const onSubmit = () => {
     if (!courseId) return;
     deleteCourse(courseId);
   };
 
   return (
-    <Dialog open={open} onClose={handleClose}>
+    <Dialog open={open} onClose={onClose}>
       <Box sx={sxStyles.modal}>
         <Typography variant="h6" component="h2">
           Delete Course
@@ -30,10 +33,10 @@ function DeleteCourseModal({ open, handleClose, courseName, onDeleted }: DeleteC
         </Typography>
 
         <Box sx={sxStyles.actions}>
-          <Button variant="contained" color="error" onClick={onSubmit}>
+          <Button loading={isLoading} variant="contained" color="error" onClick={onSubmit}>
             Delete
           </Button>
-          <Button variant="outlined" onClick={handleClose}>
+          <Button variant="outlined" onClick={onClose}>
             Close
           </Button>
         </Box>
